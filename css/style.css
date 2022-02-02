@@ -1,0 +1,576 @@
+/* all */
+
+html,
+body {
+	background-color: #000000;
+/*	font-family: Arial,sans-serif;*/
+	font-family: "Source Sans Pro", "Trebuchet MS", Helvetica, sans-serif;
+	font-size: 9pt;
+	color: white;
+	text-align: center;
+	margin: 0 auto;
+	padding: 0;
+	height: 100%;
+	max-width: 900px;
+	-webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+}
+
+/* marker */
+
+.wrapper {
+	background-color: #000000;
+	min-height: 100%;
+	position: relative;
+}
+.header {
+	padding: 5px;
+}
+.content {
+	padding-bottom: 50px;  /* Height of the footer element */ 
+}
+.footer {
+	font-size: 12px;
+	width: 100%;
+	height: 50px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.MainDiv {
+	max-width: 900px;
+	background-color: #005387;
+/*	margin: 10px;*/
+}
+
+.DVB_Calc, .Marker_Forms, .Wordle_Solver {
+	position: relative !important;
+/*    left: 50%;*/
+/*    margin-left: -175px; set to a negative number 1/2 of your width*/
+	max-width: 320px !important;
+	width: 320px; /*added 20200625 in attempt to constrain width on iPad Pro*/
+	margin: 0 auto !important;
+}
+
+.CenterContainer {
+/*	background: none repeat scroll 0 0;*/
+/*	clear: both;*/
+	color: black;
+/*	margin: 0px;*/
+	position: relative;
+	height: 100px;
+	background-color: #005387;
+}
+
+.LowerContainer {
+	background-color: #005387;
+}
+
+.Absolute-Center {
+/*	overflow: auto;*/
+	margin-top: 20px;
+/*  position: relative;*/
+/*	position: absolute;*/
+/*	top: 20px; left: 0; bottom: 0; right: 0;*/
+}
+/*
+.Absolute-Center.is-Image {
+	height: auto;
+	width: auto;
+	padding: 0;
+}
+*/
+.Absolute-Center.is-Fixed {
+	position: fixed;
+	z-index: 999;
+}
+
+.logo_main {
+	max-width: 85%;
+}
+
+.IESlogo {
+	width: 50%;
+}
+.Wordle_Solver_logo {
+	border-radius: 0px;
+}
+
+.filter-black {
+/*  filter: invert(0%) sepia(24%) saturate(3842%) hue-rotate(57deg) brightness(85%) contrast(106%);*/
+  filter: invert(0%);
+}
+
+.filter-white {
+/*  filter: invert(99%) sepia(0%) saturate(1753%) hue-rotate(315deg) brightness(115%) contrast(100%);*/
+  filter: invert(100%);
+}
+
+  .logo_mobile {
+	width: 85%;
+	max-width: 240px;
+}
+
+.name {
+	font-weight: bold;
+	font-size: 18px;
+	color: #FF9900; /* vistaprint font color spec is CMYK 0%, 60%, 100%, 0% which converts to #FF6600 but doesn't look correct */
+}
+
+.company {
+	letter-spacing: 0.2px;
+  font-size: 16px;
+	font-weight: bold;
+	color: white
+}
+
+.about {
+	font-size: 14px;
+/*	font-weight: bold;*/
+	color: white
+}
+/*
+.address
+{
+	font-size: 12px;
+	color: white;
+}
+*/
+.footer_img {
+	vertical-align: middle;
+	-webkit-transition: 0.5s ease-in-out;
+	-moz-transition: 0.5s ease-in-out;
+	-moz-transition-duration: 0.5s;
+	transition-duration: 0.5s;
+	transition: 0.5s ease-in-out;
+}
+
+img:hover.footer_img {
+	-webkit-transform: scale(1.5);
+	-moz-transform: scale(1.5);
+	-ms-transform: scale(1.5);
+	transform: scale(1.5);
+}
+
+.link_visible {
+	font-size:13px;
+	color: white;
+}
+
+.link_invisible {
+	color: #005387;
+	cursor: default;
+  display: none;
+  /*pointer-events: none;*/
+}
+
+.myButton {
+	min-width: 180px;
+	min-height: 60px;
+	-moz-box-shadow: 0px 8px 0px -1px #555555;
+	-webkit-box-shadow: 0px 8px 0px -1px #555555;
+	box-shadow: 0px 8px 0px -1px #555555;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #bababa));
+	background: -moz-linear-gradient(top, #ededed 5%, #bababa 100%);
+	background: -webkit-linear-gradient(top, #ededed 5%, #bababa 100%);
+	background: -o-linear-gradient(top, #ededed 5%, #bababa 100%);
+	background: -ms-linear-gradient(top, #ededed 5%, #bababa 100%);
+/*	background: linear-gradient(to bottom, #ededed 5%, #bababa 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#bababa',GradientType=0);*/
+	background-color: #ededed;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	border:2px solid #d6d6d6;
+	display: inline-block;
+	cursor: pointer;
+	color: #000000;
+	font-family: Arial;
+	font-size: 17px;
+/*	padding: 7px 20px;*/
+/*	text-decoration: none;*/
+/*	text-shadow: 0px 2px 0px #e1e1e1;*/
+}
+
+.myButton:active {
+	position:relative;
+	box-shadow: 0px 2px 0px 0px #555555;
+	top:2px;
+}
+
+.myButton:hover {
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #bababa), color-stop(1, #ededed));
+	background: -moz-linear-gradient(top, #bababa 5%, #ededed 100%);
+	background: -webkit-linear-gradient(top, #bababa 5%, #ededed 100%);
+	background: -o-linear-gradient(top, #bababa 5%, #ededed 100%);
+	background: -ms-linear-gradient(top, #bababa 5%, #ededed 100%);
+/*	background: linear-gradient(to bottom, #bababa 5%, #ededed 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bab1ba', endColorstr='#ededed',GradientType=0);*/
+	background-color: #bababa;
+}
+
+.buttonMarkerForm {
+	min-height: 80px;
+}
+
+.buttonMain {
+	font-size: 15px;
+	min-height: 50px;
+}
+
+/*
+.buttonLarryPi {
+	min-height: 180px;
+}
+*/
+
+.myEmailField {
+	min-width: 170px;
+	min-height: 15px;
+	border-radius: 4px;
+	/*border: 4px solid #d6d6d6;*/
+}
+
+.myEmailField:focus, .myEmailField:hover { 
+	outline: none;
+	border-color: #d6d6d0;
+	box-shadow: 0 0 10px #d6d6d0;
+}
+
+/* DVB Calculator */
+
+sub, sup { /* compensate for <sub></sub> tagged text*/
+	font-size: 90%;
+	line-height: 0; 
+	position: relative; 
+	vertical-align: baseline; 
+}
+sup { top: -0.25em; }
+sub { bottom: -0.25em; }
+
+.spacer-main {
+	height: 5px;
+	padding: 0px;
+}
+
+.spacer-big {
+	height: 20px;
+	padding: 0px;
+}
+
+.spacer-sub {
+	height: 0px;
+	padding: 0px;
+}
+
+/*jQuery Select Button width styling*/
+
+#Calculator_Mode_select > label {
+	width: 75px;
+}
+
+#DVB_Standard_select > label {
+	width: 75px;
+}
+
+#Roll-Off_select > label {
+	min-width: 36px;
+/*	height: 3em;*/
+}
+
+#SI_prefix_select > label {
+	min-width: 40px;
+}
+
+#Modulation_select > label {	/*Modulation Select jQuery buttons*/
+	min-width: 58.5px;			/*inline CSS styling in javascript overwrites this for DVB-S2X*/
+/*	height: 3em;*/
+}
+
+#ideal_QEF_EsNo_number,
+#ideal_QEF_EbNo_number,
+#actual_QEF_EsNo_number,
+#actual_QEF_EbNo_number {
+	width: 35px;
+}
+
+#Modulation_Multiplier_output_number {
+	width: 15px;
+}
+
+#Efficiency_output_number {
+	width: 120px;
+}
+
+#Transport_Stream_Rate_output_number,
+#Symbol_Rate_output_number,
+#Bandwidth_output_number {
+	width: 70px;
+}
+
+input[type=number]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+/*	margin-left: -5px;*/
+}
+
+.input-number > input[type=number],
+.input-number > input[type=text] {
+	height: 2.0em;
+	font-size: 110%;
+	width: 75px;
+}
+
+.flex-container-wordle {
+	display: flex;
+	align-items: center;
+	padding: 5px 4px 0px 4px;	/*top right bottom left*/
+}
+
+.flex-container {
+	display: flex;
+	align-items: center;
+	padding-top: 5px;
+}
+/*
+.flex-item-row {
+	flex-direction: row;
+}
+*/
+.flex-QEF-container {
+	display: flex;
+	justify-content: flex-end;
+	flex-direction: row;
+    align-items: center;
+    padding-top: 5px;
+	line-height: 1.5rem;
+}
+
+/*fieldset > .flex-container { margin-left: -8px; }*/
+
+.flex-space-around {
+	justify-content: space-around;
+}
+
+.flex-container.flex-header {
+	padding-top: 0px;
+}
+
+.flex-item {
+	text-align: left;
+}
+
+.flex-item-center {
+	text-align: center;
+}
+/*
+.flex-QEF-item {
+	
+}
+*/
+.flex-item-column {
+	flex-direction: column;	
+}
+
+.flex-item-QEF-column {
+	flex-direction: column;
+/*	align-items: flex-end;*/
+}
+
+.QEF-left {
+	padding-right: 5px;
+}
+/*
+.full-width{
+	width: 260px;
+}
+*/
+.main-left,
+.input-left {
+	width: 80px;
+	text-align: right;
+	padding-right: 5px;
+}
+
+.input-right {
+	margin-left: auto;
+/*	padding-right: 0px;*/
+}
+
+.output-left {
+	width: 112px;
+	text-align: right;
+	padding-right: 4px;
+}
+
+.calculation-left {
+	width: 80px;
+	text-align: right;
+	padding-right: 4px;
+}
+
+.input-number > input {
+	padding-left: 3px;
+}
+
+.input-text > input {
+	text-align: center;
+	background-color: #000000;
+	color: #ffffff;
+	border: 2px solid #3a3a3c;
+	width: 45px;
+	height: 50px;
+	/*text-transform: uppercase;*/
+	border-radius: 0px;
+	font-size: 30pt;
+	caret-color: transparent;
+	-webkit-touch-callout: none;
+	padding: 0px 2px 0px 2px;	/*top right bottom left*/
+}
+
+.main-ul {
+	list-style-position: inside;
+	padding-inline-start: 0px !important;
+	font-size: 11pt !important;
+}​
+
+/* ul.main-ul > ul { */
+/* ul.notmain { */
+.notmain {
+	list-style-type: none;
+	padding-inline-start: 20px !important;
+}​
+
+.help {
+	font-size: 11pt;
+}
+.possibilities {
+	font-size: 12pt;
+}
+.noselect {										 /* disables selection (sometimes) */
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+			 -khtml-user-drag: none;
+			 -moz-user-select: -moz-none;
+			 	 -o-user-select: none;
+			 			user-select: none;
+						 		 margin: 0px 2px 0px 2px
+						 		/* padding: 0px 2px 0px 2px;	top right bottom left */
+}
+
+/* 
+::-moz-selection {
+  background: transparent;
+}
+::selection {
+  background: transparent;
+}
+ */
+.input-units,
+.output-units,
+.calculation-units
+{
+	padding-left: 4px;
+}
+
+.output-number {
+/*	width: 50px;*/
+	margin-left: 2px;
+}
+
+.calculation-number {
+/*	width: 50px;*/
+	margin-left: 2px;
+}
+
+.output-number > input,
+.calculation-number > input {
+	padding-left: 3px;
+}
+/*
+.main-label { }
+*/
+fieldset { /*making the position of our <fieldset> relative, we can safely position other elements inside the <fieldset> with absolute values.*/
+	position: relative;
+	margin: 20px 5px 2px 5px;
+/*	padding: 7px 0px 7px 0px;*/
+}
+
+legend span { /*fieldset legend positioning*/
+	position: absolute;
+	top: -8px;
+	left: 8px;
+	background-color: #000000;
+	padding: 0px 3px 0px 3px;
+}
+/*
+.main-legend {}
+*/
+.QEF-label {
+	margin-left: 2px;
+}
+/*
+.div-vertically-centered {
+	display: flex;
+	height: 3em;
+	align-items: center;
+}
+*/
+/* override jQuery Theme */
+/* http://jqueryui.com/themeroller/?ffDefault=Arial%2CHelvetica%2Csans-serif&fsDefault=0.87em&fwDefault=normal&cornerRadius=5px&bgColorHeader=%23e9e9e9&bgTextureHeader=flat&borderColorHeader=%23dddddd&fcHeader=%23333333&iconColorHeader=%23444444&bgColorContent=%23ffffff&bgTextureContent=flat&borderColorContent=%23dddddd&fcContent=%23333333&iconColorContent=%23444444&bgColorDefault=%238a8a8a&bgTextureDefault=flat&borderColorDefault=%23848484&fcDefault=%23ffffff&iconColorDefault=%23777777&bgColorHover=%23ededed&bgTextureHover=flat&borderColorHover=%23cccccc&fcHover=%232b2b2b&iconColorHover=%23555555&bgColorActive=%23ffffff&bgTextureActive=flat&borderColorActive=%23848484&fcActive=%23000000&iconColorActive=%23ffffff&bgColorHighlight=%23cacaca&bgTextureHighlight=flat&borderColorHighlight=%239c9c9c&fcHighlight=%234d4d4d&iconColorHighlight=%23484848&bgColorError=%23fddfdf&bgTextureError=flat&borderColorError=%23f1a899&fcError=%235f3f3f&iconColorError=%23cc0000&bgColorOverlay=%23aaaaaa&bgTextureOverlay=flat&bgImgOpacityOverlay=0&opacityOverlay=30&bgColorShadow=%23666666&bgTextureShadow=flat&bgImgOpacityShadow=0&opacityShadow=30&thicknessShadow=5px&offsetTopShadow=0px&offsetLeftShadow=0px&cornerRadiusShadow=8px&bgImgOpacityHeader=&bgImgOpacityContent=&bgImgOpacityDefault=&bgImgOpacityHover=&bgImgOpacityActive=&bgImgOpacityHighlight=&bgImgOpacityError= */
+
+.ui-widget {
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	font-size: 105%;
+}
+
+.ui-button {
+	min-width: 56.75px;
+/*	height: 3em;*/
+}
+
+.ui-button-text {
+/*			  top  right bottom left */
+	padding: 0.5em 0.0em 0.5em 0.0em !important;
+}
+
+/*.ui-selectmenu-text {
+	width: 100px !important;
+	font-size: 110%;
+}*/
+
+.ui-selectmenu-button {
+	width: 110px !important;
+	font-size: 110%;
+	height: 2.0em;
+/*			  top  right bottom left */
+/*	padding: 0.1em 0.0em 0.1em 0.0em;*/
+  background: #ffffff;
+	color: #000000;
+	vertical-align: middle;
+}
+
+:checked + label {	/*make selected radio button bold*/
+	font-weight: bold;
+	letter-spacing: -0.2px;
+}
+
+/*.ui-selectmenu-menu .ui-menu {
+	max-height: 15em;
+}*/
+
+/*
+#radio label span {
+	width: 200px;
+}
+*/
+
+/* override jQuery Mobile Theme */
+
+.ui-mobile-viewport {
+	background-color: black;
+}
