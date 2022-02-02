@@ -141,7 +141,7 @@ function solveIt() {
     }//for
     console.log(guessWord);
     if (guessWord !== '     ') {
-      if (!((aryAllPossibleGuesses.includes(guessWord)) /*|| (aryAllPossibleAnswers.includes(guessWord))*/)) {
+      if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
         errorHandler(guessWord + ' not a possible guess word!');
         return;
       }//if
@@ -152,7 +152,7 @@ function solveIt() {
   //console.log('include2D: ');
   //console.table(aryIncludeLetters2D);
   console.log('pattern: ' + aryPatternLetters);
-  //test that Exclude and Include/Pattern arrays are exclusive                    //this doesn't work if there are 2+ same letter in a guess!
+  //test that Exclude and Include/Pattern arrays are exclusive      //doesn't work when guess has 2+ of same letter!
   //if (aryExcludeLetters.some(r => aryIncludeLetters.indexOf(r) >= 0)) {
   //errorHandler('letter(s) overlap Include and Exclude!');
   //return;
