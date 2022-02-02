@@ -219,7 +219,7 @@ function solveIt() {
         }//if else
       }//for
     }//for
-    if (boolG2G) {
+    if (boolG2G) {                                                  //word excludes letter at Yellow letter position
       //console.log('push it real good!');
       aryScrutinizedFilteredFiveLetterWords.push(word);
     }//if
