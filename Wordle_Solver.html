@@ -1,0 +1,171 @@
+<!doctype html> <!-- standalone html doc now -->
+<html>
+	<head>
+		<!--other HTML head tags-->
+		<meta charset="utf-8">
+		<meta name="description" content="Innovative Engineering Services (IES)">
+		<!--		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">-->
+		<meta name="viewport" content="initial-scale=1.2, maximum-scale=1.2">
+		<!--^^^^this was used to make iPad Pro look OK and preserve iPhone 7 Plus-->
+		<!--		<meta name="viewport" content="width=320">-->
+		<!--^^^^this was last used-->
+		<!-- , maximum-scale=1.2 was added to prevent iOS Safari from zooming in for input fields-->
+		<!--changed the following 'viewport' meta so bigger iPhone 7 Plus etc will zoom automatically to look like iPhone 5s-->
+		<!--		<meta name="viewport" content="width=device-width, initial-scale=2.0">-->
+		<!--		<meta name="viewport" content="width=640, initial-scale=1.0">-->
+		<!--		<meta name="viewport" content="width=320">-->
+		<!-- undocumented meta tag on Safari on iOS defines the name of a Home screen icon -->
+		<meta name="apple-mobile-web-app-title" content="IES">
+		<meta name="application-name" content="IES">
+		<!-- META Tag for bookmarked springboard sites: removes the top (and bottom?) bar from the browser -->
+		<!-- seems to cause all hyperlinks to load into browser separately -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!-- favourite icon -->
+		<link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="/img/favicon/apple-touch-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="/img/favicon/apple-touch-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="/img/favicon/apple-touch-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="/img/favicon/apple-touch-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="/img/favicon/apple-touch-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="/img/favicon/apple-touch-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="/img/favicon/apple-touch-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-touch-icon-180x180.png">
+		<link rel="icon" type="image/png" href="/img/favicon/favicon-192x192.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="/img/favicon/favicon-160x160.png" sizes="160x160">
+		<link rel="icon" type="image/png" href="/img/favicon/favicon-96x96.png" sizes="96x96">
+		<link rel="icon" type="image/png" href="/img/favicon/favicon-16x16.png" sizes="16x16">
+		<link rel="icon" type="image/png" href="/img/favicon/favicon-32x32.png" sizes="32x32">
+		<meta name="msapplication-TileColor" content="#2b5797">
+		<meta name="msapplication-TileImage" content="/img/favicon/mstile-144x144.png">
+		<!--JavaScript includes-->
+		<script type="text/javascript" src="//code.jquery.com/jquery-2.2.2.min.js"></script>
+		<script type="text/javascript" src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		<script type="text/javascript" src="../js/links.js"></script><!-- cause all hyperlinked pages to load in the web app window -->
+		<link type="text/css" rel="stylesheet" href="../js/jquery/jquery-ui-1.11.4.custom/jquery-ui.css">
+		<link type="text/css" rel="stylesheet" href="../css/style.css"><!--ensure my style sheet is after jQuery's in includes.html-->
+		<link rel="prefetch" href="/img/IES_logo.svg">
+		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+		<title>IES: Wordle Solver</title>
+		<script src="Wordle_Solver.js"></script>
+	</head>
+	<body>
+		<div class="wrapper Wordle_Solver">
+			<div class="header">
+				<div id="header_container" class="flex-container flex-space-around">
+					<div id="IES_logo" class="flex-item" style="width: 50%; ">
+						<!-- <form action="/index_mobile.php" method="post"> -->
+							<input type="image" id="IES_logo_img" alt="IES logo" src="/img/IES_logo.svg" style="height:42px;" class="filter-white">
+							<!-- <input type="image" id="IES_logo_img" alt="IES logo" src="/img/IES_logo.svg" class="filter-white"> -->
+						<!-- </form> -->
+					</div>
+					<div id="Wordle_Solver_logo" class="flex-item" style="width: 50%; text-align: right">
+						<form action="/Wordle_Solver/Wordle_Solver_main_form.php" method="post">
+							<!-- <img id="Wordle_Solver_logo_img" alt="Wordle Solver" src="/img/Wordle_Solver.svg" style="height: 42px;"> -->
+							<input type="image" id="Wordle_Solver_logo_img" alt="Wordle Solver" src="/img/Wordle_Solver.svg" style="height:42px;" class="Wordle_Solver_logo">
+						</form>
+					</div>
+				</div>
+			</div><!-- header -->
+			<div id="spacer_1" class="spacer-big"></div>
+			<div class="content">
+				<div class="flex-container-wordle flex-space-around">
+					<div id="guess_1" class="flex-item-wordle input-text">
+						<input type="text" maxlength="1" id="guess_1_1" autocomplete="off" name="guess_1_1_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_1_2" autocomplete="off" name="guess_1_2_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_1_3" autocomplete="off" name="guess_1_3_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_1_4" autocomplete="off" name="guess_1_4_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_1_5" autocomplete="off" name="guess_1_5_input" class="noselect" value=" " />
+					</div>
+				</div>
+				<div class="flex-container-wordle flex-space-around">
+					<div id="guess_2" class="flex-item-wordle input-text">
+						<input type="text" maxlength="1" id="guess_2_1" autocomplete="off" name="guess_2_1_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_2_2" autocomplete="off" name="guess_2_2_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_2_3" autocomplete="off" name="guess_2_3_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_2_4" autocomplete="off" name="guess_2_4_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_2_5" autocomplete="off" name="guess_2_5_input" class="noselect" value=" " />
+					</div>
+				</div>
+				<div class="flex-container-wordle flex-space-around">
+					<div id="guess_3" class="flex-item-wordle input-text">
+						<input type="text" maxlength="1" id="guess_3_1" autocomplete="off" name="guess_3_1_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_3_2" autocomplete="off" name="guess_3_2_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_3_3" autocomplete="off" name="guess_3_3_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_3_4" autocomplete="off" name="guess_3_4_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_3_5" autocomplete="off" name="guess_3_5_input" class="noselect" value=" " />
+					</div>
+				</div>
+				<div class="flex-container-wordle flex-space-around">
+					<div id="guess_4" class="flex-item-wordle input-text">
+						<input type="text" maxlength="1" id="guess_4_1" autocomplete="off" name="guess_4_1_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_4_2" autocomplete="off" name="guess_4_2_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_4_3" autocomplete="off" name="guess_4_3_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_4_4" autocomplete="off" name="guess_4_4_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_4_5" autocomplete="off" name="guess_4_5_input" class="noselect" value=" " />
+					</div>
+				</div>
+				<div class="flex-container-wordle flex-space-around">
+					<div id="guess_5" class="flex-item-wordle input-text">
+						<input type="text" maxlength="1" id="guess_5_1" autocomplete="off" name="guess_5_1_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_5_2" autocomplete="off" name="guess_5_2_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_5_3" autocomplete="off" name="guess_5_3_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_5_4" autocomplete="off" name="guess_5_4_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_5_5" autocomplete="off" name="guess_5_5_input" class="noselect" value=" " />
+					</div>
+				</div>
+				<!-- 
+				<div class="flex-container-wordle flex-space-around">
+					<div id="guess_6" class="flex-item-wordle input-text">
+						<input type="text" maxlength="1" id="guess_6_1" autocomplete="off" name="guess_6_1_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_6_2" autocomplete="off" name="guess_6_2_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_6_3" autocomplete="off" name="guess_6_3_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_6_4" autocomplete="off" name="guess_6_4_input" class="noselect" value=" " />
+						<input type="text" maxlength="1" id="guess_6_5" autocomplete="off" name="guess_6_5_input" class="noselect" value=" " />
+					</div>
+				</div>
+				 -->
+				<div id="spacer_2" class="spacer-big"></div>
+				<div id="solve_it" class="flex-container flex-space-around">
+					<button id="solve_it_button" class="myButton" style="min-width: 80px; min-height: 40px; font-size: 14px; margin-right: 5px; margin-top: 0px">solve it!</button>
+				</div><!-- class="flex-container input-right" -->
+				<div id="spacer_3" class="spacer-big"></div>
+				<div id="help-outer" class="flex-container flex-space-around">
+					<div id="help-inner" class="flex-item">
+						<span id="help-span" class="help">
+							<ul class="main-ul">
+								<li>Start playing <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a></li>
+								<li>Enter guess words as you go</li>
+								<li>Click each letter to match Wordle results:</li>
+								<li style="list-style-type: none;"><!-- could not make CSS selector styling work-->
+									<ul style="padding-inline-start: 20px !important;"><!-- could not make CSS selector styling work-->
+										<li>Black:&nbsp;&nbsp;&nbsp;exclude letter</li>
+										<li>Yellow:&nbsp;include letter, wrong position</li>
+										<li>Green:&nbsp;&nbsp;include letter, correct position</li>
+									</ul>
+								</li>
+								<li>Click 'solve it!' button to see possible answers</li>
+								<li>Click Wordle Solver logo to reset</li>
+							</ul>
+						</span><!-- id="help-span" -->
+					</div><!-- id="help-inner" -->
+				</div><!-- id="help-outer" -->
+				<div id="possibilities" class="flex-item-center">
+					<span id="possibilities-number-span" class="possibilities">
+						possibilities: 
+					</span>
+				</div>
+				<br>
+				<div id="words" class="flex-item-center">
+					<span id="possibilities-text-span" class="possibilities">
+						&lt;possibilities&gt;
+					</span>
+				</div>
+			</div><!-- content -->
+			<div class="footer">
+				<!-- <form action="/index_mobile.php" method="post"> -->
+					<p>&copy;2022 <input type="image" alt="Bart" src="/img/BartmanEH.png" class="footer_img" style="height:30px;">Stassen, P.Eng.</p>
+				<!-- </form> -->
+			</div><!-- footer -->
+		</div><!-- wrapper -->
+	</body>
+</html>

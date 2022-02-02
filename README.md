@@ -1,1 +1,1 @@
-# BartmanEH.github.io
+# wordle-solver
