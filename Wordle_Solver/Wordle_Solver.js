@@ -154,6 +154,7 @@ function solveIt() {
           }//if else
         } else {
           aryIncludeLetters.push(letter);
+          boolFirstOccurrance = false;
         }//if else
       } else if (gridCoordBColor === 'rgb(83, 141, 78)') {   //is it Green?
         if (aryPatternLetters[letterPosition - 1] === '*') {
@@ -228,18 +229,18 @@ function solveIt() {
           for (let wordLetterPosition = 1; wordLetterPosition <= 5; wordLetterPosition++) {
             const wordLetter = word.substring(wordLetterPosition - 1, wordLetterPosition);
             if (wordLetter === yellowLetter) {
-              console.log('match: ' + word + ' ' + wordLetterPosition + ' ' + wordLetter);
+              //console.log('match: ' + word + ' ' + wordLetterPosition + ' ' + wordLetter);
               if (wordLetterPosition === letterPosition) {          //word has Yellow letter in same position
                 boolG2G = false;                                    //reject word
-                console.log('reject: ' + word + ' wordLetterPosition === letterPosition');
+                //console.log('reject: ' + word + ' wordLetterPosition === letterPosition');
                 break;
               } else {
                 if ((aryPatternLetters[wordLetterPosition - 1] !== '*') && (aryPatternLetters[wordLetterPosition - 1] !== yellowLetter)) {     //word's 'Yellow letter is in Black position
                   boolG2G = false;                                  //reject word
-                  console.log('reject: ' + word + ' aryPatternLetters[wordLetterPosition - 1]: ' + aryPatternLetters[wordLetterPosition - 1]);
+                  //console.log('reject: ' + word + ' aryPatternLetters[wordLetterPosition - 1]: ' + aryPatternLetters[wordLetterPosition - 1]);
                   break;
                 } else {
-                  console.log('keep ' + word);
+                  //console.log('keep ' + word);
                   continue;                                            //keep word (don't set boolG2G and stop further checking)
                 }//if else
               }//if else
