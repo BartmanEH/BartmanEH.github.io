@@ -169,9 +169,8 @@ function solveIt() {
           console.log('pattern Green: ' + letter);
           aryPatternLetters[letterPosition - 1] = letter;
           if (aryIncludeLetters.includes(letter)) {           //already have this letter
-            if (boolFirstGreenOccurrance) {
-              if (aryPatternLetters.indexOf(letter) !== letterPosition) {
-                console.log('ingoring already included first Green occurrance: ' + letter);
+            if (boolFirstYellowOccurrance) {
+              console.log('ingoring already included first Green occurrance: ' + letter);
               //aryIncludeLetters.push(letter);
               } else {
                 console.log('including already included first Green occurrance: ' + letter);
