@@ -178,10 +178,10 @@ function solveIt() {
           aryPatternLetters[letterPosition - 1] = letter;
           if (aryIncludeLetters.includes(letter)) {           //already have this letter
             if (aryBoolFirstYellowOccurrance.letter) {
+              console.log('ingoring already included first Green occurrance: ' + letter);
+            } else {
               console.log('including already included first Green occurrance: ' + letter);
               aryIncludeLetters.push(letter);
-            } else {
-              console.log('ingoring already included first Green occurrance: ' + letter);
             }//if else
             aryBoolFirstGreenOccurrance.letter = false;
           } else if (aryBoolFirstGreenOccurrance.letter) {              //don't have this letter
