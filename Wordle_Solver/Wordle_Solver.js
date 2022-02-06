@@ -165,26 +165,23 @@ function solveIt() {
         }//if else
       } else if (gridCoordBColor === 'rgb(83, 141, 78)') {    //is it Green?
         if (aryPatternLetters[letterPosition - 1] === '*') {
-          //aryIncludeLetters.push(letter);
           console.log('pattern Green: ' + letter);
           aryPatternLetters[letterPosition - 1] = letter;
           if (aryIncludeLetters.includes(letter)) {           //already have this letter
             if (boolFirstYellowOccurrance) {
               console.log('ingoring already included first Green occurrance: ' + letter);
-              //aryIncludeLetters.push(letter);
-              } else {
-                console.log('including already included first Green occurrance: ' + letter);
-                aryIncludeLetters.push(letter);
-              }//if else
-            boolFirstGreenOccurrance = false;
             } else {
-              console.log('including subsequent Green occurrance: ' + letter);
+              console.log('including already included first Green occurrance: ' + letter);
               aryIncludeLetters.push(letter);
             }//if else
-          } else {
+            boolFirstGreenOccurrance = false;
+          } else if (boolFirstGreenOccurrance) {              //don't have this letter
             console.log('including first Green: ' + letter);
             aryIncludeLetters.push(letter);
-          }//if
+          } else {
+            console.log('including subsequent Green occurrance: ' + letter);
+            aryIncludeLetters.push(letter);
+          }//if else
           //console.log('guessWord: ' + guessWord + ' letter: ' + letter + ' guessWord.indexOf(letter): ' + guessWord.indexOf(letter));
           /*
           if (guessWord.indexOf(letter) === letterPosition - 1) {
@@ -199,7 +196,7 @@ function solveIt() {
           errorHandler('more than one Green per column!');
           return;
         }//if else
-      }//if else
+      }//if else (gridCoordBColor)
     }//for
     if (guessWord !== '     ') {
       if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
