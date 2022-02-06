@@ -184,7 +184,7 @@ function solveIt() {
               aryIncludeLetters.push(letter);
             }//if else
             aryBoolFirstGreenOccurrance.letter = false;
-          } else if (boolFirstGreenOccurrance.letter) {              //don't have this letter
+          } else if (aryBoolFirstGreenOccurrance.letter) {              //don't have this letter
             console.log('including first Green: ' + letter);
             aryIncludeLetters.push(letter);
             aryBoolFirstGreenOccurrance.letter = false;
