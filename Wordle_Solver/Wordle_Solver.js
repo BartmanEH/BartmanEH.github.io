@@ -31,6 +31,10 @@ function inputKeydown(evt) {
   if (evt.keyCode === 8) {                                          //detect backspace/delete key
     evt.preventDefault();                                           //ignore it
   }//if
+  if (evt.keyCode === 13) {                                         //detect backspace/delete key
+    //evt.preventDefault();                                         //ignore it
+    $('#solve_it').click();                                         //trigger Solve It! button handler
+  }//if
 }//inputKeydown()
 
 function inputKeyup(evt) {
