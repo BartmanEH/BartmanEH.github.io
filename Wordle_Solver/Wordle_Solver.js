@@ -147,7 +147,7 @@ function solveIt() {
       } else if (gridCoordBColor === 'rgb(181, 159, 59)') {   //is it Yellow?
         if (aryIncludeLetters.includes(letter)) {             //already have this letter
           if (boolFirstYellowOccurrance) {
-            if (aryPatternLetters.indexOf(letter) >= -1) {
+            if (aryPatternLetters.indexOf(letter) > -1) {
               console.log('including first Yellow occurrance: ' + letter);
               aryIncludeLetters.push(letter);
             } else {
