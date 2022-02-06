@@ -161,7 +161,7 @@ function solveIt() {
               aryIncludeLetters.push(letter);
             } else {
             console.log('ignoring already included first Yellow occurrance: ' + letter);
-            boolFirstYellowOccurrance.letter = false;
+            aryBoolFirstYellowOccurrance.letter = false;
             }//if else
           } else {
             console.log('including subsequent Yellow occurrance: ' + letter);
@@ -170,24 +170,24 @@ function solveIt() {
         } else {                                              //new letter
           console.log('including first Yellow: ' + letter);
           aryIncludeLetters.push(letter);
-          boolFirstYellowOccurrance.letter = false;
+          aryBoolFirstYellowOccurrance.letter = false;
         }//if else
       } else if (gridCoordBColor === 'rgb(83, 141, 78)') {    //is it Green?
         if (aryPatternLetters[letterPosition - 1] === '*') {
           console.log('pattern Green: ' + letter);
           aryPatternLetters[letterPosition - 1] = letter;
           if (aryIncludeLetters.includes(letter)) {           //already have this letter
-            if (boolFirstYellowOccurrance.letter) {
+            if (aryBoolFirstYellowOccurrance.letter) {
               console.log('ingoring already included first Green occurrance: ' + letter);
             } else {
               console.log('including already included first Green occurrance: ' + letter);
               aryIncludeLetters.push(letter);
             }//if else
-            boolFirstGreenOccurrance.letter = false;
+            aryBoolFirstGreenOccurrance.letter = false;
           } else if (boolFirstGreenOccurrance.letter) {              //don't have this letter
             console.log('including first Green: ' + letter);
             aryIncludeLetters.push(letter);
-            boolFirstGreenOccurrance.letter = false;
+            aryBoolFirstGreenOccurrance.letter = false;
           } else {
             console.log('including subsequent Green occurrance: ' + letter);
             aryIncludeLetters.push(letter);
