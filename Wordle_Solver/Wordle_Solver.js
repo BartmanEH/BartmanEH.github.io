@@ -10,7 +10,7 @@ let numFiveLetterWords = aryAllPossibleAnswers.length;              //number of 
 let $previousClickedInput = null;                                   //declare tracking of what was clicked last
 
 $(document).ready(function () {                                     //main function () called after document DOM is ready
-  console.log('DOM ready!');                                        //log DOM ready
+  console.log('DOM ready! v' + version);                            //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
 });//$(document).ready()
