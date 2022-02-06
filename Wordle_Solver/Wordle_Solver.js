@@ -168,6 +168,8 @@ function solveIt() {
             } else {
               aryIncludeLetters.push(letter);
             }//if else
+          } else {
+            aryIncludeLetters.push(letter);
           }//if
           //console.log('guessWord: ' + guessWord + ' letter: ' + letter + ' guessWord.indexOf(letter): ' + guessWord.indexOf(letter));
           /*
