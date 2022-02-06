@@ -130,12 +130,12 @@ function solveIt() {
   for (let guessPosition = 1; guessPosition <= 5; guessPosition++) {
     let guessWord = '';
     //let boolFirstGreenOccurrance = Boolean(true);             //need to track multiple letters!
-    let aryBoolGreenLetterOccurrance = {
+    let aryBoolFirstGreenOccurrance = {
       A: true, B: true, C: true, D: true, E: true, F: true, G: true, H: true, I: true, J: true, K: true, L: true, M: true, 
       N: true, O: true, P: true, Q: true, R: true, S: true, T: true, U: true, V: true, W: true, X: true, Y: true, Z: true
     };
     //let boolFirstYellowOccurrance = Boolean(true);            //need to track multiple letters!
-    let aryBoolYellowLetterOccurrance = {
+    let aryBoolFirstYellowOccurrance = {
       A: true, B: true, C: true, D: true, E: true, F: true, G: true, H: true, I: true, J: true, K: true, L: true, M: true, 
       N: true, O: true, P: true, Q: true, R: true, S: true, T: true, U: true, V: true, W: true, X: true, Y: true, Z: true
     };
@@ -155,7 +155,7 @@ function solveIt() {
         };//if
       } else if (gridCoordBColor === 'rgb(181, 159, 59)') {   //is it Yellow?
         if (aryIncludeLetters.includes(letter)) {             //already have this letter
-          if (aryBoolYellowLetterOccurrance.letter) {         //first occurrance of this letter?
+          if (aryBoolFirstYellowOccurrance.letter) {         //first occurrance of this letter?
             if (aryPatternLetters.indexOf(letter) > -1) {
               console.log('including first Yellow occurrance: ' + letter);
               aryIncludeLetters.push(letter);
