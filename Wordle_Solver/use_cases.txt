@@ -16,6 +16,11 @@ BGYGG
 possibilities:
 LOWLY
 
+FOLLY
+BBGYB
+possibilities:
+LILAC
+
 SOARE
 BBYBY
 PEDAL
