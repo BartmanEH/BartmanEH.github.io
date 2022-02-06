@@ -1,0 +1,12 @@
+ROBOT
+BYBYB
+
+SOARE
+GBBBB
+SHUNT
+GBBBB
+
+FOLLY
+BGYGG
+possibilities:
+LOWLY

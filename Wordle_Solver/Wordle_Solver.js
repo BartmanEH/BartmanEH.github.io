@@ -147,29 +147,34 @@ function solveIt() {
       } else if (gridCoordBColor === 'rgb(181, 159, 59)') {   //is it Yellow?
         if (aryIncludeLetters.includes(letter)) {             //already have this letter
           if (boolFirstYellowOccurrance) {
+            console.log('including first Yellow occurrance: ' + letter);
             aryIncludeLetters.push(letter);
             boolFirstYellowOccurrance = false;
           } else {
-            console.log('including subsequent: ' + letter);
+            console.log('including subsequent Yellow occurrance: ' + letter);
             aryIncludeLetters.push(letter);
           }//if else
         } else {                                              //new letter
+          console.log('including first Yellow: ' + letter);
           aryIncludeLetters.push(letter);
           boolFirstYellowOccurrance = false;
         }//if else
       } else if (gridCoordBColor === 'rgb(83, 141, 78)') {   //is it Green?
         if (aryPatternLetters[letterPosition - 1] === '*') {
           //aryIncludeLetters.push(letter);
+          console.log('including first Green: ' + letter);
           aryPatternLetters[letterPosition - 1] = letter;
           if (aryIncludeLetters.includes(letter)) {             //already have this letter
             if (boolFirstGreenOccurrance) {
             //aryIncludeLetters.push(letter);
+            console.log('ignoring already included Yellow: ' + letter);
             boolFirstGreenOccurrance = false;
             } else {
+              console.log('including subsequent Green occurrance: ' + letter);
               aryIncludeLetters.push(letter);
             }//if else
           } else {
-            console.log('first Green occurrance');
+            console.log('first first Green:' + letter);
             aryIncludeLetters.push(letter);
           }//if
           //console.log('guessWord: ' + guessWord + ' letter: ' + letter + ' guessWord.indexOf(letter): ' + guessWord.indexOf(letter));
