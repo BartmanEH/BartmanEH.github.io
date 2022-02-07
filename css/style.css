@@ -453,13 +453,12 @@ input[type=number]::-webkit-inner-spin-button {
      -khtml-user-select: none; /* Konqueror HTML */
        -moz-user-select: none; /* Old versions of Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 			 -khtml-user-drag: none;
 			 -moz-user-select: -moz-none;
 			 	 -o-user-select: none;
 			 			user-select: none;
-						 		 margin: 0px 2px 0px 2px
+						 		 margin: 0px 2px 0px 2px /* top right bottom left */
 						 		/* padding: 0px 2px 0px 2px;	top right bottom left */
 }
 
