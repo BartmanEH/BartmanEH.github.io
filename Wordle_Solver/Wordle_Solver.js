@@ -78,8 +78,9 @@ function inputKeyup(evt) {
   $('[tabindex=' + tabindex + ']').focus();
   */
   //if ($(evt.target).next('input') != null) {                               //and next focus field is available
-  //$(evt.target).next('input').focus();                                   //focus next field
-  focusNextElement();
+  $(evt.target).next('input').click();                                   //focus next field
+  //$(evt.target).parent().parent().parent().next().find('input[type="text"]').focus();
+  //focusNextElement();
   //$('#guess_2_1').focus();
   //}//if
   if (logMode) { console.log('keyup event fired: evt.which: ' + evt.which + ' evt.target.value: ' + evt.target.value); }
@@ -148,7 +149,8 @@ function isSubsetInclDupes(includesArray, wordArray) {      //includesArray subs
 
 function focusNextElement () {
   //add all elements we want to include in our selection
-  var focussableElements = 'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
+  //var focussableElements = 'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
+  var focussableElements = 'input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
   if (document.activeElement && document.activeElement.form) {
       var focussable = Array.prototype.filter.call(document.activeElement.form.querySelectorAll(focussableElements),
       function (element) {
