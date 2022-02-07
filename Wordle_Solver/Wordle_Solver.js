@@ -41,13 +41,10 @@ $(document).ready(function () {                                     //main funct
 
 function UIeventHandlers() {                                        //attach handlers to UI events
   $('input[type="text"]').click(inputClicked);                      //text input field was clicked
-  //$('input[type="text"]').keydown(inputKeydown);                    //detect key pressed down in input field
   $('input[type="text"]').keyup(inputKeyup);                        //detect key pressed up in input field
-  //$('input[type="text"]').keypress(inputKeyPressed);                //detect key pressed in input field
   $('input[type="text"]').bind('contextmenu', function () {         //2nd tap invokes context menu
     return false;                                                   //this disables contect menu
   });//input context menu
-  //$('#solve_it').click(solveIt);                                    //Solve It! button handler
 }//UIeventHandlers()
 
 function inputKeyup(evt) {
@@ -131,7 +128,7 @@ function errorHandler(strError) {
   $('#possibilities').show();
 }//errorHandler
 
-function isSubsetInclDupes(includesArray, wordArray) {      //? includesArray subset of wordArray incl. any duplicates
+function isSubsetInclDupes(includesArray, wordArray) {      //includesArray subset of wordArray incl. any duplicates?
   const occurences = new Map();
   for (const entry of includesArray) {
     occurences.set(entry, (occurences.get(entry) ?? 0) + 1);
@@ -312,7 +309,7 @@ function solveIt() {
                   break;
                 } else {
                   if (logMode) { console.log('keep ' + word); }
-                  continue;                                            //keep word (don't set boolG2G and stop further checking)
+                  continue;                                         //keep word (don't set boolG2G and stop further checking)
                 }//if else
               }//if else
             }//if
