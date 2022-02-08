@@ -78,10 +78,10 @@ function inputKeyup(evt) {
   $('[tabindex=' + tabindex + ']').focus();
   */
   //if ($(evt.target).next('input') != null) {                               //and next focus field is available
-  $(evt.target).next('input').focus();                                   //focus next field
+  //$(evt.target).next('input').focus();                                   //focus next field
   //const nextTab = $(evt.target).attr('tabindex') + 1;
   //$('input[tabindex=' + nextTab + ']').focus();
-  //$(evt.target).parent().parent().parent().next().find('input[type="text"]').focus();
+  $(evt.target).parent().parent().next().find('input[type="text"]').focus();
   //focusNextElement();
   //$('#guess_2_1').focus();
   //}//if
