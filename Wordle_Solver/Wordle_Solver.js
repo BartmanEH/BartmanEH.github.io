@@ -80,8 +80,8 @@ function inputKeyup(evt) {
   //if ($(evt.target).next('input') != null) {                               //and next focus field is available
   //$(evt.target).next('input').focus();                                   //focus next field
   //const nextTab = $(evt.target).attr('tabindex') + 1;
-  //$('input[tabindex=' + nextTab + ']').focus();
-  $(evt.target).parent().find('input[type="text"]').focus();
+  $('input[tabindex=' + nextTab + ']').focus();
+  //$(evt.target).parent().find('input[type="text"]').focus();
   //focusNextElement();
   //$('#guess_2_1').focus();
   //}//if
