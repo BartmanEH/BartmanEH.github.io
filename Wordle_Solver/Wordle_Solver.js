@@ -114,13 +114,10 @@ function errorHandler(strError) {
 function isSubsetInclDupes(includesArray, wordArray) {      //includesArray subset of wordArray incl. any duplicates?
   const occurences = new Map();
   for (const entry of includesArray) {
-    //occurences.set(entry, (occurences.get(entry) ?? 0) + 1);
-    occurences.set(entry, (occurences.get(entry) || 0) + 1);
+    occurences.set(entry, (occurences.get(entry) ?? 0) + 1);                      //nullish coalescing operator (??)
   }//for
   for (const entry of wordArray) {
-    if (occurences.has(entry)) {
-      occurences.set(entry, occurences.get(entry) - 1);
-    }//if
+    if (occurences.has(entry)) { occurences.set(entry, occurences.get(entry) - 1); }
   }//for
   return [...occurences.values()].every(count => count <= 0);
 }//function()
