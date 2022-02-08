@@ -351,6 +351,11 @@ input[type=number]::-webkit-inner-spin-button {
 	justify-content: space-around;
 }
 
+.flex-space-around-wordle {
+	/* justify-content: space-around; */
+	justify-content: space-evenly;
+}
+
 .flex-container.flex-header {
 	padding-top: 0px;
 }
