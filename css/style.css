@@ -323,7 +323,7 @@ input[type=number]::-webkit-inner-spin-button {
 .flex-container-wordle {
 	display: flex;
 	align-items: center;
-	padding: 5px 4px 0px 4px;	/*top right bottom left*/
+	padding: 2px 4px 2px 4px;	/*top right bottom left*/
 }
 
 .flex-container {
