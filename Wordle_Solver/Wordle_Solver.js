@@ -261,10 +261,13 @@ function solveIt() {
             speed: 10,
             acceleration: 1.2,
             friction: 0.97,
-            gravity: 1.5
+            gravity: 0.1,
+            opacity: 0.1,
+            autoresize: false
+            //boundaries: { visible: false, x: 50, y: 50, width: container.clientWidth, height: container.clientHeight }
           };
-          //const fireworks = new Fireworks(container, fireworksConfig);
-          //fireworks.start();
+          const fireworks = new Fireworks(container, fireworksConfig);
+          fireworks.start();
         }//for
         return;                                                       //terminate further processing
       }//if
