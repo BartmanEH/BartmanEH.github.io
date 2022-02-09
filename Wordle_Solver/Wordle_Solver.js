@@ -345,3 +345,10 @@ function solveIt() {
   document.getElementById('possibilities-text-span').innerHTML = strPossibilities;
   document.getElementById('words').style.display = 'block';
 }//solveIt()
+
+async function automatedTesting() {
+  const requestURL = 'https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json';
+  const request = new Request(requestURL);
+  const response = await fetch(request);
+  const useCases = await response.json();
+}
