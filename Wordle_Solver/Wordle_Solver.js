@@ -10,7 +10,7 @@ const aryAllAnswersOrdered = [
 ];
 const testMode = Boolean(false);          //testMode = true: allow non-Answers and non-Guesses
 const prevAnswers = Boolean(true);        //prevAnswers = true: include previous Answers
-const logGeneral = Boolean(false);        //logGeneral = true: show general info messages on console
+const logGeneral = Boolean(true);        //logGeneral = true: show general info messages on console
 const logTabbing = Boolean(false);        //logTabbing = true: show auto focus next tab debug info messages on console
 const logKeyboard = Boolean(false);       //logKeyboard = true: show keyboard/tap info messages on console
 const logFilterRules = Boolean(false);    //logFilterRules = true: filter rules debug messages on console
@@ -277,6 +277,7 @@ function solveIt() {
         //║ ToDo: kickoff automated testing                                                                      ║
         //╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
         celebrate(guessPosition, 'Huomos easter egg!');
+        console.log('about to break...');
         break;                                                     //terminate further processing
       }//if
       if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
