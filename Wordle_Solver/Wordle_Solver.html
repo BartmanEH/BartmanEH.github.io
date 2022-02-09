@@ -43,10 +43,11 @@
 		<link rel="prefetch" href="../img/IES_logo.svg">
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
 		<title>IES: Wordle Solver</title>
+		<script src="https://cdn.jsdelivr.net/npm/fireworks-js@latest/dist/fireworks.js"></script>
 		<script src="../Wordle_Solver/Wordle_Solver.js"></script>
 	</head>
 	<body>
-		<div class="wrapper Wordle_Solver">
+		<div class="wrapper Wordle_Solver fireworks-container">
 			<div class="header">
 				<div id="header_container" class="flex-container flex-space-around">
 					<div id="IES_logo" class="flex-item" style="width: 50%; ">
@@ -166,5 +167,6 @@
 				<span id="version">vX.Y</span>
 			</div><!-- footer -->
 		</div><!-- wrapper -->
+		<div id="root"></div>
 	</body>
 </html>

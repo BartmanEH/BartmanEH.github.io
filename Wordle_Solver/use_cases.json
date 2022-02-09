@@ -3,7 +3,6 @@
     {
       "guess1": "ROBOT",
       "pattern1": "BYBYB",
-      "numPossibilities": 2,
       "possibilities": [
         "OVOID",
         "OZONE"
@@ -12,7 +11,6 @@
     {
       "guess1": "ROBOT",
       "pattern1": "BGBYB",
-      "numPossibilities": 15,
       "possibilities": [
         "CONDO",
         "FOLIO",
@@ -34,7 +32,6 @@
     {
       "guess1": "ROBOT",
       "pattern1": "BYBGB",
-      "numPossibilities": 16,
       "possibilities": [
         "ALOOF",
         "FLOOD",
@@ -57,7 +54,6 @@
     {
       "guess1": "EVERY",
       "pattern1": "YBYBB",
-      "numPossibilities": 30,
       "possibilities": [
         "BEGET",
         "BELIE",
@@ -94,7 +90,6 @@
     {
       "guess1": "EVERY",
       "pattern1": "GBYBB",
-      "numPossibilities": 15,
       "possibilities": [
         "EAGLE",
         "EASEL",
@@ -116,7 +111,6 @@
     {
       "guess1": "EVERY",
       "pattern1": "YBGBB",
-      "numPossibilities": 35,
       "possibilities": [
         "BEECH",
         "BLEED",
@@ -158,7 +152,6 @@
     {
       "guess1": "EVERY",
       "pattern1": "GBGBB",
-      "numPossibilities": 3,
       "possibilities": [
         "EJECT",
         "ELECT",
@@ -172,7 +165,6 @@
       "pattern3": "GBBBB",
       "guess3": "SPICY",
       "pattern4": "GBGBB",
-      "numPossibilities": 3,
       "possibilities": [
         "SKIFF",
         "SKILL",
@@ -182,7 +174,6 @@
     {
       "guess1": "FOLLY",
       "pattern1": "BGYGG",
-      "numPossibilities": 1,
       "possibilities": [
         "LOWLY"
       ]
@@ -190,7 +181,6 @@
     {
       "guess1": "FOLLY",
       "pattern1": "BBGYB",
-      "numPossibilities": 1,
       "possibilities": [
         "LILAC"
       ]
@@ -200,7 +190,6 @@
       "pattern1": "BBYBY",
       "guess2": "PEDAL",
       "pattern3": "GYBGY",
-      "numPossibilities": 1,
       "possibilities": [
         "PLEAT"
       ]
