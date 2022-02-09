@@ -157,9 +157,9 @@ function celebrate (guessPosition, string) {
     document.getElementById(gridId).style.backgroundColor = rgbGreen;        //make background Green
     document.getElementById(gridId).style.border = '2px solid ' + rgbGreen;  //make border Green too
     document.getElementById(gridId).dataset.state = stateCorrect;
-    aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
-    aryExcludeLetters = [];
-    aryIncludeLetters = [];
+    //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
+    //aryExcludeLetters = [];
+    //aryIncludeLetters = [];
     errorHandler(string);
     const container = document.getElementById('root');
     const fireworksConfig = {
