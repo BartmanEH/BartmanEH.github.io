@@ -263,7 +263,7 @@ function solveIt() {
             friction: 0.97,
             gravity: 1.5
           };
-          const fireworks = new Fireworks(container, fireworksConfig);
+          //const fireworks = new Fireworks(container, fireworksConfig);
           //fireworks.start();
         }//for
         return;                                                       //terminate further processing
