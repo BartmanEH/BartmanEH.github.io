@@ -1,0 +1,209 @@
+{
+  "use cases": [
+    {
+      "guess1": "ROBOT",
+      "pattern1": "BYBYB",
+      "numPossibilities": 2,
+      "possibilities": [
+        "OVOID",
+        "OZONE"
+      ]
+    },
+    {
+      "guess1": "ROBOT",
+      "pattern1": "BGBYB",
+      "numPossibilities": 15,
+      "possibilities": [
+        "CONDO",
+        "FOLIO",
+        "GOODY",
+        "GOOEY",
+        "GOOFY",
+        "GOOSE",
+        "LOOPY",
+        "LOOSE",
+        "MOODY",
+        "MOOSE",
+        "NOOSE",
+        "POOCH",
+        "WOODY",
+        "WOOLY",
+        "WOOZY"
+      ]
+    },
+    {
+      "guess1": "ROBOT",
+      "pattern1": "BYBGB",
+      "numPossibilities": 16,
+      "possibilities": [
+        "ALOOF",
+        "FLOOD",
+        "GLOOM",
+        "IGLOO",
+        "ONION",
+        "SCOOP",
+        "SHOOK",
+        "SLOOP",
+        "SNOOP",
+        "SPOOF",
+        "SPOOK",
+        "SPOOL",
+        "SPOON",
+        "SWOON",
+        "SWOOP",
+        "WHOOP"
+      ]
+    },
+    {
+      "guess1": "EVERY",
+      "pattern1": "YBYBB",
+      "numPossibilities": 30,
+      "possibilities": [
+        "BEGET",
+        "BELIE",
+        "BELLE",
+        "BESET",
+        "BETEL",
+        "BEZEL",
+        "CEASE",
+        "DENSE",
+        "DEUCE",
+        "FEMME",
+        "FENCE",
+        "GENIE",
+        "HEDGE",
+        "HENCE",
+        "JEWEL",
+        "LEASE",
+        "LEDGE",
+        "MELEE",
+        "PEACE",
+        "PENCE",
+        "PENNE",
+        "SEGUE",
+        "SEIZE",
+        "SEMEN",
+        "SENSE",
+        "TEASE",
+        "TENET",
+        "TENSE",
+        "TEPEE",
+        "WEDGE"
+      ]
+    },
+    {
+      "guess1": "EVERY",
+      "pattern1": "GBYBB",
+      "numPossibilities": 15,
+      "possibilities": [
+        "EAGLE",
+        "EASEL",
+        "EATEN",
+        "ELATE",
+        "ELIDE",
+        "ELITE",
+        "ELOPE",
+        "ELUDE",
+        "EMBED",
+        "EMCEE",
+        "ENSUE",
+        "ETUDE",
+        "EXCEL",
+        "EXILE",
+        "EXPEL"
+      ]
+    },
+    {
+      "guess1": "EVERY",
+      "pattern1": "YBGBB",
+      "numPossibilities": 35,
+      "possibilities": [
+        "BEECH",
+        "BLEED",
+        "BLEEP",
+        "CHEEK",
+        "FLEET",
+        "GEESE",
+        "KNEED",
+        "KNEEL",
+        "LEECH",
+        "LIEGE",
+        "NIECE",
+        "OBESE",
+        "PIECE",
+        "QUEEN",
+        "QUEUE",
+        "SCENE",
+        "SHEEN",
+        "SHEEP",
+        "SHEET",
+        "SIEGE",
+        "SLEEK",
+        "SLEEP",
+        "SLEET",
+        "SPEED",
+        "STEED",
+        "STEEL",
+        "STEEP",
+        "SWEEP",
+        "SWEET",
+        "TEETH",
+        "THEME",
+        "THESE",
+        "TWEED",
+        "TWEET",
+        "WHEEL"
+      ]
+    },
+    {
+      "guess1": "EVERY",
+      "pattern1": "GBGBB",
+      "numPossibilities": 3,
+      "possibilities": [
+        "EJECT",
+        "ELECT",
+        "ENEMA"
+      ]
+    },
+    {
+      "guess1": "SOARE",
+      "pattern1": "GBBBB",
+      "guess2": "SHUNT",
+      "pattern3": "GBBBB",
+      "guess3": "SPICY",
+      "pattern4": "GBGBB",
+      "numPossibilities": 3,
+      "possibilities": [
+        "SKIFF",
+        "SKILL",
+        "SWILL"
+      ]
+    },
+    {
+      "guess1": "FOLLY",
+      "pattern1": "BGYGG",
+      "numPossibilities": 1,
+      "possibilities": [
+        "LOWLY"
+      ]
+    },
+    {
+      "guess1": "FOLLY",
+      "pattern1": "BBGYB",
+      "numPossibilities": 1,
+      "possibilities": [
+        "LILAC"
+      ]
+    },
+    {
+      "guess1": "SOARE",
+      "pattern1": "BBYBY",
+      "guess2": "PEDAL",
+      "pattern3": "GYBGY",
+      "numPossibilities": 1,
+      "possibilities": [
+        "PLEAT"
+      ]
+    }
+  ]
+}
