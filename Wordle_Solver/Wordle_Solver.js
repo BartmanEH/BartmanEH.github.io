@@ -277,7 +277,7 @@ function solveIt() {
         //║ ToDo: kickoff automated testing                                                                      ║
         //╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
         celebrate(guessPosition, 'Huomos easter egg!');
-        return;                                                     //terminate further processing
+        break;                                                     //terminate further processing
       }//if
       if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
         errorHandler('"' + guessWord + '" is not a possible guess word!');
@@ -289,7 +289,7 @@ function solveIt() {
     if (logGeneral) { console.log('diffDays: ' + diffDays); }
     if (streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays)) {
       celebrate(guessPosition, 'Streak Saver easter egg!');
-      return;                                                       //terminate further processing
+      break;                                                       //terminate further processing
     }//if
     //let's do some error checking, shall we? we have the whole Guess word here
   }//for guessPosition
