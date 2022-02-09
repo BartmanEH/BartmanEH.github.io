@@ -264,7 +264,7 @@ function solveIt() {
             gravity: 1.5
           };
           const fireworks = new Fireworks(container, fireworksConfig);
-          fireworks.start();
+          //fireworks.start();
         }//for
         return;                                                       //terminate further processing
       }//if
