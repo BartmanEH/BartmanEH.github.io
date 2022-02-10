@@ -172,7 +172,7 @@ function celebrate (guessPosition, string) {
     width: container.clientWidth
   };
   console.log('Height: ' + container.clientHeight + ', Width: ' + container.clientWidth);
-  const fireworks = new Fireworks(container, fireworksConfig);
+  //const fireworks = new Fireworks(container, fireworksConfig);
   //fireworks.start();
 }//celebrate()
 
