@@ -384,9 +384,9 @@ async function automatedTesting() {
   //if (logAutoTest) { console.log(useCaseData.useCases); }
   useCaseData.useCases.forEach(useCase => {
     //if (logAutoTest) { console.log(useCase); }
-    if (logAutoTest) { console.log('id: ' + useCase.id); }
-    if (logAutoTest) { console.log('guess: ' + useCase.guess); }
-    if (logAutoTest) { console.log('pattern: ' + useCase.pattern); }
-    if (logAutoTest) { console.log('possibilities: ' + useCase.possibilities); }
+    if (logAutoTest) { console.log('id(' + useCase.id.length + '): ' + useCase.id); }
+    if (logAutoTest) { console.log('guess(' + useCase.guess.length +  '): ' + useCase.guess); }
+    if (logAutoTest) { console.log('pattern(' + useCase.pattern.length +  '): ' + useCase.pattern); }
+    if (logAutoTest) { console.log('possibilities(' + useCase.possibilities.length +  '): ' + useCase.possibilities); }
   });
 }//automatedTesting()
