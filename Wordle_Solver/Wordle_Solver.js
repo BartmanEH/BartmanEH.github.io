@@ -370,6 +370,9 @@ function solveIt() {
   }//for
   numFiveLetterWords = aryScrutinizedFilteredFiveLetterWords.length;
   const strPossibilities = buildStrFilteredFiveLetterWords(aryScrutinizedFilteredFiveLetterWords);
+  if (strPossibilities === '') {
+    strPossibilities = ' ';
+  }//if
   if (logFiltered) { console.log('strPossibilities: ' + strPossibilities); }
   if (logFiltered) { console.log('possibilities (filtered): ' + aryFilteredFiveLetterWords.length.toLocaleString()); }
   if (logFiltered) { console.log('possibilities (scrutinized): ' + numFiveLetterWords.toLocaleString()); }
