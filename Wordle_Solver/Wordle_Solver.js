@@ -159,22 +159,23 @@ function celebrate (guessPosition, string) {
     document.getElementById(gridId).style.border = '2px solid ' + rgbGreen;  //make border Green too
     document.getElementById(gridId).dataset.state = stateCorrect;
   }//for
-    errorHandler(string);
-    const container = document.getElementById('root');
-    const fireworksConfig = {
-      delay: { min: 15, max: 15 },
-      speed: 10,
-      acceleration: 1.2,
-      friction: 0.97,
-      gravity: 0.1,
-      opacity: 0.1,
-      height: container.clientHeight,
-      width: container.clientWidth
-    };
-    console.log('Height: ' + container.clientHeight);
-    console.log('Width: ' + container.clientWidth);
-    const fireworks = new Fireworks(container, fireworksConfig);
-    fireworks.start();
+  errorHandler(string);
+  const container = document.getElementById('root');
+  const fireworksConfig = {
+    delay: { min: 15, max: 15 },
+    speed: 10,
+    acceleration: 1.2,
+    friction: 0.97,
+    gravity: 0.1,
+    opacity: 0.1,
+    height: container.clientHeight,
+    width: container.clientWidth
+  };
+  console.log('Height: ' + container.clientHeight);
+  console.log('Width: ' + container.clientWidth);
+  const fireworks = new Fireworks(container, fireworksConfig);
+  console.log('about to start');
+  fireworks.start();
 }//celebrate()
 
 function solveIt() {
