@@ -161,9 +161,9 @@ function celebrate(guessPosition, string) {
   }//for
   errorHandler(string);
   const container = document.querySelector('.fireworks-container');
-  const fireworks = new Fireworks(container);
+  //eslint-disable-next-line no-undef
+  const fireworks = new Fireworks(container);                       //set eslint to ignore "'Fireworks' is not defined."
   fireworks.start();
-  //fireworks.visibleBoudaries();
 }//celebrate()
 
 function solveIt() {
