@@ -173,7 +173,7 @@ function celebrate (guessPosition, string) {
   };
   console.log('Height: ' + container.clientHeight + ', Width: ' + container.clientWidth);
   const fireworks = new Fireworks(container, fireworksConfig);
-  //fireworks.start();
+  fireworks.start();
 }//celebrate()
 
 function solveIt() {
@@ -291,12 +291,15 @@ function solveIt() {
     if (streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays)) {
       celebrate(guessPosition, 'Streak Saver easter egg!');
       //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
+      console.log('1');
       aryPatternLetters = ['*', '*', '*', '*', '*'];
       aryExcludeLetters = aryIncludeLetters = [];
+      console.log('2');
       break;                                                        //terminate further processing
     }//if
     //let's do some error checking, shall we? we have the whole Guess word here
   }//for guessPosition
+  console.log('3');
   if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('exclude: ' + aryExcludeLetters); }
   if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('include: ' + aryIncludeLetters); }
   if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('pattern: ' + aryPatternLetters); }
