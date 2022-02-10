@@ -160,7 +160,7 @@ function celebrate (guessPosition, string) {
     document.getElementById(gridId).dataset.state = stateCorrect;
   }//for
   errorHandler(string);
-  const container = document.getElementsByClassName('fireworks-container');
+  const container = document.getElementsByClassName('fireworks-container')[0];
   const fireworksConfig = {
     delay: { min: 15, max: 15 },
     speed: 10,
