@@ -274,7 +274,7 @@ function solveIt() {
         //║ ToDo: kickoff automated testing                                                                      ║
         //╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
         celebrate(guessPosition, 'Huomos easter egg!');
-        break;                                                     //terminate further processing
+        return;                                                     //terminate further processing
       }//if
       if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
         errorHandler('"' + guessWord + '" is not a possible guess word!');
@@ -290,7 +290,7 @@ function solveIt() {
       aryPatternLetters = [];
       aryExcludeLetters = [];
       aryIncludeLetters = [];
-      break;                                                       //terminate further processing
+      return;                                                       //terminate further processing
     }//if
     //let's do some error checking, shall we? we have the whole Guess word here
   }//for guessPosition
