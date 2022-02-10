@@ -369,8 +369,11 @@ function solveIt() {
     }//if
   }//for
   numFiveLetterWords = aryScrutinizedFilteredFiveLetterWords.length;
-  if (numFiveLetterWords === 0) const strPossibilities = ' ';
-  else const strPossibilities = buildStrFilteredFiveLetterWords(aryScrutinizedFilteredFiveLetterWords);
+  if (numFiveLetterWords === 0) {
+    let strPossibilities = ' ';
+  } else {
+    let strPossibilities = buildStrFilteredFiveLetterWords(aryScrutinizedFilteredFiveLetterWords);
+  }
   if (logFiltered) { console.log('strPossibilities: ' + strPossibilities); }
   if (logFiltered) { console.log('possibilities (filtered): ' + aryFilteredFiveLetterWords.length.toLocaleString()); }
   if (logFiltered) { console.log('possibilities (scrutinized): ' + numFiveLetterWords.toLocaleString()); }
