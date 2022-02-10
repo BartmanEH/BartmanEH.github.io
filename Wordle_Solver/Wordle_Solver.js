@@ -160,7 +160,7 @@ function celebrate (guessPosition, string) {
     document.getElementById(gridId).dataset.state = stateCorrect;
   }//for
   errorHandler(string);
-  const container = document.getElementById('root');
+  const container = document.getElementsByClassName('fireworks-container');
   const fireworksConfig = {
     delay: { min: 15, max: 15 },
     speed: 10,
@@ -168,8 +168,7 @@ function celebrate (guessPosition, string) {
     friction: 0.97,
     gravity: 0.1,
     opacity: 0.1,
-    //height: container.clientHeight,
-    height: 768,
+    height: container.clientHeight,
     width: container.clientWidth
   };
   console.log('Height: ' + container.clientHeight + ', Width: ' + container.clientWidth);
