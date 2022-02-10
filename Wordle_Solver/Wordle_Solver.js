@@ -374,56 +374,19 @@ function solveIt() {
   document.getElementById('possibilities-text-span').innerHTML = strPossibilities;
   document.getElementById('words').style.display = 'block';
 }//solveIt()
-/*
-function traverse(jsonObj) {
-  if (jsonObj !== null && typeof jsonObj === 'object') {
-    Object.entries(jsonObj).forEach(([key, value]) => {
-      //key is either an array index or object key
-      traverse(value);
-    });
-  } else {
-    //jsonObj is a number or string
-  }//if else
-}//traverse()
-*/
-//called with every property and its value
-function process(key, value) {
-  console.log(key + ': ' + value);
-}//process()
-
-function traverse(o, func) {
-  for (const i in o) {
-    func.apply(this, [i, o[i]]);
-    if (o[i] !== null && typeof (o[i]) === 'object') {
-      //going one step down in the object tree!!
-      traverse(o[i], func);
-    }//if//
-  }//for
-}//traverse()
-
-//that's all... no magic, no bloated framework
-//traverse(o, process);
 
 async function automatedTesting() {
   const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/use_cases.json';
   const request = new Request(requestURL);
   const response = await fetch(request);
   const useCaseData = await response.json();
-  if (logAutoTest) { console.log(useCaseData); }
-  /*
-  for (const useCases in useCaseData) {
-    if (logAutoTest) { console.log('useCases: "' + useCases + '"'); }
-    for (const useCase in useCaseData[useCases]) {
-      if (logAutoTest) { console.log('useCase: "' + useCase + '"'); }
-      for (const param in useCaseData[useCases][useCase]) {
-        //if (logAutoTest) { console.log('param: "' + param + '"'); }
-        if (logAutoTest) { console.log('id: ' + useCaseData[useCases][useCase].id); }
-        if (logAutoTest) { console.log('guess: ' + useCaseData[useCases][useCase].guess); }
-        if (logAutoTest) { console.log('pattern: ' + useCaseData[useCases][useCase].pattern); }
-        if (logAutoTest) { console.log('possibilities: ' + useCaseData[useCases][useCase].possibilities); }
-      }//for
-    }//for
-  }//for
-  */
-  traverse(useCaseData, process);
+  //if (logAutoTest) { console.log(useCaseData); }
+  //if (logAutoTest) { console.log(useCaseData.useCases); }
+  useCaseData.useCases.forEach(useCase => {
+    //if (logAutoTest) { console.log(useCase); }
+    if (logAutoTest) { console.log('id: ' + useCase.id); }
+    if (logAutoTest) { console.log('guess: ' + useCase.guess); }
+    if (logAutoTest) { console.log('pattern: ' + useCase.pattern); }
+    if (logAutoTest) { console.log('possibilities: ' + useCase.possibilities); }
+  });
 }//automatedTesting()
