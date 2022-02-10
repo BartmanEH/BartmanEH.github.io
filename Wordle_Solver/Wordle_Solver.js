@@ -276,13 +276,8 @@ function solveIt() {
         //║ ToDo: kickoff automated testing                                                                      ║
         //╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
         celebrate(guessPosition, 'Huomos easter egg!');
-        console.log('1');
-        aryPatternLetters = ['*', '*', '*', '*', '*'];
-        console.log('2');
-        aryExcludeLetters = [];
-        console.log('3');
-        aryIncludeLetters = [];
-        console.log('4');
+        aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
+        aryExcludeLetters = aryIncludeLetters = [];
         break;                                                      //terminate further processing
       }//if
       if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
@@ -296,7 +291,7 @@ function solveIt() {
     if (streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays)) {
       celebrate(guessPosition, 'Streak Saver easter egg!');
       //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
-      aryPatternLetters = ['*', '*', '*', '*', '*'];
+      aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
       aryExcludeLetters = aryIncludeLetters = [];
       break;                                                        //terminate further processing
     }//if
