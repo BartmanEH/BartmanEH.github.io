@@ -277,7 +277,7 @@ function solveIt() {
         //╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
         celebrate(guessPosition, 'Huomos easter egg!');
         aryPatternLetters = aryExcludeLetters = aryIncludeLetters = [];
-        return;                                                     //terminate further processing
+        break;                                                      //terminate further processing
       }//if
       if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
         errorHandler('"' + guessWord + '" is not a possible guess word!');
@@ -291,7 +291,7 @@ function solveIt() {
       celebrate(guessPosition, 'Streak Saver easter egg!');
       //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
       aryPatternLetters = aryExcludeLetters = aryIncludeLetters = [];
-      return;                                                       //terminate further processing
+      break;                                                        //terminate further processing
     }//if
     //let's do some error checking, shall we? we have the whole Guess word here
   }//for guessPosition
