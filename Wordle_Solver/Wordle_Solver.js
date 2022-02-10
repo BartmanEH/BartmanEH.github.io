@@ -278,8 +278,9 @@ function solveIt() {
         celebrate(guessPosition, 'Huomos easter egg!');
         console.log('1');
         aryPatternLetters = ['*', '*', '*', '*', '*'];
-        aryExcludeLetters = aryIncludeLetters = [];
         console.log('2');
+        aryExcludeLetters = aryIncludeLetters = [];
+        console.log('3');
         break;                                                      //terminate further processing
       }//if
       if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
@@ -299,7 +300,6 @@ function solveIt() {
     }//if
     //let's do some error checking, shall we? we have the whole Guess word here
   }//for guessPosition
-  console.log('3');
   if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('exclude: ' + aryExcludeLetters); }
   if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('include: ' + aryIncludeLetters); }
   if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('pattern: ' + aryPatternLetters); }
