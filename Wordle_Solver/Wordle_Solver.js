@@ -185,6 +185,7 @@ function solveIt() {
   let aryExcludeLetters = [];
   let aryIncludeLetters = [];
   const aryPatternLetters = ['*', '*', '*', '*', '*'];
+  guess_loop:
   for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
     let guessWord = '';
     const aryBoolFirstGreenOccurrance = [];
@@ -195,7 +196,7 @@ function solveIt() {
       const letter = gridElement.value.toUpperCase();
       if (letter === ' ') {
         //errorHandler('gridCoord contains &lt;space&gt;! ' + gridCoord);
-        break;
+        break guess_loop;
       }//if
       const boolFirstYellowOccurance = aryBoolFirstYellowOccurrance[letter] ?? true;    //?? to initialize array elements
       const boolFirstGreenOccurance = aryBoolFirstGreenOccurrance[letter] ?? true;      //?? to initialize array elements
@@ -274,10 +275,8 @@ function solveIt() {
         //║ ToDo: kickoff automated testing                                                                      ║
         //╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
         celebrate(guessPosition, 'Huomos easter egg!');
-        aryPatternLetters = [];
-        aryExcludeLetters = [];
-        aryIncludeLetters = [];
-        return;                                                     //terminate further processing
+        aryPatternLetters = aryExcludeLetters = aryIncludeLetters = [];
+        break guess_loop;                                           //terminate further processing
       }//if
       if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
         errorHandler('"' + guessWord + '" is not a possible guess word!');
@@ -290,10 +289,8 @@ function solveIt() {
     if (streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays)) {
       celebrate(guessPosition, 'Streak Saver easter egg!');
       //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
-      aryPatternLetters = [];
-      aryExcludeLetters = [];
-      aryIncludeLetters = [];
-      return;                                                       //terminate further processing
+      aryPatternLetters = aryExcludeLetters = aryIncludeLetters = [];
+      break guess_loop;                                             //terminate further processing
     }//if
     //let's do some error checking, shall we? we have the whole Guess word here
   }//for guessPosition
