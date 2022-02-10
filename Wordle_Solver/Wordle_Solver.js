@@ -15,7 +15,7 @@ const logTabbing = Boolean(false);        //logTabbing = true: show auto focus n
 const logKeyboard = Boolean(false);       //logKeyboard = true: show keyboard/tap info messages on console
 const logFilterRules = Boolean(false);    //logFilterRules = true: filter rules debug messages on console
 const logFiltering = Boolean(false);      //logFiltering = true: filtering debug messages on console
-const logFiltered = Boolean(true);       //logFiltered = true: filtered debug messages on console
+const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const streakSaver = Boolean(true);        //streakSaver = true: Greenify Guess if it's Today's Answer
