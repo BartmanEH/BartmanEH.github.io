@@ -171,11 +171,9 @@ function celebrate (guessPosition, string) {
     height: container.clientHeight,
     width: container.clientWidth
   };
-  console.log('Height: ' + container.clientHeight);
-  console.log('Width: ' + container.clientWidth);
+  console.log('Height: ' + container.clientHeight + ', Width: ' + container.clientWidth);
   const fireworks = new Fireworks(container, fireworksConfig);
-  console.log('about to start');
-  fireworks.start();
+  //fireworks.start();
 }//celebrate()
 
 function solveIt() {
@@ -299,9 +297,9 @@ function solveIt() {
     }//if
     //let's do some error checking, shall we? we have the whole Guess word here
   }//for guessPosition
-  if (logGeneral || logFilterRules || logFiltering) { console.log('exclude: ' + aryExcludeLetters); }
-  if (logGeneral || logFilterRules || logFiltering) { console.log('include: ' + aryIncludeLetters); }
-  if (logGeneral || logFilterRules || logFiltering) { console.log('pattern: ' + aryPatternLetters); }
+  if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('exclude: ' + aryExcludeLetters); }
+  if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('include: ' + aryIncludeLetters); }
+  if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('pattern: ' + aryPatternLetters); }
   for (const word of aryAllPossibleAnswers) {
     let boolExclude = Boolean(false);                               //true if word excludes all exclude letters
     let boolInclude = Boolean(false);                               //true if word includes any include letter
@@ -372,9 +370,6 @@ function solveIt() {
   }//for
   numFiveLetterWords = aryScrutinizedFilteredFiveLetterWords.length;
   const strPossibilities = buildStrFilteredFiveLetterWords(aryScrutinizedFilteredFiveLetterWords);
-  if (strPossibilities === '') {
-    strPossibilities = ' ';
-  }//if
   if (logFiltered) { console.log('possibilities (filtered): ' + aryFilteredFiveLetterWords.length.toLocaleString()); }
   if (logFiltered) { console.log('possibilities (scrutinized): ' + numFiveLetterWords.toLocaleString()); }
   document.getElementById('possibilities-number-span').innerHTML = 'possibilities: ' + numFiveLetterWords.toLocaleString();
