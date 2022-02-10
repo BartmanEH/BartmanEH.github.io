@@ -173,7 +173,7 @@ function celebrate (guessPosition, string) {
   };
   console.log('Height: ' + container.clientHeight + ', Width: ' + container.clientWidth);
   const fireworks = new Fireworks(container, fireworksConfig);
-  fireworks.start();
+  //fireworks.start();
 }//celebrate()
 
 function solveIt() {
