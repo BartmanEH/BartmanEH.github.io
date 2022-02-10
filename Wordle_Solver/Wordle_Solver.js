@@ -279,8 +279,10 @@ function solveIt() {
         console.log('1');
         aryPatternLetters = ['*', '*', '*', '*', '*'];
         console.log('2');
-        aryExcludeLetters = aryIncludeLetters = [];
+        aryExcludeLetters = [];
         console.log('3');
+        aryIncludeLetters = [];
+        console.log('4');
         break;                                                      //terminate further processing
       }//if
       if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
