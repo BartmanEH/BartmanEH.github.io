@@ -168,7 +168,8 @@ function celebrate (guessPosition, string) {
     friction: 0.97,
     gravity: 0.1,
     opacity: 0.1,
-    height: container.clientHeight,
+    //height: container.clientHeight,
+    height: 768,
     width: container.clientWidth
   };
   console.log('Height: ' + container.clientHeight + ', Width: ' + container.clientWidth);
@@ -373,7 +374,7 @@ function solveIt() {
   if (numFiveLetterWords !== 0) {
     strPossibilities = buildStrFilteredFiveLetterWords(aryScrutinizedFilteredFiveLetterWords);
   }
-  if (logFiltered) { console.log('strPossibilities: ' + strPossibilities); }
+  if (logFiltered) { console.log('strPossibilities: "' + strPossibilities + '"'); }
   if (logFiltered) { console.log('possibilities (filtered): ' + aryFilteredFiveLetterWords.length.toLocaleString()); }
   if (logFiltered) { console.log('possibilities (scrutinized): ' + numFiveLetterWords.toLocaleString()); }
   document.getElementById('possibilities-number-span').innerHTML = 'possibilities: ' + numFiveLetterWords.toLocaleString();
