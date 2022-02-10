@@ -157,9 +157,7 @@ function celebrate (guessPosition, string) {
     document.getElementById(gridId).style.backgroundColor = rgbGreen;        //make background Green
     document.getElementById(gridId).style.border = '2px solid ' + rgbGreen;  //make border Green too
     document.getElementById(gridId).dataset.state = stateCorrect;
-    //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
-    //aryExcludeLetters = [];
-    //aryIncludeLetters = [];
+  }//for
     errorHandler(string);
     const container = document.getElementById('root');
     const fireworksConfig = {
@@ -176,7 +174,6 @@ function celebrate (guessPosition, string) {
     console.log('Width: ' + container.clientWidth);
     const fireworks = new Fireworks(container, fireworksConfig);
     fireworks.start();
-  }//for
 }//celebrate()
 
 function solveIt() {
@@ -277,7 +274,6 @@ function solveIt() {
         //║ ToDo: kickoff automated testing                                                                      ║
         //╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
         celebrate(guessPosition, 'Huomos easter egg!');
-        console.log('about to break...');
         break;                                                     //terminate further processing
       }//if
       if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
@@ -290,6 +286,10 @@ function solveIt() {
     if (logGeneral) { console.log('diffDays: ' + diffDays); }
     if (streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays)) {
       celebrate(guessPosition, 'Streak Saver easter egg!');
+      //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
+      aryPatternLetters = [];
+      aryExcludeLetters = [];
+      aryIncludeLetters = [];
       break;                                                       //terminate further processing
     }//if
     //let's do some error checking, shall we? we have the whole Guess word here
