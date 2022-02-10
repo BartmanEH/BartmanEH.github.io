@@ -379,11 +379,20 @@ async function automatedTesting() {
   const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/use_cases.json';
   const request = new Request(requestURL);
   const response = await fetch(request);
-  const useCases = await response.json();
-  if (logAutoTest) { console.log(useCases); }
-  for (useCase of useCases) {
-    for (guess of useCase['guess']) {
-      //parse
+  const useCaseData = await response.json();
+  if (logAutoTest) { console.log(useCaseData); }
+  /*
+  for(var key in json.jsonData) {
+    for (var key1 in json.jsonData[key]) {
+        console.log(json.jsonData[key][key1])
+    }
+  }
+*/
+  for (const useCases in useCaseData) {
+    //if (logAutoTest) { console.log('useCases: "' + useCases + '"'); }
+    for (const useCase in useCases[useCases]) {
+      //if (logAutoTest) { console.log('useCase: "' + useCase + '"'); }
+      console.log('guess: "' + useCaseData[useCases][useCase].guess + '"');
     }//for
   }//for
 }
