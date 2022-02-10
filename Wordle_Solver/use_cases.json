@@ -1,16 +1,24 @@
 {
   "use cases": [
     {
-      "guess1": "ROBOT",
-      "pattern1": "BYBYB",
+      "guess": [
+        "ROBOT"
+      ],
+      "pattern": [
+        "BYBYB"
+      ],
       "possibilities": [
         "OVOID",
         "OZONE"
       ]
     },
     {
-      "guess1": "ROBOT",
-      "pattern1": "BGBYB",
+      "guess": [
+        "ROBOT"
+      ],
+      "pattern": [
+        "BGBYB"
+      ],
       "possibilities": [
         "CONDO",
         "FOLIO",
@@ -30,8 +38,12 @@
       ]
     },
     {
-      "guess1": "ROBOT",
-      "pattern1": "BYBGB",
+      "guess": [
+        "ROBOT"
+      ],
+      "pattern": [
+        "BYBGB"
+      ],
       "possibilities": [
         "ALOOF",
         "FLOOD",
@@ -52,8 +64,12 @@
       ]
     },
     {
-      "guess1": "EVERY",
-      "pattern1": "YBYBB",
+      "guess": [
+        "EVERY"
+      ],
+      "pattern": [
+        "YBYBB"
+      ],
       "possibilities": [
         "BEGET",
         "BELIE",
@@ -88,8 +104,12 @@
       ]
     },
     {
-      "guess1": "EVERY",
-      "pattern1": "GBYBB",
+      "guess": [
+        "EVERY"
+      ],
+      "pattern": [
+        "GBYBB"
+      ],
       "possibilities": [
         "EAGLE",
         "EASEL",
@@ -109,8 +129,12 @@
       ]
     },
     {
-      "guess1": "EVERY",
-      "pattern1": "YBGBB",
+      "guess": [
+        "EVERY"
+      ],
+      "pattern": [
+        "YBGBB"
+      ],
       "possibilities": [
         "BEECH",
         "BLEED",
@@ -150,8 +174,12 @@
       ]
     },
     {
-      "guess1": "EVERY",
-      "pattern1": "GBGBB",
+      "guess": [
+        "EVERY"
+      ],
+      "pattern": [
+        "GBGBB"
+      ],
       "possibilities": [
         "EJECT",
         "ELECT",
@@ -159,12 +187,16 @@
       ]
     },
     {
-      "guess1": "SOARE",
-      "pattern1": "GBBBB",
-      "guess2": "SHUNT",
-      "pattern3": "GBBBB",
-      "guess3": "SPICY",
-      "pattern4": "GBGBB",
+      "guess": [
+        "SOARE",
+        "SHUNT",
+        "SPICY"
+      ],
+      "pattern": [
+        "GBBBB",
+        "GBBBB",
+        "GBGBB"
+      ],
       "possibilities": [
         "SKIFF",
         "SKILL",
@@ -172,26 +204,110 @@
       ]
     },
     {
-      "guess1": "FOLLY",
-      "pattern1": "BGYGG",
+      "guess": [
+        "FOLLY"
+      ],
+      "pattern": [
+        "BGYGG"
+      ],
       "possibilities": [
         "LOWLY"
       ]
     },
     {
-      "guess1": "FOLLY",
-      "pattern1": "BBGYB",
+      "guess": [
+        "FOLLY"
+      ],
+      "pattern": [
+        "BBGYB"
+      ],
       "possibilities": [
         "LILAC"
       ]
     },
     {
-      "guess1": "SOARE",
-      "pattern1": "BBYBY",
-      "guess2": "PEDAL",
-      "pattern3": "GYBGY",
+      "guess": [
+        "FOLLY"
+      ],
+      "pattern": [
+        "BBYGB"
+      ],
       "possibilities": [
+        "CHILL",
+        "SKILL",
+        "SWILL",
+        "SPILL",
+        "SHALL",
+        "SPELL",
+        "STILL",
+        "QUELL",
+        "QUILL",
+        "SHELL",
+        "SMELL",
+        "DWELL",
+        "GRILL",
+        "SKULL",
+        "SWELL",
+        "SMALL",
+        "LADLE",
+        "DRILL",
+        "KRILL",
+        "STALL"
+      ]
+    },
+    {
+      "guess": [
+        "SOARE",
+        "PEDAL"
+      ],
+      "pattern": [
+        "BBYBY",
+        "GYBGY"
+      ],
+     "possibilities": [
         "PLEAT"
+      ]
+    },
+    {
+      "guess": [
+        "POUTY",
+        "RAISE",
+        "AWARE"
+      ],
+      "pattern": [
+        "BBBBB",
+        "YYBBG",
+        "BBGBB"
+      ],
+      "possibilities": [
+        "GRADE",
+        "BRAKE",
+        "CRAZE",
+        "FRAME",
+        "GRAVE",
+        "CRAVE",
+        "GRACE",
+        "BRAVE",
+        "GRAZE",
+        "DRAKE",
+        "CRANE",
+        "BRACE"
+      ]
+    },
+    {
+      "guess": [
+        "COATS",
+        "TRICK",
+        "BUTCH"
+      ],
+      "pattern": [
+        "YBBYB",
+        "YBBGB",
+        "BGGGG"
+      ],
+     "possibilities": [
+        "DUTCH",
+        "HUTCH"
       ]
     }
   ]
