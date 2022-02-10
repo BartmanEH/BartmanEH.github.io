@@ -184,7 +184,7 @@ function solveIt() {
   const aryFilteredFiveLetterWords = [];
   let aryExcludeLetters = [];
   let aryIncludeLetters = [];
-  const aryPatternLetters = ['*', '*', '*', '*', '*'];
+  let aryPatternLetters = ['*', '*', '*', '*', '*'];
   guess_loop:
   for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
     let guessWord = '';
