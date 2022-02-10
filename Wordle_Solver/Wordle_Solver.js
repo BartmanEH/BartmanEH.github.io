@@ -381,4 +381,9 @@ async function automatedTesting() {
   const response = await fetch(request);
   const useCases = await response.json();
   if (logAutoTest) { console.log(useCases); }
+  for (useCase of useCases) {
+    for (guess of useCase['guess']) {
+      //parse
+    }//for
+  }//for
 }
