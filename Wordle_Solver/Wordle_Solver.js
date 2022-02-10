@@ -277,7 +277,8 @@ function solveIt() {
         //║ ToDo: kickoff automated testing                                                                      ║
         //╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
         celebrate(guessPosition, 'Huomos easter egg!');
-        aryPatternLetters = aryExcludeLetters = aryIncludeLetters = [];
+        aryPatternLetters = ['*', '*', '*', '*', '*'];
+        aryExcludeLetters = aryIncludeLetters = [];
         break;                                                      //terminate further processing
       }//if
       if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
@@ -291,7 +292,8 @@ function solveIt() {
     if (streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays)) {
       celebrate(guessPosition, 'Streak Saver easter egg!');
       //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
-      aryPatternLetters = aryExcludeLetters = aryIncludeLetters = [];
+      aryPatternLetters = ['*', '*', '*', '*', '*'];
+      aryExcludeLetters = aryIncludeLetters = [];
       break;                                                        //terminate further processing
     }//if
     //let's do some error checking, shall we? we have the whole Guess word here
