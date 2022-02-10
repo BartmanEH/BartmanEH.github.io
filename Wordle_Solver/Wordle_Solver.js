@@ -370,6 +370,7 @@ function solveIt() {
   }//for
   numFiveLetterWords = aryScrutinizedFilteredFiveLetterWords.length;
   const strPossibilities = buildStrFilteredFiveLetterWords(aryScrutinizedFilteredFiveLetterWords);
+  if (logFiltered) { console.log('strPossibilities: ' + strPossibilities); }
   if (logFiltered) { console.log('possibilities (filtered): ' + aryFilteredFiveLetterWords.length.toLocaleString()); }
   if (logFiltered) { console.log('possibilities (scrutinized): ' + numFiveLetterWords.toLocaleString()); }
   document.getElementById('possibilities-number-span').innerHTML = 'possibilities: ' + numFiveLetterWords.toLocaleString();
