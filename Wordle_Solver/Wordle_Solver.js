@@ -17,6 +17,7 @@ const logFilterRules = Boolean(false);    //logFilterRules = true: filter rules 
 const logFiltering = Boolean(false);      //logFiltering = true: filtering debug messages on console
 const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
+const boolAutoTest = Boolean(true);      //boolAutoTest = true: run automated testing
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const streakSaver = Boolean(true);        //streakSaver = true: Greenify Guess if it's Today's Answer
 const rgbGray = 'rgb(58, 58, 60)';        //Yellow = #b59f3b rgb(181, 159, 59)
@@ -62,7 +63,7 @@ function initialize() {                                             //set defaul
   document.getElementById('words').style.display = 'none';
   if (logGeneral) { console.log('number of 5-letter words: ' + numFiveLetterWords.toLocaleString()); }
   document.getElementById('guess_1_1').focus();                     //set focus to first letter of first guess
-  automatedTesting();                                               //load json use cases for automated testing
+  if (boolAutoTest) { automatedTesting(); }                         //load json use cases for automated testing
 }//initialize()
 
 function inputKeyup(e) {
@@ -382,11 +383,44 @@ async function automatedTesting() {
   const useCaseData = await response.json();
   //if (logAutoTest) { console.log(useCaseData); }
   //if (logAutoTest) { console.log(useCaseData.useCases); }
-  useCaseData.useCases.forEach(useCase => {
-    //if (logAutoTest) { console.log(useCase); }
-    if (logAutoTest) { console.log('id(' + useCase.id.length + '): ' + useCase.id); }
-    if (logAutoTest) { console.log('guess(' + useCase.guess.length +  '): ' + useCase.guess); }
-    if (logAutoTest) { console.log('pattern(' + useCase.pattern.length +  '): ' + useCase.pattern); }
-    if (logAutoTest) { console.log('possibilities(' + useCase.possibilities.length +  '): ' + useCase.possibilities); }
-  });
+  //useCaseData.useCases.forEach(useCase => {                         //enable this to loop thru all use cases!
+  const useCase = useCaseData.useCases[11];                          //disable this to loop thru all use cases!
+  //if (logAutoTest) { console.log(useCase); }
+  if (logAutoTest) { console.log('id(' + useCase.id.length + '): ' + useCase.id); }
+  if (logAutoTest) { console.log('guess(' + useCase.guess.length + '): ' + useCase.guess); }
+  if (logAutoTest) { console.log('pattern(' + useCase.pattern.length + '): ' + useCase.pattern); }
+  if (logAutoTest) { console.log('possibilities(' + useCase.possibilities.length + '): ' + useCase.possibilities); }
+  //here we go
+  if (logAutoTest) { console.log('testing use case id: ' + useCase.id); }
+  for (let guessPosition = 1; guessPosition <= useCase.guess.length; guessPosition++) {
+    if (logAutoTest) { console.log('guess: ' + useCase.guess.toString()); }
+    const guessWord = useCase.guess[guessPosition - 1].toString();
+    for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
+      const gridId = 'guess_' + guessPosition + '_' + letterPosition;
+      const gridElement = document.getElementById(gridId);
+      if (logAutoTest) { console.log('guess Letter: ' + guessWord.substring(letterPosition - 1, letterPosition)); }
+      gridElement.value = guessWord.substring(letterPosition - 1, letterPosition);
+      const letterColor = useCase.pattern[guessPosition - 1].toString().substring(letterPosition - 1, letterPosition);
+      if (letterColor === 'B') {                                    //is it Gray?
+        gridElement.style.backgroundColor = rgbGray;                //make background Yellow
+        gridElement.style.border = '2px solid ' + rgbGray;          //make border Yellow too
+        gridElement.dataset.state = stateIncorrect;                 //set metadata attribute for Yellow
+      } else if (letterColor === 'Y') {                             //is it Yellow?
+        gridElement.style.backgroundColor = rgbYellow;              //make background Green
+        gridElement.style.border = '2px solid ' + rgbYellow;        //make border Green too
+        gridElement.dataset.state = stateMisplaced;                 //set metadata attribute for Green
+      } else if (letterColor === 'G') {                             //is it Green?
+        gridElement.style.backgroundColor = rgbGreen;               //make background Gray
+        gridElement.style.border = '2px solid ' + rgbGreen;         //make border Gray too
+        gridElement.dataset.state = stateCorrect;                   //set metadata attribute for Gray
+      } else {                                                      //metadata attribute still reset
+        if (logAutoTest) { console.log('invalid Pattern Colour!'); }
+      }//if else
+    }//for letterPosition
+  }//for guessPosition
+  solveIt();
+//╔═══════════════════════════════╗
+//║ centrally scrutinize results  ║
+//╚═══════════════════════════════╝
+  //});//forEach useCase
 }//automatedTesting()
