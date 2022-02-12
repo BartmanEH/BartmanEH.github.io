@@ -423,9 +423,9 @@ async function automatedTesting() {
     for (let useCasePossibilities = 1; useCasePossibilities <= useCase.possibilities.length; useCasePossibilities++) {
       aryUseCasePossibilities.push(useCase.possibilities[useCasePossibilities - 1].toString());
     }//for
-    //if (logAutoTest) { console.log('use case possibilities: ' + aryUseCasePossibilities); }
+    if (logAutoTest) { console.log('use case possibilities: ' + aryUseCasePossibilities); }
     const aryTestPossibilities = solveIt() ?? [];                   //get possibilities for use case
-    //if (logAutoTest) { console.log('test possibilities: ' + aryTestPossibilities); }
+    if (logAutoTest) { console.log('test possibilities: ' + aryTestPossibilities); }
     //╔═══════════════════════════════╗
     //║ centrally scrutinize results  ║
     //╚═══════════════════════════════╝
