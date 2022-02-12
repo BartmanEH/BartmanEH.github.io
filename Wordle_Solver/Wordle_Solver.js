@@ -76,10 +76,12 @@ function resetGrid() {
       gridElement.value = ' ';
       gridElement.dataset.state = stateTBD;                         //reset metadata attribute
       gridElement.style.backgroundColor = '#000000';                //make background Black
-      gridElement.style.border = '2px solid ' + rgbGray;            //make border Gray
-  
+      gridElement.style.border = '2px solid ' + rgbGray;            //make border Gray  
     }//for
   }//for
+  document.getElementById('possibilities').style.display = 'none';  //hide possibilities div
+  document.getElementById('words').style.display = 'none';          //hide words div
+  document.getElementById('help-outer').style.display = 'block';    //show help div
 }//resetGrid()
 
 function inputKeyup(e) {
