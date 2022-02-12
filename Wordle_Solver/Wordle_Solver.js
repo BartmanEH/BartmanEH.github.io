@@ -394,8 +394,8 @@ async function automatedTesting() {
     //here we go
     if (logAutoTest) { console.log('testing use case id: ' + useCase.id); }
     for (let useCaseGuess = 1; useCaseGuess <= useCase.guess.length; useCaseGuess++) {
-      if (logAutoTest) { console.log('guess: ' + useCase.guess.toString()); }
       const guessWord = useCase.guess[useCaseGuess - 1].toString();
+      if (logAutoTest) { console.log('guess: ' + guessWord); }
       for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
         const gridId = 'guess_' + useCaseGuess + '_' + letterPosition;
         const gridElement = document.getElementById(gridId);
@@ -420,6 +420,7 @@ async function automatedTesting() {
       }//for letterPosition
     }//for guessPosition
     const aryUseCasePossibilites = [];
+    if (logAutoTest) { console.log('# possibilities: ' + useCase.possibilities.length); }
     for (let useCasePossibilities = 1; useCasePossibilities <= useCase.possibilities.length; useCasePossibilities++) {
       aryUseCasePossibilites.push(useCase.possibilities[useCasePossibilities - 1].toString());
     }//for
