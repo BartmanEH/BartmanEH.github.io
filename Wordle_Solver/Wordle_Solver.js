@@ -457,14 +457,16 @@ async function automatedTesting() {
     //║ The Central Scrutinizer ║
     //╚═════════════════════════╝
     if (compareArrays(aryUseCasePossibilities, aryTestPossibilities)) {
-      if (logAutoTest) { console.warn('use case id: ' + useCase.id + ' pass!'); }
+      if (logAutoTest) { console.log('use case id: ' + useCase.id + ' pass!'); }
     } else {
       if (logAutoTest) { console.error('use case id: ' + useCase.id + ' FAIL!'); }
+      if (logAutoTest) { console.log('guesses(' + useCase.guess.length + '): ' + useCase.guess); }
+      if (logAutoTest) { console.log('pattern(' + useCase.pattern.length + '): ' + useCase.pattern); }
       if (logAutoTest) { console.log('use case possibilities: ' + aryUseCasePossibilities.slice().sort()); }
       if (logAutoTest) { console.log('    test possibilities: ' + aryTestPossibilities.slice().sort()); }
       useCaseResults += useCase.id + ' ';
     }//if else
     resetGrid();                                                    //reset Grid for next use case
   });//forEach useCase
-  if (logAutoTest) { console.log(useCaseResults + 'failed!'); }
+  if (logAutoTest) { console.error(useCaseResults + 'failed!'); }
 }//automatedTesting()
