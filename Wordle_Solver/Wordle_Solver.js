@@ -469,5 +469,5 @@ async function automatedTesting() {
     }//if else
     resetGrid();                                                    //reset Grid for next use case
   });//forEach useCase
-  if (logAutoTest) { console.error(useCaseResults.slice(0, -1) + ' FAILED!'); }
+  if (logAutoTest) { console.error(useCaseResults.slice(0, -2) + ' FAILED!'); }
 }//automatedTesting()
