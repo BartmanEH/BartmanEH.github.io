@@ -2,6 +2,7 @@
   "useCases": [
     {
       "id": "1",
+      "comment": "valid",
       "guess": [
         "ROBOT"
       ],
@@ -15,6 +16,7 @@
     },
     {
       "id": "2",
+      "comment": "valid",
       "guess": [
         "ROBOT"
       ],
@@ -41,6 +43,7 @@
     },
     {
       "id": "3",
+      "comment": "valid",
       "guess": [
         "ROBOT"
       ],
@@ -68,6 +71,7 @@
     },
     {
       "id": "4",
+      "comment": "valid",
       "guess": [
         "EVERY"
       ],
@@ -109,6 +113,7 @@
     },
     {
       "id": "5",
+      "comment": "valid",
       "guess": [
         "EVERY"
       ],
@@ -135,6 +140,7 @@
     },
     {
       "id": "6",
+      "comment": "valid",
       "guess": [
         "EVERY"
       ],
@@ -181,6 +187,7 @@
     },
     {
       "id": "7",
+      "comment": "valid",
       "guess": [
         "EVERY"
       ],
@@ -195,6 +202,7 @@
     },
     {
       "id": "8",
+      "comment": "valid",
       "guess": [
         "SOARE",
         "SHUNT",
@@ -213,6 +221,7 @@
     },
     {
       "id": "9",
+      "comment": "valid",
       "guess": [
         "FOLLY"
       ],
@@ -225,6 +234,7 @@
     },
     {
       "id": "10",
+      "comment": "valid",
       "guess": [
         "FOLLY"
       ],
@@ -237,6 +247,7 @@
     },
     {
       "id": "11",
+      "comment": "valid",
       "guess": [
         "FOLLY"
       ],
@@ -268,6 +279,7 @@
     },
     {
       "id": "12",
+      "comment": "valid",
       "guess": [
         "SOARE",
         "PEDAL"
@@ -282,6 +294,7 @@
     },
     {
       "id": "13",
+      "comment": "valid",
       "guess": [
         "COATS",
         "TRICK",
@@ -299,6 +312,7 @@
     },
     {
       "id": "14",
+      "comment": "invalid 3rd pattern (should be BBGYG)",
       "guess": [
         "POUTY",
         "RAISE",
