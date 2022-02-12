@@ -385,8 +385,7 @@ async function automatedTesting() {
   const useCaseData = await response.json();
   //if (logAutoTest) { console.log(useCaseData); }
   //if (logAutoTest) { console.log(useCaseData.useCases); }
-  useCaseData.useCases.forEach(useCase => {                         //enable this to loop thru all use cases!
-  //const useCase = useCaseData.useCases[11]; {                     //disable this to loop thru all use cases!
+  useCaseData.useCases.forEach(useCase => {                         //loop thru all use cases
     //if (logAutoTest) { console.log(useCase); }
     //if (logAutoTest) { console.log('id(' + useCase.id.length + '): ' + useCase.id); }
     //if (logAutoTest) { console.log('guess(' + useCase.guess.length + '): ' + useCase.guess); }
@@ -433,8 +432,7 @@ async function automatedTesting() {
     if (compareArrays(aryUseCasePossibilities, aryTestPossibilities)) {
       if (logAutoTest) { console.log('pass!'); }
     } else {
-      if (logAutoTest) { console.log('pass!'); }
+      if (logAutoTest) { console.log('fail!'); }
     }//if else
-  //}                                                               //disable this to loop thru all use cases!
-  });//forEach useCase                                              //enable this to loop thru all use cases!
+  });//forEach useCase
 }//automatedTesting()
