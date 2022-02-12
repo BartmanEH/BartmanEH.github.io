@@ -153,6 +153,10 @@ function isSubsetInclDupes(includesArray, wordArray) {              //includesAr
   return [...occurences.values()].every(count => count <= 0);
 }//isSubsetInclDupes()
 
+function compareArrays(array1, array2) {
+  return array1.length === array2.length && array1.every((value, index) => value === array2[index]);
+}//compareArrays()
+
 function celebrate(guessPosition, string) {
   for (let guessLetterPosition = 1; guessLetterPosition <= 5; guessLetterPosition++) {
     const gridId = 'guess_' + guessPosition + '_' + guessLetterPosition;
@@ -420,20 +424,20 @@ async function automatedTesting() {
       }//for letterPosition
     }//for guessPosition
     const aryUseCasePossibilities = [];
-    if (logAutoTest) { console.log('breakpoint 1'); }
     for (let useCasePossibilities = 1; useCasePossibilities <= useCase.possibilities.length; useCasePossibilities++) {
       aryUseCasePossibilities.push(useCase.possibilities[useCasePossibilities - 1].toString());
     }//for
-    if (logAutoTest) { console.log('breakpoint 2'); }
     if (logAutoTest) { console.log('use case possibilities: ' + aryUseCasePossibilities); }
-    if (logAutoTest) { console.log('breakpoint 3'); }
     const aryTestPossibilities = solveIt();                           //get possibilities for use case
-    if (logAutoTest) { console.log('breakpoint 4'); }
     if (logAutoTest) { console.log('test possibilities: ' + aryTestPossibilities); }
-    if (logAutoTest) { console.log('breakpoint 5'); }
     //╔═══════════════════════════════╗
     //║ centrally scrutinize results  ║
     //╚═══════════════════════════════╝
+    if (compareArrays(aryUseCasePossibilities, aryTestPossibilities)) {
+      if (logAutoTest) { console.log('pass!'); }
+    } else {
+      if (logAutoTest) { console.log('pass!'); }
+    }//if else
   }                                                               //disable this to loop thru all use cases!
   //});//forEach useCase                                              //enable this to loop thru all use cases!
 }//automatedTesting()
