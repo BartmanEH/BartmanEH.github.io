@@ -420,13 +420,17 @@ async function automatedTesting() {
       }//for letterPosition
     }//for guessPosition
     const aryUseCasePossibilites = [];
-    if (logAutoTest) { console.log('# possibilities: ' + useCase.possibilities.length); }
+    if (logAutoTest) { console.log('breakpoint 1'); }
     for (let useCasePossibilities = 1; useCasePossibilities <= useCase.possibilities.length; useCasePossibilities++) {
       aryUseCasePossibilites.push(useCase.possibilities[useCasePossibilities - 1].toString());
     }//for
+    if (logAutoTest) { console.log('breakpoint 2'); }
     if (logAutoTest) { console.log('use case possibilities: ' + aryUseCasePossibilities); }
+    if (logAutoTest) { console.log('breakpoint 3'); }
     const aryTestPossibilities = solveIt();                           //get possibilities for use case
+    if (logAutoTest) { console.log('breakpoint 4'); }
     if (logAutoTest) { console.log('test possibilities: ' + aryTestPossibilities); }
+    if (logAutoTest) { console.log('breakpoint 5'); }
     //╔═══════════════════════════════╗
     //║ centrally scrutinize results  ║
     //╚═══════════════════════════════╝
