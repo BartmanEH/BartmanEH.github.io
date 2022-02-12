@@ -75,6 +75,9 @@ function resetGrid() {
       const gridElement = document.getElementById(gridId);
       gridElement.value = ' ';
       gridElement.dataset.state = stateTBD;                         //reset metadata attribute
+      gridElement.style.backgroundColor = '#000000';                //make background Black
+      gridElement.style.border = '2px solid ' + rgbGray;            //make border Gray
+  
     }//for
   }//for
 }//resetGrid()
