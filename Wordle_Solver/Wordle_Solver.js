@@ -419,12 +419,12 @@ async function automatedTesting() {
         }//if else
       }//for letterPosition
     }//for guessPosition
-    let aryUseCasePossibilites = [];
+    const aryUseCasePossibilites = [];
     for (let useCasePossibilities = 1; useCasePossibilities <= useCase.possibilities.length; useCasePossibilities++) {
       aryUseCasePossibilites.push(useCase.possibilities[useCasePossibilities - 1].toString());
     }//for
     if (logAutoTest) { console.log('use case possibilities: ' + aryUseCasePossibilities); }
-    let aryTestPossibilities = solveIt();                           //get possibilities for use case
+    const aryTestPossibilities = solveIt();                           //get possibilities for use case
     if (logAutoTest) { console.log('test possibilities: ' + aryTestPossibilities); }
     //╔═══════════════════════════════╗
     //║ centrally scrutinize results  ║
