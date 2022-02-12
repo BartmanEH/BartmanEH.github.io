@@ -374,6 +374,7 @@ function solveIt() {
   document.getElementById('possibilities').style.display = 'block';
   document.getElementById('possibilities-text-span').innerHTML = strPossibilities;
   document.getElementById('words').style.display = 'block';
+  return aryScrutinizedFilteredFiveLetterWords;                     //added in attempt to access array from caller
 }//solveIt()
 
 async function automatedTesting() {
@@ -418,7 +419,8 @@ async function automatedTesting() {
       }//if else
     }//for letterPosition
   }//for guessPosition
-  solveIt();
+  aryPossibilities = solveIt();                                     //get possibilities for use case
+  if (logAutoTest) { console.log('possibilities: ' + aryPossibilities); }
 //╔═══════════════════════════════╗
 //║ centrally scrutinize results  ║
 //╚═══════════════════════════════╝
