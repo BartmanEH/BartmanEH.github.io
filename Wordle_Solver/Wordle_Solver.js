@@ -207,7 +207,7 @@ function solveIt() {
         }//if
         if (aryPatternLetters[letterPosition - 1] === letter) {
           errorHandler('Green cannot change to Gray!');             //was Green in previous Guess
-          return;
+          return [];
         }//if
       } else if (gridElement.dataset.state === stateMisplaced) {    //is it Yellow?
         if (aryPatternLetters[letterPosition - 1] === letter) {
@@ -267,9 +267,6 @@ function solveIt() {
     }//for letterPosition
     if ((guessWord !== '     ') && (guessWord !== '')) {
       if (guessWord === 'HUOMO') {
-        //╔══════════════════════════════════════════════════════════════════════════════════════════════════════╗
-        //║ ToDo: kickoff automated testing                                                                      ║
-        //╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
         celebrate(guessPosition, 'Huomos easter egg!');
         aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
         aryExcludeLetters = aryIncludeLetters = [];
