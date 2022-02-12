@@ -276,6 +276,12 @@ function solveIt() {
         aryExcludeLetters = aryIncludeLetters = [];
         break;                                                      //terminate further processing
       }//if
+      if (guessWord === 'ATEST') {
+        //ToDo: clear the board here
+        boolAutoTest = true;                                        //set bool for automatic testing
+        initialize();
+        //break;                                                      //terminate further processing
+      }//if
       if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
         errorHandler('"' + guessWord + '" is not a possible guess word!');
         if (logFilterRules) { console.log('"' + guessWord + '" is not a possible guess word!'); }
