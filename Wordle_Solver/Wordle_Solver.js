@@ -449,16 +449,16 @@ async function automatedTesting() {
     for (let useCasePossibilities = 1; useCasePossibilities <= useCase.possibilities.length; useCasePossibilities++) {
       aryUseCasePossibilities.push(useCase.possibilities[useCasePossibilities - 1].toString());
     }//for
-    if (logAutoTest) { console.log('use case possibilities: ' + aryUseCasePossibilities); }
+    //if (logAutoTest) { console.log('use case possibilities: ' + aryUseCasePossibilities); }
     const aryTestPossibilities = solveIt() ?? [];                   //get possibilities for use case
-    if (logAutoTest) { console.log('test possibilities: ' + aryTestPossibilities); }
+    //if (logAutoTest) { console.log('test possibilities: ' + aryTestPossibilities); }
     //╔═══════════════════════════════╗
     //║ centrally scrutinize results  ║
     //╚═══════════════════════════════╝
     if (compareArrays(aryUseCasePossibilities, aryTestPossibilities)) {
-      if (logAutoTest) { console.log('pass!'); }
+      if (logAutoTest) { console.log('use case id: ' + useCase.id + ' pass!'); }
     } else {
-      if (logAutoTest) { console.log('fail!'); }
+      if (logAutoTest) { console.log('use case id: ' + useCase.id + ' fail!'); }
     }//if else
     resetGrid();                                                    //reset Grid to get ready for next use case
   });//forEach useCase
