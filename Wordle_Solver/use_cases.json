@@ -281,6 +281,23 @@
       ]
     },
     {
+      "id": "14",
+      "guess": [
+        "COATS",
+        "TRICK",
+        "BUTCH"
+      ],
+      "pattern": [
+        "YBBYB",
+        "YBBGB",
+        "BGGGG"
+      ],
+      "possibilities": [
+        "DUTCH",
+        "HUTCH"
+      ]
+    },
+    {
       "id": "13",
       "guess": [
         "POUTY",
@@ -305,23 +322,6 @@
         "DRAKE",
         "CRANE",
         "BRACE"
-      ]
-    },
-    {
-      "id": "14",
-      "guess": [
-        "COATS",
-        "TRICK",
-        "BUTCH"
-      ],
-      "pattern": [
-        "YBBYB",
-        "YBBGB",
-        "BGGGG"
-      ],
-      "possibilities": [
-        "DUTCH",
-        "HUTCH"
       ]
     }
   ]
