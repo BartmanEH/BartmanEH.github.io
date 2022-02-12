@@ -419,10 +419,10 @@ async function automatedTesting() {
         }//if else
       }//for letterPosition
     }//for guessPosition
-    const aryUseCasePossibilites = [];
+    const aryUseCasePossibilities = [];
     if (logAutoTest) { console.log('breakpoint 1'); }
     for (let useCasePossibilities = 1; useCasePossibilities <= useCase.possibilities.length; useCasePossibilities++) {
-      aryUseCasePossibilites.push(useCase.possibilities[useCasePossibilities - 1].toString());
+      aryUseCasePossibilities.push(useCase.possibilities[useCasePossibilities - 1].toString());
     }//for
     if (logAutoTest) { console.log('breakpoint 2'); }
     if (logAutoTest) { console.log('use case possibilities: ' + aryUseCasePossibilities); }
