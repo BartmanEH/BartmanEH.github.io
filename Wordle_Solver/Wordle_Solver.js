@@ -1,6 +1,3 @@
-//╔══════════════════════════════════════════════════════════════════════════════════════════════════════╗
-//║                                                                                                      ║
-//╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
 const version = '1.126';
 //#region
 const aryAllPossibleGuesses = [
@@ -210,14 +207,99 @@ function solveIt() {
       const gridId = 'guess_' + guessPosition + '_' + letterPosition;
       const gridElement = document.getElementById(gridId);
       const letter = gridElement.value.toUpperCase();
-      guessWord += letter;
       if (letter === ' ') {
         //errorHandler('gridCoord contains &lt;space&gt;! ' + gridCoord);
         if (logFilterRules) { console.log('breaking'); }
         break;
         //return;
       }//if
-      if ((letterPosition === 5) && (guessWord !== '     ') && (guessWord !== '')) {
+      const boolFirstYellowOccurance = aryBoolFirstYellowOccurrance[letter] ?? true;    //?? to initialize array elements
+      const boolFirstGreenOccurance = aryBoolFirstGreenOccurrance[letter] ?? true;      //?? to initialize array elements
+      if (logFilterRules) { console.log('top of for loop, boolFirstYellowOccurance: ' + boolFirstYellowOccurance); }
+      if (logFilterRules) { console.log('top of for loop, boolFirstGreenOccurance: ' + boolFirstGreenOccurance); }
+      guessWord += letter;
+      if (gridElement.dataset.state === stateIncorrect) {           //is it Gray?
+        if (!aryExcludeLetters.includes(letter)) {                  //new exclude letter?
+          if (!aryIncludeLetters.includes(letter)) {                //not an include letter?
+            aryExcludeLetters.push(letter);                         //add to exclude letters
+          }//if
+        }//if
+        if (aryPatternLetters[letterPosition - 1] === letter) {
+          errorHandler('Green cannot change to Gray!');             //was Green in previous Guess
+          return;
+        }//if
+      } else if (gridElement.dataset.state === stateMisplaced) {    //is it Yellow?
+        if (aryPatternLetters[letterPosition - 1] === letter) {
+          errorHandler('Green cannot change to Yellow in same column!');
+          return;
+        }//if else
+        if (aryIncludeLetters.includes(letter)) {                   //already have this letter
+          if (boolFirstYellowOccurance) {                           //first occurrance of this letter?
+            if (aryPatternLetters.indexOf(letter) > -1) {
+              if (logFilterRules) { console.log('including first Yellow occurrance: ' + letter); }
+              aryIncludeLetters.push(letter);
+            } else {
+              if (logFilterRules) { console.log('ignoring already included first Yellow occurrance: ' + letter); }
+              aryBoolFirstYellowOccurrance[letter] = false;
+            }//if else
+          } else {
+            if (logFilterRules) { console.log('including subsequent Yellow occurrance: ' + letter); }
+            aryIncludeLetters.push(letter);
+          }//if else
+        } else {                                                    //new letter
+          if (logFilterRules) { console.log('including first Yellow: ' + letter); }
+          aryIncludeLetters.push(letter);
+          aryBoolFirstYellowOccurrance[letter] = false;
+        }//if else
+      } else if (gridElement.dataset.state === stateCorrect) {      //is it Green?
+        if (logFilterRules) { console.log('top of Green test, boolFirstGreenOccurance: ' + boolFirstGreenOccurance); }
+        if (aryPatternLetters[letterPosition - 1] === '*') {
+          if (logFilterRules) { console.log('pattern Green: ' + letter); }
+          aryPatternLetters[letterPosition - 1] = letter;
+          if (aryIncludeLetters.includes(letter)) {                 //already have this letter
+            if (logFilterRules) { console.log('already included: ' + letter); }
+            if (boolFirstYellowOccurance) {
+              if (logFilterRules) { console.log('ingoring already included first Green occurrance: ' + letter); }
+            } else {
+              if (logFilterRules) { console.log('including already included first Green occurrance: ' + letter); }
+              aryIncludeLetters.push(letter);
+            }//if else
+            aryBoolFirstGreenOccurrance[letter] = false;
+          } else {                                                  //don't have this letter
+            if (logFilterRules) { console.log('not already included: ' + letter); }
+            if (logFilterRules) { console.log('middle of Green test else, boolFirstGreenOccurance: ' + boolFirstGreenOccurance); }
+            if (boolFirstGreenOccurance) {
+              if (logFilterRules) { console.log('including first Green: ' + letter); }
+              aryIncludeLetters.push(letter);
+              aryBoolFirstGreenOccurrance[letter] = false;
+            } else {
+              if (logFilterRules) { console.log('including subsequent Green occurrance: ' + letter); }
+              aryIncludeLetters.push(letter);
+            }//if else
+          }//if else
+          if (logFilterRules) { console.log('guessWord: ' + guessWord + ' letter: ' + letter + ' guessWord.indexOf(letter): ' + guessWord.indexOf(letter)); }
+        } else if (aryPatternLetters[letterPosition - 1] !== letter) {
+          errorHandler('more than one Green per column!');
+          return;
+        }//if else
+      }//if else (gridCoordBColor)
+    }//for letterPosition
+    if ((guessWord !== '     ') && (guessWord !== '')) {
+      if (guessWord === 'HUOMO') {
+        celebrate(guessPosition, 'Huomos easter egg!');
+        aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
+        aryExcludeLetters = aryIncludeLetters = [];
+        break;                                                      //terminate further processing
+      } else if (guessWord === 'ATEST') {
+        //ToDo: clear the board here
+        boolAutoTest = true;                                        //set bool for automatic testing
+        initialize();
+        //break;                                                    //terminate further processing
+      } else if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
+        errorHandler('"' + guessWord + '" is not a possible guess word!');
+        if (logFilterRules) { console.log('"' + guessWord + '" is not a possible guess word!'); }
+        if (!testMode) { return; }//if
+      } else {
         if (logGeneral) { console.log('aryAllAnswersOrdered.indexOf(guessWord): ' + aryAllAnswersOrdered.indexOf(guessWord)); }
         if (logGeneral) { console.log('diffDays: ' + diffDays); }
         if (streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays)) {
@@ -226,96 +308,14 @@ function solveIt() {
           aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
           aryExcludeLetters = aryIncludeLetters = [];
           break;                                                    //terminate further processing
-        } else if (guessWord === 'HUOMO') {
-          celebrate(guessPosition, 'Huomos easter egg!');
-          aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
-          aryExcludeLetters = aryIncludeLetters = [];
-          break;                                                    //terminate further processing
-        } else if (guessWord === 'ATEST') {
-          //ToDo: clear the board here
-          boolAutoTest = true;                                      //set bool for automatic testing
-          initialize();
-          //break;                                                  //terminate further processing
-        } else if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
-          errorHandler('"' + guessWord + '" is not a possible guess word!');
-          if (logFilterRules) { console.log('"' + guessWord + '" is not a possible guess word!'); }
-          if (!testMode) { return; }//if
-        }//if else
-      } else {
-        const boolFirstYellowOccurance = aryBoolFirstYellowOccurrance[letter] ?? true;    //?? to initialize array elements
-        const boolFirstGreenOccurance = aryBoolFirstGreenOccurrance[letter] ?? true;      //?? to initialize array elements
-        if (logFilterRules) { console.log('top of for loop, boolFirstYellowOccurance: ' + boolFirstYellowOccurance); }
-        if (logFilterRules) { console.log('top of for loop, boolFirstGreenOccurance: ' + boolFirstGreenOccurance); }
-        if (gridElement.dataset.state === stateIncorrect) {         //is it Gray?
-          if (!aryExcludeLetters.includes(letter)) {                //new exclude letter?
-            if (!aryIncludeLetters.includes(letter)) {              //not an include letter?
-              aryExcludeLetters.push(letter);                       //add to exclude letters
-            }//if
-          }//if
-          if (aryPatternLetters[letterPosition - 1] === letter) {
-            errorHandler('Green cannot change to Gray!');           //was Green in previous Guess
-            return;
-          }//if
-        } else if (gridElement.dataset.state === stateMisplaced) {  //is it Yellow?
-          if (aryPatternLetters[letterPosition - 1] === letter) {
-            errorHandler('Green cannot change to Yellow in same column!');
-            return;
-          }//if else
-          if (aryIncludeLetters.includes(letter)) {                 //already have this letter
-            if (boolFirstYellowOccurance) {                         //first occurrance of this letter?
-              if (aryPatternLetters.indexOf(letter) > -1) {
-                if (logFilterRules) { console.log('including first Yellow occurrance: ' + letter); }
-                aryIncludeLetters.push(letter);
-              } else {
-                if (logFilterRules) { console.log('ignoring already included first Yellow occurrance: ' + letter); }
-                aryBoolFirstYellowOccurrance[letter] = false;
-              }//if else
-            } else {
-              if (logFilterRules) { console.log('including subsequent Yellow occurrance: ' + letter); }
-              aryIncludeLetters.push(letter);
-            }//if else
-          } else {                                                  //new letter
-            if (logFilterRules) { console.log('including first Yellow: ' + letter); }
-            aryIncludeLetters.push(letter);
-            aryBoolFirstYellowOccurrance[letter] = false;
-          }//if else
-        } else if (gridElement.dataset.state === stateCorrect) {    //is it Green?
-          if (logFilterRules) { console.log('top of Green test, boolFirstGreenOccurance: ' + boolFirstGreenOccurance); }
-          if (aryPatternLetters[letterPosition - 1] === '*') {
-            if (logFilterRules) { console.log('pattern Green: ' + letter); }
-            aryPatternLetters[letterPosition - 1] = letter;
-            if (aryIncludeLetters.includes(letter)) {               //already have this letter
-              if (logFilterRules) { console.log('already included: ' + letter); }
-              if (boolFirstYellowOccurance) {
-                if (logFilterRules) { console.log('ingoring already included first Green occurrance: ' + letter); }
-              } else {
-                if (logFilterRules) { console.log('including already included first Green occurrance: ' + letter); }
-                aryIncludeLetters.push(letter);
-              }//if else
-              aryBoolFirstGreenOccurrance[letter] = false;
-            } else {                                                //don't have this letter
-              if (logFilterRules) { console.log('not already included: ' + letter); }
-              if (logFilterRules) { console.log('middle of Green test else, boolFirstGreenOccurance: ' + boolFirstGreenOccurance); }
-              if (boolFirstGreenOccurance) {
-                if (logFilterRules) { console.log('including first Green: ' + letter); }
-                aryIncludeLetters.push(letter);
-                aryBoolFirstGreenOccurrance[letter] = false;
-              } else {
-                if (logFilterRules) { console.log('including subsequent Green occurrance: ' + letter); }
-                aryIncludeLetters.push(letter);
-              }//if else
-            }//if else
-            if (logFilterRules) { console.log('guessWord: ' + guessWord + ' letter: ' + letter + ' guessWord.indexOf(letter): ' + guessWord.indexOf(letter)); }
-          } else if (aryPatternLetters[letterPosition - 1] !== letter) {
-            errorHandler('more than one Green per column!');
-            return;
-          }//if else
-        }//if else (gridCoordBColor)
+        }//if
       }//if else
-      //╔═════════════════════════════════════════════════════════════════════════════════╗
-      //║ let's do some error checking, shall we? we have the whole Guess word here, meow ║
-      //╚═════════════════════════════════════════════════════════════════════════════════╝
-    }//for letterPositiom
+      if (logFilterRules) { console.log('continuing'); }
+      continue;
+    }
+    //╔═══════════════════════════════════════════════════════════════════════════╗
+    //║ let's do some error checking, shall we? we have the whole Guess word here ║
+    //╚═══════════════════════════════════════════════════════════════════════════╝
   }//for guessPosition
   if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('exclude: ' + aryExcludeLetters); }
   if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('include: ' + aryIncludeLetters); }
