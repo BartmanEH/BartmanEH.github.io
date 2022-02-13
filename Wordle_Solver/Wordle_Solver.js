@@ -324,14 +324,14 @@ function solveIt() {
       if (logFilterRules) { console.log('continuing'); }
       continue;
     }//if
-    //╔════════════════════════════════════════════════════════════════════════════════════════════════════╗
-    //║ let's do some error checking, shall we? we have the whole Guess word here meow                     ║
-    //╠════════════════════════════════════════════════════════════════════════════════════════════════════╣
-    //║ 3 rules identified to error-check Guess word entry matches Wordle results:                         ║
-    //║ (1) any guess word letters also in pattern positions are green                                     ║
-    //║ (2) any guess word letters also in exclude array are gray                                          ║
-    //║ (3) all guess word letters also in include array are yellow (account for multiples of same letter) ║
-    //╚════════════════════════════════════════════════════════════════════════════════════════════════════╝
+    //╔═══════════════════════════════════════════════════════════════════════════════════════════════════════╗
+    //║ let's do some error checking, shall we? we have the whole Guess word here meow                        ║
+    //╠═══════════════════════════════════════════════════════════════════════════════════════════════════════╣
+    //║ 3 rules to error-check Guess word entry matches Wordle results:                                       ║
+    //║ (1) any guess word letters are Green that are also in same Green pattern array positions              ║
+    //║ (2) any guess word letters are Gray that are also in exclude array                                    ║
+    //║ (3) all guess word letters are yellow that are also in include array (incl. multiples of same letter) ║
+    //╚═══════════════════════════════════════════════════════════════════════════════════════════════════════╝
     //(1) already done above: errorHandler('Green cannot change to Gray!');
   }//for guessPosition
   if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('exclude: ' + aryExcludeLetters); }
