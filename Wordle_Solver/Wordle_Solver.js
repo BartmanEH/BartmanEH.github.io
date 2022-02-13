@@ -210,6 +210,7 @@ function solveIt() {
       const gridId = 'guess_' + guessPosition + '_' + letterPosition;
       const gridElement = document.getElementById(gridId);
       const letter = gridElement.value.toUpperCase();
+      guessWord += letter;
       if (letter === ' ') {
         //errorHandler('gridCoord contains &lt;space&gt;! ' + gridCoord);
         if (logFilterRules) { console.log('breaking'); }
@@ -245,7 +246,6 @@ function solveIt() {
         const boolFirstGreenOccurance = aryBoolFirstGreenOccurrance[letter] ?? true;      //?? to initialize array elements
         if (logFilterRules) { console.log('top of for loop, boolFirstYellowOccurance: ' + boolFirstYellowOccurance); }
         if (logFilterRules) { console.log('top of for loop, boolFirstGreenOccurance: ' + boolFirstGreenOccurance); }
-        guessWord += letter;
         if (gridElement.dataset.state === stateIncorrect) {         //is it Gray?
           if (!aryExcludeLetters.includes(letter)) {                //new exclude letter?
             if (!aryIncludeLetters.includes(letter)) {              //not an include letter?
