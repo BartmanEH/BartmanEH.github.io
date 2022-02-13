@@ -222,7 +222,10 @@ function solveIt() {
         if (!aryExcludeLetters.includes(letter)) {                  //new exclude letter?
           if (!aryIncludeLetters.includes(letter)) {                //not an include letter?
             aryExcludeLetters.push(letter);                         //add to exclude letters
-          }//if
+          } else {
+            errorHandler('Yellow cannot change to Gray!');          //Gray letter is in includes array!
+            return;
+            }//if else
         }//if
         if (aryPatternLetters[letterPosition - 1] === letter) {
           errorHandler('Green cannot change to Gray!');             //was Green in previous Guess
@@ -316,6 +319,11 @@ function solveIt() {
     //╔═══════════════════════════════════════════════════════════════════════════╗
     //║ let's do some error checking, shall we? we have the whole Guess word here ║
     //╚═══════════════════════════════════════════════════════════════════════════╝
+    //check that any letters of guess word also in pattern positions are green
+    //already done above: errorHandler('Green cannot change to Gray!');
+    //check that any letters of guess word also in exclude array are gray
+    //already done above: errorHandler('Yellow cannot change to Gray!');
+    //check that any letters of guess word also in include array are yellow (account for multiples of same letter)
   }//for guessPosition
   if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('exclude: ' + aryExcludeLetters); }
   if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('include: ' + aryIncludeLetters); }
