@@ -216,7 +216,7 @@ function solveIt() {
         break;
         //return;
       }//if
-      if ((guessWord !== '     ') && (guessWord !== '')) {
+      if ((letterPosition === 5) && (guessWord !== '     ') && (guessWord !== '')) {
         if (logGeneral) { console.log('aryAllAnswersOrdered.indexOf(guessWord): ' + aryAllAnswersOrdered.indexOf(guessWord)); }
         if (logGeneral) { console.log('diffDays: ' + diffDays); }
         if (streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays)) {
