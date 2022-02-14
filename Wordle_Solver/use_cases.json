@@ -312,6 +312,34 @@
     },
     {
       "id": "14",
+      "comment": "valid",
+      "guess": [
+        "POUTY",
+        "RAISE",
+        "AWARE"
+      ],
+      "pattern": [
+        "BBBBB",
+        "YYBBG",
+        "BBGYG"
+      ],
+      "possibilities": [
+        "GRADE",
+        "BRAKE",
+        "CRAZE",
+        "FRAME",
+        "GRAVE",
+        "CRAVE",
+        "GRACE",
+        "BRAVE",
+        "GRAZE",
+        "DRAKE",
+        "CRANE",
+        "BRACE"
+      ]
+    },
+    {
+      "id": "15",
       "comment": "invalid 3rd pattern (should be BBGYG)",
       "guess": [
         "POUTY",
@@ -336,6 +364,25 @@
         "DRAKE",
         "CRANE",
         "BRACE"
+      ]
+    },
+    {
+      "id": "16",
+      "comment": "valid",
+      "guess": [
+        "POUTY",
+        "ARISE",
+        "AWARE",
+        "KARMA"
+      ],
+      "pattern": [
+        "BBBBB",
+        "YYBBB",
+        "YBYYB",
+        "BGGBG"
+      ],
+      "possibilities": [
+        "LARVA"
       ]
     }
   ]
