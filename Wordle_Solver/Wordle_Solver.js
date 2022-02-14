@@ -288,7 +288,7 @@ function solveIt() {
           aryPatternLetters[letterPosition - 1] = letter;
           if (aryIncludeLetters.includes(letter)) {                 //already have this letter
             if (logFilterRules) { console.log('already included: ' + letter); }
-            if (boolFirstYellowOccurance) {
+            if (boolFirstGreenOccurance) {                          //changed Yellow to Green here
               if (logFilterRules) { console.log('ingoring already included first Green occurrance: ' + letter); }
             } else {
               if (logFilterRules) { console.log('including already included first Green occurrance: ' + letter); }
