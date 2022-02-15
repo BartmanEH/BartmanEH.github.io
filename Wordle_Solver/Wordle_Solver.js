@@ -402,7 +402,7 @@ function solveIt() {
     //║ (3) all guess word letters are yellow or Green that are in include array (incl. multiples of same letter) ║
     //╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════╝
     //(1) already done above: errorHandler('Green cannot change to Gray!');
-    //(2)
+    //(2) (none of this poo is working right now)
     consoleLog(logErrorChecking, 'guessWord: ' + guessWord);
     consoleLog(logErrorChecking, 'exclude: ' + aryExcludeLetters);
     consoleLog(logErrorChecking, 'include: ' + aryIncludeLetters);
@@ -412,18 +412,17 @@ function solveIt() {
       consoleLog(logErrorChecking, 'checking exclude letter: ' + aryExcludeLetters[aryExcludeLettersPosition - 1]);
       if (guessWord.indexOf(aryExcludeLetters[aryExcludeLettersPosition - 1]) > -1) {
         consoleLog(logErrorChecking, 'guess word contains exclude letter ' + aryExcludeLetters[aryExcludeLettersPosition - 1]);
-        if (aryIncludeLetters.includes(aryExcludeLetters[aryExcludeLettersPosition - 1])) {
-          consoleLog(logErrorChecking, 'exclude letter ' + aryExcludeLetters[aryExcludeLettersPosition - 1] + ' is include letters');
-          const gridId = 'guess_' + guessPosition + '_' + (aryExcludeLettersPosition);
-          const gridElement = document.getElementById(gridId);
-          if (logFilterRules) { console.log('gridId: ' + gridId); }
-          if (gridElement.dataset.state === stateIncorrect) {
-            errorHandler('Yellow cannot change to Gray!');              //Gray letter is in includes array!
-            return;                                                     //Green cannot change to Gray is already handled above
-          }//if
+        const gridId = 'guess_' + guessPosition + '_' + (aryExcludeLettersPosition);
+        const gridElement = document.getElementById(gridId);
+        if (logFilterRules) { console.log('gridId: ' + gridId); }
+        if (gridElement.dataset.state !== stateIncorrect) {
+          errorHandler('Gray cannot change to Yellow/Green!');              //Gray letter is in includes array!
+          return;                                                     //Green cannot change to Gray is already handled above
         }//if
       }//if
     }//for
+    //if (aryIncludeLetters.includes(aryExcludeLetters[aryExcludeLettersPosition - 1])) {
+    //consoleLog(logErrorChecking, 'exclude letter ' + aryExcludeLetters[aryExcludeLettersPosition - 1] + ' is in include letters');
     //(3)
     //
   }//for guessPosition
