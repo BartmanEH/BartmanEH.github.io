@@ -384,6 +384,23 @@
       "possibilities": [
         "LARVA"
       ]
+    },
+    {
+      "id": "17",
+      "comment": "valid",
+      "guess": [
+        "POUTY",
+        "RAISE",
+        "CROAK"
+      ],
+      "pattern": [
+        "BYBBB",
+        "YYBBB",
+        "BGGYB"
+      ],
+      "possibilities": [
+        "AROMA"
+      ]
     }
   ]
 }
