@@ -90,7 +90,7 @@ function resetGrid() {
 }//resetGrid()
 
 function inputKeydown(e) {
-  if ((e.shiftKey && (e.keyCode === 9)) || ( e.keyCode === 9)) {    //Shift+Tab or Tab
+  if ((e.shiftKey && (e.keyCode === 9)) || (e.keyCode === 9)) {     //Shift+Tab or Tab
     e.preventDefault();                                             //bypass normal processing
   }//if
 }//inputKeydown()
@@ -395,8 +395,9 @@ function solveIt() {
     //║ (2) any guess word letters must be Gray that are in exclude array                                             ║
     //║ (3) all guess word letters must be yellow or Green that are in include array (incl. multiples of same letter) ║
     //╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
-    //(1) already done above: errorHandler('Green cannot change to Gray!');
-    //(2)
+    //(1) any guess word letters must be Green that are in same Green pattern array positions
+    //already done above: errorHandler('Green cannot change to Gray!');
+    //(2) any guess word letters must be Gray that are in exclude array
     consoleLog(logErrorChecking, 'guessWord: ' + guessWord);
     consoleLog(logErrorChecking, 'exclude: ' + aryExcludeLetters);
     consoleLog(logErrorChecking, 'include: ' + aryIncludeLetters);
