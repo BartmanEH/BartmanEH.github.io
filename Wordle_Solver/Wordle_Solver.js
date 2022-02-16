@@ -1,4 +1,4 @@
-const version = '1.148';
+const version = '1.149';
 /*eslint no-labels: ["error", { "allowLoop": true }]*/
 //#region word arrays
 const aryAllPossibleGuesses = [
