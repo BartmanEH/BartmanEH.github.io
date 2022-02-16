@@ -1,4 +1,4 @@
-const version = '1.137new';
+const version = '1.148';
 /*eslint no-labels: ["error", { "allowLoop": true }]*/
 //#region word arrays
 const aryAllPossibleGuesses = [
@@ -58,6 +58,7 @@ function UIeventHandlers() {                                        //attach han
   for (const textInput of textInputs) {
     textInput.addEventListener('click', (e) => { inputClicked(e); });           //click handler
     textInput.addEventListener('keyup', (e) => { inputKeyup(e); });             //keyup handler
+    textInput.addEventListener('keydown', (e) => { inputKeydown(e); });         //keydown handler
     textInput.addEventListener('contextmenu', (e) => { e.preventDefault(); });  //disable right-click context menu
   }//for
 }//UIeventHandlers()
@@ -88,33 +89,42 @@ function resetGrid() {
   document.getElementById('help-outer').style.display = 'block';    //show help div
 }//resetGrid()
 
+function inputKeydown(e) {
+  if ((e.shiftKey && (e.keyCode === 9)) || ( e.keyCode === 9)) {    //Shift+Tab or Tab
+    e.preventDefault();                                             //bypass normal processing
+  }//if
+}//inputKeydown()
+
 function inputKeyup(e) {
   consoleLog(logKeyboard, 'keyup event fired: e.which: ' + e.which + ' e.target.value: ' + e.target.value);
   let chrKeyPressed = '';
   if (e.which === 229) {                                            //Android
     chrKeyPressed = e.target.value.charCodeAt();                    //convert to ASCII code indirectly
   } else { chrKeyPressed = e.which; }                               //assume iOS; get ASCII code directly
-  if (chrKeyPressed === 8) {                                        //detect backspace/delete key
-    consoleLog(logKeyboard, 'delete/backspace');
-    //e.preventDefault();                                             //ignore it
+  if (chrKeyPressed === 8) {                                        //backspace/delete key?
+    consoleLog(logKeyboard, 'delete/backspace');                    //clear precious grid position
+    //e.preventDefault();                                             //bypass normal processing
     findTabStop(e.target, 'backward').focus();                      //focus previous focussable element
-    e.target.value = ' ';
+    e.target.value = ' ';                                           //set default letter value
     e.target.style.backgroundColor = rgbBlack;                      //make background Black
-    e.target.style.border = '2px solid ' + rgbGray;                 //make border Gray too
+    e.target.style.border = '2px solid ' + rgbGray;                 //make border Gray
     e.target.dataset.state = stateTBD;                              //reset metadata attribute
     return;                                                         //terminate further processing
   } else if (chrKeyPressed >= 97 && chrKeyPressed <= 122) {         //lowercase?
-    chrKeyPressed -= 32;                                            //convert to uppercase
+    e.target.value = String.fromCharCode(chrKeyPressed - 32);       //convert to uppercase
   } else if (chrKeyPressed >= 65 && chrKeyPressed <= 90) {          //uppercase?
     e.target.value = String.fromCharCode(chrKeyPressed);            //uppercase
-    e.target.style.backgroundColor = rgbGray;                       //make background Gray
-    e.target.style.border = '2px solid ' + rgbGray;                 //make border Gray too
-    e.target.dataset.state = stateIncorrect;                        //set metadata attribute
-  }//if
-  if (e.target.value === '') {
-    e.target.value = ' ';
+  } else {
+    e.preventDefault();                                             //bypass normal processing
+    return;                                                         //terminate further processing
+  }//if else
+  e.target.style.backgroundColor = rgbGray;                         //make background Gray
+  e.target.style.border = '2px solid ' + rgbGray;                   //make border Gray too
+  e.target.dataset.state = stateIncorrect;                          //set metadata attribute
+  if (e.target.value === '') {                                      //non default value?
+    e.target.value = ' ';                                           //set default letter value
     e.target.dataset.state = stateTBD;                              //reset metadata attribute
-    return;
+    return;                                                         //terminate further processing
   }//if
   //e.target.next('input').focus();                                   //this method doesn't traverse guesses
   findTabStop(e.target, 'forward').focus();                       //focus next focussable element
@@ -136,29 +146,13 @@ function findTabStop(element, direction) {
   consoleLog(logTabbing, 'list[list.indexOf(element) + 1]: ' + (list[list.indexOf(element) + 1]) ?? list[0]);
   consoleLog(logTabbing, 'list[list.indexOf(element) - 1]: ' + (list[list.indexOf(element) - 1]) ?? list[universe.length - 1]);
   consoleLog(logTabbing, 'direction: ' + direction);
-  /*
-  if (direction === 'forward') {
-    consoleLog(logTabbing, 'forward');
-    if (list.indexOf(element) + 1 === universe.length) {
-      return (list[0]);
-    } else {
-      return (list[list.indexOf(element) + 1]);
-    }//if else
-  } else if (direction === 'backward') {
-    consoleLog(logTabbing, 'backward');
-    if (list.indexOf(element) - 1 === -1) {
-      return list[universe.length];
-    } else {
-      return (list[list.indexOf(element) - 1]);
-    }//if else
-  } else errorHandler('invalid tab direction!');
-  */
   if (direction === 'forward') {
     consoleLog(logTabbing, 'forward');
     return ((list[list.indexOf(element) + 1]) ?? list[0]);
   } else if (direction === 'backward') {
     consoleLog(logTabbing, 'backward');
-    return ((list[list.indexOf(element) - 1]) ?? list[universe.length - 1]);
+    //return ((list[list.indexOf(element) - 1]) ?? list[universe.length - 1]);
+    return ((list[list.indexOf(element) - 1]) ?? list[0]);
   } else errorHandler('invalid tab direction!');
 }//findTabStop()
 
@@ -289,15 +283,15 @@ function solveIt() {
           }//if else
         }//if
         if (aryPatternLetters[letterPosition - 1] === letter) {     //was Green in a previous Guess
-          errorHandler('Green ' + letter + ' cannot change to Gray!');             //'Green cannot change to Gray!
+          errorHandler('Green ' + letter + ' cannot change to Gray!');                  //Green cannot change to Gray!
           return;
         }//if
       } else if (gridElement.dataset.state === stateMisplaced) {    //if (stateMisplaced); is it Yellow?
         if (aryPatternLetters[letterPosition - 1] === letter) {     //was Green in a previous Guess
-          errorHandler('Green ' + letter + ' cannot change to Yellow in same column!'); //Green cannot change to Yellow in column!
+          errorHandler('Green ' + letter + ' cannot change to Yellow in same column!'); //Green cannot change to Yellow
           return;
         } else if (aryExcludeLetters.includes(letter)) {            //already an exclude letter?
-          errorHandler('Gray ' + letter + ' cannot change to Yellow!');            //Gray cannot change to Yellow!
+          errorHandler('Gray ' + letter + ' cannot change to Yellow!');                 //Gray cannot change to Yellow!
           return;
         } else if (aryIncludeLetters.includes(letter)) {            //already have this letter
           if (boolFirstYellowOccurance) {                           //first occurrance of this letter?
@@ -324,7 +318,7 @@ function solveIt() {
         }//if else
       } else if (gridElement.dataset.state === stateCorrect) {      //if (stateCorrect); is it Green?
         consoleLog(logFilterRules, 'top of Green test, boolFirstGreenOccurance: ' + boolFirstGreenOccurance);
-        if (aryExcludeLetters.includes(letter)) {                 //already have this letter
+        if (aryExcludeLetters.includes(letter)) {                   //already have this letter
           consoleLog(logFilterRules, 'splicing');
           aryExcludeLetters.splice(aryExcludeLetters.indexOf(letter), 1);
         }
@@ -393,16 +387,16 @@ function solveIt() {
       consoleLog(logFilterRules, 'end of guess word trigger check');
       //continue;
     }//if
-    //╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════╗
-    //║ let's do some error checking, shall we? we have the whole Guess word here meow                            ║
-    //╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════╣
-    //║ 3 rules to error-check Guess word entry matches Wordle results:                                           ║
-    //║ (1) any guess word letters are Green that are in same Green pattern array positions                       ║
-    //║ (2) any guess word letters are Gray that are in exclude array                                             ║
-    //║ (3) all guess word letters are yellow or Green that are in include array (incl. multiples of same letter) ║
-    //╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+    //╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+    //║ let's do some error checking, shall we? we have the whole Guess word here meow                                ║
+    //╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+    //║ 3 rules to error-check Guess word entry matches Wordle results:                                               ║
+    //║ (1) any guess word letters must be Green that are in same Green pattern array positions                       ║
+    //║ (2) any guess word letters must be Gray that are in exclude array                                             ║
+    //║ (3) all guess word letters must be yellow or Green that are in include array (incl. multiples of same letter) ║
+    //╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
     //(1) already done above: errorHandler('Green cannot change to Gray!');
-    //(2) (none of this poo is working right now)
+    //(2)
     consoleLog(logErrorChecking, 'guessWord: ' + guessWord);
     consoleLog(logErrorChecking, 'exclude: ' + aryExcludeLetters);
     consoleLog(logErrorChecking, 'include: ' + aryIncludeLetters);
@@ -412,17 +406,18 @@ function solveIt() {
       consoleLog(logErrorChecking, 'checking exclude letter: ' + aryExcludeLetters[aryExcludeLettersPosition - 1]);
       if (guessWord.indexOf(aryExcludeLetters[aryExcludeLettersPosition - 1]) > -1) {
         consoleLog(logErrorChecking, 'guess word contains exclude letter ' + aryExcludeLetters[aryExcludeLettersPosition - 1]);
-        const gridId = 'guess_' + guessPosition + '_' + (aryExcludeLettersPosition);
-        const gridElement = document.getElementById(gridId);
-        if (logFilterRules) { console.log('gridId: ' + gridId); }
-        if (gridElement.dataset.state !== stateIncorrect) {
-          errorHandler('Gray cannot change to Yellow/Green!');              //Gray letter is in includes array!
-          return;                                                     //Green cannot change to Gray is already handled above
+        if (aryIncludeLetters.includes(aryExcludeLetters[aryExcludeLettersPosition - 1])) {
+          consoleLog(logErrorChecking, 'exclude letter ' + aryExcludeLetters[aryExcludeLettersPosition - 1] + ' is include letters');
+          const gridId = 'guess_' + guessPosition + '_' + (aryExcludeLettersPosition);
+          const gridElement = document.getElementById(gridId);
+          if (logFilterRules) { console.log('gridId: ' + gridId); }
+          if (gridElement.dataset.state === stateIncorrect) {
+            errorHandler('Yellow cannot change to Gray!');          //Gray letter is in includes array!
+            return;                                                 //Green cannot change to Gray already handled above
+          }//if
         }//if
       }//if
     }//for
-    //if (aryIncludeLetters.includes(aryExcludeLetters[aryExcludeLettersPosition - 1])) {
-    //consoleLog(logErrorChecking, 'exclude letter ' + aryExcludeLetters[aryExcludeLettersPosition - 1] + ' is in include letters');
     //(3)
     //
   }//for guessPosition
@@ -445,7 +440,7 @@ function solveIt() {
         if ((aryPatternLetters[2] === '*') || (word.substring(2, 3) === aryPatternLetters[2])) {
           if ((aryPatternLetters[3] === '*') || (word.substring(3, 4) === aryPatternLetters[3])) {
             if (((aryPatternLetters[4] === '*') || word.substring(4, 5) === aryPatternLetters[4])) {
-              boolExclude = aryExcludeLetters.every(function (letter) { return !word.includes(letter); });  //boolExclude
+              boolExclude = aryExcludeLetters.every(function (letter) { return !word.includes(letter); });
               consoleLog(logFiltering, 'word: ' + word + ' boolExclude: ' + boolExclude);
               if (boolExclude) {                                            //word excludes all exclude letters?
                 boolInclude = isSubsetInclDupes(aryIncludeLetters, word);   //check it includes all include letters
