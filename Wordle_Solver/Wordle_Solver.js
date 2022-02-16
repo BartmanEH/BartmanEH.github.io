@@ -1,4 +1,4 @@
-const version = '1.150';
+const version = '1.151';
 /*eslint no-labels: ["error", { "allowLoop": true }]*/
 //#region word arrays
 const aryAllPossibleGuesses = [
@@ -34,7 +34,6 @@ const oneDay = 24 * 60 * 60 * 1000;                                 //hours*minu
 const start = new Date(2021, 5, 19);                                //date of first Wordle (0 indexed)
 const today = new Date();                                           //today's date
 const diffDays = Math.floor((today - start) / oneDay);              //#days (changed from .round to .floor)
-
 //#endregion constants
 //#region init
 consoleLog(logGeneral, 'today: ' + today + ', Wordle day#: ' + diffDays);
@@ -148,7 +147,8 @@ function findTabStop(element, direction) {
   consoleLog(logTabbing, 'direction: ' + direction);
   if (direction === 'forward') {
     consoleLog(logTabbing, 'forward');
-    return ((list[list.indexOf(element) + 1]) ?? list[0]);
+    //return ((list[list.indexOf(element) + 1]) ?? list[0]);
+    return ((list[list.indexOf(element) + 1]) ?? list[universe.length - 1]);
   } else if (direction === 'backward') {
     consoleLog(logTabbing, 'backward');
     //return ((list[list.indexOf(element) - 1]) ?? list[universe.length - 1]);
@@ -283,7 +283,7 @@ function solveIt() {
           }//if else
         }//if
         if (aryPatternLetters[letterPosition - 1] === letter) {     //was Green in a previous Guess
-          errorHandler('Green ' + letter + ' cannot change to Gray in guess word: ' + guessWord + '!'); //Green cannot change to Gray!
+          errorHandler('Green ' + letter + ' cannot change to Gray!'); //Green cannot change to Gray!
           return;
         }//if
       } else if (gridElement.dataset.state === stateMisplaced) {    //if (stateMisplaced); is it Yellow?
@@ -291,7 +291,7 @@ function solveIt() {
           errorHandler('Green ' + letter + ' cannot change to Yellow in same column!'); //Green cannot change to Yellow
           return;
         } else if (aryExcludeLetters.includes(letter)) {            //already an exclude letter?
-          errorHandler('Gray ' + letter + ' cannot change to Yellow in guess word: ' + guessWord + '!');  //Gray cannot change to Yellow!
+          errorHandler('Gray ' + letter + ' cannot change to Yellow!');  //Gray cannot change to Yellow!
           return;
         } else if (aryIncludeLetters.includes(letter)) {            //already have this letter
           if (boolFirstYellowOccurance) {                           //first occurrance of this letter?
