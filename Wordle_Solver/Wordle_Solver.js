@@ -1,4 +1,4 @@
-const version = '1.152';
+const version = '1.153';
 /*eslint no-labels: ["error", { "allowLoop": true }]*/
 //#region word arrays
 const aryAllPossibleGuesses = [
@@ -20,8 +20,10 @@ const logFiltering = Boolean(false);      //logFiltering = true: filtering debug
 const logErrorChecking = Boolean(false);  //logFilterRules = true: filter rules debug messages on console
 const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
+const logAutoResults = Boolean(true);    //logAutoResults = true: automated results debug messages on console
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const streakSaver = Boolean(true);        //streakSaver = true: Greenify Guess if it's Today's Answer
+const autoResults = Boolean(false);        //autoResults = true: automatically enter guess results based on Today's Answer
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
@@ -267,8 +269,8 @@ function solveIt() {
           break forLetterLoop;
         }//if else
       }//if
-      const boolFirstYellowOccurance = aryBoolFirstYellowOccurrance[letter] ?? true;    //?? to initialize array elements
-      const boolFirstGreenOccurance = aryBoolFirstGreenOccurrance[letter] ?? true;      //?? to initialize array elements
+      const boolFirstYellowOccurance = aryBoolFirstYellowOccurrance[letter] ?? true;      //?? to initialize array elements
+      const boolFirstGreenOccurance = aryBoolFirstGreenOccurrance[letter] ?? true;        //?? to initialize array elements
       //consoleLog(logFilterRules, 'top of for loop, boolFirstYellowOccurance: ' + boolFirstYellowOccurance);
       //consoleLog(logFilterRules, 'top of for loop, boolFirstGreenOccurance: ' + boolFirstGreenOccurance);
       guessWord += letter;
@@ -276,23 +278,25 @@ function solveIt() {
         if (!aryExcludeLetters.includes(letter)) {                  //new exclude letter?
           if (!aryIncludeLetters.includes(letter)) {                //not an include letter?
             aryExcludeLetters.push(letter);                         //add to exclude letters
-          } else {
-            //this doesn't work because letter may be Green or Yellow further into guess word!
-            //errorHandler('Yellow cannot change to Gray!');          //Gray letter is in includes array!
-            //return;
-          }//if else
+          }//if
         }//if
         if (aryPatternLetters[letterPosition - 1] === letter) {     //was Green in a previous Guess
-          errorHandler('Green ' + letter + ' cannot change to Gray!'); //Green cannot change to Gray!
+          if (!autoResults) {
+            errorHandler('Green ' + letter + ' cannot change to Gray!');                  //Green cannot change to Gray!
+          }//if
           return;
         }//if
       } else if (gridElement.dataset.state === stateMisplaced) {    //if (stateMisplaced); is it Yellow?
         if (aryPatternLetters[letterPosition - 1] === letter) {     //was Green in a previous Guess
-          errorHandler('Green ' + letter + ' cannot change to Yellow in same column!'); //Green cannot change to Yellow
-          return;
+          if (!autoResults) {
+            errorHandler('Green ' + letter + ' cannot change to Yellow in same column!'); //Green cannot change to Yellow
+            return;
+          }//if
         } else if (aryExcludeLetters.includes(letter)) {            //already an exclude letter?
-          errorHandler('Gray ' + letter + ' cannot change to Yellow!');  //Gray cannot change to Yellow!
-          return;
+          if (!autoResults) {
+            errorHandler('Gray ' + letter + ' cannot change to Yellow!');                 //Gray cannot change to Yellow!
+            return;
+          }//if
         } else if (aryIncludeLetters.includes(letter)) {            //already have this letter
           if (boolFirstYellowOccurance) {                           //first occurrance of this letter?
             if (aryPatternLetters.indexOf(letter) > -1) {
@@ -351,8 +355,10 @@ function solveIt() {
             }//if else
           }//if else
         } else if (aryPatternLetters[letterPosition - 1] !== letter) {
-          errorHandler(aryPatternLetters[letterPosition - 1] + ' and ' + letter + ' cannot be Green in same column!');
-          return;
+          if (!autoResults) {
+            errorHandler(aryPatternLetters[letterPosition - 1] + ' and ' + letter + ' cannot be Green in same column!');
+            return;
+          }//if
         }//if else
       }//if else (stateCorrect)
       //consoleLog(logFilterRules, 'guessWord: ' + guessWord + ' letter: ' + letter + ' guessWord.indexOf(letter): ' + guessWord.indexOf(letter));
@@ -387,51 +393,91 @@ function solveIt() {
       consoleLog(logFilterRules, 'end of guess word trigger check');
       //continue;
     }//if
-    //╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
-    //║ let's do some error checking, shall we? we have the whole Guess word here meow                                ║
-    //╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
-    //║  3 rules to error-check Guess word entry matches Wordle results:                                              ║
-    //║ (1) any guess word letters must be Green that are in same Green pattern array positions                       ║
-    //║ (2) any guess word letters must be Gray that are in exclude array                                             ║
-    //║ (3) all guess word letters must be yellow or Green that are in include array (incl. multiples of same letter) ║
-    //╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
-    //(1) any guess word letters must be Green that are in same Green pattern array positions
-    //already done above: errorHandler('Green ' + letter + ' cannot change to Gray!');
-    //(2) any guess word letters must be Gray that are in exclude array
-    //already done above: errorHandler('Gray ' + letter + ' cannot change to Yellow!');
-    //(3) all guess word letters must be yellow or Green that are in include array (incl. multiples of same letter)
-    consoleLog(logErrorChecking, 'guessWord: ' + guessWord);
-    consoleLog(logErrorChecking, 'exclude: ' + aryExcludeLetters);
-    consoleLog(logErrorChecking, 'include: ' + aryIncludeLetters);
-    consoleLog(logErrorChecking, 'pattern: ' + aryPatternLetters);
-    consoleLog(logErrorChecking, 'checking rule #3: all guess word letters must be yellow or Green that are in include array (incl. multiples of same letter)');
-    let includeLetter = '';
-    let boolCheck = Boolean(false);
-    for (let aryIncludeLettersPosition = 1; aryIncludeLettersPosition <= aryIncludeLetters.length; aryIncludeLettersPosition++) {
-      includeLetter = aryIncludeLetters[aryIncludeLettersPosition - 1];
-      consoleLog(logErrorChecking, 'checking Include letter: ' + includeLetter);
-      for (let guessWordCheckPosition = 1; guessWordCheckPosition <= guessWord.length; guessWordCheckPosition++) {
-        if (guessWord[guessWordCheckPosition - 1] === includeLetter) {  //guess word includes include letter
-          const gridId = 'guess_' + guessPosition + '_' + (guessWordCheckPosition);   //guessPosition is from main guess for loop way above
-          const gridElement = document.getElementById(gridId);
-          if (logErrorChecking) { console.log('gridId: ' + gridId); }
-          if (gridElement.dataset.state === stateIncorrect) {
-            consoleLog(logErrorChecking, 'Includes letter ' + includeLetter + ' is Gray in this position of guess word ' + guessWord + '. Continuing to check any additional occurrances!');
-            boolCheck = true;
-          } else {                                                  //include letter is still Yellow or changed to Green/Yellow: OK!
-            consoleLog(logErrorChecking, 'Includes letter ' + includeLetter + ' is still Yellow or changed to Green/Yellow: OK!');
-            boolCheck = false;
-            break;                                                  //no more checking required for this include letter
+    if (!autoResults) {
+      //╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+      //║ let's do some error checking, shall we? we have the whole Guess word here meow                                ║
+      //╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+      //║  3 rules to error-check Guess word entry matches Wordle results:                                              ║
+      //║ (1) any guess word letters must be Green that are in same Green pattern array positions                       ║
+      //║ (2) any guess word letters must be Gray that are in exclude array                                             ║
+      //║ (3) all guess word letters must be yellow or Green that are in include array (incl. multiples of same letter) ║
+      //╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+      //(1) any guess word letters must be Green that are in same Green pattern array positions
+      //already done above: errorHandler('Green ' + letter + ' cannot change to Gray!');
+      //(2) any guess word letters must be Gray that are in exclude array
+      //already done above: errorHandler('Gray ' + letter + ' cannot change to Yellow!');
+      //(3) all guess word letters must be yellow or Green that are in include array (incl. multiples of same letter)
+      consoleLog(logErrorChecking, 'guessWord: ' + guessWord);
+      consoleLog(logErrorChecking, 'exclude: ' + aryExcludeLetters);
+      consoleLog(logErrorChecking, 'include: ' + aryIncludeLetters);
+      consoleLog(logErrorChecking, 'pattern: ' + aryPatternLetters);
+      consoleLog(logErrorChecking, 'checking rule #3: all guess word letters must be yellow or Green that are in include array (incl. multiples of same letter)');
+      let includeLetter = '';
+      let boolCheck = Boolean(false);
+      for (let aryIncludeLettersPosition = 1; aryIncludeLettersPosition <= aryIncludeLetters.length; aryIncludeLettersPosition++) {
+        includeLetter = aryIncludeLetters[aryIncludeLettersPosition - 1];
+        consoleLog(logErrorChecking, 'checking Include letter: ' + includeLetter);
+        for (let guessWordCheckPosition = 1; guessWordCheckPosition <= guessWord.length; guessWordCheckPosition++) {
+          if (guessWord[guessWordCheckPosition - 1] === includeLetter) {  //guess word includes include letter
+            const gridId = 'guess_' + guessPosition + '_' + (guessWordCheckPosition);   //guessPosition is from main guess for loop way above
+            const gridElement = document.getElementById(gridId);
+            if (logErrorChecking) { console.log('gridId: ' + gridId); }
+            if (gridElement.dataset.state === stateIncorrect) {
+              consoleLog(logErrorChecking, 'Includes letter ' + includeLetter + ' is Gray in this position of guess word ' + guessWord + '. Continuing to check any additional occurrances!');
+              boolCheck = true;
+            } else {                                                //include letter is still Yellow or changed to Green/Yellow: OK!
+              consoleLog(logErrorChecking, 'Includes letter ' + includeLetter + ' is still Yellow or changed to Green/Yellow: OK!');
+              boolCheck = false;
+              break;                                                //no more checking required for this include letter
+            }//if
           }//if
+        }//for
+        if (boolCheck) {
+          consoleLog(logErrorChecking, 'Letter ' + includeLetter + ' cannot change to Gray in guess word: ' + guessWord + '!');
+          errorHandler('Letter ' + includeLetter + ' cannot change to Gray in guess word: ' + guessWord + '!');          //Gray letter is in includes array!
+          return;                                                   //terminate further processing
         }//if
       }//for
-      if (boolCheck) {
-        consoleLog(logErrorChecking, 'Letter ' + includeLetter + ' cannot change to Gray in guess word: ' + guessWord + '!');
-        errorHandler('Letter ' + includeLetter + ' cannot change to Gray in guess word: ' + guessWord + '!');          //Gray letter is in includes array!
-        return;                                                   //terminate further processing
-      }//if
-    }//for
+    } else {                                                        //automatic results based on today's answer: aryAllAnswersOrdered[diffDays]
+      //╔═════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+      //║ this is a bad position for auto results: we have guess word but we've already built the solving arrays! ║
+      //╚═════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+      consoleLog(logAutoResults, 'guessWord: ' + guessWord);
+      consoleLog(logAutoResults, 'exclude: ' + aryExcludeLetters);
+      consoleLog(logAutoResults, 'include: ' + aryIncludeLetters);
+      consoleLog(logAutoResults, 'pattern: ' + aryPatternLetters);
+      consoleLog(logAutoResults, 'today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
+      for (let guessWordCheckPosition = 1; guessWordCheckPosition <= guessWord.length; guessWordCheckPosition++) {
+        const gridId = 'guess_' + guessPosition + '_' + (guessWordCheckPosition);   //guessPosition is from main guess for loop way above
+        const gridElement = document.getElementById(gridId);
+        consoleLog(logAutoResults, 'gridId: ' + gridId);
+        if (guessWord[guessWordCheckPosition - 1] === aryAllAnswersOrdered[diffDays][guessWordCheckPosition - 1]) {
+          gridElement.style.backgroundColor = rgbGreen;                    //make background Green
+          gridElement.style.border = '2px solid ' + rgbGreen;              //make border Green too
+          gridElement.dataset.state = stateCorrect;
+        }//if
+      }//for
+    }//if else
   }//for guessPosition
+  /*
+  if (e.target.dataset.state !== stateTBD) {                        //metadata attribute set?
+    if (e.target.dataset.state === stateIncorrect) {                //is it Gray?
+      e.target.style.backgroundColor = rgbYellow;                   //make background Yellow
+      e.target.style.border = '2px solid ' + rgbYellow;             //make border Yellow too
+      e.target.dataset.state = stateMisplaced;                      //set metadata attribute for Yellow
+    } else if (e.target.dataset.state === stateMisplaced) {         //is it Yellow?
+      e.target.style.backgroundColor = rgbGreen;                    //make background Green
+      e.target.style.border = '2px solid ' + rgbGreen;              //make border Green too
+      e.target.dataset.state = stateCorrect;                        //set metadata attribute for Green
+    } else if (e.target.dataset.state === stateCorrect) {           //is it Green?
+      e.target.style.backgroundColor = rgbGray;                     //make background Gray
+      e.target.style.border = '2px solid ' + rgbGray;               //make border Gray too
+      e.target.dataset.state = stateIncorrect;                      //set metadata attribute for Gray
+    } else {                                                        //metadata attribute still reset
+      consoleLog(logKeyboard, 'empty gridCoord clicked!');
+    }//if else
+  }//if
+  */
   if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('exclude: ' + aryExcludeLetters); }
   if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('include: ' + aryIncludeLetters); }
   if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('pattern: ' + aryPatternLetters); }
