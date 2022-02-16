@@ -426,8 +426,8 @@ function solveIt() {
         }//if
       }//for
       if (boolCheck) {
-        consoleLog(logErrorChecking, 'Yellow ' + includeLetter + ' cannot change to Gray in guess word: ' + guessWord + '!');
-        errorHandler('Yellow ' + includeLetter + ' cannot change to Gray in guess word: ' + guessWord + '!');          //Gray letter is in includes array!
+        consoleLog(logErrorChecking, 'Letter ' + includeLetter + ' cannot change to Gray in guess word: ' + guessWord + '!');
+        errorHandler('Letter ' + includeLetter + ' cannot change to Gray in guess word: ' + guessWord + '!');          //Gray letter is in includes array!
         return;                                                   //terminate further processing
       }//if
     }//for
