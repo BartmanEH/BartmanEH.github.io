@@ -1,4 +1,4 @@
-const version = '1.151';
+const version = '1.152';
 /*eslint no-labels: ["error", { "allowLoop": true }]*/
 //#region word arrays
 const aryAllPossibleGuesses = [
@@ -506,6 +506,7 @@ function solveIt() {
   }//for
   numFiveLetterWords = aryScrutinizedFilteredFiveLetterWords.length;
   let strPossibilities = ' ';
+  aryScrutinizedFilteredFiveLetterWords.sort();                     //sort possibilites alphabetically
   if (numFiveLetterWords !== 0) {
     strPossibilities = buildStrFilteredFiveLetterWords(aryScrutinizedFilteredFiveLetterWords);
   }//if
@@ -578,8 +579,8 @@ async function automatedTesting() {
       consoleLog(logAutoTest, 'use case comment: ' + useCase.comment, 'warn');
       consoleLog(logAutoTest, 'guesses(' + useCase.guess.length + '): ' + useCase.guess);
       consoleLog(logAutoTest, 'pattern(' + useCase.pattern.length + '): ' + useCase.pattern);
-      consoleLog(logAutoTest, 'use case possibilities: ' + aryUseCasePossibilities.slice().sort());
-      consoleLog(logAutoTest, '    test possibilities: ' + aryTestPossibilities.slice().sort());
+      consoleLog(logAutoTest, 'use case possibilities: ' + aryUseCasePossibilities.sort());
+      consoleLog(logAutoTest, '    test possibilities: ' + aryTestPossibilities.sort());
       useCaseResultsIds += useCase.id + ', ';
     }//if else
     resetGrid();                                                    //reset Grid for next use case
