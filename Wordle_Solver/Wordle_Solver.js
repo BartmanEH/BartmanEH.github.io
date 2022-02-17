@@ -197,7 +197,7 @@ function inputClicked(e) {                                          //text input
 }//inputClicked()
 function imageClicked(e) {                                          //image input clicked
   if (e.target.id === 'IES_logo_img') {                             //undefined
-    e.preventDefault();                                             //do nothing
+    location = '../index.html';                                     //back to main index page
   } else if (e.target.id === 'Wordle_Solver_logo_img') {            //reset
     //resetGrid();                                                    //reset grid
     //initialize();                                                   //initialize
