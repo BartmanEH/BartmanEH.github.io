@@ -1,4 +1,4 @@
-const version = '1.158';
+const version = '1.159';
 /*eslint no-labels: ["error", { "allowLoop": true }]*/
 //#region word arrays
 const aryAllPossibleGuesses = [
@@ -9,7 +9,6 @@ const aryAllAnswersOrdered = [
 ];
 //#endregion word arrays
 //#region constants
-let boolAutoTest = Boolean(false);        //boolAutoTest = true: run automated testing
 const testMode = Boolean(false);          //testMode = true: allow non-Answers and non-Guesses
 const prevAnswers = Boolean(true);        //prevAnswers = true: include previous Answers
 const logGeneral = Boolean(false);        //logGeneral = true: show general info messages on console
@@ -23,7 +22,6 @@ const logAutoTest = Boolean(true);        //logAutoTest = true: automated testin
 const logAutoResults = Boolean(true);    //logAutoResults = true: automated results debug messages on console
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const streakSaver = Boolean(true);        //streakSaver = true: Greenify Guess if it's Today's Answer
-const autoResults = Boolean(false);       //autoResults = true: auto enter guess results based on Today's Answer
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
@@ -37,34 +35,30 @@ const start = new Date(2021, 5, 19);                                //date of fi
 const today = new Date();                                           //today's date
 const diffDays = Math.floor((today - start) / oneDay);              //#days (changed from .round to .floor)
 //#endregion constants
-//#region init
-consoleLog(logGeneral, 'today: ' + today + ', Wordle day#: ' + diffDays);
-let answerOffset = 0;
-if (!prevAnswers) { answerOffset = diffDays - 1; }                  //skip previous answers
+//#region globals
+let boolAutoTest = Boolean(false);        //boolAutoTest = true: run automated testing
+let autoResults = Boolean(false);         //autoResults = true: auto enter guess results based on Today's Answer
+let numFiveLetterWords = 0;
 const aryAllPossibleAnswers = [];
-for (let i = 0; i < aryAllAnswersOrdered.length - answerOffset; i++) {
-  aryAllPossibleAnswers[i] = aryAllAnswersOrdered[i + answerOffset];
-}//for
-if (spoilerModePre) { console.log('Today\'s answer: ' + aryAllAnswersOrdered[diffDays]); }
-let numFiveLetterWords = aryAllPossibleAnswers.length;              //number of 5-letter words
-
+//#endregion globals
+//#region init
 document.addEventListener('DOMContentLoaded', function () {
   consoleLog(logGeneral, 'DOM ready! v' + version);                             //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
   openKeyboard();                                                   //open keyboard
 });
-
 function UIeventHandlers() {                                        //attach handlers to UI events
-  const textInputs = document.querySelectorAll('input[type="text"]');
+  const textInputs = document.querySelectorAll('input[type="text"]');           //get all text inputs
+  const imageInput = document.querySelectorAll('input[type="image"]');          //get all image inputs
   for (const textInput of textInputs) {
-    textInput.addEventListener('click', (e) => { inputClicked(e); });           //click handler
-    textInput.addEventListener('keyup', (e) => { inputKeyup(e); });             //keyup handler
-    textInput.addEventListener('keydown', (e) => { inputKeydown(e); });         //keydown handler
-    textInput.addEventListener('contextmenu', (e) => { e.preventDefault(); });  //disable right-click context menu
+    textInput.addEventListener('click', (e) => { inputClicked(e); });           //text input click handler
+    textInput.addEventListener('keyup', (e) => { inputKeyup(e); });             //text input keyup handler
+    textInput.addEventListener('keydown', (e) => { inputKeydown(e); });         //text input keydown handler
+    textInput.addEventListener('contextmenu', (e) => { e.preventDefault(); });  //text input disable right-click context menu
+    imageInput.addEventListener('click', (e) => { imageClicked(e); });          //image input click handler
   }//for
 }//UIeventHandlers()
-
 function openKeyboard() {
   /*
   //jquery
@@ -80,8 +74,15 @@ function openKeyboard() {
   document.getElementById('guess_1_1').focus();                   //set focus to first letter of first guess
   document.getElementById('guess_1_1').setSelectionRange(0, 0);   //set selection to open keyboard
 }//openKeyboard()
-
 function initialize() {                                             //set default selections
+  consoleLog(logGeneral, 'today: ' + today + ', Wordle day#: ' + diffDays);
+  let answerOffset = 0;
+  if (!prevAnswers) { answerOffset = diffDays - 1; }                //skip previous answers
+  for (let i = 0; i < aryAllAnswersOrdered.length - answerOffset; i++) {
+    aryAllPossibleAnswers[i] = aryAllAnswersOrdered[i + answerOffset];
+  }//for
+  if (spoilerModePre) { console.log('Today\'s answer: ' + aryAllAnswersOrdered[diffDays]); }
+  numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
   document.getElementById('version').innerHTML = 'v' + version;
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('words').style.display = 'none';
@@ -105,13 +106,11 @@ function resetGrid() {                                              //clear lett
   document.getElementById('words').style.display = 'none';          //hide words div
   document.getElementById('help-outer').style.display = 'block';    //show help div
 }//resetGrid()
-
 function inputKeydown(e) {                                          //handler for keydown event
   if ((e.shiftKey && (e.keyCode === 9)) || (e.keyCode === 9)) {     //Shift+Tab or Tab
     e.preventDefault();                                             //bypass normal processing
   }//if
 }//inputKeydown()
-
 function inputKeyup(e) {                                            //handler for keyup event
   consoleLog(logKeyboard, 'keyup event fired: e.which: ' + e.which + ' e.target.value: ' + e.target.value);
   let chrKeyPressed = '';
@@ -148,7 +147,6 @@ function inputKeyup(e) {                                            //handler fo
   consoleLog(logKeyboard, 'keyup event fired: e.which: ' + e.which + ' e.target.value: ' + e.target.value);
   solveIt();                                                        //autofire SolveIt!
 }//inputKeyup()
-
 function findTabStop(element, direction) {                          //find next tab stop in 'direction'
   consoleLog(logTabbing, 'direction: ' + direction);
   //const universe = document.querySelectorAll('input, button, select, textarea, a[href]');
@@ -169,8 +167,7 @@ function findTabStop(element, direction) {                          //find next 
     return ((list[list.indexOf(element) - 1]) ?? list[0]);          //if at the beginning, stay at the beginning
   } else errorHandler('invalid tab direction!');                    //function called with unsupported parameter
 }//findTabStop()
-
-function inputClicked(e) {                                          //cycle through letter states
+function inputClicked(e) {                                          //text input clicked: cycle through letter states
   e.target.setSelectionRange(0, 0);                                 //unselect automatically selected text
   if (e.target.dataset.state !== stateTBD) {                        //metadata attribute set?
     if (e.target.dataset.state === stateIncorrect) {                //is it Gray?
@@ -191,20 +188,29 @@ function inputClicked(e) {                                          //cycle thro
   } else consoleLog(logKeyboard, 'empty gridCoord clicked!');       //metadata state attribute still unset (stateTBD)
   solveIt();                                                        //autofire SolveIt!
 }//inputClicked()
-
+function imageClicked(e) {                                          //image input clicked
+  if (e.target.id === 'IES_logo_img') {                             //undefined
+    e.preventDefault();                                             //do nothing
+  } else if (e.target.id === 'Wordle_Solver_logo_img') {            //reset
+    resetGrid();                                                    //reset grid
+    initialize();                                                   //initialize
+  } else if (e.target.id === 'BartmanEH_logo_img') {                //toggle automatic results on/off
+    autoResults = !autoResults;                                     //toggle automatic results boolean switch
+    resetGrid();                                                    //reset grid
+    initialize();                                                   //initialize
+  }//if else
+}//imageClicked()
 function buildStrFilteredFiveLetterWords(array) {                   //helper function to concatenate strings (words)
   let strBuilt = '';
   for (const word of array) { strBuilt += word + '&nbsp &nbsp'; }
   return strBuilt;
 }//buildStrFilteredFiveLetterWords()
-
 function errorHandler(strError) {                                   //helper function to display debug messages
   //consoleLog(true, strError);
   //alert(strError);
   document.getElementById('possibilities-number-span').innerHTML = strError;
   document.getElementById('possibilities').style.display = 'block';
 }//errorHandler()
-
 function consoleLog(boolSwitch, strMessage, logType) {              //helper function to display console log messages
   if (typeof logType === 'undefined') {
     if (boolSwitch) { console.log(strMessage); }
@@ -214,7 +220,6 @@ function consoleLog(boolSwitch, strMessage, logType) {              //helper fun
     if (boolSwitch) { console.error(strMessage); }
   }//if else
 }//consoleLog()
-
 function isSubsetInclDupes(includesArray, wordArray) {              //includesArray subset of wordArray incl. any duplicates?
   const occurences = new Map();
   for (const entry of includesArray) {
@@ -228,7 +233,6 @@ function isSubsetInclDupes(includesArray, wordArray) {              //includesAr
   }//for
   return [...occurences.values()].every(count => count <= 0);
 }//isSubsetInclDupes()
-
 function compareArrays(array1, array2) {                            //compare two arrays for equivalence
   //return array1.length === array2.length && array1.every((value, index) => value === array2[index]);
   const array2Sorted = array2.slice().sort();
@@ -236,7 +240,6 @@ function compareArrays(array1, array2) {                            //compare tw
     return value === array2Sorted[index];
   });
 }//compareArrays()
-
 function celebrate(guessPosition, message) {                         //Easter Egg graphics
   for (let guessLetterPosition = 1; guessLetterPosition <= 5; guessLetterPosition++) {
     const gridId = 'guess_' + guessPosition + '_' + guessLetterPosition;
@@ -281,8 +284,8 @@ function solveIt() {
           break forLetterLoop;
         }//if else
       }//if
-      const boolFirstYellowOccurance = aryBoolFirstYellowOccurrance[letter] ?? true;      //?? to initialize array elements
-      const boolFirstGreenOccurance = aryBoolFirstGreenOccurrance[letter] ?? true;        //?? to initialize array elements
+      const boolFirstYellowOccurance = aryBoolFirstYellowOccurrance[letter] ?? true;      //?? to init array elements
+      const boolFirstGreenOccurance = aryBoolFirstGreenOccurrance[letter] ?? true;        //?? to init array elements
       //consoleLog(logFilterRules, 'top of for loop, boolFirstYellowOccurance: ' + boolFirstYellowOccurance);
       //consoleLog(logFilterRules, 'top of for loop, boolFirstGreenOccurance: ' + boolFirstGreenOccurance);
       guessWord += letter;
