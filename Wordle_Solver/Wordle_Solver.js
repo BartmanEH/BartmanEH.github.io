@@ -1,4 +1,4 @@
-const version = '1.155';
+const version = '1.157';
 /*eslint no-labels: ["error", { "allowLoop": true }]*/
 //#region word arrays
 const aryAllPossibleGuesses = [
@@ -23,7 +23,7 @@ const logAutoTest = Boolean(true);        //logAutoTest = true: automated testin
 const logAutoResults = Boolean(true);    //logAutoResults = true: automated results debug messages on console
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const streakSaver = Boolean(true);        //streakSaver = true: Greenify Guess if it's Today's Answer
-const autoResults = Boolean(false);        //autoResults = true: auto enter guess results based on Today's Answer
+const autoResults = Boolean(false);       //autoResults = true: auto enter guess results based on Today's Answer
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
@@ -66,10 +66,18 @@ function UIeventHandlers() {                                        //attach han
 }//UIeventHandlers()
 
 function openKeyboard() {
+  /*
+  //jquery
+  $input.off('click').on('click', function (){ $input.focus(); });
+  $input.trigger('click');
+  */
+  /*
   setTimeout(function() {
     document.getElementById('guess_1_1').focus();                   //set focus to first letter of first guess
     }, 100);
     document.getElementById('guess_1_1').setSelectionRange(0, 0);   //set focus to first letter of first guess
+  */
+  document.getElementById('guess_1_1').setSelectionRange(0, 0);   //set focus to first letter of first guess
 }//openKeyboard()
 
 function initialize() {                                             //set default selections
