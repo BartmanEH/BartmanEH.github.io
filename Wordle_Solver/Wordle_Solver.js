@@ -1,4 +1,4 @@
-const version = '1.159';
+const version = '1.160';
 /*eslint no-labels: ["error", { "allowLoop": true }]*/
 //#region word arrays
 const aryAllPossibleGuesses = [
@@ -56,7 +56,7 @@ function UIeventHandlers() {                                        //attach han
     textInput.addEventListener('keydown', (e) => { inputKeydown(e); });         //text input keydown handler
     textInput.addEventListener('contextmenu', (e) => { e.preventDefault(); });  //text input disable right-click context menu
   }//for text inputs
-  const imageInputs = document.querySelectorAll('input[type="image"]');          //get all image inputs
+  const imageInputs = document.querySelectorAll('input[type="image"]');         //get all image inputs
   for (const imageInput of imageInputs) {
     imageInput.addEventListener('click', (e) => { imageClicked(e); });          //image input click handler
   }//for image inputs
@@ -83,12 +83,12 @@ function initialize() {                                             //set defaul
   for (let i = 0; i < aryAllAnswersOrdered.length - answerOffset; i++) {
     aryAllPossibleAnswers[i] = aryAllAnswersOrdered[i + answerOffset];
   }//for
-  if (spoilerModePre) { console.log('Today\'s answer: ' + aryAllAnswersOrdered[diffDays]); }
+  consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
   numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
   document.getElementById('version').innerHTML = 'v' + version;
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('words').style.display = 'none';
-  if (logGeneral) { console.log('number of 5-letter words: ' + numFiveLetterWords.toLocaleString()); }
+  consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
   if (boolAutoTest) { automatedTesting(); }                         //load json use cases for automated testing
 }//initialize()
 //#endregion init
@@ -153,7 +153,7 @@ function findTabStop(element, direction) {                          //find next 
   consoleLog(logTabbing, 'direction: ' + direction);
   //const universe = document.querySelectorAll('input, button, select, textarea, a[href]');
   const universe = document.querySelectorAll('input[type=text');    //only input type=text (AKA the grid)
-  //if (logTabbing) { console.log(universe); }
+  //consoleLog(logTabbing, universe);
   const list = Array.prototype.filter.call(universe, function (item) { return item.tabIndex >= '0'; });
   //consoleLog(logTabbing, 'element: ' + element);
   consoleLog(logTabbing, 'universe.length: ' + universe.length);
@@ -198,6 +198,7 @@ function imageClicked(e) {                                          //image inpu
     initialize();                                                   //initialize
   } else if (e.target.id === 'BartmanEH_logo_img') {                //toggle automatic results on/off
     autoResults = !autoResults;                                     //toggle automatic results boolean switch
+
     resetGrid();                                                    //reset grid
     initialize();                                                   //initialize
   }//if else
@@ -213,13 +214,16 @@ function errorHandler(strError) {                                   //helper fun
   document.getElementById('possibilities-number-span').innerHTML = strError;
   document.getElementById('possibilities').style.display = 'block';
 }//errorHandler()
-function consoleLog(boolSwitch, strMessage, logType) {              //helper function to display console log messages
-  if (typeof logType === 'undefined') {
-    if (boolSwitch) { console.log(strMessage); }
-  } else if (logType === 'warn') {
-    if (boolSwitch) { console.warn(strMessage); }
-  } else if (logType === 'error') {
-    if (boolSwitch) { console.error(strMessage); }
+function consoleLog(boolLogSwitch, strMessage, logType) {           //helper function to display console log messages
+  if (typeof boolLogSwitch === 'undefined') boolLogSwitch = true;   //default to true if no log switch provided in call
+  if (typeof logType === 'undefined' && boolLogSwitch) {            //default log type if no log type provided in call
+    console.log(strMessage);
+  } else if (logType === 'warn' && boolLogSwitch) {
+    console.warn(strMessage);
+  } else if (logType === 'error' && boolLogSwitch) {
+    console.error(strMessage);
+  } else {
+    console.error('console log type or log switch unknown!');
   }//if else
 }//consoleLog()
 function isSubsetInclDupes(includesArray, wordArray) {              //includesArray subset of wordArray incl. any duplicates?
@@ -438,7 +442,7 @@ function solveIt() {
           if (guessWord[guessWordCheckPosition - 1] === includeLetter) {  //guess word includes include letter
             const gridId = 'guess_' + guessPosition + '_' + (guessWordCheckPosition);   //guessPosition is from main guess for loop way above
             const gridElement = document.getElementById(gridId);
-            if (logErrorChecking) { console.log('gridId: ' + gridId); }
+            consoleLog(logErrorChecking, 'gridId: ' + gridId);
             if (gridElement.dataset.state === stateIncorrect) {
               consoleLog(logErrorChecking, 'Includes letter ' + includeLetter + ' is Gray in this position of guess word ' + guessWord + '. Continuing to check any additional occurrances!');
               boolCheck = true;
@@ -495,9 +499,11 @@ function solveIt() {
     }//if else
   }//if
   */
-  if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('exclude: ' + aryExcludeLetters); }
-  if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('include: ' + aryIncludeLetters); }
-  if (logGeneral || logFilterRules || logFiltering || logFiltered) { console.log('pattern: ' + aryPatternLetters); }
+  if (logGeneral || logFilterRules || logFiltering || logFiltered) {
+    consoleLog(true, 'exclude: ' + aryExcludeLetters);
+    consoleLog(true, 'include: ' + aryIncludeLetters);
+    consoleLog(true, 'pattern: ' + aryPatternLetters);
+  }//if
   for (const word of aryAllPossibleAnswers) {
     let boolExclude = Boolean(false);                               //true if word excludes all exclude letters
     let boolInclude = Boolean(false);                               //true if word includes any include letter
@@ -527,7 +533,7 @@ function solveIt() {
       }//if
     }//if
   }//for
-  if (logFiltering) { console.log(aryFilteredFiveLetterWords); }
+  consoleLog(logFiltering, aryFilteredFiveLetterWords);
   //now scrutinize Yellow letter include positions
   const aryScrutinizedFilteredFiveLetterWords = [];
   for (const word of aryFilteredFiveLetterWords) {
@@ -551,7 +557,7 @@ function solveIt() {
                 break;
               } else if ((aryPatternLetters[wordLetterPosition - 1] !== '*') && (aryPatternLetters[wordLetterPosition - 1] !== letter)) {
                 boolG2G = false;                                    //word's 'Yellow letter is in Black position, reject word
-                if (logFiltering) { console.log('reject: ' + word + ' aryPatternLetters[wordLetterPosition - 1]: ' + aryPatternLetters[wordLetterPosition - 1]); }
+                consoleLog(logFiltering, 'reject: ' + word + ' aryPatternLetters[wordLetterPosition - 1]: ' + aryPatternLetters[wordLetterPosition - 1]);
                 break;
               } else {
                 consoleLog(logFiltering, 'keep ' + word);
@@ -589,18 +595,18 @@ async function automatedTesting() {
   const request = new Request(requestURL);
   const response = await fetch(request);
   const useCaseData = await response.json();
-  //if (logAutoTest) { console.log(useCaseData); }
-  //if (logAutoTest) { console.log(useCaseData.useCases); }
+  //consoleLog(logAutoTest, useCaseData);
+  //consoleLog(logAutoTest, useCaseData.useCases);
   let useCaseResults = 'Use Case';
   let useCaseResultsIds = '';
   useCaseData.useCases.forEach(useCase => {                         //loop thru all use cases
-    //if (logAutoTest) { console.log(useCase); }
-    //if (logAutoTest) { console.log('id(' + useCase.id.length + '): ' + useCase.id); }
-    //if (logAutoTest) { console.log('guess(' + useCase.guess.length + '): ' + useCase.guess); }
-    //if (logAutoTest) { console.log('pattern(' + useCase.pattern.length + '): ' + useCase.pattern); }
-    //if (logAutoTest) { console.log('possibilities(' + useCase.possibilities.length + '): ' + useCase.possibilities); }
+    //consoleLog(logAutoTest, useCase);
+    //consoleLog(logAutoTest, 'id(' + useCase.id.length + '): ' + useCase.id);
+    //consoleLog(logAutoTest, 'guess(' + useCase.guess.length + '): ' + useCase.guess);
+    //consoleLog(logAutoTest, 'pattern(' + useCase.pattern.length + '): ' + useCase.pattern);
+    //consoleLog(logAutoTest, 'possibilities(' + useCase.possibilities.length + '): ' + useCase.possibilities);
     //here we go
-    //if (logAutoTest) { console.log('testing use case id: ' + useCase.id); }
+    //consoleLog(logAutoTest, 'testing use case id: ' + useCase.id); }
     for (let useCaseGuess = 1; useCaseGuess <= useCase.guess.length; useCaseGuess++) {
       const guessWord = useCase.guess[useCaseGuess - 1].toString();
       //consoleLog(logAutoTest, 'guess: ' + guessWord);
