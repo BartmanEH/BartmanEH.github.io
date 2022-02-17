@@ -106,7 +106,7 @@ function resetGrid() {                                              //clear lett
   }//for
   document.getElementById('possibilities').style.display = 'none';  //hide possibilities div
   document.getElementById('words').style.display = 'none';          //hide words div
-  document.getElementById('help-outer').style.display = 'block';    //show help div
+  document.getElementById('help-inner').style.display = 'block';    //show help div
 }//resetGrid()
 function inputKeydown(e) {                                          //handler for keydown event
   if ((e.shiftKey && (e.keyCode === 9)) || (e.keyCode === 9)) {     //Shift+Tab or Tab
@@ -259,7 +259,7 @@ function celebrate(guessPosition, message) {                         //Easter Eg
 //#region solveIt
 function solveIt() {
   consoleLog(logGeneral, 'Solve it!');
-  document.getElementById('help-outer').style.display = 'none';     //hide help div
+  document.getElementById('help-inner').style.display = 'none';     //hide help div
   document.getElementById('possibilities').style.display = 'none';  //hide possibilities div
   document.getElementById('words').style.display = 'none';          //hide words div
   const aryFilteredFiveLetterWords = [];
