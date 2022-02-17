@@ -222,8 +222,6 @@ function consoleLog(boolLogSwitch, strMessage, logType) {           //helper fun
     console.warn(strMessage);
   } else if (logType === 'error' && boolLogSwitch) {
     console.error(strMessage);
-  } else {
-    console.error('console log type or log switch unknown!');
   }//if else
 }//consoleLog()
 function isSubsetInclDupes(includesArray, wordArray) {              //includesArray subset of wordArray incl. any duplicates?
