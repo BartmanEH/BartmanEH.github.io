@@ -1,4 +1,4 @@
-const version = '1.157';
+const version = '1.158';
 /*eslint no-labels: ["error", { "allowLoop": true }]*/
 //#region word arrays
 const aryAllPossibleGuesses = [
@@ -77,7 +77,8 @@ function openKeyboard() {
     }, 100);
     document.getElementById('guess_1_1').setSelectionRange(0, 0);   //set focus to first letter of first guess
   */
-  document.getElementById('guess_1_1').setSelectionRange(0, 0);   //set focus to first letter of first guess
+  document.getElementById('guess_1_1').focus();                   //set focus to first letter of first guess
+  document.getElementById('guess_1_1').setSelectionRange(0, 0);   //set selection to open keyboard
 }//openKeyboard()
 
 function initialize() {                                             //set default selections
