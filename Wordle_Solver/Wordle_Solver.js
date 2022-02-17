@@ -1,4 +1,4 @@
-const version = '1.160';
+const version = '1.161';
 /*eslint no-labels: ["error", { "allowLoop": true }]*/
 //#region word arrays
 const aryAllPossibleGuesses = [
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
   consoleLog(logGeneral, 'DOM ready! v' + version);                             //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
-  openKeyboard();                                                   //open keyboard
+  //openKeyboard();                                                   //open keyboard
 });
 function UIeventHandlers() {                                        //attach handlers to UI events
   const textInputs = document.querySelectorAll('input[type="text"]');           //get all text inputs
@@ -90,6 +90,7 @@ function initialize() {                                             //set defaul
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
   if (boolAutoTest) { automatedTesting(); }                         //load json use cases for automated testing
+  document.getElementById('guess_1_1').focus();                     //set focus to first letter of first guess
 }//initialize()
 //#endregion init
 //#region functions
@@ -198,7 +199,7 @@ function imageClicked(e) {                                          //image inpu
     initialize();                                                   //initialize
   } else if (e.target.id === 'BartmanEH_logo_img') {                //toggle automatic results on/off
     autoResults = !autoResults;                                     //toggle automatic results boolean switch
-
+    consoleLog(logAutoResults, 'automatic results: ' + autoResults);
     resetGrid();                                                    //reset grid
     initialize();                                                   //initialize
   }//if else
