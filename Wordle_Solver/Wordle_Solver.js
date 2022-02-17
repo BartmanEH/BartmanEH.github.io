@@ -1,4 +1,4 @@
-const version = '1.154';
+const version = '1.155';
 /*eslint no-labels: ["error", { "allowLoop": true }]*/
 //#region word arrays
 const aryAllPossibleGuesses = [
@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
   consoleLog(logGeneral, 'DOM ready! v' + version);                             //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
+  openKeyboard();                                                   //open keyboard
 });
 
 function UIeventHandlers() {                                        //attach handlers to UI events
@@ -64,11 +65,17 @@ function UIeventHandlers() {                                        //attach han
   }//for
 }//UIeventHandlers()
 
+function openKeyboard() {
+  setTimeout(function() {
+    document.getElementById('guess_1_1').focus();                   //set focus to first letter of first guess
+    }, 100);
+    document.getElementById('guess_1_1').setSelectionRange(0, 0);   //set focus to first letter of first guess
+}//openKeyboard()
+
 function initialize() {                                             //set default selections
   document.getElementById('version').innerHTML = 'v' + version;
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('words').style.display = 'none';
-  document.getElementById('guess_1_1').focus();                     //set focus to first letter of first guess
   if (logGeneral) { console.log('number of 5-letter words: ' + numFiveLetterWords.toLocaleString()); }
   if (boolAutoTest) { automatedTesting(); }                         //load json use cases for automated testing
 }//initialize()
