@@ -1,4 +1,4 @@
-const version = '1.161';
+const version = '1.162';
 /*eslint no-labels: ["error", { "allowLoop": true }]*/
 //#region word arrays
 const aryAllPossibleGuesses = [
@@ -81,8 +81,6 @@ function openKeyboard() {
 function initialize() {                                             //set default selections
   if (fireworks !== '') { fireworks.stop(); }
   container = document.querySelector('.fireworks-container');
-  document.getElementById('header').style.display = 'none';
-  document.getElementById('header').style.display = 'block';
   consoleLog(logGeneral, 'today: ' + today + ', Wordle day#: ' + diffDays);
   let answerOffset = 0;
   if (!prevAnswers) { answerOffset = diffDays - 1; }                //skip previous answers
@@ -201,8 +199,10 @@ function imageClicked(e) {                                          //image inpu
   if (e.target.id === 'IES_logo_img') {                             //undefined
     e.preventDefault();                                             //do nothing
   } else if (e.target.id === 'Wordle_Solver_logo_img') {            //reset
-    resetGrid();                                                    //reset grid
-    initialize();                                                   //initialize
+    //resetGrid();                                                    //reset grid
+    //initialize();                                                   //initialize
+    //eslint-disable-next-line no-self-assign
+    location = location;                                            //reload page
   } else if (e.target.id === 'BartmanEH_logo_img') {                //toggle automatic results on/off
     autoResults = !autoResults;                                     //toggle automatic results boolean switch
     consoleLog(logAutoResults, 'automatic results: ' + autoResults);
