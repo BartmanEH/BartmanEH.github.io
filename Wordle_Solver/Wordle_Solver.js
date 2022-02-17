@@ -40,13 +40,15 @@ let boolAutoTest = Boolean(false);        //boolAutoTest = true: run automated t
 let autoResults = Boolean(false);         //autoResults = true: auto enter guess results based on Today's Answer
 let numFiveLetterWords = 0;
 const aryAllPossibleAnswers = [];
+let container = '';
+let fireworks = '';
 //#endregion globals
 //#region init
 document.addEventListener('DOMContentLoaded', function () {
   consoleLog(logGeneral, 'DOM ready! v' + version);                             //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
-  //openKeyboard();                                                   //open keyboard
+  openKeyboard();                                                   //open keyboard
 });
 function UIeventHandlers() {                                        //attach handlers to UI events
   const textInputs = document.querySelectorAll('input[type="text"]');           //get all text inputs
@@ -73,10 +75,14 @@ function openKeyboard() {
     }, 100);
     document.getElementById('guess_1_1').setSelectionRange(0, 0);   //set focus to first letter of first guess
   */
-  document.getElementById('guess_1_1').focus();                   //set focus to first letter of first guess
-  document.getElementById('guess_1_1').setSelectionRange(0, 0);   //set selection to open keyboard
+  //document.getElementById('guess_1_1').focus();                   //set focus to first letter of first guess
+  //document.getElementById('guess_1_1').setSelectionRange(0, 0);   //set selection to open keyboard
 }//openKeyboard()
 function initialize() {                                             //set default selections
+  if (fireworks !== '') { fireworks.stop(); }
+  container = document.querySelector('.fireworks-container');
+  document.getElementById('header').style.display = 'none';
+  document.getElementById('header').style.display = 'block';
   consoleLog(logGeneral, 'today: ' + today + ', Wordle day#: ' + diffDays);
   let answerOffset = 0;
   if (!prevAnswers) { answerOffset = diffDays - 1; }                //skip previous answers
@@ -253,9 +259,8 @@ function celebrate(guessPosition, message) {                         //Easter Eg
     document.getElementById(gridId).dataset.state = stateCorrect;
   }//for
   errorHandler(message);
-  const container = document.querySelector('.fireworks-container');
   //eslint-disable-next-line no-undef
-  const fireworks = new Fireworks(container);                       //set eslint to ignore "'Fireworks' is not defined."
+  fireworks = new Fireworks(container);                             //set eslint to ignore "'Fireworks' is not defined."
   fireworks.start();
 }//celebrate()
 //#endregion functions
@@ -279,6 +284,7 @@ function solveIt() {
       const gridId = 'guess_' + guessPosition + '_' + letterPosition;
       const gridElement = document.getElementById(gridId);
       const letter = gridElement.value.toUpperCase();
+      /*
       if (letter === ' ') {
         //errorHandler('gridCoord contains &lt;space&gt;! ' + gridCoord);
         if (letterPosition !== 1) {
@@ -289,11 +295,47 @@ function solveIt() {
           break forLetterLoop;
         }//if else
       }//if
+      */
+      guessWord += letter;
+      consoleLog(true, letter + ' ' + guessWord);
+      if ((guessWord !== '     ') && (guessWord !== '') && (guessWord.length === 5)) {
+      //if ((guessWord !== '     ') && (guessWord !== '')) {
+        consoleLog(true, 'testing');
+        if (guessWord === 'HUOMO') {
+          celebrate(guessPosition, 'Huomos easter egg!');
+          aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
+          aryExcludeLetters = aryIncludeLetters = [];
+          break;                                                      //terminate further processing
+        } else if (guessWord === 'ATEST') {
+          boolAutoTest = true;                                        //set bool for automatic testing
+          resetGrid();
+          initialize();
+          boolAutoTest = false;                                       //clear bool for automatic testing
+          //break;                                                    //terminate further processing
+        } else if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
+          errorHandler('"' + guessWord + '" is not a possible guess word!');
+          consoleLog(logFilterRules, '"' + guessWord + '" is not a possible guess word!');
+          if (!testMode) { return; }
+        } else {
+          consoleLog(logGeneral, 'aryAllAnswersOrdered.indexOf(guessWord): ' + aryAllAnswersOrdered.indexOf(guessWord));
+          consoleLog(logGeneral, 'diffDays: ' + diffDays);
+          if (streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays)) {
+            celebrate(guessPosition, 'Streak Saver easter egg!');
+            //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
+            aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
+            aryExcludeLetters = aryIncludeLetters = [];
+            break;                                                    //terminate further processing
+          }//if
+        }//if else
+        //consoleLog(logFilterRules, 'end of guess word trigger check');
+        consoleLog(true, 'end of guess word trigger check');
+        //continue;
+      }//if
+      //if (guessWord.length < 5) break;
       const boolFirstYellowOccurance = aryBoolFirstYellowOccurrance[letter] ?? true;      //?? to init array elements
       const boolFirstGreenOccurance = aryBoolFirstGreenOccurrance[letter] ?? true;        //?? to init array elements
       //consoleLog(logFilterRules, 'top of for loop, boolFirstYellowOccurance: ' + boolFirstYellowOccurance);
       //consoleLog(logFilterRules, 'top of for loop, boolFirstGreenOccurance: ' + boolFirstGreenOccurance);
-      guessWord += letter;
       if (gridElement.dataset.state === stateIncorrect) {           //if (stateIncorrect); is it Gray?
         if (!aryExcludeLetters.includes(letter)) {                  //new exclude letter?
           if (!aryIncludeLetters.includes(letter)) {                //not an include letter?
@@ -383,36 +425,6 @@ function solveIt() {
       }//if else (stateCorrect)
       //consoleLog(logFilterRules, 'guessWord: ' + guessWord + ' letter: ' + letter + ' guessWord.indexOf(letter): ' + guessWord.indexOf(letter));
     }//for letterPosition
-    if (guessWord.length < 5) break;
-    if ((guessWord !== '     ') && (guessWord !== '') && (guessWord.length === 5)) {
-      if (guessWord === 'HUOMO') {
-        celebrate(guessPosition, 'Huomos easter egg!');
-        aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
-        aryExcludeLetters = aryIncludeLetters = [];
-        break;                                                      //terminate further processing
-      } else if (guessWord === 'ATEST') {
-        boolAutoTest = true;                                        //set bool for automatic testing
-        resetGrid();
-        initialize();
-        //break;                                                    //terminate further processing
-      } else if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
-        errorHandler('"' + guessWord + '" is not a possible guess word!');
-        consoleLog(logFilterRules, '"' + guessWord + '" is not a possible guess word!');
-        if (!testMode) { return; }
-      } else {
-        consoleLog(logGeneral, 'aryAllAnswersOrdered.indexOf(guessWord): ' + aryAllAnswersOrdered.indexOf(guessWord));
-        consoleLog(logGeneral, 'diffDays: ' + diffDays);
-        if (streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays)) {
-          celebrate(guessPosition, 'Streak Saver easter egg!');
-          //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
-          aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
-          aryExcludeLetters = aryIncludeLetters = [];
-          break;                                                    //terminate further processing
-        }//if
-      }//if else
-      consoleLog(logFilterRules, 'end of guess word trigger check');
-      //continue;
-    }//if
     if (!autoResults) {
       //╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
       //║ let's do some error checking, shall we? we have the whole Guess word here meow                                ║
