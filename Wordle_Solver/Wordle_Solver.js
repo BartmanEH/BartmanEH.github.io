@@ -17,7 +17,7 @@ const logFilterRules = Boolean(false);    //logFilterRules = true: filter rules 
 const logFiltering = Boolean(false);      //logFiltering = true: filtering debug messages on console
 const logErrorChecking = Boolean(false);  //logFilterRules = true: filter rules debug messages on console
 const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
-const logAutoTest = Boolean(false);        //logAutoTest = true: automated testing debug messages on console
+const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const streakSaver = Boolean(true);        //streakSaver = true: Greenify Guess if it's Today's Answer
