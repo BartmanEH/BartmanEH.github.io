@@ -50,14 +50,16 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 function UIeventHandlers() {                                        //attach handlers to UI events
   const textInputs = document.querySelectorAll('input[type="text"]');           //get all text inputs
-  const imageInput = document.querySelectorAll('input[type="image"]');          //get all image inputs
   for (const textInput of textInputs) {
     textInput.addEventListener('click', (e) => { inputClicked(e); });           //text input click handler
     textInput.addEventListener('keyup', (e) => { inputKeyup(e); });             //text input keyup handler
     textInput.addEventListener('keydown', (e) => { inputKeydown(e); });         //text input keydown handler
     textInput.addEventListener('contextmenu', (e) => { e.preventDefault(); });  //text input disable right-click context menu
+  }//for text inputs
+  const imageInputs = document.querySelectorAll('input[type="image"]');          //get all image inputs
+  for (const imageInput of imageInputs) {
     imageInput.addEventListener('click', (e) => { imageClicked(e); });          //image input click handler
-  }//for
+  }//for image inputs
 }//UIeventHandlers()
 function openKeyboard() {
   /*
