@@ -1,4 +1,4 @@
-const version = '1.153';
+const version = '1.154';
 /*eslint no-labels: ["error", { "allowLoop": true }]*/
 //#region word arrays
 const aryAllPossibleGuesses = [
@@ -23,7 +23,7 @@ const logAutoTest = Boolean(true);        //logAutoTest = true: automated testin
 const logAutoResults = Boolean(true);    //logAutoResults = true: automated results debug messages on console
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const streakSaver = Boolean(true);        //streakSaver = true: Greenify Guess if it's Today's Answer
-const autoResults = Boolean(false);        //autoResults = true: automatically enter guess results based on Today's Answer
+const autoResults = Boolean(false);        //autoResults = true: auto enter guess results based on Today's Answer
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
@@ -74,12 +74,12 @@ function initialize() {                                             //set defaul
 }//initialize()
 //#endregion init
 //#region functions
-function resetGrid() {
+function resetGrid() {                                              //clear letter grid
   for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
     for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
       const gridId = 'guess_' + guessPosition + '_' + letterPosition;
       const gridElement = document.getElementById(gridId);
-      gridElement.value = ' ';
+      gridElement.value = ' ';                                      //reset to default letter value (space)
       gridElement.dataset.state = stateTBD;                         //reset metadata attribute
       gridElement.style.backgroundColor = rgbBlack;                 //make background Black
       gridElement.style.border = '2px solid ' + rgbGray;            //make border Gray
@@ -90,13 +90,13 @@ function resetGrid() {
   document.getElementById('help-outer').style.display = 'block';    //show help div
 }//resetGrid()
 
-function inputKeydown(e) {
+function inputKeydown(e) {                                          //handler for keydown event
   if ((e.shiftKey && (e.keyCode === 9)) || (e.keyCode === 9)) {     //Shift+Tab or Tab
     e.preventDefault();                                             //bypass normal processing
   }//if
 }//inputKeydown()
 
-function inputKeyup(e) {
+function inputKeyup(e) {                                            //handler for keyup event
   consoleLog(logKeyboard, 'keyup event fired: e.which: ' + e.which + ' e.target.value: ' + e.target.value);
   let chrKeyPressed = '';
   if (e.which === 229) {                                            //Android
@@ -133,32 +133,28 @@ function inputKeyup(e) {
   solveIt();                                                        //autofire SolveIt!
 }//inputKeyup()
 
-function findTabStop(element, direction) {
+function findTabStop(element, direction) {                          //find next tab stop in 'direction'
   consoleLog(logTabbing, 'direction: ' + direction);
   //const universe = document.querySelectorAll('input, button, select, textarea, a[href]');
-  const universe = document.querySelectorAll('input[type=text');
+  const universe = document.querySelectorAll('input[type=text');    //only input type=text (AKA the grid)
   //if (logTabbing) { console.log(universe); }
   const list = Array.prototype.filter.call(universe, function (item) { return item.tabIndex >= '0'; });
   //consoleLog(logTabbing, 'element: ' + element);
   consoleLog(logTabbing, 'universe.length: ' + universe.length);
   consoleLog(logTabbing, 'list.indexOf(element): ' + list.indexOf(element));
-  consoleLog(logTabbing, 'list.indexOf(element) - 1: ' + (list[list.indexOf(element) - 1]) ?? list[universe.length - 1]);
-  consoleLog(logTabbing, 'list.indexOf(element) + 1: ' + (list[list.indexOf(element) + 1]) ?? list[0]);
-  consoleLog(logTabbing, 'list[list.indexOf(element) + 1]: ' + (list[list.indexOf(element) + 1]) ?? list[0]);
-  consoleLog(logTabbing, 'list[list.indexOf(element) - 1]: ' + (list[list.indexOf(element) - 1]) ?? list[universe.length - 1]);
   consoleLog(logTabbing, 'direction: ' + direction);
   if (direction === 'forward') {
     consoleLog(logTabbing, 'forward');
     //return ((list[list.indexOf(element) + 1]) ?? list[0]);
-    return ((list[list.indexOf(element) + 1]) ?? list[universe.length - 1]);
+    return ((list[list.indexOf(element) + 1]) ?? list[universe.length - 1]);  //if at the end, stay at the end
   } else if (direction === 'backward') {
     consoleLog(logTabbing, 'backward');
     //return ((list[list.indexOf(element) - 1]) ?? list[universe.length - 1]);
-    return ((list[list.indexOf(element) - 1]) ?? list[0]);
-  } else errorHandler('invalid tab direction!');
+    return ((list[list.indexOf(element) - 1]) ?? list[0]);          //if at the beginning, stay at the beginning
+  } else errorHandler('invalid tab direction!');                    //function called with unsupported parameter
 }//findTabStop()
 
-function inputClicked(e) {
+function inputClicked(e) {                                          //cycle through letter states
   e.target.setSelectionRange(0, 0);                                 //unselect automatically selected text
   if (e.target.dataset.state !== stateTBD) {                        //metadata attribute set?
     if (e.target.dataset.state === stateIncorrect) {                //is it Gray?
@@ -174,9 +170,9 @@ function inputClicked(e) {
       e.target.style.border = '2px solid ' + rgbGray;               //make border Gray too
       e.target.dataset.state = stateIncorrect;                      //set metadata attribute for Gray
     } else {                                                        //metadata attribute still reset
-      consoleLog(logKeyboard, 'empty gridCoord clicked!');
+      consoleLog(logKeyboard, 'unsupported grid letter state!');    //catch unsupported state
     }//if else
-  }//if
+  } else consoleLog(logKeyboard, 'empty gridCoord clicked!');       //metadata state attribute still unset (stateTBD)
   solveIt();                                                        //autofire SolveIt!
 }//inputClicked()
 
@@ -186,14 +182,14 @@ function buildStrFilteredFiveLetterWords(array) {                   //helper fun
   return strBuilt;
 }//buildStrFilteredFiveLetterWords()
 
-function errorHandler(strError) {                                   //helper function to perform repetitive debug messages
+function errorHandler(strError) {                                   //helper function to display debug messages
   //consoleLog(true, strError);
   //alert(strError);
   document.getElementById('possibilities-number-span').innerHTML = strError;
   document.getElementById('possibilities').style.display = 'block';
 }//errorHandler()
 
-function consoleLog(boolSwitch, strMessage, logType) {
+function consoleLog(boolSwitch, strMessage, logType) {              //helper function to display console log messages
   if (typeof logType === 'undefined') {
     if (boolSwitch) { console.log(strMessage); }
   } else if (logType === 'warn') {
@@ -217,7 +213,7 @@ function isSubsetInclDupes(includesArray, wordArray) {              //includesAr
   return [...occurences.values()].every(count => count <= 0);
 }//isSubsetInclDupes()
 
-function compareArrays(array1, array2) {
+function compareArrays(array1, array2) {                            //compare two arrays for equivalence
   //return array1.length === array2.length && array1.every((value, index) => value === array2[index]);
   const array2Sorted = array2.slice().sort();
   return array1.length === array2.length && array1.slice().sort().every(function (value, index) {
@@ -225,14 +221,14 @@ function compareArrays(array1, array2) {
   });
 }//compareArrays()
 
-function celebrate(guessPosition, string) {
+function celebrate(guessPosition, message) {                         //Easter Egg graphics
   for (let guessLetterPosition = 1; guessLetterPosition <= 5; guessLetterPosition++) {
     const gridId = 'guess_' + guessPosition + '_' + guessLetterPosition;
     document.getElementById(gridId).style.backgroundColor = rgbGreen;        //make background Green
     document.getElementById(gridId).style.border = '2px solid ' + rgbGreen;  //make border Green too
     document.getElementById(gridId).dataset.state = stateCorrect;
   }//for
-  errorHandler(string);
+  errorHandler(message);
   const container = document.querySelector('.fireworks-container');
   //eslint-disable-next-line no-undef
   const fireworks = new Fireworks(container);                       //set eslint to ignore "'Fireworks' is not defined."
