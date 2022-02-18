@@ -451,9 +451,9 @@
         "PAGER"
       ],
       "pattern": [
-        "BYYYB",
-        "YYBBY",
-        "YGBYB"
+        "YBBBB",
+        "BYBYB",
+        "BYBYB"
       ],
       "possibilities": [
         "LEAVE",
