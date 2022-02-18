@@ -340,7 +340,7 @@
     },
     {
       "id": "15",
-      "comment": "invalid 3rd pattern (should be BBGYG)",
+      "comment": "valid",
       "guess": [
         "POUTY",
         "RAISE",
@@ -349,7 +349,7 @@
       "pattern": [
         "BBBBB",
         "YYBBG",
-        "BBGBG"
+        "BBGYG"
       ],
       "possibilities": [
         "GRADE",
