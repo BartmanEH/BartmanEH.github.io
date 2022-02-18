@@ -371,14 +371,14 @@
       "comment": "valid",
       "guess": [
         "POUTY",
-        "ARISE",
+        "RAISE",
         "AWARE",
         "KARMA"
       ],
       "pattern": [
         "BBBBB",
         "YYBBB",
-        "YBYYB",
+        "YBBYB",
         "BGGBG"
       ],
       "possibilities": [
@@ -400,6 +400,72 @@
       ],
       "possibilities": [
         "AROMA"
+      ]
+    },
+    {
+      "id": "18",
+      "comment": "not validated; >4 possibilities?",
+      "guess": [
+        "SOARE",
+        "RADIO",
+        "ORGAN"
+      ],
+      "pattern": [
+        "BYYYB",
+        "YYBBY",
+        "YGBYB"
+      ],
+      "possibilities": [
+        "ARBOR",
+        "ARMOR",
+        "ARROW",
+        "AROMA"
+      ]
+    },
+    {
+      "id": "19",
+      "comment": "valid",
+      "guess": [
+        "TALES",
+        "SHARE",
+        "PENES"
+      ],
+      "pattern": [
+        "BYBYY",
+        "GGGBG",
+        "BYBBY"
+      ],
+      "possibilities": [
+        "SHAKE",
+        "SHADE",
+        "SHAME",
+        "SHAVE"
+      ]
+    },
+    {
+      "id": "20",
+      "comment": "not validated; >10 possibilities?",
+      "guess": [
+        "AUDIO",
+        "MATED",
+        "PAGER"
+      ],
+      "pattern": [
+        "BYYYB",
+        "YYBBY",
+        "YGBYB"
+      ],
+      "possibilities": [
+        "LEAVE",
+        "LEASE",
+        "HEAVE",
+        "WEAVE",
+        "CEASE",
+        "SHAVE",
+        "SLAVE",
+        "SHAKE",
+        "SHALE",
+        "CHASE"
       ]
     }
   ]
