@@ -326,7 +326,7 @@ function solveIt() {
           }//if
         }//if else
       }//if
-      if (autoResults) {                                            //automatic results based on today's answer: aryAllAnswersOrdered[diffDays]
+      if (autoResults) {                //automatic results based on today's answer: aryAllAnswersOrdered[diffDays]
         //╔═══════════════════╗
         //║ automatic results ║
         //╚═══════════════════╝
@@ -337,8 +337,9 @@ function solveIt() {
         //consoleLog(logAutoResults, 'today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
         let todayAnswer = aryAllAnswersOrdered[diffDays];
         consoleLog(logAutoResults, 'todayAnswer: ' + todayAnswer);
-        //attack with two loops; GREENs first, then YELLOWs
-        //GREEN
+        //╔═════════════════╗
+        //║ automatic GREEN ║
+        //╚═════════════════╝
         for (let guessWordCheckPosition = 1; guessWordCheckPosition <= guessWord.length; guessWordCheckPosition++) {
           const gridId = 'guess_' + guessPosition + '_' + (guessWordCheckPosition);   //guessPosition is from main guess for loop way above
           const gridElement = document.getElementById(gridId);
@@ -363,7 +364,9 @@ function solveIt() {
             gridElement.dataset.state = stateIncorrect;             //set metadata attribute for Gray
           }//if
         }//for
-        //YELLOW
+        //╔══════════════════╗
+        //║ automatic YELLOW ║
+        //╚══════════════════╝
         for (let guessWordCheckPosition = 1; guessWordCheckPosition <= guessWord.length; guessWordCheckPosition++) {
           const gridId = 'guess_' + guessPosition + '_' + (guessWordCheckPosition);   //guessPosition is from main guess for loop way above
           const gridElement = document.getElementById(gridId);
@@ -380,28 +383,30 @@ function solveIt() {
           }//if
         }//for guessWordCheckPosition
       }//if autoResults
-      //build Exclude, Include and Pattern letter arrays
+      //╔══════════════════════════════════════════════════╗
+      //║ build Exclude, Include and Pattern letter arrays ║
+      //╚══════════════════════════════════════════════════╝
       consoleLog(logFilterRules, 'new iteration');
-      const boolFirstYellowOccurrence = aryBoolFirstYellowOccurrence[letter] ?? true;      //?? to init array elements
-      const boolFirstGreenOccurrence = aryBoolFirstGreenOccurrence[letter] ?? true;        //?? to init array elements
+      const boolFirstYellowOccurrence = aryBoolFirstYellowOccurrence[letter] ?? true;   //?? to init array elements
+      const boolFirstGreenOccurrence = aryBoolFirstGreenOccurrence[letter] ?? true;     //?? to init array elements
       //╔══════╗
       //║ GRAY ║
       //╚══════╝
-      if (gridElement.dataset.state === stateIncorrect) {           //if (stateIncorrect); is it Gray?
-        if (!aryExcludeLetters.includes(letter)) {                  //not Exclude letter?
-          if (!aryIncludeLetters.includes(letter)) {                //not Include letter?
-            if (!aryPatternLetters.includes(letter)) {
-              aryExcludeLetters.push(letter);                         //add to Exclude letters
+      if (gridElement.dataset.state === stateIncorrect) {           //stateIncorrect AKA Gray
+        if (!aryExcludeLetters.includes(letter)) {                  //not Exclude letter
+          if (!aryIncludeLetters.includes(letter)) {                //not Include letter
+            if (!aryPatternLetters.includes(letter)) {              //not Pattern letter
+              aryExcludeLetters.push(letter);                       //add to Exclude letters
             }//if
           } else {                                                  //already an Include letter
             consoleLog(logFilterRules, 'splicing Yellow Include now Gray letter ' + letter);
             aryIncludeLetters.splice(aryIncludeLetters.indexOf(letter), 1);
-            //errorHandler('Yellow ' + letter + ' cannot change to Gray!');                 //Gray cannot change to Yellow!
+            //errorHandler('Yellow ' + letter + ' cannot change to Gray!');
             //return;
           }//if else
         }//if
         if (aryPatternLetters[letterPosition - 1] === letter) {     //was Green in a previous Guess
-          errorHandler('Green ' + letter + ' cannot change to Gray!');                    //Green cannot change to Gray!
+          errorHandler('Green ' + letter + ' cannot change to Gray!');
           return;
         }//if
       //╔════════╗
@@ -409,10 +414,10 @@ function solveIt() {
       //╚════════╝
       } else if (gridElement.dataset.state === stateMisplaced) {    //stateMisplaced; AKA Yellow
         if (aryPatternLetters[letterPosition - 1] === letter) {     //was Green in a previous Guess
-          errorHandler('Green ' + letter + ' cannot change to Yellow in same column!');   //Green cannot change to Yellow
+          errorHandler('Green ' + letter + ' cannot change to Yellow in same column!');
           return;
         } else if (aryExcludeLetters.includes(letter)) {            //already an exclude letter
-          errorHandler('Gray ' + letter + ' cannot change to Yellow!');                   //Gray cannot change to Yellow!
+          errorHandler('Gray ' + letter + ' cannot change to Yellow!');
           return;
         } else if (aryIncludeLetters.includes(letter)) {            //already have Include letter
           if (boolFirstYellowOccurrence) {                          //first Yellow occurrence
@@ -462,9 +467,6 @@ function solveIt() {
           aryPatternLetters[letterPosition - 1] = letter;           //put letter into Green pattern array
           if (aryIncludeLetters.includes(letter)) {                 //already have this as Yellow letter
             if (boolFirstYellowOccurrence) {
-              //╔══════════════════════════════════════════════════════════════════════════════════════╗
-              //║ THIS SHOULD ONLY SPLICE IF YELLOW WAS IN PREVIOUS GUESS WORD, NOT CURRENT GUESS WORD ║
-              //╚══════════════════════════════════════════════════════════════════════════════════════╝
               consoleLog(logFilterRules, 'splicing Yellow now Included Green ' + letter);
               aryIncludeLetters.splice(aryIncludeLetters.indexOf(letter), 1); //remove Include letter
               //aryBoolFirstYellowOccurrence[letter] = true;
@@ -511,12 +513,12 @@ function solveIt() {
             consoleLog(logErrorChecking, 'Includes letter ' + includeLetter + ' is still Yellow or changed to Green/Yellow: OK!');
             boolCheck = false;
             break;                                                //no more checking required for this include letter
-          }//if
+          }//if else
         }//if
       }//for
       if (boolCheck) {
         consoleLog(logErrorChecking, 'Letter ' + includeLetter + ' cannot change to Gray in guess word: ' + guessWord + '!');
-        errorHandler('Letter ' + includeLetter + ' cannot change to Gray in guess word: ' + guessWord + '!');          //Gray letter is in includes array!
+        errorHandler('Letter ' + includeLetter + ' cannot change to Gray in guess word: ' + guessWord + '!');   //Gray letter is in includes array!
         return;                                                   //terminate further processing
       }//if
     }//for
@@ -529,12 +531,12 @@ function solveIt() {
     consoleLog(true, 'include: ' + aryIncludeLetters);              //║ FILTERING ║
     consoleLog(true, 'pattern: ' + aryPatternLetters);              //╚═══════════╝
   }//if
-  for (let word of aryAllPossibleAnswers) {
+  for (let word of aryAllPossibleAnswers) {                         //loop through all possible words
     let boolExclude = Boolean(false);                               //true if word excludes all exclude letters
     let boolInclude = Boolean(false);                               //true if word includes any include letter
     const wordIndex = aryAllAnswersOrdered.indexOf(word);
     //consoleLog(logFiltering, 'word: ' + aryAllAnswersOrdered[wordIndex] + ' word index: ' + wordIndex);
-    //scrutinze GREENs
+    //scrutinize GREENs
     let boolGREENsTest = Boolean(true);                             //true if word matches Green Pattern
     for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
       const patternLetter = aryPatternLetters[letterPosition - 1];
@@ -565,12 +567,11 @@ function solveIt() {
   }//for word
   consoleLog(logFiltering, aryFilteredFiveLetterWords);
   const aryScrutinizedFilteredFiveLetterWords = [];
-  //╔═══════════════════════════════════════════════════════════════════════════════════════════════════════╗
-  //║ theory: any Yellow letter in any grid position should not match with that letter in any possible word ║
-  //╚═══════════════════════════════════════════════════════════════════════════════════════════════════════╝
+  //╔═══════════════════════════════════════════════════════════════════════════════════════════════╗
+  //║ any Yellow letter in any grid position should not match with that letter in any possible word ║
+  //╚═══════════════════════════════════════════════════════════════════════════════════════════════╝
   for (const word of aryFilteredFiveLetterWords) {                  //scrutinize Yellow letter include positions
     let boolG2G = Boolean(true);
-    scrutinizeWord:                                                 //eslint-disable-line
     for (let guessPosition = 1; guessPosition <= 5; guessPosition++) {
       for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
         const gridId = 'guess_' + guessPosition + '_' + letterPosition;
@@ -586,18 +587,11 @@ function solveIt() {
               if (wordLetterPosition === letterPosition) {          //word has Yellow letter in same position
                 boolG2G = false;                                    //reject word
                 consoleLog(logFiltering, 'reject: ' + word + ' wordLetterPosition === letterPosition');
-                //break scrutinizeWord;                               //eslint-disable-line
-                /*
-              } else if ((aryPatternLetters[wordLetterPosition - 1] !== '*') && (aryPatternLetters[wordLetterPosition - 1] !== letter)) {
-                boolG2G = false;                                    //word's 'Yellow letter is in Black position, reject word
-                consoleLog(logFiltering, 'reject: ' + word + ' aryPatternLetters[wordLetterPosition - 1]: ' + aryPatternLetters[wordLetterPosition - 1]);
-                break;
-                */
               } else {
                 //consoleLog(logFiltering, 'keep ' + word);
-                continue;                                           //keep word (don't set boolG2G and stop further checking)
+                continue;                                 //keep word (don't set boolG2G and stop further checking)
               }//if else
-            }//if else
+            }//ife
           }//for
         }//if else
       }//for
@@ -617,10 +611,10 @@ function solveIt() {
   consoleLog(logFiltered, 'possibilities (filtered): ' + aryFilteredFiveLetterWords.length.toLocaleString());
   consoleLog(logFiltered, 'possibilities (scrutinized): ' + numFiveLetterWords.toLocaleString());
   document.getElementById('possibilities-number-span').innerHTML = 'possibilities: ' + numFiveLetterWords.toLocaleString();
-  document.getElementById('possibilities').style.display = 'block';
+  document.getElementById('possibilities').style.display = 'block'; //'unhide'
   document.getElementById('possibilities-text-span').innerHTML = strPossibilities;
-  document.getElementById('words').style.display = 'block';
-  return aryScrutinizedFilteredFiveLetterWords;                     //added in attempt to access array from caller
+  document.getElementById('words').style.display = 'block';         //'unhide'
+  return aryScrutinizedFilteredFiveLetterWords;                     //pass array to caller
 }//solveIt()
 //#endregion solveIt
 //#region automated testing
