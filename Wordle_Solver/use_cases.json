@@ -487,6 +487,29 @@
         "WEAVE",
         "WHALE"
       ]
+    },
+    {
+      "id": "21",
+      "comment": "valid",
+      "guess": [
+        "CHEAP",
+        "TRUGS",
+        "BOSON",
+        "SKILL",
+        "WASTE",
+        "SLAWS"
+      ],
+      "pattern": [
+        "BBBBB",
+        "BBBBY",
+        "BBYBB",
+        "GBGGG",
+        "YBYBB",
+        "GYBYB"
+      ],
+      "possibilities": [
+        "SWILL"
+      ]
     }
   ]
 }
