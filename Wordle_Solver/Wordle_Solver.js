@@ -643,7 +643,6 @@ async function automatedTesting() {
     //consoleLog(logAutoTest, 'guess(' + useCase.guess.length + '): ' + useCase.guess);
     //consoleLog(logAutoTest, 'pattern(' + useCase.pattern.length + '): ' + useCase.pattern);
     //consoleLog(logAutoTest, 'possibilities(' + useCase.possibilities.length + '): ' + useCase.possibilities);
-    //here we go
     //consoleLog(logAutoTest, 'testing use case id: ' + useCase.id); }
     for (let useCaseGuess = 1; useCaseGuess <= useCase.guess.length; useCaseGuess++) {
       const guessWord = useCase.guess[useCaseGuess - 1].toString();
@@ -697,7 +696,7 @@ async function automatedTesting() {
   if (useCaseResultsIds.length > 2) { useCaseResults += 's'; }
   useCaseResults += ' ' + useCaseResultsIds;
   if (useCasesPassed) {
-    consoleLog(logAutoTest, 'all use cases PASSED!', 'warn');
+    consoleLog(logAutoTest, 'all ' + useCaseData.useCases.length + ' use cases PASSED!', 'warn');
   } else {
     consoleLog(logAutoTest, useCaseResults + ' FAILED!', 'error');
   }
