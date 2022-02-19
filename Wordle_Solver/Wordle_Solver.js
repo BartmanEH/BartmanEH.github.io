@@ -13,13 +13,13 @@ const prevAnswers = Boolean(true);        //prevAnswers = true: include previous
 const logGeneral = Boolean(false);        //logGeneral = true: show general info messages on console
 const logTabbing = Boolean(false);        //logTabbing = true: show auto focus next tab debug info messages on console
 const logKeyboard = Boolean(false);       //logKeyboard = true: show keyboard/tap info messages on console
-const logFilterRules = Boolean(true);    //logFilterRules = true: filter rules debug messages on console
-const logFiltering = Boolean(true);      //logFiltering = true: filtering debug messages on console
+const logFilterRules = Boolean(false);    //logFilterRules = true: filter rules debug messages on console
+const logFiltering = Boolean(false);      //logFiltering = true: filtering debug messages on console
 const logErrorChecking = Boolean(false);  //logFilterRules = true: filter rules debug messages on console
 const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
-const spoilerModePre = Boolean(true);    //spoilerMode = true: show Today's Answer in console
+const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const streakSaver = Boolean(true);        //streakSaver = true: Greenify Guess if it's Today's Answer
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
@@ -39,7 +39,7 @@ const diffDays = Math.floor((today - start) / oneDay);              //#days (cha
 //#endregion constants
 //#region globals
 let boolAutoTest = Boolean(false);        //boolAutoTest = true: run automated testing
-let autoResults = Boolean(false);         //autoResults = true: auto enter guess results based on Today's Answer
+let autoResults = Boolean(true);          //autoResults = true: auto enter guess results based on Today's Answer
 let numFiveLetterWords = 0;
 let container = '';
 let fireworks = '';
