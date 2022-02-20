@@ -201,6 +201,13 @@ function imageClicked(e) {                                          //image inpu
   } else if (e.target.id === 'BartmanEH_logo_img') {                //toggle automatic results on/off
     autoResults = !autoResults;                                     //toggle automatic results boolean switch
     consoleLog(logAutoResults, 'automatic results: ' + autoResults);
+    const toastMessage = 'automatic results ' + (autoResults ? 'enabled' : 'disabled');
+    ToastMaker(toastMessage, 2000, {                                //eslint-disable-line
+      //styles: { fontSize: '18px', backgroundColor: 'green' },
+      //classList: ['custom-class', 'other-custom-class'],
+      //align: 'right',
+      //valign: 'top'
+    });
     resetGrid();                                                    //reset grid
     initialize();                                                   //initialize
   }//if else
