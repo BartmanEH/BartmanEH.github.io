@@ -79,12 +79,12 @@ function initialize() {                                             //set defaul
   document.getElementById('datePicker-div').style.display = 'none'; //hide date picker
   let dd = today.getDate();
   let mm = today.getMonth() + 1; //January is 0!
-  let yyyy = today.getFullYear();
+  const yyyy = today.getFullYear();
   if (dd < 10) { dd = '0' + dd; }
   if (mm < 10) { mm = '0' + mm; }
-  todayFormatted = yyyy + '-' + mm + '-' + dd;
+  const todayFormatted = yyyy + '-' + mm + '-' + dd;
   document.getElementById('datePicker-input').valueAsDate = todayFormatted;
-  document.getElementById('datePicker-input').setAttribute("max", todayFormatted);
+  document.getElementById('datePicker-input').setAttribute('max', todayFormatted);
   document.getElementById('datePicker-span').innerHTML = diffDays.toString();
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
