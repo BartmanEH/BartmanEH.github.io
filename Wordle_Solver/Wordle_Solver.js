@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
   consoleLog(logGeneral, 'DOM ready! v' + version);                             //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
-  openKeyboard();                                                   //open keyboard
 });
 function UIeventHandlers() {                                        //attach handlers to UI events
   const textInputs = document.querySelectorAll('input[type="text"]');           //get all text inputs
@@ -64,21 +63,6 @@ function UIeventHandlers() {                                        //attach han
     imageInput.addEventListener('click', (e) => { imageClicked(e); });          //image input click handler
   }//for image inputs
 }//UIeventHandlers()
-function openKeyboard() {
-  /*
-  //jquery
-  $input.off('click').on('click', function (){ $input.focus(); });
-  $input.trigger('click');
-  */
-  /*
-  setTimeout(function() {
-    document.getElementById('guess_1_1').focus();                   //set focus to first letter of first guess
-    }, 100);
-    document.getElementById('guess_1_1').setSelectionRange(0, 0);   //set focus to first letter of first guess
-  */
-  //document.getElementById('guess_1_1').focus();                   //set focus to first letter of first guess
-  //document.getElementById('guess_1_1').setSelectionRange(0, 0);   //set selection to open keyboard
-}//openKeyboard()
 function initialize() {                                             //set default selections
   if (fireworks !== '') { fireworks.stop(); }
   container = document.querySelector('.fireworks-container');
@@ -92,6 +76,7 @@ function initialize() {                                             //set defaul
   numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
   document.getElementById('version').innerHTML = 'v' + version;
   document.getElementById('possibilities').style.display = 'none';
+  document.getElementById('archiveDatePicker').valueAsDate = today;
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
   if (boolAutoTest) { automatedTesting(); }                         //load json use cases for automated testing
