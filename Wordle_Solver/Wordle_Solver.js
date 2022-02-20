@@ -83,8 +83,8 @@ function initialize() {                                             //set defaul
   if (dd < 10) { dd = '0' + dd; }
   if (mm < 10) { mm = '0' + mm; }
   todayFormatted = yyyy + '-' + mm + '-' + dd;
-  document.getElementById('archiveDatePicker').valueAsDate = todayFormatted;
-  document.getElementById('archiveDatePicker').setAttribute("max", todayFormatted);
+  document.getElementById('datePicker').valueAsDate = todayFormatted;
+  document.getElementById('datePicker').setAttribute("max", todayFormatted);
   document.getElementById('datePicker-span').innerHTML = diffDays.toString();
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
