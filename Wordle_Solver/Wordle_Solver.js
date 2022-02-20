@@ -83,7 +83,7 @@ function initialize() {                                             //set defaul
   if (dd < 10) { dd = '0' + dd; }
   if (mm < 10) { mm = '0' + mm; }
   const todayFormatted = yyyy + '-' + mm + '-' + dd;
-  document.getElementById('datePicker-input').valueAsDate = todayFormatted;
+  document.getElementById('datePicker-input').valueAsDate = today;
   document.getElementById('datePicker-input').setAttribute('max', todayFormatted);
   document.getElementById('datePicker-span').innerHTML = diffDays.toString();
   document.getElementById('words').style.display = 'none';
