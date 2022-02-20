@@ -77,6 +77,7 @@ function initialize() {                                             //set defaul
   document.getElementById('version').innerHTML = 'v' + version;
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('archiveDatePicker').valueAsDate = today;
+  document.getElementById('datePicker-span').innerHTML = diffDays;
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
   if (boolAutoTest) { automatedTesting(); }                         //load json use cases for automated testing
