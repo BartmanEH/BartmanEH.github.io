@@ -400,7 +400,7 @@ input[type=date] {
 	font-size: 11pt;
 }
 .possibilities {
-	font-size: 12pt;
+	font-size: 16pt;
 }
 .noselect {										 /* disables selection (sometimes) */
   -webkit-touch-callout: none; /* iOS Safari */
