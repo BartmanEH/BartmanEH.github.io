@@ -76,7 +76,13 @@ function initialize() {                                             //set defaul
   numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
   document.getElementById('version').innerHTML = 'v' + version;
   document.getElementById('possibilities').style.display = 'none';
-  document.getElementById('archiveDatePicker').valueAsDate = today;
+  let dd = today.getDate();
+  let mm = today.getMonth() + 1; //January is 0!
+  let yyyy = today.getFullYear();
+  if (dd < 10) { dd = '0' + dd; }
+  if (mm < 10) { mm = '0' + mm; }
+  todayFormatted = yyyy + '-' + mm + '-' + dd;  document.getElementById('archiveDatePicker').setAttribute("max", today);
+  document.getElementById('archiveDatePicker').valueAsDate = todayFormatted;
   document.getElementById('datePicker-span').innerHTML = diffDays.toString();
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
