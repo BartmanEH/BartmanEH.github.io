@@ -91,13 +91,13 @@ function initialize() {                                             //set defaul
 //#endregion init
 //#region helper functions
 function dayNumChanged() {
-  dayNum = document.getElementById('dayNum-input').value;
-  if (dayNum > diffDays) { dayNum = diffDays }
-  let archiveDate = new Date(start) + dayNum;
-  document.getElementById('datePicker-input').value = formatDate(today);
+  let dayNum = document.getElementById('dayNum-input').value;
+  if (dayNum > diffDays) { dayNum = diffDays; }
+  const archiveDate = new Date(start) + dayNum;
+  document.getElementById('datePicker-input').value = formatDate(archiveDate);
 }//dayNumChanged()
 function datePickerChanged() {
-  dateValue = new Date(document.getElementById('datePicker-input').value).getTime();
+  const dateValue = new Date(document.getElementById('datePicker-input').value).getTime();
   let diff = dateValue - new Date(start).getTime();                 //difference in milliseconds
   diff = Math.round(diff / oneDay);                  //round ms to days
   consoleLog(logDatePicker, 'dateValue - start: ' + (dateValue - new Date(start).getTime()));
