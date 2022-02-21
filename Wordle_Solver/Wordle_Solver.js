@@ -91,9 +91,11 @@ function initialize() {                                             //set defaul
 //#endregion init
 //#region helper functions
 function dayNumChanged() {
-  let dayNum = document.getElementById('dayNum-input').value;
+  let dayNum = +document.getElementById('dayNum-input').value;      //The unary plus (+) coerces its operand into a number
   if (dayNum > diffDays) { dayNum = diffDays; }
-  const archiveDate = new Date(start) + dayNum;
+  const archiveDate = new Date(start);
+  archiveDate.setDate(archiveDate.getDate() + dayNum);
+  consoleLog(logDatePicker, formatDate(archiveDate));
   document.getElementById('datePicker-input').value = formatDate(archiveDate);
 }//dayNumChanged()
 function datePickerChanged() {
@@ -104,7 +106,7 @@ function datePickerChanged() {
   if (diff < 0) {
     consoleLog(logDatePicker, 'date too early');
     diff = 0;
-    document.getElementById('datePicker-input').valueAsDate = formatDate(start);
+    document.getElementById('datePicker-input').value = formatDate(start);
   } else if ((new Date(today).getTime() - dateValue) < 0) {
     consoleLog(logDatePicker, 'date too late');
     diff = new Date(today).getTime() - new Date(start).getTime();   //difference in milliseconds
