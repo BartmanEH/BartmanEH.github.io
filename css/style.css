@@ -275,19 +275,18 @@ input[type=number]::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 /*	margin-left: -5px;*/
 }
-/* input[type=date] { */
-.datePicker {
-	background-color: #000000;
-	color: #ffffff;
-}
-input[type=number]::-webkit-calendar-picker-indicator {
-	filter: invert(1);
-}
-/* .input-number > input[type=number], */
+.input-number > input[type=number],
 .input-number > input[type=text] {
 	height: 2.0em;
 	font-size: 110%;
 	width: 75px;
+}
+.datePicker {
+	background-color: #000000;
+	color: #ffffff;
+}
+input[type=date]::-webkit-calendar-picker-indicator {
+	filter: invert(100%);
 }
 .flex-container-wordle {
 	display: flex;
@@ -366,9 +365,9 @@ input[type=number]::-webkit-calendar-picker-indicator {
 	text-align: right;
 	padding-right: 4px;
 }
-/* .input-number > input {
+.input-number > input {
 	padding-left: 3px;
-} */
+}
 .input-text > input {
 	text-align: center;
 	background-color: #000000;
