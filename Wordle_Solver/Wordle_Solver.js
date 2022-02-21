@@ -64,6 +64,7 @@ function UIeventHandlers() {                                        //attach han
     imageInput.addEventListener('click', (e) => { imageClicked(e); });          //image input click handler
   }//for image inputs
   document.getElementById('datePicker-input').addEventListener('change', (e) => { datePickerChanged(e); });  //date input change handler
+  document.getElementById('dayNum-input').addEventListener('change', (e) => { dayNumChanged(e); });  //date input change handler
 }//UIeventHandlers()
 function initialize() {                                             //set default selections
   if (fireworks !== '') { fireworks.stop(); }
@@ -80,7 +81,8 @@ function initialize() {                                             //set defaul
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-input').valueAsDate = today;
   document.getElementById('datePicker-input').setAttribute('max', formatDate(today));
-  document.getElementById('datePicker-span').innerHTML = diffDays.toString();
+  //document.getElementById('datePicker-span').innerHTML = diffDays.toString();
+  document.getElementById('dayNum-input').value = diffDays;
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
   if (boolAutoTest) { automatedTesting(); }                         //load json use cases for automated testing
@@ -88,6 +90,11 @@ function initialize() {                                             //set defaul
 }//initialize()
 //#endregion init
 //#region helper functions
+function dayNumChanged() {
+  dayNum = document.getElementById('dayNum-input').value;
+  let archiveDate = new Date(start) + dayNum;
+  document.getElementById('datePicker-input').value = formatDate(today);
+}//dayNumChanged()
 function datePickerChanged() {
   dateValue = new Date(document.getElementById('datePicker-input').value).getTime();
   let diff = dateValue - new Date(start).getTime();                 //difference in milliseconds
@@ -104,7 +111,8 @@ function datePickerChanged() {
     document.getElementById('datePicker-input').value = formatDate(today);
   }//if else
   diffDays = diff;
-  document.getElementById('datePicker-span').innerHTML = diff.toString();
+  //document.getElementById('datePicker-span').innerHTML = diff.toString();
+  document.getElementById('dayNum-input').value = diffDays;
 }//datePickerChanged()
 function formatDate(dateValue) {
   let dd = dateValue.getDate();
