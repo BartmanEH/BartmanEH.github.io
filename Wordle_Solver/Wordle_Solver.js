@@ -77,7 +77,7 @@ function initialize() {                                             //set defaul
   numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
   document.getElementById('version').innerHTML = 'v' + version;
   document.getElementById('possibilities').style.display = 'none';
-  document.getElementById('datePicker-div').style.display = 'none'; //hide date picker
+  //document.getElementById('datePicker-div').style.display = 'none'; //hide date picker
   let dd = today.getDate();
   let mm = today.getMonth() + 1; //0-indexed; January is 0!
   const yyyy = today.getFullYear();
@@ -101,7 +101,7 @@ function datePickerChanged() {
   } else if (dateValue - today < 0) {
     document.getElementById('datePicker-input').valueAsDate = today;
   }//if else
-}//validate()
+}//datePickerChanged()
 function resetGrid() {                                              //clear letter grid
   for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
     for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
