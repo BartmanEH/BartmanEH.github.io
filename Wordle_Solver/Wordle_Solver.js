@@ -39,6 +39,7 @@ const today = new Date();                                           //today's da
 const diffDays = Math.floor((today - start) / oneDay);              //#days (changed from .round to .floor)
 //#endregion constants
 //#region globals
+let todayAnswer = aryAllAnswersOrdered[diffDays];
 let boolAutoTest = Boolean(false);        //boolAutoTest = true: run automated testing
 let autoResults = Boolean(true);          //autoResults = true: auto enter guess results based on Today's Answer
 let numFiveLetterWords = 0;
@@ -103,6 +104,7 @@ function datePickerChanged() {
     diff = Math.round(diff / (1000 * 60 * 60 * 24));                //round ms to days
     document.getElementById('datePicker-input').value = formatDate(today);
   }//if else
+  todayAnswer = aryAllAnswersOrdered[diff];
   document.getElementById('datePicker-span').innerHTML = diff.toString();
 }//datePickerChanged()
 function formatDate(dateValue) {
@@ -354,7 +356,7 @@ function solveIt() {
         //consoleLog(logAutoResults, 'include: ' + aryIncludeLetters);
         //consoleLog(logAutoResults, 'pattern: ' + aryPatternLetters);
         //consoleLog(logAutoResults, 'today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
-        let todayAnswer = aryAllAnswersOrdered[diffDays];
+        //let todayAnswer = aryAllAnswersOrdered[diffDays];
         consoleLog(logAutoResults, 'todayAnswer: ' + todayAnswer);
         //╔═════════════════╗
         //║ automatic GREEN ║
