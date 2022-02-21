@@ -397,6 +397,9 @@ input[type=date] {
 	padding-inline-start: 20px !important;
 }​
 .dayNum {
+	color: white;
+	background-color: black;
+	outline: none;
 	width: 20px;
 }
 .toastMaker {
