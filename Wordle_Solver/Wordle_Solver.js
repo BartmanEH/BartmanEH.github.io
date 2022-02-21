@@ -148,6 +148,7 @@ function inputKeyup(e) {                                            //handler fo
     e.target.style.backgroundColor = rgbBlack;                      //make background Black
     e.target.style.border = '2px solid ' + rgbGray;                 //make border Gray
     e.target.dataset.state = stateTBD;                              //reset metadata attribute
+    solveIt();
     return;                                                         //terminate further processing
   } else if (chrKeyPressed >= 97 && chrKeyPressed <= 122) {         //lowercase?
     e.target.value = String.fromCharCode(chrKeyPressed - 32);       //convert to uppercase
