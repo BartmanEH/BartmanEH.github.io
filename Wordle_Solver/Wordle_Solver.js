@@ -89,7 +89,7 @@ function initialize() {                                             //set defaul
 //#region helper functions
 function datePickerChanged() {
   dateValue = new Date(document.getElementById('datePicker-input').value).getTime();
-  const diff = dateValue - new Date(start).getTime();               //difference in milliseconds
+  let diff = dateValue - new Date(start).getTime();                 //difference in milliseconds
   diff = Math.round(diff / (1000 * 60 * 60 * 24));                  //round ms to days
   consoleLog(true, 'dateValue - start: ' + (dateValue - new Date(start).getTime()));
   if ((dateValue - new Date(start).getTime()) < 0) {
