@@ -19,6 +19,7 @@ const logErrorChecking = Boolean(false);  //logFilterRules = true: filter rules 
 const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
+const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const streakSaver = Boolean(true);        //streakSaver = true: Greenify Guess if it's Today's Answer
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
@@ -91,14 +92,18 @@ function datePickerChanged() {
   dateValue = new Date(document.getElementById('datePicker-input').value).getTime();
   let diff = dateValue - new Date(start).getTime();                 //difference in milliseconds
   diff = Math.round(diff / (1000 * 60 * 60 * 24));                  //round ms to days
-  consoleLog(true, 'dateValue - start: ' + (dateValue - new Date(start).getTime()));
-  if ((dateValue - new Date(start).getTime()) < 0) {
-    consoleLog(true, 'date too early');
+  consoleLog(logDatePicker, 'dateValue - start: ' + (dateValue - new Date(start).getTime()));
+  if (diff < 0) {
+    consoleLog(logDatePicker, 'date too early');
+    diff = 0;
     document.getElementById('datePicker-input').valueAsDate = formatDate(start);
   } else if ((new Date(today).getTime() - dateValue) < 0) {
-    consoleLog(true, 'date too late');
+    consoleLog(logDatePicker, 'date too late');
+    diff = new Date(today).getTime() - dateValue;                   //difference in milliseconds
+    diff = Math.round(diff / (1000 * 60 * 60 * 24));                  //round ms to days
     document.getElementById('datePicker-input').value = formatDate(today);
   }//if else
+  document.getElementById('datePicker-span').innerHTML = diff.toString();
 }//datePickerChanged()
 function formatDate(dateValue) {
   let dd = dateValue.getDate();
