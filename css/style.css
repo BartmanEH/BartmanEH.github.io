@@ -396,6 +396,9 @@ input[type=date] {
 	list-style-type: none;
 	padding-inline-start: 20px !important;
 }​
+.dayNum {
+	width: 20px;
+}
 .toastMaker {
 	font-size: '20px';
 }

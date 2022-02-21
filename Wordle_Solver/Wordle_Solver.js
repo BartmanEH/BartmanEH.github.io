@@ -92,6 +92,7 @@ function initialize() {                                             //set defaul
 //#region helper functions
 function dayNumChanged() {
   dayNum = document.getElementById('dayNum-input').value;
+  if (dayNum > diffDays) { dayNum = diffDays }
   let archiveDate = new Date(start) + dayNum;
   document.getElementById('datePicker-input').value = formatDate(today);
 }//dayNumChanged()
