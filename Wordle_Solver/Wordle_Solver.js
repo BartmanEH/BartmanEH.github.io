@@ -100,7 +100,7 @@ function datePickerChanged() {
     document.getElementById('datePicker-input').valueAsDate = formatDate(start);
   } else if ((new Date(today).getTime() - dateValue) < 0) {
     consoleLog(logDatePicker, 'date too late');
-    diff = new Date(today).getTime() - dateValue;                   //difference in milliseconds
+    diff = new Date(today).getTime() - new Date(start).getTime();   //difference in milliseconds
     diff = Math.round(diff / (1000 * 60 * 60 * 24));                //round ms to days
     document.getElementById('datePicker-input').value = formatDate(today);
   }//if else
