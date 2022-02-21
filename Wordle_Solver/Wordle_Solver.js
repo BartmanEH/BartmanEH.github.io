@@ -212,7 +212,8 @@ function buildStrFilteredFiveLetterWords(array) {                   //helper fun
   return strBuilt;
 }//buildStrFilteredFiveLetterWords()
 function toast(toastMessage) {
-  ToastMaker(toastMessage, 3000, { classList: ['toastMaker'], valign: 'top' });   //eslint-disable-line
+  //ToastMaker(toastMessage, 3000, { classList: ['toastMaker'], valign: 'top' });   //eslint-disable-line
+  ToastMaker(toastMessage, 3000, { fontSize: '20px', valign: 'top' });   //eslint-disable-line
 }//toast()
 function errorHandler(strError) {                                   //helper function to display debug messages
   //consoleLog(true, strError);
