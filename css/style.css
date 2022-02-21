@@ -276,10 +276,8 @@ input[type=number]::-webkit-inner-spin-button {
 /*	margin-left: -5px;*/
 }
 /* input[type=date] { */
-.datePicker {
-	color: white;
-  background-color: black;
-  outline: none;
+.datePicker::-webkit-calendar-picker-indicator {
+	filter: invert(1);
 }
 /* .input-number > input[type=number], */
 .input-number > input[type=text] {
