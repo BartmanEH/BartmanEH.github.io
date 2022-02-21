@@ -62,6 +62,7 @@ function UIeventHandlers() {                                        //attach han
   for (const imageInput of imageInputs) {
     imageInput.addEventListener('click', (e) => { imageClicked(e); });          //image input click handler
   }//for image inputs
+  document.getElementById('datePicker-input').addEventListener('onchange', (e) => { datePickerChanged(e); });  //date input change handler
 }//UIeventHandlers()
 function initialize() {                                             //set default selections
   if (fireworks !== '') { fireworks.stop(); }
@@ -78,7 +79,7 @@ function initialize() {                                             //set defaul
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-div').style.display = 'none'; //hide date picker
   let dd = today.getDate();
-  let mm = today.getMonth() + 1; //January is 0!
+  let mm = today.getMonth() + 1; //0-indexed; January is 0!
   const yyyy = today.getFullYear();
   if (dd < 10) { dd = '0' + dd; }
   if (mm < 10) { mm = '0' + mm; }
@@ -93,6 +94,14 @@ function initialize() {                                             //set defaul
 }//initialize()
 //#endregion init
 //#region helper functions
+function datePickerChanged() {
+  dateValue = document.getElementById('datePicker-input').valueAsDate;  //get date picker value
+  if (dateValue - start < 0) {
+    document.getElementById('datePicker-input').valueAsDate = start;
+  } else if (dateValue - today < 0) {
+    document.getElementById('datePicker-input').valueAsDate = today;
+  }//if else
+}//validate()
 function resetGrid() {                                              //clear letter grid
   for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
     for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
