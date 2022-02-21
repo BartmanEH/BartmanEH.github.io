@@ -96,6 +96,7 @@ function dayNumChanged() {
   const archiveDate = new Date(start);
   archiveDate.setDate(archiveDate.getDate() + dayNum);
   consoleLog(logDatePicker, formatDate(archiveDate));
+  diffDays = dayNum;
   document.getElementById('datePicker-input').value = formatDate(archiveDate);
 }//dayNumChanged()
 function datePickerChanged() {
