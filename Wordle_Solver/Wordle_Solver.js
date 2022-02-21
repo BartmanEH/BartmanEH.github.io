@@ -88,14 +88,14 @@ function initialize() {                                             //set defaul
 //#endregion init
 //#region helper functions
 function datePickerChanged() {
-  dateValue = document.getElementById('datePicker-input').value.getTime();
-  const diff = dateValue - start.getTime();               //difference in milliseconds
+  dateValue = document.getElementById('datePicker-input').value;
+  const diff = dateValue.getTime() - start.getTime();               //difference in milliseconds
   diff = Math.round(diff / (1000 * 60 * 60 * 24));                  //round ms to days
-  consoleLog(true, 'dateValue - start: ' + (dateValue - start.getTime()));
+  consoleLog(true, 'dateValue - start: ' + (dateValue.getTime() - start.getTime()));
   if ((dateValue - start.getTime()) < 0) {
     consoleLog(true, 'date too early');
     document.getElementById('datePicker-input').valueAsDate = formatDate(start);
-  } else if ((today.getTime() - dateValue) < 0) {
+  } else if ((today.getTime() - dateValue.getTime()) < 0) {
     consoleLog(true, 'date too late');
     document.getElementById('datePicker-input').value = formatDate(today);
   }//if else
