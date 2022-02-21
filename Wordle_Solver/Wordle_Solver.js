@@ -203,25 +203,7 @@ function imageClicked(e) {                                          //image inpu
     consoleLog(logAutoResults, 'automatic results: ' + autoResults);
     const toastMessage = 'automatic results ' + (autoResults ? 'enabled' : 'disabled');
     ToastMaker(toastMessage, 3000, {                                //eslint-disable-line
-      styles: {
-        fontSize: '20px',
-        valign: 'top',
-        //'animation-name': 'toastEffect',
-        //'animation-timing-function': 'ease-in',
-        //'background-color': '#555',
-        //'border-radius': '20px',
-        //'box-shadow': '0 5px 15px 0 rgba(221,221,221,1)',
-        //color: '#fff',
-        //display: 'inline-block',
-        //padding: '2px 20px',
-        //position: 'fixed',
-        //'text-align': 'center',
-        //'text-decoration': 'none',
-        'z-index': '2147483647'
-      },
-      //styles: { fontSize: '18px', backgroundColor: 'green' },
-      //classList: ['custom-class', 'other-custom-class'],
-      //align: 'right',
+      classList: ['toastMaker'],
       //valign: 'top'
     });
     resetGrid();                                                    //reset grid
