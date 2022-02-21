@@ -62,7 +62,7 @@ function UIeventHandlers() {                                        //attach han
   for (const imageInput of imageInputs) {
     imageInput.addEventListener('click', (e) => { imageClicked(e); });          //image input click handler
   }//for image inputs
-  document.getElementById('datePicker-input').addEventListener('onchange', (e) => { datePickerChanged(e); });  //date input change handler
+  document.getElementById('datePicker-input').addEventListener('change', (e) => { datePickerChanged(e); });  //date input change handler
 }//UIeventHandlers()
 function initialize() {                                             //set default selections
   if (fireworks !== '') { fireworks.stop(); }
@@ -87,6 +87,17 @@ function initialize() {                                             //set defaul
 }//initialize()
 //#endregion init
 //#region helper functions
+function datePickerChanged() {
+  dateValue = document.getElementById('datePicker-input').value;
+  consoleLog(true, 'dateValue - start: ' + (dateValue - start));
+  if ((dateValue - start) < 0) {
+    consoleLog(true, 'date too early');
+    document.getElementById('datePicker-input').valueAsDate = formatDate(start);
+  } else if ((today - dateValue) < 0) {
+    consoleLog(true, 'date too late');
+    document.getElementById('datePicker-input').value = formatDate(today);
+  }//if else
+}//datePickerChanged()
 function formatDate(dateValue) {
   let dd = dateValue.getDate();
   let mm = dateValue.getMonth() + 1; //0-indexed; January is 0!
@@ -95,17 +106,6 @@ function formatDate(dateValue) {
   if (mm < 10) { mm = '0' + mm; }
   return yyyy + '-' + mm + '-' + dd;
 }//formatDate()
-function datePickerChanged() {
-  dateValue = document.getElementById('datePicker-input').value;
-  consoleLog(true, 'dateValue - start: ' + dateValue - start);
-  if (dateValue - start < 0) {
-    consoleLog(true, 'date too early');
-    document.getElementById('datePicker-input').valueAsDate = formatDate(start);
-  } else if (today - dateValue < 0) {
-    consoleLog(true, 'date too late');
-    document.getElementById('datePicker-input').value = formatDate(today);
-  }//if else
-}//datePickerChanged()
 function resetGrid() {                                              //clear letter grid
   for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
     for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
