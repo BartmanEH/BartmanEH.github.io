@@ -77,15 +77,8 @@ function initialize() {                                             //set defaul
   numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
   document.getElementById('version').innerHTML = 'v' + version;
   document.getElementById('possibilities').style.display = 'none';
-  //document.getElementById('datePicker-div').style.display = 'none'; //hide date picker
-  let dd = today.getDate();
-  let mm = today.getMonth() + 1; //0-indexed; January is 0!
-  const yyyy = today.getFullYear();
-  if (dd < 10) { dd = '0' + dd; }
-  if (mm < 10) { mm = '0' + mm; }
-  const todayFormatted = yyyy + '-' + mm + '-' + dd;
   document.getElementById('datePicker-input').valueAsDate = today;
-  document.getElementById('datePicker-input').setAttribute('max', todayFormatted);
+  document.getElementById('datePicker-input').setAttribute('max', formatDate(today));
   document.getElementById('datePicker-span').innerHTML = diffDays.toString();
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
@@ -94,26 +87,23 @@ function initialize() {                                             //set defaul
 }//initialize()
 //#endregion init
 //#region helper functions
+function formatDate(dateValue) {
+  let dd = dateValue.getDate();
+  let mm = dateValue.getMonth() + 1; //0-indexed; January is 0!
+  const yyyy = dateValue.getFullYear();
+  if (dd < 10) { dd = '0' + dd; }
+  if (mm < 10) { mm = '0' + mm; }
+  return yyyy + '-' + mm + '-' + dd;
+}//formatDate()
 function datePickerChanged() {
   dateValue = document.getElementById('datePicker-input').value;
+  consoleLog(true, 'dateValue - start: ' + dateValue - start);
   if (dateValue - start < 0) {
     consoleLog(true, 'date too early');
-    let dd = start.getDate();
-    let mm = start.getMonth() + 1; //0-indexed; January is 0!
-    const yyyy = start.getFullYear();
-    if (dd < 10) { dd = '0' + dd; }
-    if (mm < 10) { mm = '0' + mm; }
-    const startFormatted = yyyy + '-' + mm + '-' + dd;
-    document.getElementById('datePicker-input').valueAsDate = startFormatted;
-  } else if (dateValue - today < 0) {
+    document.getElementById('datePicker-input').valueAsDate = formatDate(start);
+  } else if (today - dateValue < 0) {
     consoleLog(true, 'date too late');
-    let dd = today.getDate();
-    let mm = today.getMonth() + 1; //0-indexed; January is 0!
-    const yyyy = today.getFullYear();
-    if (dd < 10) { dd = '0' + dd; }
-    if (mm < 10) { mm = '0' + mm; }
-    const todayFormatted = yyyy + '-' + mm + '-' + dd;
-    document.getElementById('datePicker-input').value = todayFormatted;
+    document.getElementById('datePicker-input').value = formatDate(today);
   }//if else
 }//datePickerChanged()
 function resetGrid() {                                              //clear letter grid
