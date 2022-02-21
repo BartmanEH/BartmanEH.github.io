@@ -397,20 +397,7 @@ input[type=date] {
 	padding-inline-start: 20px !important;
 }​
 .toastMaker {
-	fontSize: '20px',						/* eslint-disable-line */
-	valign: 'top',
-	/* 'animation-name': 'toastEffect', */
-	/* 'animation-timing-function': 'ease-in', */
-	/* 'background-color': '#555', */
-	/* 'border-radius': '20px', */
-	/* 'box-shadow': '0 5px 15px 0 rgba(221,221,221,1)', */
-	/* color: '#fff', */
-	/* display: 'inline-block', */
-	/* padding: '2px 20px', */
-	/* position: 'fixed', */
-	/* 'text-align': 'center', */
-	/* 'text-decoration': 'none', */
-	'z-index': '2147483647'
+	font-size: '20px';
 }
 .help {
 	font-size: 12pt;

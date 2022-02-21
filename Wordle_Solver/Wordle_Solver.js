@@ -201,11 +201,7 @@ function imageClicked(e) {                                          //image inpu
   } else if (e.target.id === 'BartmanEH_logo_img') {                //toggle automatic results on/off
     autoResults = !autoResults;                                     //toggle automatic results boolean switch
     consoleLog(logAutoResults, 'automatic results: ' + autoResults);
-    const toastMessage = 'automatic results ' + (autoResults ? 'enabled' : 'disabled');
-    ToastMaker(toastMessage, 3000, {                                //eslint-disable-line
-      classList: ['toastMaker'],
-      //valign: 'top'
-    });
+    toast('automatic results ' + (autoResults ? 'enabled' : 'disabled'));
     resetGrid();                                                    //reset grid
     initialize();                                                   //initialize
   }//if else
@@ -215,6 +211,9 @@ function buildStrFilteredFiveLetterWords(array) {                   //helper fun
   for (const word of array) { strBuilt += word + '&nbsp &nbsp'; }
   return strBuilt;
 }//buildStrFilteredFiveLetterWords()
+function toast(toastMessage) {
+  ToastMaker(toastMessage, 3000, { classList: ['toastMaker'], valign: 'top' });   //eslint-disable-line
+}//toast()
 function errorHandler(strError) {                                   //helper function to display debug messages
   //consoleLog(true, strError);
   //alert(strError);
@@ -623,6 +622,7 @@ async function automatedTesting() {
   const request = new Request(requestURL);
   const response = await fetch(request);
   const useCaseData = await response.json();
+  toast('automated testing');
   console.clear();
   consoleLog(logAutoTest, 'commencing automated testing');
   //consoleLog(logAutoTest, useCaseData);
