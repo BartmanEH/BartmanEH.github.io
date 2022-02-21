@@ -204,6 +204,7 @@ function imageClicked(e) {                                          //image inpu
     const toastMessage = 'automatic results ' + (autoResults ? 'enabled' : 'disabled');
     ToastMaker(toastMessage, 2000, {                                //eslint-disable-line
       styles: {
+        fontSize: '20px',
         'animation-name': 'toastEffect',
         'animation-timing-function': 'ease-in',
         'background-color': '#555',
@@ -216,11 +217,11 @@ function imageClicked(e) {                                          //image inpu
         'text-align': 'center',
         'text-decoration': 'none',
         'z-index': '2147483647'
-      }
+      },
       //styles: { fontSize: '18px', backgroundColor: 'green' },
       //classList: ['custom-class', 'other-custom-class'],
       //align: 'right',
-      //valign: 'top'
+      valign: 'top'
     });
     resetGrid();                                                    //reset grid
     initialize();                                                   //initialize
