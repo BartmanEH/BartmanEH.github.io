@@ -95,11 +95,25 @@ function initialize() {                                             //set defaul
 //#endregion init
 //#region helper functions
 function datePickerChanged() {
-  dateValue = document.getElementById('datePicker-input').valueAsDate;  //get date picker value
+  dateValue = document.getElementById('datePicker-input').value;
   if (dateValue - start < 0) {
-    document.getElementById('datePicker-input').valueAsDate = start;
+    consoleLog(true, 'date too early');
+    let dd = start.getDate();
+    let mm = start.getMonth() + 1; //0-indexed; January is 0!
+    const yyyy = start.getFullYear();
+    if (dd < 10) { dd = '0' + dd; }
+    if (mm < 10) { mm = '0' + mm; }
+    const startFormatted = yyyy + '-' + mm + '-' + dd;
+    document.getElementById('datePicker-input').valueAsDate = startFormatted;
   } else if (dateValue - today < 0) {
-    document.getElementById('datePicker-input').valueAsDate = today;
+    consoleLog(true, 'date too late');
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; //0-indexed; January is 0!
+    const yyyy = today.getFullYear();
+    if (dd < 10) { dd = '0' + dd; }
+    if (mm < 10) { mm = '0' + mm; }
+    const todayFormatted = yyyy + '-' + mm + '-' + dd;
+    document.getElementById('datePicker-input').value = todayFormatted;
   }//if else
 }//datePickerChanged()
 function resetGrid() {                                              //clear letter grid
