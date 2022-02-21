@@ -81,6 +81,7 @@ function initialize() {                                             //set defaul
   document.getElementById('datePicker-input').valueAsDate = today;
   document.getElementById('datePicker-input').setAttribute('max', formatDate(today));
   document.getElementById('datePicker-span').innerHTML = diffDays.toString();
+  consoleLog(true, '"' + diffDays.toString() + '"');
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
   if (boolAutoTest) { automatedTesting(); }                         //load json use cases for automated testing
