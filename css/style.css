@@ -410,6 +410,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	outline: none;
 	width: 25px !important;
 	font-size: 12px;
+	padding-left: 0px;
 }
 .toastMaker {
 	font-size: 12px;
