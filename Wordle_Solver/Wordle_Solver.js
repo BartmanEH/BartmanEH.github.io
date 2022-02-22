@@ -228,10 +228,16 @@ function imageClicked(e) {                                          //image inpu
   if (e.target.id === 'IES_logo_img') {                             //undefined
     location = '../index.html';                                     //back to main index page
   } else if (e.target.id === 'Wordle_Solver_logo_img') {            //reset
-    //resetGrid();                                                    //reset grid
-    //initialize();                                                   //initialize
-    //eslint-disable-next-line no-self-assign
-    location = location;                                            //reload page
+    if (fireworks !== '') {                                         //fireworks are on
+      fireworks.stop();                                             //stop fireworks
+      fireworks = '';                                               //'destroy' instance
+      document.getElementsByTagName('canvas')[0].style.display = 'none';  //hide fireworks canvas
+    } else {                                                        //fireworks not on
+      //resetGrid();                                                  //reset grid
+      //initialize();                                                 //initialize
+      //eslint-disable-next-line no-self-assign
+      location = location;                                          //reload page
+    }//if else
   } else if (e.target.id === 'BartmanEH_logo_img') {                //toggle automatic results on/off
     autoResults = !autoResults;                                     //toggle automatic results boolean switch
     consoleLog(logAutoResults, 'automatic results: ' + autoResults);
