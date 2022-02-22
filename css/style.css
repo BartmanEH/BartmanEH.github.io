@@ -397,21 +397,30 @@ input[type=number]::-webkit-inner-spin-button {
 	padding-inline-start: 20px !important;
 }​
 input[type=date]::-webkit-calendar-picker-indicator {
+	/* position: absolute;
+  top: -150%;
+  left: -150%;
+  width: 300%;
+  height: 300%;
+  cursor: pointer; */
 	/* filter: invert(100%); */
-	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="#ffffff" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
+	/* margin-left: -25px !important; */
+	/* margin-inline-start: 0px; */
+	/* width: 15px; */
+	/* right: -15px; */
+	/* background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="#ffffff" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>'); */
 }
 .datePicker {
 	font-family: "Source Sans Pro", "Trebuchet MS", Helvetica, sans-serif;
 	color-scheme: dark;
-	background-color: #121212 !important;
+	background-color: #000000 !important;
 	color: #f3f3f3 !important;
-	width: 130px;
+	/* width: 120px; */
 	font-size: 16px;
-	margin-right: 0px;
 }
 .dayNum {
 	font-family: "Source Sans Pro", "Trebuchet MS", Helvetica, sans-serif;
-	background-color: #121212 !important;
+	background-color: #000000 !important;
 	color: #f3f3f3 !important;
 	outline: none;
 	width: 25px !important;
