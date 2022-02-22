@@ -1,12 +1,13 @@
 /* all */
 html,
 body {
-	background-color: #000000;
+	/* background-color: #000000; */
+	background-color: #121212;
+	color: #f3f3f3;
 /*	font-family: Arial,sans-serif;*/
 	font-family: "Source Sans Pro", "Trebuchet MS", Helvetica, sans-serif;
 	/* font-size: 9pt; */
 	font-size: 12px;
-	color: white;
 	text-align: center;
 	margin: 0 auto;
 	padding: 0;
@@ -16,7 +17,7 @@ body {
 }
 /* marker */
 .wrapper {
-	background-color: #000000;
+	background-color: #121212;
 	min-height: 100%;
 	position: relative;
 }
@@ -27,7 +28,7 @@ body {
 	padding-bottom: 50px;  /* Height of the footer element */ 
 }
 .footer {
-	font-size: 12px;
+	font-size: 14px;
 	width: 100%;
 	height: 50px;
 	position: absolute;
@@ -100,7 +101,7 @@ body {
 }
 .filter-white {
 /*  filter: invert(99%) sepia(0%) saturate(1753%) hue-rotate(315deg) brightness(115%) contrast(100%);*/
-  filter: invert(100%);
+  filter: invert(90%);
 }
 .logo_mobile {
 	width: 85%;
@@ -400,19 +401,21 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 24 24"><path fill="#ffffff" d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
 }
 .datePicker {
+	font-family: "Source Sans Pro", "Trebuchet MS", Helvetica, sans-serif;
 	color-scheme: dark;
-	/* background-color: #000000; */
-	/* color: #ffffff; */
+	background-color: #121212 !important;
+	color: #f3f3f3 !important;
 	width: 130px;
-	font-size: 14px;
+	font-size: 16px;
+	margin-right: 0px;
 }
 .dayNum {
-	color-scheme: dark;
-	/* color: white; */
-	/* background-color: black; */
+	font-family: "Source Sans Pro", "Trebuchet MS", Helvetica, sans-serif;
+	background-color: #121212 !important;
+	color: #f3f3f3 !important;
 	outline: none;
 	width: 25px !important;
-	font-size: 14px;
+	font-size: 16px;
 	padding-left: 0px;
 	text-align: left;
 }
