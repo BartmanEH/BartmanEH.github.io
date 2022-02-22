@@ -298,6 +298,11 @@ function celebrate(guessPosition, message) {                         //Easter Eg
     document.getElementById(gridId).dataset.state = stateCorrect;
   }//for
   errorHandler(message);
+  if (fireworks !== '') {                                         //fireworks are on
+    fireworks.stop();                                             //stop fireworks
+    fireworks = '';                                               //'destroy' instance
+    document.getElementsByTagName('canvas')[0].remove();          //remove fireworks canvas
+  }//if
   fireworks = new Fireworks(container);                             //eslint-disable-line
   fireworks.start();
 }//celebrate()
