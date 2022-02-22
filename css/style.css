@@ -4,7 +4,8 @@ body {
 	background-color: #000000;
 /*	font-family: Arial,sans-serif;*/
 	font-family: "Source Sans Pro", "Trebuchet MS", Helvetica, sans-serif;
-	font-size: 9pt;
+	/* font-size: 9pt; */
+	font-size: 12px;
 	color: white;
 	text-align: center;
 	margin: 0 auto;
@@ -374,7 +375,6 @@ input[type=number]::-webkit-inner-spin-button {
 	height: 55px;
 	/*text-transform: uppercase;*/
 	border-radius: 0px;
-	/* font-size: 30pt; */
 	font-size: 2.5rem;
 	font-weight: bold;
 	caret-color: transparent;
@@ -387,7 +387,7 @@ input[type=number]::-webkit-inner-spin-button {
 .main-ul {
 	list-style-position: inside;
 	padding-inline-start: 0px !important;
-	font-size: 11pt !important;
+	font-size: 14px !important;
 }​
 /* ul.main-ul > ul { */
 /* ul.notmain { */
@@ -402,23 +402,23 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	background-color: #000000;
 	color: #ffffff;
 	width: 130px;
-	font-size: 12pt;
+	font-size: 16px;
 }
 .dayNum {
 	color: white;
 	background-color: black;
 	outline: none;
 	width: 25px !important;
-	font-size: 12pt;
+	font-size: 16px;
 }
 .toastMaker {
-	font-size: '20px';
+	font-size: 16px;
 }
 .help {
-	font-size: 12pt;
+	font-size: 16px;
 }
 .possibilities {
-	font-size: 16pt;
+	font-size: 20px;
 }
 .noselect {										 /* disables selection (sometimes) */
   -webkit-touch-callout: none; /* iOS Safari */
