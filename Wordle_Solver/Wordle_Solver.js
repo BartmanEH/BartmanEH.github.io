@@ -256,8 +256,9 @@ function toast(toastMessage) {
 function errorHandler(strError) {                                   //helper function to display debug messages
   //consoleLog(true, strError);
   //alert(strError);
-  document.getElementById('possibilities-number-span').innerHTML = strError;
-  document.getElementById('possibilities').style.display = 'block';
+  document.getElementById('possibilities').style.display = 'none';  //'hide'
+  document.getElementById('possibilities-text-span').innerHTML = strError;
+  document.getElementById('words').style.display = 'block';         //'unhide'
 }//errorHandler()
 function consoleLog(boolLogSwitch, strMessage, logType) {           //helper function to display console log messages
   if (typeof boolLogSwitch === 'undefined') boolLogSwitch = true;   //default to true if no log switch provided in call
@@ -340,13 +341,13 @@ function solveIt() {
           celebrate(guessPosition, 'Huomos easter egg!');
           aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
           aryExcludeLetters = aryIncludeLetters = [];
-          break;                                                    //terminate further processing
+          return;                                                    //terminate further processing
         } else if (guessWord === 'ATEST') {
           boolAutoTest = true;                                      //set bool for automatic testing
           resetGrid();
           initialize();
           boolAutoTest = false;                                     //clear bool for automatic testing
-          //break;                                                  //terminate further processing
+          return;                                                  //terminate further processing
         } else if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
           errorHandler('"' + guessWord + '" is not a possible guess word!');
           consoleLog(logFilterRules, '"' + guessWord + '" is not a possible guess word!');
@@ -359,7 +360,7 @@ function solveIt() {
             //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
             aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
             aryExcludeLetters = aryIncludeLetters = [];
-            break;                                                  //terminate further processing
+            return;                                                  //terminate further processing
           }//if
         }//if else
       }//if
