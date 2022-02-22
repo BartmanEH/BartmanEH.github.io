@@ -95,6 +95,11 @@ function dayNumChanged() {
   consoleLog(logDatePicker, formatDate(archiveDate));
   diffDays = dayNum;
   document.getElementById('datePicker-input').value = formatDate(archiveDate);
+  if (fireworks !== '') {                                         //fireworks are on
+    fireworks.stop();                                             //stop fireworks
+    fireworks = '';                                               //'destroy' instance
+    document.getElementsByTagName('canvas')[0].remove();          //remove fireworks canvas
+  }//if
   resetGrid();
 }//dayNumChanged()
 function datePickerChanged() {
@@ -115,6 +120,11 @@ function datePickerChanged() {
   diffDays = diff;
   //document.getElementById('datePicker-span').innerHTML = diff.toString();
   document.getElementById('dayNum-input').value = diffDays;
+  if (fireworks !== '') {                                         //fireworks are on
+    fireworks.stop();                                             //stop fireworks
+    fireworks = '';                                               //'destroy' instance
+    document.getElementsByTagName('canvas')[0].remove();          //remove fireworks canvas
+  }//if
   resetGrid();
 }//datePickerChanged()
 function formatDate(dateValue) {
