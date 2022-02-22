@@ -402,14 +402,14 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	background-color: #000000;
 	color: #ffffff;
 	width: 130px;
-	font-size: 12px;
+	font-size: 14px;
 }
 .dayNum {
 	color: white;
 	background-color: black;
 	outline: none;
 	width: 25px !important;
-	font-size: 12px;
+	font-size: 14px;
 	padding-left: 0px;
 	text-align: left;
 }
