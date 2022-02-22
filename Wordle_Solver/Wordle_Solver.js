@@ -34,8 +34,6 @@ const aryAllPossibleAnswers = [];
 const oneDay = 24 * 60 * 60 * 1000;                                 //hours*minutes*seconds*milliseconds
 const start = new Date(2021, 5, 19);                                //date of first Wordle (0 indexed)
 const today = new Date();                                           //today's date
-//today = today.setDate(today.getDate() - 1);                         //yesterday's date
-//consoleLog(true, 'WARNING: test mode hard coded to use YESTERDAY\'S Answer!');
 //#endregion constants
 //#region globals
 let diffDays = Math.floor((today - start) / oneDay);                //#days (changed from .round to .floor)
@@ -50,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
   consoleLog(logGeneral, 'DOM ready! v' + version);                 //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
-});
+});//DOM loaded
 function UIeventHandlers() {                                        //attach handlers to UI events
   const textInputs = document.querySelectorAll('input[type="text"]');           //get all text inputs
   for (const textInput of textInputs) {
@@ -67,7 +65,6 @@ function UIeventHandlers() {                                        //attach han
   document.getElementById('dayNum-input').addEventListener('change', (e) => { dayNumChanged(e); });  //date input change handler
 }//UIeventHandlers()
 function initialize() {                                             //set default selections
-  if (fireworks !== '') { fireworks.stop(); }
   container = document.querySelector('.fireworks-container');
   consoleLog(logGeneral, 'today: ' + today + ', Wordle day#: ' + diffDays);
   let answerOffset = 0;
@@ -252,7 +249,6 @@ function buildStrFilteredFiveLetterWords(array) {                   //helper fun
   return strBuilt;
 }//buildStrFilteredFiveLetterWords()
 function toast(toastMessage) {
-  //ToastMaker(toastMessage, 3000, { classList: ['toastMaker'], valign: 'top' });   //eslint-disable-line
   ToastMaker(toastMessage, 3000, { styles: { fontSize: '20px', }, valign: 'top' });   //eslint-disable-line
 }//toast()
 function errorHandler(strError) {                                   //helper function to display debug messages
