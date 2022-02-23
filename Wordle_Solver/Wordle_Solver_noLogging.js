@@ -640,9 +640,9 @@ async function automatedTesting() {
   if (useCaseResultsIds.length > 2) { useCaseResults += 's'; }
   useCaseResults += ' ' + useCaseResultsIds;
   if (useCasesPassed) {
-    console.log('all ' + useCaseData.useCases.length + ' use cases PASSED!', 'warn');
+    console.log('all ' + useCaseData.useCases.length + ' use cases PASSED!');
   } else {
-    console.log(useCaseResults + ' FAILED!', 'error');
+    console.log(useCaseResults + ' FAILED!');
   }
   autoResults = true;                                               //re-enable auto results mode
 }//automatedTesting()
