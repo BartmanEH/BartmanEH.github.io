@@ -2,7 +2,6 @@
 <ul>
   <li>Enter your guess words for NYT <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a></li>
   <li>Results are automatic for today's answer</li>
-  //
   <!-- <li style="list-style-type: none;"><! -- could not make CSS selector styling work-- >
     <ul style="padding-inline-start: 20px !important;"><! -- could not make CSS selector styling work-- >
       <li>Black:&nbsp;&nbsp;&nbsp;exclude letter</li>
