@@ -1,13 +1,33 @@
 # Wordle Solver
 <ul>
-<li>Start playing <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a></li>
-<li>Enter guess words as you go</li>
-<li>Click each letter to match Wordle results:</li>
-<ul>
-<li>Black:&nbsp;&nbsp;&nbsp;exclude letter</li>
-<li>Yellow:&nbsp;include letter, wrong position</li>
-<li>Green:&nbsp;&nbsp;include letter, correct position</li>
-</ul>
-<li>Click 'solve it!' button to see possible answers</li>
-<li>Click Wordle Solver logo to reset</li>
+  <li>Enter your guess words for NYT <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a></li>
+  <li>Results are automatic for today's answer</li>
+  <script>/* work around multiline HTML comment
+  <li style="list-style-type: none;"><!-- could not make CSS selector styling work-->
+    <ul style="padding-inline-start: 20px !important;"><!-- could not make CSS selector styling work-->
+      <li>Black:&nbsp;&nbsp;&nbsp;exclude letter</li>
+      <li>Yellow:&nbsp;include letter, wrong position</li>
+      <li>Green:&nbsp;&nbsp;include letter, correct position</li>
+    </ul>
+  </li>
+  work around multiline HTML comment */</script>
+  <li>Possible answers will be shown (scroll down!)</li>
+  <li>Other features:</li>
+  <li style="list-style-type: none;"><!-- could not make CSS selector styling work-->
+    <ul style="padding-inline-start: 20px !important;"><!-- could not make CSS selector styling work-->
+      <li>Tap Wordle Solver logo to reset</li>
+      <li>Tap the Date Picker to play a Wordle Archive date</li>
+      <li style="list-style-type: none;"><!-- could not make CSS selector styling work-->
+        <ul style="padding-inline-start: 20px !important;"><!-- could not make CSS selector styling work-->
+          <li>...or the day# to choose day directly</li>
+        </ul>
+      </li>
+      <li>Tap Bart image in footer for manual results mode</li>
+      <li style="list-style-type: none;"><!-- could not make CSS selector styling work-->
+        <ul style="padding-inline-start: 20px !important;"><!-- could not make CSS selector styling work-->
+          <li>Then tap each guess letter to match Wordle results</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
