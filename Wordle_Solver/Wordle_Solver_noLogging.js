@@ -221,7 +221,7 @@ function imageClicked(e) {                                          //image inpu
   } else if (e.target.id === 'BartmanEH_logo_img') {                //toggle automatic results on/off
     autoResults = !autoResults;                                     //toggle automatic results boolean switch
     streakSaver = !streakSaver;                                     //toggle Streak Saver boolean switch
-    window.scrollTo(-100, 0);                                       //scroll to top of page
+    window.scroll(0, 0);                                            //scroll to top of page
     //document.getElementById('header').scrollIntoView();             //scroll to top of page
     toast('automatic results ' + (autoResults ? 'enabled' : 'disabled'));
     resetGrid();                                                    //reset grid

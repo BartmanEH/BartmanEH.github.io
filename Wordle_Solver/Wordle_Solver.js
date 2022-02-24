@@ -21,7 +21,6 @@ const logAutoTest = Boolean(true);        //logAutoTest = true: automated testin
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
 const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
-const streakSaver = Boolean(true);        //streakSaver = true: Greenify Guess if it's Today's Answer
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
@@ -251,7 +250,7 @@ function imageClicked(e) {                                          //image inpu
   } else if (e.target.id === 'BartmanEH_logo_img') {                //toggle automatic results on/off
     autoResults = !autoResults;                                     //toggle automatic results boolean switch
     streakSaver = !streakSaver;                                     //toggle Streak Saver boolean switch
-    window.scrollTo(-100, 0);                                       //scroll to top of page
+    window.top.scroll(0, 0);                                        //scroll to top of page
     //document.getElementById('header').scrollIntoView();             //scroll to top of page
     consoleLog(logAutoResults, 'automatic results: ' + autoResults);
     toast('automatic results ' + (autoResults ? 'enabled' : 'disabled'));
