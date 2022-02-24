@@ -510,6 +510,41 @@
       "possibilities": [
         "SWILL"
       ]
+    },
+    {
+      "id": "22",
+      "comment": "valid",
+      "guess": [
+        "SONIC",
+        "IMPEL"
+      ],
+      "pattern": [
+        "BBBYB",
+        "BBBBG"
+      ],
+      "possibilities": [
+        "AWFUL",
+        "AXIAL",
+        "BRAWL",
+        "DRAWL",
+        "DRILL",
+        "FATAL",
+        "FRILL",
+        "GRILL",
+        "IDYLL",
+        "KRILL",
+        "QUILL",
+        "RIVAL",
+        "RURAL",
+        "TIDAL",
+        "TRAWL",
+        "TRIAL",
+        "TUBAL",
+        "TWIRL",
+        "VIRAL",
+        "VITAL",
+        "WHIRL"
+      ]
     }
   ]
 }
