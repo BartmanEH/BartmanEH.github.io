@@ -10,7 +10,6 @@ const aryAllAnswersOrdered = [
 //#region constants
 const testMode = Boolean(false);          //testMode = true: allow non-Answers and non-Guesses
 const prevAnswers = Boolean(true);        //prevAnswers = true: include previous Answers
-const streakSaver = Boolean(true);        //streakSaver = true: Greenify Guess if it's Today's Answer
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
@@ -28,6 +27,7 @@ const today = new Date();                                           //today's da
 let diffDays = Math.floor((today - start) / oneDay);                //#days (changed from .round to .floor)
 let boolAutoTest = Boolean(false);        //boolAutoTest = true: run automated testing
 let autoResults = Boolean(true);          //autoResults = true: auto enter guess results based on Today's Answer
+let streakSaver = Boolean(true);          //streakSaver = true: Greenify Guess if it's Today's Answer
 let numFiveLetterWords = 0;
 let container = '';
 let fireworks = '';
@@ -220,6 +220,7 @@ function imageClicked(e) {                                          //image inpu
     }//if else
   } else if (e.target.id === 'BartmanEH_logo_img') {                //toggle automatic results on/off
     autoResults = !autoResults;                                     //toggle automatic results boolean switch
+    streakSaver = !streakSaver;                                     //toggle Streak Saver boolean switch
     toast('automatic results ' + (autoResults ? 'enabled' : 'disabled'));
     resetGrid();                                                    //reset grid
     initialize();                                                   //initialize
