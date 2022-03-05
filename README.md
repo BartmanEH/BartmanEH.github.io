@@ -1,15 +1,16 @@
 # Wordle Solver
-<ul>
+<ul class="main-ul">
   <li>Enter your guess words for NYT <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a></li>
   <li>Results are automatic for today's answer</li>
-  <!-- <li style="list-style-type: none;"><! -- could not make CSS selector styling work-- >
-    <ul style="padding-inline-start: 20px !important;"><! -- could not make CSS selector styling work-- >
+  <script>/* work around multiline HTML comment
+  <li style="list-style-type: none;"><!-- could not make CSS selector styling work-->
+    <ul style="padding-inline-start: 20px !important;"><!-- could not make CSS selector styling work-->
       <li>Black:&nbsp;&nbsp;&nbsp;exclude letter</li>
       <li>Yellow:&nbsp;include letter, wrong position</li>
       <li>Green:&nbsp;&nbsp;include letter, correct position</li>
     </ul>
   </li>
-  // -->
+  work around multiline HTML comment */</script>
   <li>Possible answers will be shown (scroll down!)</li>
   <li>Other features:</li>
   <li style="list-style-type: none;"><!-- could not make CSS selector styling work-->
