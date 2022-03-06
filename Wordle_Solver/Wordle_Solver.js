@@ -51,7 +51,8 @@ document.addEventListener('DOMContentLoaded', function () {
   initialize();                                                     //initialize things
 });//DOM loaded
 async function getVersion() {                                       //must be async function
-  const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/version.json';
+  //const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/version.json';
+  const requestURL = 'https://bartmaneh.github.io/Wordle_Solver/version.json';
   const request = new Request(requestURL);
   const response = await fetch(request);
   const versionData = await response.json();
