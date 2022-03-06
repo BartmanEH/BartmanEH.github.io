@@ -45,14 +45,15 @@ let version = '';
 //#endregion globals
 //#region init
 document.addEventListener('DOMContentLoaded', function () {
-  getVersion();                                                     //retrieve version data from json file
+  getVersion();                                                     //retrieve version data from file
   consoleLog(logGeneral, 'DOM ready!');                             //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
 });//DOM loaded
 async function getVersion() {                                       //must be async function
   //const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/version.json';
-  const requestURL = 'https://bartmaneh.github.io/Wordle_Solver/version.json';
+  //const requestURL = 'https://bartmaneh.github.io/Wordle_Solver/version.json';
+  const requestURL = 'https://cdn.jsdelivr.net/gh/BartmanEH/BartmanEH.github.io@master/Wordle_Solver/version.json';
   const request = new Request(requestURL);
   const response = await fetch(request);
   const versionData = await response.json();
@@ -93,7 +94,7 @@ function initialize() {                                             //set defaul
   document.getElementById('dayNum-input').value = diffDays;
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
-  if (boolAutoTest) { automatedTesting(); }                         //load json use cases for automated testing
+  if (boolAutoTest) { automatedTesting(); }                         //run automated testing
   document.getElementById('guess_1_1').focus();                     //set focus to first letter of first guess
 }//initialize()
 //#endregion init
@@ -690,7 +691,8 @@ async function automatedTesting() {
   toast('automated testing');
   autoResults = false;                                              //disable auto results mode
   //const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/use_cases.json';
-  const requestURL = 'https://bartmaneh.github.io/Wordle_Solver/use_cases.json';
+  //const requestURL = 'https://bartmaneh.github.io/Wordle_Solver/use_cases.json';
+  const requestURL = 'https://cdn.jsdelivr.net/gh/BartmanEH/BartmanEH.github.io@master/Wordle_Solver/use_cases.json';
   const request = new Request(requestURL);
   const response = await fetch(request);
   const useCaseData = await response.json();
@@ -729,7 +731,7 @@ async function automatedTesting() {
           gridElement.style.backgroundColor = rgbGreen;             //make background Green
           gridElement.style.border = '2px solid ' + rgbGreen;       //make border Green too
           gridElement.dataset.state = stateCorrect;                 //set metadata attribute for Gren
-        } else {                                                    //pattern JSON data error
+        } else {                                                    //pattern data error
           consoleLog(logAutoTest, 'invalid Pattern Colour!');
         }//if else
       }//for letterPosition
