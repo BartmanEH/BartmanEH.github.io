@@ -82,8 +82,7 @@ function initialize() {                                             //set defaul
   }//for
   consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
   numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
-  consoleLog(logGeneral, 'version: ' + version);
-  document.getElementById('version').innerHTML = 'v' + version;
+  document.getElementById('version').innerHTML = 'v' + version.toString();
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-input').valueAsDate = today;
   document.getElementById('datePicker-input').setAttribute('max', formatDate(today));
