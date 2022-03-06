@@ -45,8 +45,8 @@ let version = '';
 //#endregion globals
 //#region init
 document.addEventListener('DOMContentLoaded', function () {
-  consoleLog(logGeneral, 'DOM ready! v' + version);                 //log DOM ready
   getVersion();                                                     //retrieve version data from json file
+  consoleLog(logGeneral, 'DOM ready! v' + version);                 //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
 });//DOM loaded
@@ -56,8 +56,6 @@ async function getVersion() {
   const response = await fetch(request);
   const versionData = await response.json();
   version = versionData.buildMajor + '.' + versionData.buildMinor + '.' + versionData.buildRevision + '-' + versionData.buildTag;
-  consoleLog(logGeneral, 'versionData: ' + versionData);
-  consoleLog(logGeneral, 'version: ' + version);
 }//getVersion
 function UIeventHandlers() {                                        //attach handlers to UI events
   const textInputs = document.querySelectorAll('input[type="text"]');           //get all text inputs
@@ -84,6 +82,7 @@ function initialize() {                                             //set defaul
   }//for
   consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
   numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
+  consoleLog(logGeneral, 'version: ' + version);
   document.getElementById('version').innerHTML = 'v' + version;
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-input').valueAsDate = today;
