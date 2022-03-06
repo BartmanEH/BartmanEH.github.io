@@ -46,16 +46,18 @@ let version = '';
 //#region init
 document.addEventListener('DOMContentLoaded', function () {
   getVersion();                                                     //retrieve version data from json file
-  consoleLog(logGeneral, 'DOM ready! v' + version);                 //log DOM ready
+  consoleLog(logGeneral, 'DOM ready!');                             //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
 });//DOM loaded
-async function getVersion() {
+async function getVersion() {                                       //must be async function
   const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/version.json';
   const request = new Request(requestURL);
   const response = await fetch(request);
   const versionData = await response.json();
   version = versionData.buildMajor + '.' + versionData.buildMinor + '.' + versionData.buildRevision + '-' + versionData.buildTag;
+  consoleLog(logGeneral, 'version v:' + version);                   //log version
+  document.getElementById('version').innerHTML = 'v' + version.toString();
 }//getVersion
 function UIeventHandlers() {                                        //attach handlers to UI events
   const textInputs = document.querySelectorAll('input[type="text"]');           //get all text inputs
@@ -82,7 +84,7 @@ function initialize() {                                             //set defaul
   }//for
   consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
   numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
-  document.getElementById('version').innerHTML = 'v' + version.toString();
+  //document.getElementById('version').innerHTML = 'v' + version.toString();    //moved to async function
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-input').valueAsDate = today;
   document.getElementById('datePicker-input').setAttribute('max', formatDate(today));
