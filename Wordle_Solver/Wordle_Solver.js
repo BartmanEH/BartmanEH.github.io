@@ -52,8 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });//DOM loaded
 async function getVersion() {                                       //must be async function
   //const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/version.json';
-  //const requestURL = 'https://bartmaneh.github.io/Wordle_Solver/version.json';
-  const requestURL = 'https://cdn.jsdelivr.net/gh/BartmanEH/BartmanEH.github.io@master/Wordle_Solver/version.json';
+  //const requestURL = 'https://cdn.jsdelivr.net/gh/BartmanEH/BartmanEH.github.io@master/Wordle_Solver/version.json';
+  const requestURL = 'https://bartmaneh.github.io/Wordle_Solver/version.json';
   const request = new Request(requestURL);
   const response = await fetch(request);
   const versionData = await response.json();
@@ -691,8 +691,8 @@ async function automatedTesting() {
   toast('automated testing');
   autoResults = false;                                              //disable auto results mode
   //const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/use_cases.json';
-  //const requestURL = 'https://bartmaneh.github.io/Wordle_Solver/use_cases.json';
-  const requestURL = 'https://cdn.jsdelivr.net/gh/BartmanEH/BartmanEH.github.io@master/Wordle_Solver/use_cases.json';
+  //const requestURL = 'https://cdn.jsdelivr.net/gh/BartmanEH/BartmanEH.github.io@master/Wordle_Solver/use_cases.json';
+  const requestURL = 'https://bartmaneh.github.io/Wordle_Solver/use_cases.json';
   const request = new Request(requestURL);
   const response = await fetch(request);
   const useCaseData = await response.json();
