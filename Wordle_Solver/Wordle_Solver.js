@@ -686,12 +686,12 @@ function solveIt() {
 //#endregion solveIt
 //#region automated testing
 async function automatedTesting() {
+  toast('automated testing');
   autoResults = false;                                              //disable auto results mode
   const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/use_cases.json';
   const request = new Request(requestURL);
   const response = await fetch(request);
   const useCaseData = await response.json();
-  toast('automated testing');
   console.clear();
   consoleLog(logAutoTest, 'commencing automated testing');
   //consoleLog(logAutoTest, useCaseData);
