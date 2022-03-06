@@ -55,7 +55,7 @@ async function getVersion() {
   const request = new Request(requestURL);
   const response = await fetch(request);
   const versionData = await response.json();
-  version = versionData.buildMajor + '.' + versionData.buildMinor + '.' + versionData.buildRevision + '.' + versionData.buildTag;
+  version = versionData.buildMajor + '.' + versionData.buildMinor + '.' + versionData.buildRevision + '-' + versionData.buildTag;
   consoleLog(logGeneral, 'versionData: ' + versionData);
   consoleLog(logGeneral, 'version: ' + version);
 }//getVersion
