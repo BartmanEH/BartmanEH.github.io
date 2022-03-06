@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
 });//DOM loaded
-function getVersion() {
+async function getVersion() {
   const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/version.json';
   const request = new Request(requestURL);
   const response = await fetch(request);
