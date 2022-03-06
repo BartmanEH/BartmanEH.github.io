@@ -9,7 +9,7 @@ const aryAllAnswersOrdered = [
 //#region constants
 const testMode = Boolean(false);          //testMode = true: allow non-Answers and non-Guesses
 const prevAnswers = Boolean(true);        //prevAnswers = true: include previous Answers
-const logGeneral = Boolean(false);        //logGeneral = true: show general info messages on console
+const logGeneral = Boolean(true);        //logGeneral = true: show general info messages on console
 const logTabbing = Boolean(false);        //logTabbing = true: show auto focus next tab debug info messages on console
 const logKeyboard = Boolean(false);       //logKeyboard = true: show keyboard/tap info messages on console
 const logFilterRules = Boolean(false);    //logFilterRules = true: filter rules debug messages on console
@@ -50,6 +50,14 @@ document.addEventListener('DOMContentLoaded', function () {
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
 });//DOM loaded
+function getVersion() {
+  const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/version.json';
+  const request = new Request(requestURL);
+  const response = await fetch(request);
+  const versionData = await response.json();
+  version = versionData.buildMajor + '.' + buildMinor + '.' + buildRevision + '.' + buildTag;
+  consoleLog(logGeneral, 'version: ' + version);
+}//getVersion
 function UIeventHandlers() {                                        //attach handlers to UI events
   const textInputs = document.querySelectorAll('input[type="text"]');           //get all text inputs
   for (const textInput of textInputs) {
@@ -88,14 +96,6 @@ function initialize() {                                             //set defaul
 }//initialize()
 //#endregion init
 //#region helper functions
-function getVersion() {
-  const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/version.json';
-  const request = new Request(requestURL);
-  const response = await fetch(request);
-  const versionData = await response.json();
-  version = versionData.buildMajor + '.' + buildMinor + '.' + buildRevision + '.' + buildTag;
-  consoleLog(logGeneral, 'version: ' + version);
-}//getVersion
 function dayNumChanged() {
   let dayNum = +document.getElementById('dayNum-input').value;      //The unary plus (+) coerces its operand into a number
   if (dayNum > diffDays) { dayNum = diffDays; }
