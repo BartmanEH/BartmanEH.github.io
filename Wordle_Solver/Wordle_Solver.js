@@ -473,12 +473,12 @@ function solveIt() {
             if (!aryPatternLetters.includes(letter)) {              //not Pattern letter
               aryExcludeLetters.push(letter);                       //add to Exclude letters
             }//if
-          } else {                                                  //already an Include letter
-            //consoleLog(logFilterRules, 'splicing Yellow Include now Gray letter ' + letter);
-            //aryIncludeLetters.splice(aryIncludeLetters.indexOf(letter), 1);
-            errorHandler('Yellow ' + letter + ' cannot change to Gray!');
-            //return;
-          }//if else
+            //} else {                                                  //already an Include letter
+            //consoleLog(logFilterRules, 'splicing Yellow Include now Gray letter ' + letter);    //not sure why I did this->removed
+            //aryIncludeLetters.splice(aryIncludeLetters.indexOf(letter), 1);                     //not sure why I did this->removed
+            //errorHandler('Yellow ' + letter + ' cannot change to Gray!');         //never seem to get here so->removed
+            //return;                                                                             //not sure why I did this->removed
+          }//if
         }//if
         if (aryPatternLetters[letterPosition - 1] === letter) {     //was Green in a previous Guess
           errorHandler('Green ' + letter + ' cannot change to Gray!');
