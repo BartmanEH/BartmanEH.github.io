@@ -60,9 +60,12 @@ body {
 /*    margin-left: -175px; set to a negative number 1/2 of your width*/
 	/* max-width: 320px !important; */
 	max-width: 400px !important;
-	/* width: 320px; *//*added 20200625 in attempt to constrain width on iPad Pro*/
-	width: 400px; /*added 20200625 in attempt to constrain width on iPad Pro*/
+	width: 320px;/*added 20200625 in attempt to constrain width on iPad Pro*/
 	margin: 0 auto !important;
+}
+
+.Wordle_Solver {
+	width: 400px !important;
 }
 
 .CenterContainer {
