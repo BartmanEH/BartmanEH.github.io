@@ -9,17 +9,17 @@ const aryAllAnswersOrdered = [
 //#region constants
 const testMode = Boolean(false);          //testMode = true: allow non-Answers and non-Guesses
 const prevAnswers = Boolean(true);        //prevAnswers = true: include previous Answers
-const logGeneral = Boolean(true);        //logGeneral = true: show general info messages on console
+const logGeneral = Boolean(false);        //logGeneral = true: show general info messages on console
 const logTabbing = Boolean(false);        //logTabbing = true: show auto focus next tab debug info messages on console
 const logKeyboard = Boolean(false);       //logKeyboard = true: show keyboard/tap info messages on console
-const logFilterRules = Boolean(true);    //logFilterRules = true: filter rules debug messages on console
+const logFilterRules = Boolean(false);    //logFilterRules = true: filter rules debug messages on console
 const logFiltering = Boolean(false);      //logFiltering = true: filtering debug messages on console
 const logErrorChecking = Boolean(false);  //logFilterRules = true: filter rules debug messages on console
 const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
-const logDatePicker = Boolean(true);     //logDatePicker = true: date picker results debug messages on console
-const spoilerModePre = Boolean(true);    //spoilerMode = true: show Today's Answer in console
+const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
+const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
@@ -100,17 +100,21 @@ function initialize() {                                             //set defaul
 //#endregion init
 //#region helper functions
 function dayNumChanged() {
+  diffDays = Math.floor((today - start) / oneDay);
   let dayNum = +document.getElementById('dayNum-input').value;      //The unary plus (+) coerces its operand into a number
   if (dayNum > diffDays) { dayNum = diffDays; }
   const archiveDate = new Date(start);
   archiveDate.setDate(archiveDate.getDate() + dayNum);
-  consoleLog(logDatePicker, formatDate(archiveDate));
+  consoleLog(logDatePicker, 'archiveDate: ' + formatDate(archiveDate));
+  consoleLog(logDatePicker, 'diffDays: ' + diffDays);
+  consoleLog(logDatePicker, 'dayNum: ' + dayNum);
   diffDays = dayNum;
   document.getElementById('datePicker-input').value = formatDate(archiveDate);
-  if (fireworks !== '') {                                         //fireworks are on
-    fireworks.stop();                                             //stop fireworks
-    fireworks = '';                                               //'destroy' instance
-    document.getElementsByTagName('canvas')[0].remove();          //remove fireworks canvas
+  document.getElementById('dayNum-input').value = diffDays;
+  if (fireworks !== '') {                                           //fireworks are on
+    fireworks.stop();                                               //stop fireworks
+    fireworks = '';                                                 //'destroy' instance
+    document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
   consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
   resetGrid();
