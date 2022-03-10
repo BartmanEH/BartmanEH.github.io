@@ -253,9 +253,12 @@ function inputClicked(e) {                                          //text input
 }//inputClicked()
 function imageClicked(e) {                                          //image input clicked
   if (e.target.id === 'IES_logo_img') {                             //undefined
-    //consoleLog(true, location.pathname);
-    location = '../index.html';                                     //back to main index page (local or gh-pages)
-    //location = '../index.php';                                     //back to main index page (RPi)
+    if (location.pathname.slice(-3) === 'php') {
+      location = '../index.php';                                    //back to main index page (RPi)
+    } else {
+      location = '../index.html';                                   //back to main index page (local or gh-pages)
+    }//if else
+    consoleLog(true, location.pathname);
   } else if (e.target.id === 'Wordle_Solver_logo_img') {            //reset
     if (fireworks !== '') {                                         //fireworks are on
       fireworks.stop();                                             //stop fireworks
