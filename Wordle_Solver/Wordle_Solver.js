@@ -258,7 +258,6 @@ function imageClicked(e) {                                          //image inpu
     } else {
       location = '../index.html';                                   //back to main index page (local or gh-pages)
     }//if else
-    consoleLog(true, location.pathname);
   } else if (e.target.id === 'Wordle_Solver_logo_img') {            //reset
     if (fireworks !== '') {                                         //fireworks are on
       fireworks.stop();                                             //stop fireworks
