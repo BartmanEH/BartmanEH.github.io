@@ -24,44 +24,44 @@ const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
 const rgbGreen = 'rgb(83, 141, 78)';      //Green  = #538d4e rgb(83, 141, 78)
-const stateIncorrect = 'incorrect';
-const stateMisplaced = 'misplaced';
-const stateCorrect = 'correct';
-const stateTBD = 'tbd';
-const aryAllPossibleAnswers = [];
-const oneDay = 24 * 60 * 60 * 1000;                                 //hours*minutes*seconds*milliseconds
-const start = new Date(2021, 5, 19);                                //date of first Wordle (0 indexed)
-const today = new Date();                                           //today's date
+const stateIncorrect = 'incorrect';       //metadata attribute for Black
+const stateMisplaced = 'misplaced';       //metadata attribute for Yellow
+const stateCorrect = 'correct';           //metadata attribute for Green
+const stateTBD = 'tbd';                   //metadata attribute for unknown
+const aryAllPossibleAnswers = [];         //array of all possible answers (possibly without previous answers)
+const oneDay = 24 * 60 * 60 * 1000;       //hours*minutes*seconds*milliseconds
+const start = new Date(2021, 5, 19);      //date of first Wordle (0 indexed)
+const today = new Date();                 //today's date
 //#endregion constants
 //#region globals
 let diffDays = Math.floor((today - start) / oneDay);                //#days (changed from .round to .floor)
 let boolAutoTest = Boolean(false);        //boolAutoTest = true: run automated testing
 let autoResults = Boolean(true);          //autoResults = true: auto enter guess results based on Today's Answer
 let streakSaver = Boolean(true);          //streakSaver = true: Greenify Guess if it's Today's Answer
-let numFiveLetterWords = 0;
-let container = '';
-let fireworks = '';
-let version = '';
+let numFiveLetterWords = 0;               //global tracking number of possible words
+let container = '';                       //global Easter Egg container
+let fireworks = '';                       //global Easter Egg effect
+let version = '';                         //global version
 //#endregion globals
 //#region init
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {         //fires when DOM loaded (ready)
   getVersion();                                                     //retrieve version data from file
   consoleLog(logGeneral, 'DOM ready!');                             //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
 });//DOM loaded
-async function getVersion() {                                       //must be async function
+async function getVersion() {                                                   //must be async function!
   //const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/version.json';
   //const requestURL = 'https://cdn.jsdelivr.net/gh/BartmanEH/BartmanEH.github.io@master/Wordle_Solver/version.json';
-  const requestURL = 'https://bartmaneh.github.io/Wordle_Solver/version.json';
+  const requestURL = 'https://bartmaneh.github.io/Wordle_Solver/version.json';  //json version info data
   const request = new Request(requestURL);
   const response = await fetch(request);
   const versionData = await response.json();
   version = versionData.buildMajor + '.' + versionData.buildMinor + '.' + versionData.buildRevision + '-' + versionData.buildTag;
-  consoleLog(logGeneral, 'version: v' + version);                   //log version
-  document.getElementById('version').innerHTML = 'v' + version.toString();
+  consoleLog(logGeneral, 'version: v' + version);                               //log version
+  document.getElementById('version').innerHTML = 'v' + version.toString();      //update webpage footer version info
 }//getVersion
-function UIeventHandlers() {                                        //attach handlers to UI events
+function UIeventHandlers() {                                                    //attach handlers to UI events
   const textInputs = document.querySelectorAll('input[type="text"]');           //get all text inputs
   for (const textInput of textInputs) {
     textInput.addEventListener('click', (e) => { inputClicked(e); });           //text input click handler
@@ -86,11 +86,9 @@ function initialize() {                                             //set defaul
   }//for
   consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
   numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
-  //document.getElementById('version').innerHTML = 'v' + version.toString();    //moved to async function
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-input').valueAsDate = today;
   document.getElementById('datePicker-input').setAttribute('max', formatDate(today));
-  //document.getElementById('datePicker-span').innerHTML = diffDays.toString();
   document.getElementById('dayNum-input').value = diffDays;
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
@@ -102,7 +100,7 @@ function initialize() {                                             //set defaul
 function dayNumChanged() {
   diffDays = Math.floor((today - start) / oneDay);
   let dayNum = +document.getElementById('dayNum-input').value;      //The unary plus (+) coerces its operand into a number
-  if (dayNum > diffDays) { dayNum = diffDays; }
+  if (dayNum > diffDays) { dayNum = diffDays; }                     //do not allow choosing date in the future
   const archiveDate = new Date(start);
   archiveDate.setDate(archiveDate.getDate() + dayNum);
   consoleLog(logDatePicker, 'archiveDate: ' + formatDate(archiveDate));
@@ -122,7 +120,7 @@ function dayNumChanged() {
 function datePickerChanged() {
   const dateValue = new Date(document.getElementById('datePicker-input').value).getTime();
   let diff = dateValue - new Date(start).getTime();                 //difference in milliseconds
-  diff = Math.round(diff / oneDay);                  //round ms to days
+  diff = Math.round(diff / oneDay);                                 //round ms to days
   consoleLog(logDatePicker, 'dateValue - start: ' + (dateValue - new Date(start).getTime()));
   if (diff < 0) {
     consoleLog(logDatePicker, 'date too early');
@@ -131,21 +129,20 @@ function datePickerChanged() {
   } else if ((new Date(today).getTime() - dateValue) < 0) {
     consoleLog(logDatePicker, 'date too late');
     diff = new Date(today).getTime() - new Date(start).getTime();   //difference in milliseconds
-    diff = Math.round(diff / oneDay);                //round ms to days
+    diff = Math.round(diff / oneDay);                               //round ms to days
     document.getElementById('datePicker-input').value = formatDate(today);
   }//if else
   diffDays = diff;
-  //document.getElementById('datePicker-span').innerHTML = diff.toString();
   document.getElementById('dayNum-input').value = diffDays;
-  if (fireworks !== '') {                                         //fireworks are on
-    fireworks.stop();                                             //stop fireworks
-    fireworks = '';                                               //'destroy' instance
-    document.getElementsByTagName('canvas')[0].remove();          //remove fireworks canvas
+  if (fireworks !== '') {                                           //fireworks are on
+    fireworks.stop();                                               //stop fireworks
+    fireworks = '';                                                 //'destroy' instance
+    document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
   consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
   resetGrid();
 }//datePickerChanged()
-function formatDate(dateValue) {
+function formatDate(dateValue) {                                    //helper function to format date to string
   let dd = dateValue.getDate();
   let mm = dateValue.getMonth() + 1; //0-indexed; January is 0!
   const yyyy = dateValue.getFullYear();
@@ -181,7 +178,6 @@ function inputKeyup(e) {                                            //handler fo
   } else { chrKeyPressed = e.which; }                               //assume iOS; get ASCII code directly
   if (chrKeyPressed === 8) {                                        //backspace/delete key?
     consoleLog(logKeyboard, 'delete/backspace');                    //clear previous grid position
-    //e.preventDefault();                                             //bypass normal processing
     findTabStop(e.target, 'backward').focus();                      //focus previous focussable element
     e.target.value = ' ';                                           //set default letter value
     e.target.style.backgroundColor = rgbBlack;                      //make background Black
@@ -205,8 +201,7 @@ function inputKeyup(e) {                                            //handler fo
     e.target.dataset.state = stateTBD;                              //reset metadata attribute
     return;                                                         //terminate further processing
   }//if
-  //e.target.next('input').focus();                                   //this method doesn't traverse guesses
-  findTabStop(e.target, 'forward').focus();                       //focus next focussable element
+  findTabStop(e.target, 'forward').focus();                         //focus next focussable element
   consoleLog(logKeyboard, 'keyup event fired: e.which: ' + e.which + ' e.target.value: ' + e.target.value);
   solveIt();                                                        //autofire SolveIt!
 }//inputKeyup()
@@ -214,19 +209,15 @@ function findTabStop(element, direction) {                          //find next 
   consoleLog(logTabbing, 'direction: ' + direction);
   //const universe = document.querySelectorAll('input, button, select, textarea, a[href]');
   const universe = document.querySelectorAll('input[type=text');    //only input type=text (AKA the grid)
-  //consoleLog(logTabbing, universe);
   const list = Array.prototype.filter.call(universe, function (item) { return item.tabIndex >= '0'; });
-  //consoleLog(logTabbing, 'element: ' + element);
   consoleLog(logTabbing, 'universe.length: ' + universe.length);
   consoleLog(logTabbing, 'list.indexOf(element): ' + list.indexOf(element));
   consoleLog(logTabbing, 'direction: ' + direction);
   if (direction === 'forward') {
     consoleLog(logTabbing, 'forward');
-    //return ((list[list.indexOf(element) + 1]) ?? list[0]);
     return ((list[list.indexOf(element) + 1]) ?? list[universe.length - 1]);  //if at the end, stay at the end
   } else if (direction === 'backward') {
     consoleLog(logTabbing, 'backward');
-    //return ((list[list.indexOf(element) - 1]) ?? list[universe.length - 1]);
     return ((list[list.indexOf(element) - 1]) ?? list[0]);          //if at the beginning, stay at the beginning
   } else errorHandler('invalid tab direction!');                    //function called with unsupported parameter
 }//findTabStop()
@@ -252,24 +243,22 @@ function inputClicked(e) {                                          //text input
   solveIt();                                                        //autofire SolveIt!
 }//inputClicked()
 function imageClicked(e) {                                          //image input clicked
-  if (e.target.id === 'IES_logo_img') {                             //undefined
-    if (location.pathname.slice(-3) === 'php') {
+  if (e.target.id === 'IES_logo_img') {                             //IES logo clicked
+    if (location.pathname.slice(-3) === 'php') {                    //RPi
       location = '../index.php';                                    //back to main index page (RPi)
-    } else {
+    } else {                                                        //local file or gh-pages
       location = '../index.html';                                   //back to main index page (local or gh-pages)
     }//if else
-  } else if (e.target.id === 'Wordle_Solver_logo_img') {            //reset
+  } else if (e.target.id === 'Wordle_Solver_logo_img') {            //Wordle Logo clicked
     if (fireworks !== '') {                                         //fireworks are on
       fireworks.stop();                                             //stop fireworks
       fireworks = '';                                               //'destroy' instance
       document.getElementsByTagName('canvas')[0].remove();          //remove fireworks canvas
     } else {                                                        //fireworks not on
-      //resetGrid();                                                  //reset grid
-      //initialize();                                                 //initialize
       //eslint-disable-next-line no-self-assign
       location = location;                                          //reload page
     }//if else
-  } else if (e.target.id === 'BartmanEH_logo_img') {                //toggle automatic results on/off
+  } else if (e.target.id === 'BartmanEH_logo_img') {                //BartmanEH logo clicked
     autoResults = !autoResults;                                     //toggle automatic results boolean switch
     streakSaver = !streakSaver;                                     //toggle Streak Saver boolean switch
     window.scroll(0, 0);                                            //scroll to top of page
@@ -287,9 +276,7 @@ function buildStrFilteredFiveLetterWords(array) {                   //helper fun
 function toast(toastMessage) {
   ToastMaker(toastMessage, 3000, { styles: { fontSize: '20px', }, valign: 'top' });   //eslint-disable-line
 }//toast()
-function errorHandler(strError) {                                   //helper function to display debug messages
-  //consoleLog(true, strError);
-  //alert(strError);
+function errorHandler(strError) {                                   //helper function to display results error messages
   document.getElementById('possibilities').style.display = 'none';  //'hide'
   document.getElementById('possibilities-text-span').innerHTML = strError;
   document.getElementById('words').style.display = 'block';         //'unhide'
@@ -297,14 +284,16 @@ function errorHandler(strError) {                                   //helper fun
 function consoleLog(boolLogSwitch, strMessage, logType) {           //helper function to display console log messages
   if (typeof boolLogSwitch === 'undefined') boolLogSwitch = true;   //default to true if no log switch provided in call
   if (typeof logType === 'undefined' && boolLogSwitch) {            //default log type if no log type provided in call
-    console.log(strMessage);
+    console.log(strMessage);                                        //normal console log message
   } else if (logType === 'warn' && boolLogSwitch) {
-    console.warn(strMessage);
+    console.warn(strMessage);                                       //warning console log message
   } else if (logType === 'error' && boolLogSwitch) {
-    console.error(strMessage);
+    console.error(strMessage);                                      //error console log message
+  } else {
+    console.error('invalid logType for message: ' + strMessage);
   }//if else
 }//consoleLog()
-function isSubsetInclDupes(includesArray, wordArray) {              //includesArray subset of wordArray incl. any duplicates?
+function isSubsetInclDupes(includesArray, wordArray) {              //is includesArray a subset of wordArray incl. any duplicates?
   const occurrences = new Map();
   for (const entry of includesArray) {
     occurrences.set(entry, (occurrences.get(entry) ?? 0) + 1);      //nullish coalescing operator (??)
@@ -327,9 +316,9 @@ function compareArrays(array1, array2) {                            //compare tw
 function celebrate(guessPosition, message) {                        //Easter Egg graphics
   for (let guessLetterPosition = 1; guessLetterPosition <= 5; guessLetterPosition++) {
     const gridId = 'guess_' + guessPosition + '_' + guessLetterPosition;
-    document.getElementById(gridId).style.backgroundColor = rgbGreen;        //make background Green
-    document.getElementById(gridId).style.border = '2px solid ' + rgbGreen;  //make border Green too
-    document.getElementById(gridId).dataset.state = stateCorrect;
+    document.getElementById(gridId).style.backgroundColor = rgbGreen;         //make background Green
+    document.getElementById(gridId).style.border = '2px solid ' + rgbGreen;   //make border Green too
+    document.getElementById(gridId).dataset.state = stateCorrect;             //set metadata attribute to Green
   }//for
   errorHandler(message);
   if (fireworks !== '') {                                           //fireworks are on
@@ -338,9 +327,94 @@ function celebrate(guessPosition, message) {                        //Easter Egg
     document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
   fireworks = new Fireworks(container);                             //eslint-disable-line
-  fireworks.start();
+  fireworks.start();                                                //launch fireworks effect
 }//celebrate()
 //#endregion helper functions
+//#region automated testing
+async function automatedTesting() {
+  toast('automated testing');
+  autoResults = false;                                              //disable auto results mode
+  //const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/use_cases.json';
+  //const requestURL = 'https://cdn.jsdelivr.net/gh/BartmanEH/BartmanEH.github.io@master/Wordle_Solver/use_cases.json';
+  const requestURL = 'https://bartmaneh.github.io/Wordle_Solver/use_cases.json';
+  const request = new Request(requestURL);
+  const response = await fetch(request);
+  const useCaseData = await response.json();
+  console.clear();
+  consoleLog(logAutoTest, 'commencing automated testing');
+  //consoleLog(logAutoTest, useCaseData);
+  //consoleLog(logAutoTest, useCaseData.useCases);
+  let useCaseResults = 'Use Case';
+  let useCaseResultsIds = '';
+  let useCasesPassed = Boolean(true);
+  useCaseData.useCases.forEach(useCase => {                         //loop thru all use cases
+    //consoleLog(logAutoTest, useCase);
+    //consoleLog(logAutoTest, 'id(' + useCase.id.length + '): ' + useCase.id);
+    //consoleLog(logAutoTest, 'guess(' + useCase.guess.length + '): ' + useCase.guess);
+    //consoleLog(logAutoTest, 'pattern(' + useCase.pattern.length + '): ' + useCase.pattern);
+    //consoleLog(logAutoTest, 'possibilities(' + useCase.possibilities.length + '): ' + useCase.possibilities);
+    //consoleLog(logAutoTest, 'testing use case id: ' + useCase.id); }
+    for (let useCaseGuess = 1; useCaseGuess <= useCase.guess.length; useCaseGuess++) {
+      const guessWord = useCase.guess[useCaseGuess - 1].toString();
+      //consoleLog(logAutoTest, 'guess: ' + guessWord);
+      for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
+        const gridId = 'guess_' + useCaseGuess + '_' + letterPosition;
+        const gridElement = document.getElementById(gridId);
+        //consoleLog(logAutoTest, 'guess Letter: ' + guessWord.substring(letterPosition - 1, letterPosition));
+        gridElement.value = guessWord.substring(letterPosition - 1, letterPosition);
+        const letterColor = useCase.pattern[useCaseGuess - 1].toString().substring(letterPosition - 1, letterPosition);
+        if (letterColor === 'B') {                                  //is it Gray?
+          gridElement.style.backgroundColor = rgbGray;              //make background Gray
+          gridElement.style.border = '2px solid ' + rgbGray;        //make border Gray too
+          gridElement.dataset.state = stateIncorrect;               //set metadata attribute for Gray
+        } else if (letterColor === 'Y') {                           //is it Yellow?
+          gridElement.style.backgroundColor = rgbYellow;            //make background Yellow
+          gridElement.style.border = '2px solid ' + rgbYellow;      //make border Yellow too
+          gridElement.dataset.state = stateMisplaced;               //set metadata attribute for Yellow
+        } else if (letterColor === 'G') {                           //is it Green?
+          gridElement.style.backgroundColor = rgbGreen;             //make background Green
+          gridElement.style.border = '2px solid ' + rgbGreen;       //make border Green too
+          gridElement.dataset.state = stateCorrect;                 //set metadata attribute for Gren
+        } else {                                                    //pattern data error
+          consoleLog(logAutoTest, 'invalid Pattern Colour!');
+        }//if else
+      }//for letterPosition
+    }//for guessPosition
+    const aryUseCasePossibilities = [];
+    for (let useCasePossibilities = 1; useCasePossibilities <= useCase.possibilities.length; useCasePossibilities++) {
+      aryUseCasePossibilities.push(useCase.possibilities[useCasePossibilities - 1].toString());
+    }//for
+    const aryTestPossibilities = solveIt() ?? [];                   //get possibilities for use case; if test fails, null is returned so use nullish coalescing operator to return empty array
+    //╔═════════════════════════╗
+    //║ The Central Scrutinizer ║
+    //╚═════════════════════════╝
+    if (compareArrays(aryUseCasePossibilities, aryTestPossibilities)) {
+      consoleLog(logAutoTest, 'use case id: ' + ('00' + useCase.id).slice(-3) + ' pass!');
+    } else {
+      useCasesPassed = false;
+      consoleLog(logAutoTest, 'use case id: ' + ('00' + useCase.id).slice(-3) + ' FAIL!', 'error');
+      consoleLog(logAutoTest, 'use case comment: ' + useCase.comment, 'warn');
+      consoleLog(logAutoTest, 'guesses(' + useCase.guess.length + '): ' + useCase.guess);
+      consoleLog(logAutoTest, 'pattern(' + useCase.pattern.length + '): ' + useCase.pattern);
+      consoleLog(logAutoTest, 'use case possibilities: ' + aryUseCasePossibilities.sort());
+      consoleLog(logAutoTest, '    test possibilities: ' + aryTestPossibilities.sort());
+      useCaseResultsIds += useCase.id + ', ';
+    }//if else
+    resetGrid();                                                    //reset Grid for next use case
+  });//forEach useCase
+  useCaseResultsIds = useCaseResultsIds.slice(0, -2);
+  if (useCaseResultsIds.length > 2) { useCaseResults += 's'; }
+  useCaseResults += ' ' + useCaseResultsIds;
+  if (useCasesPassed) {
+    consoleLog(logAutoTest, 'all ' + useCaseData.useCases.length + ' use cases PASSED!', 'warn');
+    toast('all ' + useCaseData.useCases.length + ' use cases PASSED!');
+  } else {
+    consoleLog(logAutoTest, useCaseResults + ' FAILED!', 'error');
+    toast(useCaseResults + ' FAILED!');
+  }
+  autoResults = true;                                               //re-enable auto results mode
+}//automatedTesting()
+//#endregion automated testing
 //#region solveIt
 function solveIt() {
   consoleLog(logGeneral, 'Solve it!');
@@ -426,7 +500,7 @@ function solveIt() {
           if (gridLetter === todayAnswerLetter) {
             gridElement.style.backgroundColor = rgbGreen;           //make background Green
             gridElement.style.border = '2px solid ' + rgbGreen;     //make border Green too
-            gridElement.dataset.state = stateCorrect;
+            gridElement.dataset.state = stateCorrect;               //set metadata attribute to Green
             //todayAnswer = todayAnswer.substring(0, todayAnswer.indexOf(gridLetter)) + '*' + todayAnswer.substring(todayAnswer.indexOf(gridLetter) + 1); //overwrite GREEN letter with *
             todayAnswer = todayAnswer.substring(0, guessWordCheckPosition - 1) + '*' + todayAnswer.substring(guessWordCheckPosition); //overwrite GREEN letter with *
             consoleLog(logAutoResults, 'todayAnswer: ' + todayAnswer);
@@ -456,7 +530,7 @@ function solveIt() {
             consoleLog(logAutoResults, 'YELLOW match');
             gridElement.style.backgroundColor = rgbYellow;          //make background Yellow
             gridElement.style.border = '2px solid ' + rgbYellow;    //make border Yellow too
-            gridElement.dataset.state = stateMisplaced;             //set metadata attribute for Misplaced
+            gridElement.dataset.state = stateMisplaced;             //set metadata attribute for Yellow
             todayAnswer = todayAnswer.substring(0, todayAnswer.indexOf(gridLetter)) + '+' + todayAnswer.substring(todayAnswer.indexOf(gridLetter) + 1); //overwrite GREEN letter with +
             consoleLog(logAutoResults, 'todayAnswer: ' + todayAnswer);
           }//if
@@ -696,88 +770,3 @@ function solveIt() {
   return aryScrutinizedFilteredFiveLetterWords;                     //pass array to caller
 }//solveIt()
 //#endregion solveIt
-//#region automated testing
-async function automatedTesting() {
-  toast('automated testing');
-  autoResults = false;                                              //disable auto results mode
-  //const requestURL = 'https://raw.githubusercontent.com/BartmanEH/BartmanEH.github.io/main/Wordle_Solver/use_cases.json';
-  //const requestURL = 'https://cdn.jsdelivr.net/gh/BartmanEH/BartmanEH.github.io@master/Wordle_Solver/use_cases.json';
-  const requestURL = 'https://bartmaneh.github.io/Wordle_Solver/use_cases.json';
-  const request = new Request(requestURL);
-  const response = await fetch(request);
-  const useCaseData = await response.json();
-  console.clear();
-  consoleLog(logAutoTest, 'commencing automated testing');
-  //consoleLog(logAutoTest, useCaseData);
-  //consoleLog(logAutoTest, useCaseData.useCases);
-  let useCaseResults = 'Use Case';
-  let useCaseResultsIds = '';
-  let useCasesPassed = Boolean(true);
-  useCaseData.useCases.forEach(useCase => {                         //loop thru all use cases
-    //consoleLog(logAutoTest, useCase);
-    //consoleLog(logAutoTest, 'id(' + useCase.id.length + '): ' + useCase.id);
-    //consoleLog(logAutoTest, 'guess(' + useCase.guess.length + '): ' + useCase.guess);
-    //consoleLog(logAutoTest, 'pattern(' + useCase.pattern.length + '): ' + useCase.pattern);
-    //consoleLog(logAutoTest, 'possibilities(' + useCase.possibilities.length + '): ' + useCase.possibilities);
-    //consoleLog(logAutoTest, 'testing use case id: ' + useCase.id); }
-    for (let useCaseGuess = 1; useCaseGuess <= useCase.guess.length; useCaseGuess++) {
-      const guessWord = useCase.guess[useCaseGuess - 1].toString();
-      //consoleLog(logAutoTest, 'guess: ' + guessWord);
-      for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
-        const gridId = 'guess_' + useCaseGuess + '_' + letterPosition;
-        const gridElement = document.getElementById(gridId);
-        //consoleLog(logAutoTest, 'guess Letter: ' + guessWord.substring(letterPosition - 1, letterPosition));
-        gridElement.value = guessWord.substring(letterPosition - 1, letterPosition);
-        const letterColor = useCase.pattern[useCaseGuess - 1].toString().substring(letterPosition - 1, letterPosition);
-        if (letterColor === 'B') {                                  //is it Gray?
-          gridElement.style.backgroundColor = rgbGray;              //make background Gray
-          gridElement.style.border = '2px solid ' + rgbGray;        //make border Gray too
-          gridElement.dataset.state = stateIncorrect;               //set metadata attribute for Gray
-        } else if (letterColor === 'Y') {                           //is it Yellow?
-          gridElement.style.backgroundColor = rgbYellow;            //make background Yellow
-          gridElement.style.border = '2px solid ' + rgbYellow;      //make border Yellow too
-          gridElement.dataset.state = stateMisplaced;               //set metadata attribute for Yellow
-        } else if (letterColor === 'G') {                           //is it Green?
-          gridElement.style.backgroundColor = rgbGreen;             //make background Green
-          gridElement.style.border = '2px solid ' + rgbGreen;       //make border Green too
-          gridElement.dataset.state = stateCorrect;                 //set metadata attribute for Gren
-        } else {                                                    //pattern data error
-          consoleLog(logAutoTest, 'invalid Pattern Colour!');
-        }//if else
-      }//for letterPosition
-    }//for guessPosition
-    const aryUseCasePossibilities = [];
-    for (let useCasePossibilities = 1; useCasePossibilities <= useCase.possibilities.length; useCasePossibilities++) {
-      aryUseCasePossibilities.push(useCase.possibilities[useCasePossibilities - 1].toString());
-    }//for
-    const aryTestPossibilities = solveIt() ?? [];                   //get possibilities for use case; if test fails, null is returned so use nullish coalescing operator to return empty array
-    //╔═════════════════════════╗
-    //║ The Central Scrutinizer ║
-    //╚═════════════════════════╝
-    if (compareArrays(aryUseCasePossibilities, aryTestPossibilities)) {
-      consoleLog(logAutoTest, 'use case id: ' + ('00' + useCase.id).slice(-3) + ' pass!');
-    } else {
-      useCasesPassed = false;
-      consoleLog(logAutoTest, 'use case id: ' + ('00' + useCase.id).slice(-3) + ' FAIL!', 'error');
-      consoleLog(logAutoTest, 'use case comment: ' + useCase.comment, 'warn');
-      consoleLog(logAutoTest, 'guesses(' + useCase.guess.length + '): ' + useCase.guess);
-      consoleLog(logAutoTest, 'pattern(' + useCase.pattern.length + '): ' + useCase.pattern);
-      consoleLog(logAutoTest, 'use case possibilities: ' + aryUseCasePossibilities.sort());
-      consoleLog(logAutoTest, '    test possibilities: ' + aryTestPossibilities.sort());
-      useCaseResultsIds += useCase.id + ', ';
-    }//if else
-    resetGrid();                                                    //reset Grid for next use case
-  });//forEach useCase
-  useCaseResultsIds = useCaseResultsIds.slice(0, -2);
-  if (useCaseResultsIds.length > 2) { useCaseResults += 's'; }
-  useCaseResults += ' ' + useCaseResultsIds;
-  if (useCasesPassed) {
-    consoleLog(logAutoTest, 'all ' + useCaseData.useCases.length + ' use cases PASSED!', 'warn');
-    toast('all ' + useCaseData.useCases.length + ' use cases PASSED!');
-  } else {
-    consoleLog(logAutoTest, useCaseResults + ' FAILED!', 'error');
-    toast(useCaseResults + ' FAILED!');
-  }
-  autoResults = true;                                               //re-enable auto results mode
-}//automatedTesting()
-//#endregion automated testing
