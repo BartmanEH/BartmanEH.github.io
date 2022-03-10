@@ -308,7 +308,7 @@ function consoleLog(boolLogSwitch, strMessage, logType) {           //helper fun
 function isSubsetInclDupes(includesArray, wordArray) {              //includesArray subset of wordArray incl. any duplicates?
   const occurrences = new Map();
   for (const entry of includesArray) {
-    occurrences.set(entry, (occurrences.get(entry) ?? 0) + 1);        //nullish coalescing operator (??)
+    occurrences.set(entry, (occurrences.get(entry) ?? 0) + 1);      //nullish coalescing operator (??)
     //occurrences.set(entry, (occurrences.get(entry) !== undefined && occurrences.get(entry) !== null ? occurrences.get(entry) : 0) + 1); //equivalent
     //a ?? b                                      nullish coalescing operator (??) method
     //a !== undefined && a !== null ? a : b       equivalent method
@@ -325,7 +325,7 @@ function compareArrays(array1, array2) {                            //compare tw
     return value === array2Sorted[index];
   });
 }//compareArrays()
-function celebrate(guessPosition, message) {                         //Easter Egg graphics
+function celebrate(guessPosition, message) {                        //Easter Egg graphics
   for (let guessLetterPosition = 1; guessLetterPosition <= 5; guessLetterPosition++) {
     const gridId = 'guess_' + guessPosition + '_' + guessLetterPosition;
     document.getElementById(gridId).style.backgroundColor = rgbGreen;        //make background Green
@@ -333,10 +333,10 @@ function celebrate(guessPosition, message) {                         //Easter Eg
     document.getElementById(gridId).dataset.state = stateCorrect;
   }//for
   errorHandler(message);
-  if (fireworks !== '') {                                         //fireworks are on
-    fireworks.stop();                                             //stop fireworks
-    fireworks = '';                                               //'destroy' instance
-    document.getElementsByTagName('canvas')[0].remove();          //remove fireworks canvas
+  if (fireworks !== '') {                                           //fireworks are on
+    fireworks.stop();                                               //stop fireworks
+    fireworks = '';                                                 //'destroy' instance
+    document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
   fireworks = new Fireworks(container);                             //eslint-disable-line
   fireworks.start();
@@ -381,13 +381,13 @@ function solveIt() {
           celebrate(guessPosition, 'Huomos easter egg!');
           aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
           aryExcludeLetters = aryIncludeLetters = [];
-          return;                                                    //terminate further processing
+          return;                                                   //terminate further processing
         } else if (guessWord === 'ATEST') {
           boolAutoTest = true;                                      //set bool for automatic testing
           resetGrid();
           initialize();
           boolAutoTest = false;                                     //clear bool for automatic testing
-          return;                                                  //terminate further processing
+          return;                                                   //terminate further processing
         } else if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
           errorHandler('"' + guessWord + '" is not a possible guess word!');
           consoleLog(logFilterRules, '"' + guessWord + '" is not a possible guess word!');
@@ -400,7 +400,7 @@ function solveIt() {
             //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
             aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
             aryExcludeLetters = aryIncludeLetters = [];
-            return;                                                  //terminate further processing
+            return;                                                 //terminate further processing
           }//if
         }//if else
       }//if
@@ -431,7 +431,7 @@ function solveIt() {
             //todayAnswer = todayAnswer.substring(0, todayAnswer.indexOf(gridLetter)) + '*' + todayAnswer.substring(todayAnswer.indexOf(gridLetter) + 1); //overwrite GREEN letter with *
             todayAnswer = todayAnswer.substring(0, guessWordCheckPosition - 1) + '*' + todayAnswer.substring(guessWordCheckPosition); //overwrite GREEN letter with *
             consoleLog(logAutoResults, 'todayAnswer: ' + todayAnswer);
-            if (aryIncludeLetters.includes(letter)) {                 //already have this as Yellow letter
+            if (aryIncludeLetters.includes(letter)) {               //already have this as Yellow letter
               consoleLog(logFilterRules, 'splicing Yellow Include now Green ' + letter);
               aryIncludeLetters.splice(aryIncludeLetters.indexOf(letter), 1); //remove Include letter
               //aryBoolFirstYellowOccurrence[letter] = true;
@@ -589,17 +589,17 @@ function solveIt() {
           if (gridElement.dataset.state === stateIncorrect) {
             consoleLog(logErrorChecking, 'Includes letter ' + includeLetter + ' is Gray in this position of guess word ' + guessWord + '. Continuing to check any additional occurrences!');
             boolCheck = true;
-          } else {                                                //include letter is still Yellow or changed to Green/Yellow: OK!
-            consoleLog(logErrorChecking, 'Includes letter ' + includeLetter + ' is still Yellow or changed to Green/Yellow: OK!');
+          } else {                                                  //include letter still Yellow or changed to Green: OK!
+            consoleLog(logErrorChecking, 'Includes letter ' + includeLetter + ' still Yellow or changed to Green: OK!');
             boolCheck = false;
-            break;                                                //no more checking required for this include letter
+            break;                                                  //no more checking required for this include letter
           }//if else
         }//if
       }//for
       if (boolCheck) {
         consoleLog(logErrorChecking, 'Letter "' + includeLetter + '" cannot change to Gray in guess word: ' + guessWord + '!');
         errorHandler('Letter "' + includeLetter + '" cannot change to Gray in guess word: ' + guessWord + '!');   //Gray letter is in includes array!
-        return;                                                   //terminate further processing
+        return;                                                     //terminate further processing
       }//if
     }//for
     //╔═══════════════════╗
@@ -669,7 +669,7 @@ function solveIt() {
                 consoleLog(logFiltering, 'reject: ' + word + ' wordLetterPosition === letterPosition');
               } else {
                 //consoleLog(logFiltering, 'keep ' + word);
-                continue;                                 //keep word (don't set boolG2G and stop further checking)
+                continue;                                           //keep word; don't set boolG2G, stop further checking
               }//if else
             }//ife
           }//for
