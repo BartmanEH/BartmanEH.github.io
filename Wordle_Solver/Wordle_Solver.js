@@ -89,7 +89,11 @@ function initialize() {                                             //set defaul
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-input').valueAsDate = today;
   document.getElementById('datePicker-input').setAttribute('max', formatDate(today));
-  document.getElementById('dayNum-input').value = diffDays;
+  if(autoResults) {
+    document.getElementById('dayNum-input').value = diffDays;
+  } else {
+    document.getElementById('dayNum-input').value = "N/A";
+  }//if else
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
   if (boolAutoTest) { automatedTesting(); }                         //run automated testing
