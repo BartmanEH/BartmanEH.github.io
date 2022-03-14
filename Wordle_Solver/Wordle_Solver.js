@@ -90,18 +90,11 @@ function initialize() {                                             //set defaul
   document.getElementById('datePicker-input').valueAsDate = today;
   document.getElementById('datePicker-input').setAttribute('max', formatDate(today));
   if (autoResults) {
-    document.getElementById('resultsMode').style.display = 'none';
-    document.getElementById('labelDate').style.display = 'block';
-    document.getElementById('datePicker-input').style.display = 'block';
-    document.getElementById('labelDay').style.display = 'block';
-    document.getElementById('dayNum-input').value = diffDays;
-    document.getElementById('dayNum-input').style.display = 'block';
+    document.getElementById('resultsMode-div').style.display = 'none';
+    document.getElementById('datePicker-div').style.display = 'block';
   } else {
-    document.getElementById('resultsMode').style.display = 'none';
-    document.getElementById('datePicker-input').style.display = 'none';
-    document.getElementById('labelDay').style.display = 'none';
-    document.getElementById('dayNum-input').value = 'none';
-    document.getElementById('labelDate').style.display = 'block';
+    document.getElementById('datePicker-div').style.display = 'none';
+    document.getElementById('resultsMode-div').style.display = 'block';
   }//if else
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
