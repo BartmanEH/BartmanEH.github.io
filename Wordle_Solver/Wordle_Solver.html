@@ -125,10 +125,9 @@
 				</div>
 				<div id="spacer_2" class="spacer-normal"></div>
 				<div id="datePicker-div" class="help">
-					Date:&nbsp;
+					<span id="labelDate">Date:&nbsp;</span>
 					<input type="date" id="datePicker-input" name="datePicker" value="2021-05-19" min="2021-05-19" class="datePicker">
-					&nbsp;&nbsp;Wordle&nbsp;day&nbsp;#<input type="number" id="dayNum-input" name="dayNum" value="1" min="1" class="dayNum">
-					<!-- <span id="datePicker-span" class=""></span> -->
+					<span id="labelDay">&nbsp;&nbsp;Wordle&nbsp;day&nbsp;#<input type="number" id="dayNum-input" name="dayNum" value="1" min="1" class="dayNum"></span>
 				</div>
 				<div id="help-outer" class="flex-container flex-space-around">
 					<div id="help-inner" class="flex-item">
@@ -136,7 +135,7 @@
 							<ul class="main-ul">
 								<li>Enter your guess words for NYT <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a></li>
 								<li>Results are automatic for today's answer</li>
-								<script>/* work around multiline HTML comment
+								<script>/* work around for multiline HTML comment (script)
 								<li style="list-style-type: none;"><!-- could not make CSS selector styling work-->
 									<ul style="padding-inline-start: 20px !important;"><!-- could not make CSS selector styling work-->
 										<li>Black:&nbsp;&nbsp;&nbsp;exclude letter</li>
