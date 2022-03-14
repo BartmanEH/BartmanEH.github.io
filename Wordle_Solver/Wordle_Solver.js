@@ -295,14 +295,14 @@ function errorHandler(strError) {                                   //helper fun
   document.getElementById('words').style.display = 'block';         //'unhide'
 }//errorHandler()
 function consoleLog(boolLogSwitch, strMessage, logType) {           //helper function to display console log messages
-  if (typeof boolLogSwitch === 'undefined') boolLogSwitch = true;   //default to true if no log switch provided in call
-  if (typeof logType === 'undefined' && boolLogSwitch) {            //default log type if no log type provided in call
+  if (typeof boolLogSwitch === 'undefined') logType = 'normal';     //default to true if no log switch provided in call
+  if (logType === 'normal' && boolLogSwitch) {                      //default log type if no log type provided in call
     console.log(strMessage);                                        //normal console log message
   } else if (logType === 'warn' && boolLogSwitch) {
     console.warn(strMessage);                                       //warning console log message
   } else if (logType === 'error' && boolLogSwitch) {
     console.error(strMessage);                                      //error console log message
-  } else {
+  } else if (boolLogSwitch) {
     console.error('invalid logType for message: ' + strMessage);
   }//if else
 }//consoleLog()
