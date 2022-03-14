@@ -89,10 +89,19 @@ function initialize() {                                             //set defaul
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-input').valueAsDate = today;
   document.getElementById('datePicker-input').setAttribute('max', formatDate(today));
-  if(autoResults) {
+  if (autoResults) {
+    document.getElementById('resultsMode').style.display = 'none';
+    document.getElementById('labelDate').style.display = 'block';
+    document.getElementById('datePicker-input').style.display = 'block';
+    document.getElementById('labelDay').style.display = 'block';
     document.getElementById('dayNum-input').value = diffDays;
+    document.getElementById('dayNum-input').style.display = 'block';
   } else {
-    document.getElementById('dayNum-input').value = "N/A";
+    document.getElementById('resultsMode').style.display = 'none';
+    document.getElementById('datePicker-input').style.display = 'none';
+    document.getElementById('labelDay').style.display = 'none';
+    document.getElementById('dayNum-input').value = 'none';
+    document.getElementById('labelDate').style.display = 'block';
   }//if else
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
