@@ -89,6 +89,7 @@ function initialize() {                                             //set defaul
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-input').valueAsDate = today;
   document.getElementById('datePicker-input').setAttribute('max', formatDate(today));
+  document.getElementById('dayNum-input').value = diffDays;
   if (autoResults) {
     document.getElementById('resultsMode-div').style.display = 'none';
     document.getElementById('datePicker-div').style.display = 'block';
