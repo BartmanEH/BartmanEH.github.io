@@ -252,19 +252,19 @@ function inputClicked(e) {                                          //text input
 function imageClicked(e) {                                          //image input clicked
   if (e.target.id === 'IES_logo_img') {                             //IES logo clicked
     if (location.pathname.slice(-3) === 'php') {                    //RPi
-      location = '../index.php';                                    //back to main index page (RPi)
+      window.location.replace('../index.php');                      //back to main index page (RPi)
     } else {                                                        //local file or gh-pages
-      location = '../index.html';                                   //back to main index page (local or gh-pages)
+      window.location.replace('../index.html');                     //back to main index page (local or gh-pages)
     }//if else
   } else if (e.target.id === 'Wordle_Solver_logo_img') {            //Wordle Logo clicked
     if (fireworks !== '') {                                         //fireworks are on
       fireworks.stop();                                             //stop fireworks
       fireworks = '';                                               //'destroy' instance
       document.getElementsByTagName('canvas')[0].remove();          //remove fireworks canvas
-    } else {                                                        //fireworks not on
-      //eslint-disable-next-line no-self-assign
-      location = location;                                          //reload page
+    //} else {                                                        //fireworks not on
+      //window.location.reload();                                       //reload page
     }//if else
+    window.location.reload();                                       //reload page
   } else if (e.target.id === 'BartmanEH_logo_img') {                //BartmanEH logo clicked
     autoResults = !autoResults;                                     //toggle automatic results boolean switch
     streakSaver = !streakSaver;                                     //toggle Streak Saver boolean switch
