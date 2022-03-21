@@ -73,8 +73,9 @@ function UIeventHandlers() {                                                    
   for (const imageInput of imageInputs) {
     imageInput.addEventListener('click', (e) => { imageClicked(e); });          //image input click handler
   }//for image inputs
-  document.getElementById('datePicker-input').addEventListener('change', (e) => { datePickerChanged(e); });  //date input change handler
-  document.getElementById('dayNum-input').addEventListener('change', (e) => { dayNumChanged(e); });  //date input change handler
+  document.getElementById('datePicker-input').addEventListener('change', (e) => { datePickerChanged(e); }); //date input change handler
+  document.getElementById('dayNum-input').addEventListener('change', (e) => { dayNumChanged(e); });         //day num input change handler
+  document.getElementById('copyright').addEventListener('click', (e) => { copyrightClicked(e); });          //copyright symbol click handler
 }//UIeventHandlers()
 function initialize() {                                             //set default selections
   container = document.querySelector('.fireworks-container');
@@ -104,6 +105,9 @@ function initialize() {                                             //set defaul
 }//initialize()
 //#endregion init
 //#region helper functions
+function copyrightClicked() {
+  toast(aryAllAnswersOrdered[diffDays]);
+}//copyrightClicked()
 function dayNumChanged() {
   diffDays = Math.floor((today - start) / oneDay);
   let dayNum = +document.getElementById('dayNum-input').value;      //The unary plus (+) coerces its operand into a number
