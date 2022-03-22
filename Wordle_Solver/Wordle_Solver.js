@@ -106,7 +106,7 @@ function initialize() {                                             //set defaul
 //#endregion init
 //#region helper functions
 function copyrightClicked() {
-  toast(aryAllAnswersOrdered[diffDays]);
+  toast(aryAllAnswersOrdered[diffDays], 'bottom');
 }//copyrightClicked()
 function dayNumChanged() {
   diffDays = Math.floor((today - start) / oneDay);
@@ -284,8 +284,9 @@ function buildStrFilteredFiveLetterWords(array) {                   //helper fun
   for (const word of array) { strBuilt += word + '&nbsp &nbsp'; }
   return strBuilt;
 }//buildStrFilteredFiveLetterWords()
-function toast(toastMessage) {
-  ToastMaker(toastMessage, 3000, { styles: { fontSize: '20px', }, valign: 'top' });   //eslint-disable-line
+function toast(toastMessage, position) {
+  if (typeof position === 'undefined') position = 'top';            //default to top if no position provided in call
+  ToastMaker(toastMessage, 3000, { styles: { fontSize: '20px', }, valign: position });   //eslint-disable-line
 }//toast()
 function errorHandler(strError) {                                   //helper function to display results error messages
   document.getElementById('possibilities').style.display = 'none';  //'hide'
