@@ -150,6 +150,9 @@ function datePickerChanged() {
     fireworks = '';                                                 //'destroy' instance
     document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
+  consoleLog(logDatePicker, 'archiveDate: ' + formatDate(archiveDate));
+  consoleLog(logDatePicker, 'diffDays: ' + diffDays);
+  consoleLog(logDatePicker, 'dayNum: ' + dayNum);
   consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
   resetGrid();
 }//datePickerChanged()
