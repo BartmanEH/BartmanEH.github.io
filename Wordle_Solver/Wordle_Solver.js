@@ -166,7 +166,7 @@ function treatAsUTC(date) {
 }//treatAsUTC()
 function daysBetween(startDate, endDate) {
   const millisecondsPerDay = 24 * 60 * 60 * 1000;
-  return (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay;
+  return Math.round((treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay);
 }//daysBetween()
 function formatDate(dateValue) {                                    //helper function to format date to string
   let dd = dateValue.getDate();
