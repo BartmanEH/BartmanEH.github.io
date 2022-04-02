@@ -18,7 +18,7 @@ const logErrorChecking = Boolean(false);  //logFilterRules = true: filter rules 
 const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
-const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
+const logDatePicker = Boolean(true);     //logDatePicker = true: date picker results debug messages on console
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
@@ -142,7 +142,7 @@ function datePickerChanged() {
     consoleLog(logDatePicker, 'date too early');
     diff = 0;
     document.getElementById('datePicker-input').value = formatDate(start);
-  } else if (daysBetween(dateValue, today) < 0) {
+  } else if (daysBetween(dateValue, today) <= 0) {
     consoleLog(logDatePicker, 'date too late');
     diff = daysBetween(start, today);                               //difference in days
     //diff = Math.round(diff / oneDay);                               //round ms to days
