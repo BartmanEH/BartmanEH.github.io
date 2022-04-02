@@ -18,7 +18,7 @@ const logErrorChecking = Boolean(false);  //logFilterRules = true: filter rules 
 const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
-const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
+const logDatePicker = Boolean(true);     //logDatePicker = true: date picker results debug messages on console
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
@@ -29,12 +29,13 @@ const stateMisplaced = 'misplaced';       //metadata attribute for Yellow
 const stateCorrect = 'correct';           //metadata attribute for Green
 const stateTBD = 'tbd';                   //metadata attribute for unknown
 const aryAllPossibleAnswers = [];         //array of all possible answers (possibly without previous answers)
-const oneDay = 24 * 60 * 60 * 1000;       //hours*minutes*seconds*milliseconds
+//const oneDay = 24 * 60 * 60 * 1000;       //hours*minutes*seconds*milliseconds
 const start = new Date(2021, 5, 19);      //date of first Wordle (0 indexed)
 const today = new Date();                 //today's date
 //#endregion constants
-//#region globals
-let diffDays = Math.floor((today - start) / oneDay);                //#days (changed from .round to .floor)
+//#region globals;
+//let diffDays = Math.floor((today - start) / oneDay);                //#days (changed from .round to .floor)
+let diffDays = daysBetween(today, start); //new function to computer days between two dates
 let boolAutoTest = Boolean(false);        //boolAutoTest = true: run automated testing
 let autoResults = Boolean(true);          //autoResults = true: auto enter guess results based on Today's Answer
 let streakSaver = Boolean(true);          //streakSaver = true: Greenify Guess if it's Today's Answer
@@ -133,16 +134,17 @@ function datePickerChanged() {
   const dateValue = new Date(document.getElementById('datePicker-input').value).getTime();
   //let diff = dateValue - new Date(start).getTime();                 //difference in milliseconds
   //diff = Math.round(diff / oneDay);                                 //round ms to days
-  let diff = daysBetween(dateValue, new Date(start).getTime());
-  consoleLog(logDatePicker, 'dateValue - start: ' + (dateValue - new Date(start).getTime()));
+  //let diff = daysBetween(dateValue, new Date(start).getTime());
+  let diff = daysBetween(dateValue, start);
+  consoleLog(logDatePicker, 'dateValue - start: ' + diff);
   if (diff < 0) {
     consoleLog(logDatePicker, 'date too early');
     diff = 0;
     document.getElementById('datePicker-input').value = formatDate(start);
-  } else if ((new Date(today).getTime() - dateValue) < 0) {
+  } else if (daysBetween(today - dateValue) < 0) {
     consoleLog(logDatePicker, 'date too late');
-    diff = new Date(today).getTime() - new Date(start).getTime();   //difference in milliseconds
-    diff = Math.round(diff / oneDay);                               //round ms to days
+    diff = daysBetween(today, start);                               //difference in days
+    //diff = Math.round(diff / oneDay);                               //round ms to days
     document.getElementById('datePicker-input').value = formatDate(today);
   }//if else
   diffDays = diff;
