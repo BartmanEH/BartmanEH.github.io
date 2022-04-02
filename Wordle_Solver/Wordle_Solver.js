@@ -35,7 +35,7 @@ const today = new Date();                 //today's date
 //#endregion constants
 //#region globals;
 //let diffDays = Math.floor((today - start) / oneDay);                //#days (changed from .round to .floor)
-let diffDays = daysBetween(today, start); //new function to computer days between two dates
+let diffDays = daysBetween(start, today); //new function to computer days between two dates
 let boolAutoTest = Boolean(false);        //boolAutoTest = true: run automated testing
 let autoResults = Boolean(true);          //autoResults = true: auto enter guess results based on Today's Answer
 let streakSaver = Boolean(true);          //streakSaver = true: Greenify Guess if it's Today's Answer
