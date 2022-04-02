@@ -142,7 +142,7 @@ function datePickerChanged() {
     consoleLog(logDatePicker, 'date too early');
     diff = 0;
     document.getElementById('datePicker-input').value = formatDate(start);
-  } else if (daysBetween(dateValue - today) < 0) {
+  } else if (daysBetween(dateValue, today) < 0) {
     consoleLog(logDatePicker, 'date too late');
     diff = daysBetween(start, today);                               //difference in days
     //diff = Math.round(diff / oneDay);                               //round ms to days
