@@ -131,7 +131,8 @@ function dayNumChanged() {
   resetGrid();
 }//dayNumChanged()
 function datePickerChanged() {
-  const dateValue = new Date(document.getElementById('datePicker-input').value).getTime();
+  //const dateValue = new Date(document.getElementById('datePicker-input').value).getTime();
+  const dateValue = new Date(document.getElementById('datePicker-input').value);
   //let diff = dateValue - new Date(start).getTime();                 //difference in milliseconds
   //diff = Math.round(diff / oneDay);                                 //round ms to days
   //let diff = daysBetween(dateValue, new Date(start).getTime());
