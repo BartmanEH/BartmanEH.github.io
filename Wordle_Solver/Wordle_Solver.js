@@ -111,7 +111,7 @@ function copyrightClicked() {
 }//copyrightClicked()
 function dayNumChanged() {
   //diffDays = Math.floor((today - start) / oneDay);
-  diffDays = daysBetween(today, start);
+  diffDays = daysBetween(start, today);
   let dayNum = +document.getElementById('dayNum-input').value;      //The unary plus (+) coerces its operand into a number
   if (dayNum > diffDays) { dayNum = diffDays; }                     //do not allow choosing date in the future
   const archiveDate = new Date(start);
@@ -135,15 +135,15 @@ function datePickerChanged() {
   //let diff = dateValue - new Date(start).getTime();                 //difference in milliseconds
   //diff = Math.round(diff / oneDay);                                 //round ms to days
   //let diff = daysBetween(dateValue, new Date(start).getTime());
-  let diff = daysBetween(dateValue, start);
+  let diff = daysBetween(start, dateValue);
   consoleLog(logDatePicker, 'dateValue - start: ' + diff);
   if (diff < 0) {
     consoleLog(logDatePicker, 'date too early');
     diff = 0;
     document.getElementById('datePicker-input').value = formatDate(start);
-  } else if (daysBetween(today - dateValue) < 0) {
+  } else if (daysBetween(dateValue - today) < 0) {
     consoleLog(logDatePicker, 'date too late');
-    diff = daysBetween(today, start);                               //difference in days
+    diff = daysBetween(start, today);                               //difference in days
     //diff = Math.round(diff / oneDay);                               //round ms to days
     document.getElementById('datePicker-input').value = formatDate(today);
   }//if else
