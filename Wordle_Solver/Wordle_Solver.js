@@ -163,8 +163,9 @@ const logErrorChecking = Boolean(false);  //logFilterRules = true: filter rules 
 const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
-const logDatePicker = Boolean(true);     //logDatePicker = true: date picker results debug messages on console
-const spoilerModePre = Boolean(true);    //spoilerMode = true: show Today's Answer in console
+const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
+const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
+const modeCanuckle = Boolean(false);      //modeCanuckle = true: play Canuckle, false: play Wordle
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
@@ -653,7 +654,13 @@ function solveIt() {
         } else {
           consoleLog(logGeneral, 'aryAllAnswersOrdered.indexOf(guessWord): ' + aryAllAnswersOrdered.indexOf(guessWord));
           consoleLog(logGeneral, 'diffDays: ' + diffDays);
-          if (streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays - 1)) {
+          let boolStreakSaver = false;
+          if (modeCanuckle) {
+            boolStreakSaver = streakSaver && (aryAllCanuckleAnswersOrdered.indexOf(guessWord) === diffDaysCanuckle - 1);
+          } else {
+            boolStreakSaver = streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays - 1);
+          }//if else
+          if (boolStreakSaver) {
             celebrate(guessPosition, 'Streak Saver easter egg!');
             //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
             aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
@@ -671,7 +678,12 @@ function solveIt() {
         //consoleLog(logAutoResults, 'include: ' + aryIncludeLetters);
         //consoleLog(logAutoResults, 'pattern: ' + aryPatternLetters);
         //consoleLog(logAutoResults, 'today\'s answer: ' + aryAllAnswersOrdered[diffDays - 1]);
-        let todayAnswer = aryAllAnswersOrdered[diffDays - 1];
+        let todayAnswer = '';
+        if (modeCanuckle) {
+          todayAnswer = aryAllCanuckleAnswersOrdered[diffDaysCanuckle - 1];
+        } else {
+          todayAnswer = aryAllAnswersOrdered[diffDays - 1];
+        }//if else
         consoleLog(logAutoResults, 'todayAnswer: ' + todayAnswer);
         //╔═════════════════╗
         //║ automatic GREEN ║
