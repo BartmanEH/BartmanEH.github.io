@@ -504,7 +504,7 @@ function solveIt() {
         } else {
           consoleLog(logGeneral, 'aryAllAnswersOrdered.indexOf(guessWord): ' + aryAllAnswersOrdered.indexOf(guessWord));
           consoleLog(logGeneral, 'diffDays: ' + diffDays);
-          if (streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays)) {
+          if (streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays - 1)) {
             celebrate(guessPosition, 'Streak Saver easter egg!');
             //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
             aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
