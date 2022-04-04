@@ -18,8 +18,8 @@ const logErrorChecking = Boolean(false);  //logFilterRules = true: filter rules 
 const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
-const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
-const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
+const logDatePicker = Boolean(true);     //logDatePicker = true: date picker results debug messages on console
+const spoilerModePre = Boolean(true);    //spoilerMode = true: show Today's Answer in console
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
@@ -29,7 +29,7 @@ const stateMisplaced = 'misplaced';       //metadata attribute for Yellow
 const stateCorrect = 'correct';           //metadata attribute for Green
 const stateTBD = 'tbd';                   //metadata attribute for unknown
 const aryAllPossibleAnswers = [];         //array of all possible answers (possibly without previous answers)
-//const oneDay = 24 * 60 * 60 * 1000;       //hours*minutes*seconds*milliseconds
+const millisecondsPerDay = 24 * 60 * 60 * 1000; //hours*minutes*seconds*milliseconds = millseconds per day
 const start = new Date(2021, 5, 19);      //date of first Wordle (0 indexed)
 const today = new Date();                 //today's date
 //#endregion constants
@@ -86,7 +86,7 @@ function initialize() {                                             //set defaul
   for (let i = 0; i < aryAllAnswersOrdered.length - answerOffset; i++) {
     aryAllPossibleAnswers[i] = aryAllAnswersOrdered[i + answerOffset];
   }//for
-  consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
+  consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays - 1]);
   numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-input').valueAsDate = today;
@@ -107,13 +107,19 @@ function initialize() {                                             //set defaul
 //#endregion init
 //#region helper functions
 function copyrightClicked() {
-  toast(aryAllAnswersOrdered[diffDays], 'bottom');
+  toast(aryAllAnswersOrdered[diffDays - 1], 'bottom');
 }//copyrightClicked()
 function dayNumChanged() {
   //diffDays = Math.floor((today - start) / oneDay);
   diffDays = daysBetween(start, today);
   let dayNum = +document.getElementById('dayNum-input').value;      //The unary plus (+) coerces its operand into a number
-  if (dayNum > diffDays) { dayNum = diffDays; }                     //do not allow choosing date in the future
+  if (dayNum > diffDays) {                                          //do not allow choosing date in the future
+    consoleLog(logDatePicker, 'error: future dayNum! ' + dayNum);
+    dayNum = diffDays;
+  } else if (dayNum < 0) {
+    consoleLog(logDatePicker, 'error: negative dayNum!' + dayNum);
+    dayNum = 0;
+  }//if else
   const archiveDate = new Date(start);
   archiveDate.setDate(archiveDate.getDate() + dayNum);
   consoleLog(logDatePicker, 'archiveDate: ' + formatDate(archiveDate));
@@ -127,7 +133,7 @@ function dayNumChanged() {
     fireworks = '';                                                 //'destroy' instance
     document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
-  consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
+  consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays - 1]);
   resetGrid();
 }//dayNumChanged()
 function datePickerChanged() {
@@ -139,11 +145,11 @@ function datePickerChanged() {
   let diff = daysBetween(start, dateValue);
   consoleLog(logDatePicker, 'dateValue - start: ' + diff);
   if (diff < 0) {
-    consoleLog(logDatePicker, 'date too early');
+    consoleLog(logDatePicker, 'error: date before official start!');
     diff = 0;
     document.getElementById('datePicker-input').value = formatDate(start);
   } else if (daysBetween(dateValue, today) <= 0) {
-    consoleLog(logDatePicker, 'date too late');
+    consoleLog(logDatePicker, 'error: future date!');
     diff = daysBetween(start, today);                               //difference in days
     //diff = Math.round(diff / oneDay);                               //round ms to days
     document.getElementById('datePicker-input').value = formatDate(today);
@@ -156,7 +162,7 @@ function datePickerChanged() {
     document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
   consoleLog(logDatePicker, 'diffDays: ' + diffDays);
-  consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
+  consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays - 1]);
   resetGrid();
 }//datePickerChanged()
 function treatAsUTC(date) {
@@ -165,7 +171,6 @@ function treatAsUTC(date) {
   return result;
 }//treatAsUTC()
 function daysBetween(startDate, endDate) {
-  const millisecondsPerDay = 24 * 60 * 60 * 1000;
   return Math.round((treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay);
 }//daysBetween()
 function formatDate(dateValue) {                                    //helper function to format date to string
@@ -505,7 +510,7 @@ function solveIt() {
           }//if
         }//if else
       }//if
-      if (autoResults) {                //automatic results based on today's answer: aryAllAnswersOrdered[diffDays]
+      if (autoResults) {                //automatic results based on today's answer: aryAllAnswersOrdered[diffDays - 1]
         //╔═══════════════════╗
         //║ automatic results ║
         //╚═══════════════════╝
@@ -513,8 +518,8 @@ function solveIt() {
         //consoleLog(logAutoResults, 'exclude: ' + aryExcludeLetters);
         //consoleLog(logAutoResults, 'include: ' + aryIncludeLetters);
         //consoleLog(logAutoResults, 'pattern: ' + aryPatternLetters);
-        //consoleLog(logAutoResults, 'today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
-        let todayAnswer = aryAllAnswersOrdered[diffDays];
+        //consoleLog(logAutoResults, 'today\'s answer: ' + aryAllAnswersOrdered[diffDays - 1]);
+        let todayAnswer = aryAllAnswersOrdered[diffDays - 1];
         consoleLog(logAutoResults, 'todayAnswer: ' + todayAnswer);
         //╔═════════════════╗
         //║ automatic GREEN ║
