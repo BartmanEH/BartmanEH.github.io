@@ -163,7 +163,7 @@ const logErrorChecking = Boolean(false);  //logFilterRules = true: filter rules 
 const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
-const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
+const logDatePicker = Boolean(true);     //logDatePicker = true: date picker results debug messages on console
 const spoilerModePre = Boolean(true);    //spoilerMode = true: show Today's Answer in console
 const modeCanuckle = Boolean(false);      //modeCanuckle = true: play Canuckle, false: play Wordle
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
@@ -321,10 +321,10 @@ function treatAsUTC(date) {
   return result;
 }//treatAsUTC()
 function daysBetween(startDate, endDate) {
-  const daysBetween = Math.round((treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay);
+  const daysBetween = (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay;
   consoleLog(logDatePicker, 'daysBetween: ' + daysBetween);
-  consoleLog(logDatePicker, 'Math.round(daysBetween): ' + Math.round(daysBetween));
-  return Math.round(daysBetween);
+  consoleLog(logDatePicker, 'Math.floor(daysBetween): ' + Math.floor(daysBetween));
+  return Math.floor(daysBetween);
 }//daysBetween()
 function formatDate(dateValue) {                                    //helper function to format date to string
   let dd = dateValue.getDate();
