@@ -164,7 +164,7 @@ const logFiltered = Boolean(false);       //logFiltered = true: filtered debug m
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
 const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
-const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
+const spoilerModePre = Boolean(true);    //spoilerMode = true: show Today's Answer in console
 const modeCanuckle = Boolean(false);      //modeCanuckle = true: play Canuckle, false: play Wordle
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
@@ -235,8 +235,8 @@ function initialize() {                                             //set defaul
   for (let i = 0; i < aryAllAnswersOrdered.length - answerOffset; i++) {
     aryAllPossibleAnswers[i] = aryAllAnswersOrdered[i + answerOffset];
   }//for
-  consoleLog(spoilerModePre, 'Wordle Day #:' + (diffDays - 1) + ', Today\'s answer: ' + aryAllAnswersOrdered[diffDays - 1]);
-  consoleLog(spoilerModePre, 'Canuckle Day #:' + (diffDaysCanuckle - 1) + ', Today\'s Canuckle answer: ' + aryAllCanuckleAnswersOrdered[diffDaysCanuckle - 1]);
+  consoleLog(spoilerModePre, 'Wordle Day #:' + (diffDays) + ', Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
+  consoleLog(spoilerModePre, 'Canuckle Day #:' + (diffDaysCanuckle) + ', Today\'s Canuckle answer: ' + aryAllCanuckleAnswersOrdered[diffDaysCanuckle]);
   numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-input').valueAsDate = today;
@@ -257,7 +257,7 @@ function initialize() {                                             //set defaul
 //#endregion init
 //#region helper functions
 function copyrightClicked() {
-  toast('Wordle: ' + aryAllAnswersOrdered[diffDays - 1] + ', Canuckle: ' + aryAllCanuckleAnswersOrdered[diffDaysCanuckle - 1], 'bottom');
+  toast('Wordle: ' + aryAllAnswersOrdered[diffDays] + ', Canuckle: ' + aryAllCanuckleAnswersOrdered[diffDaysCanuckle], 'bottom');
 }//copyrightClicked()
 function dayNumChanged() {
   //diffDays = Math.floor((today - start) / oneDay);
@@ -283,7 +283,7 @@ function dayNumChanged() {
     fireworks = '';                                                 //'destroy' instance
     document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
-  consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays - 1]);
+  consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
   resetGrid();
 }//dayNumChanged()
 function datePickerChanged() {
@@ -312,7 +312,7 @@ function datePickerChanged() {
     document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
   consoleLog(logDatePicker, 'diffDays: ' + diffDays);
-  consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays - 1]);
+  consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
   resetGrid();
 }//datePickerChanged()
 function treatAsUTC(date) {
@@ -656,9 +656,9 @@ function solveIt() {
           consoleLog(logGeneral, 'diffDays: ' + diffDays);
           let boolStreakSaver = false;
           if (modeCanuckle) {
-            boolStreakSaver = streakSaver && (aryAllCanuckleAnswersOrdered.indexOf(guessWord) === diffDaysCanuckle - 1);
+            boolStreakSaver = streakSaver && (aryAllCanuckleAnswersOrdered.indexOf(guessWord) === diffDaysCanuckle);
           } else {
-            boolStreakSaver = streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays - 1);
+            boolStreakSaver = streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays);
           }//if else
           if (boolStreakSaver) {
             celebrate(guessPosition, 'Streak Saver easter egg!');
@@ -669,7 +669,7 @@ function solveIt() {
           }//if
         }//if else
       }//if
-      if (autoResults) {                //automatic results based on today's answer: aryAllAnswersOrdered[diffDays - 1]
+      if (autoResults) {                //automatic results based on today's answer: aryAllAnswersOrdered[diffDays]
         //╔═══════════════════╗
         //║ automatic results ║
         //╚═══════════════════╝
@@ -677,12 +677,12 @@ function solveIt() {
         //consoleLog(logAutoResults, 'exclude: ' + aryExcludeLetters);
         //consoleLog(logAutoResults, 'include: ' + aryIncludeLetters);
         //consoleLog(logAutoResults, 'pattern: ' + aryPatternLetters);
-        //consoleLog(logAutoResults, 'today\'s answer: ' + aryAllAnswersOrdered[diffDays - 1]);
+        //consoleLog(logAutoResults, 'today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
         let todayAnswer = '';
         if (modeCanuckle) {
-          todayAnswer = aryAllCanuckleAnswersOrdered[diffDaysCanuckle - 1];
+          todayAnswer = aryAllCanuckleAnswersOrdered[diffDaysCanuckle];
         } else {
-          todayAnswer = aryAllAnswersOrdered[diffDays - 1];
+          todayAnswer = aryAllAnswersOrdered[diffDays];
         }//if else
         consoleLog(logAutoResults, 'todayAnswer: ' + todayAnswer);
         //╔═════════════════╗
