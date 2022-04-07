@@ -558,6 +558,24 @@
         "SPREE",
         "THREE"
       ]
+    },
+    {
+      "id": "24",
+      "comment": "valid",
+      "guess": [
+        "SOARE",
+        "AORTA"
+      ],
+      "pattern": [
+        "BGYYB",
+        "YGGBB"
+      ],
+      "possibilities": [
+        "BORAX",
+        "CORAL",
+        "FORAY",
+        "MORAL"
+      ]
     }
   ]
 }

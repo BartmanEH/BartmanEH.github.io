@@ -157,12 +157,12 @@ const prevAnswers = Boolean(true);        //prevAnswers = true: include previous
 const logGeneral = Boolean(false);        //logGeneral = true: show general info messages on console
 const logTabbing = Boolean(false);        //logTabbing = true: show auto focus next tab debug info messages on console
 const logKeyboard = Boolean(false);       //logKeyboard = true: show keyboard/tap info messages on console
-const logFilterRules = Boolean(false);    //logFilterRules = true: filter rules debug messages on console
-const logFiltering = Boolean(false);      //logFiltering = true: filtering debug messages on console
-const logErrorChecking = Boolean(false);  //logFilterRules = true: filter rules debug messages on console
-const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
+const logFilterRules = Boolean(true);    //logFilterRules = true: filter rules debug messages on console
+const logFiltering = Boolean(true);      //logFiltering = true: filtering debug messages on console
+const logErrorChecking = Boolean(false);  //logErrorChecking = true: error checking rules debug messages on console
+const logFiltered = Boolean(true);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
-const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
+const logAutoResults = Boolean(true);    //logAutoResults = true: automated results debug messages on console
 const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const modeCanuckle = Boolean(false);      //modeCanuckle = true: play Canuckle, false: play Wordle
@@ -701,10 +701,11 @@ function solveIt() {
             //todayAnswer = todayAnswer.substring(0, todayAnswer.indexOf(gridLetter)) + '*' + todayAnswer.substring(todayAnswer.indexOf(gridLetter) + 1); //overwrite GREEN letter with *
             todayAnswer = todayAnswer.substring(0, guessWordCheckPosition - 1) + '*' + todayAnswer.substring(guessWordCheckPosition); //overwrite GREEN letter with *
             consoleLog(logAutoResults, 'todayAnswer: ' + todayAnswer);
-            if (aryIncludeLetters.includes(letter)) {               //already have this as Yellow letter
-              consoleLog(logFilterRules, 'splicing Yellow Include now Green ' + letter);
-              aryIncludeLetters.splice(aryIncludeLetters.indexOf(letter), 1); //remove Include letter
-              //aryBoolFirstYellowOccurrence[letter] = true;
+            //next 4 occurrences of 'letter' in next 4 lines changed to 'gridLetter' 22020407
+            if (aryIncludeLetters.includes(gridLetter)) {               //already have this as Yellow letter
+              consoleLog(logFilterRules, 'automatic Green: splicing Yellow Include now Green ' + gridLetter);
+              aryIncludeLetters.splice(aryIncludeLetters.indexOf(gridLetter), 1); //remove Include letter
+              //aryBoolFirstYellowOccurrence[gridLetter] = true;
               continue;
             }//if
           } else {                                                  //nuke any user clicks back to stateIncorrect
