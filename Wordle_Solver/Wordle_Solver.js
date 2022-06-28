@@ -144,7 +144,7 @@ const aryAllCanuckleAnswersOrdered = [
   'SCARF', /*135 (JUN 24)*/
   'BEADS', /*136 (JUN 25)*/
   'STORM', /*137 (JUN 26)*/
-  'CRAFT', /*138 (JUN 27)*/
+  'PIZZA', /*138 (JUN 27)*/
   'TAFFY', /*139 (JUN 28)*/
   'GREAT', /*140 (JUN 29)*/
   'PUCKS', /*141 (JUN 30)*/
