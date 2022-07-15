@@ -236,7 +236,7 @@ function initialize() {                                             //set defaul
     aryAllPossibleAnswers[i] = aryAllAnswersOrdered[i + answerOffset];
   }//for
   consoleLog(spoilerModePre, 'Wordle Day #:' + (diffDays) + ', Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
-  consoleLog(spoilerModePre, 'Canuckle Day #:' + (diffDaysCanuckle) + ', Today\'s Canuckle answer: ' + aryAllCanuckleAnswersOrdered[diffDaysCanuckle]);
+  //consoleLog(spoilerModePre, 'Canuckle Day #:' + (diffDaysCanuckle) + ', Today\'s Canuckle answer: ' + aryAllCanuckleAnswersOrdered[diffDaysCanuckle]);
   numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-input').valueAsDate = today;
@@ -257,7 +257,8 @@ function initialize() {                                             //set defaul
 //#endregion init
 //#region helper functions
 function copyrightClicked() {
-  toast('Wordle: ' + aryAllAnswersOrdered[diffDays] + ', Canuckle: ' + aryAllCanuckleAnswersOrdered[diffDaysCanuckle], 'bottom');
+  //toast('Wordle: ' + aryAllAnswersOrdered[diffDays] + ', Canuckle: ' + aryAllCanuckleAnswersOrdered[diffDaysCanuckle], 'bottom');
+  toast('Wordle: ' + aryAllAnswersOrdered[diffDays], 'bottom');
 }//copyrightClicked()
 function dayNumChanged() {
   //diffDays = Math.floor((today - start) / oneDay);
