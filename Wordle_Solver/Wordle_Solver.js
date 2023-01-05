@@ -5,151 +5,153 @@ const aryAllPossibleGuesses = [
 const aryAllAnswersOrdered = [
   'CIGAR', 'REBUT', 'SISSY', 'HUMPH', 'AWAKE', 'BLUSH', 'FOCAL', 'EVADE', 'NAVAL', 'SERVE', 'HEATH', 'DWARF', 'MODEL', 'KARMA', 'STINK', 'GRADE', 'QUIET', 'BENCH', 'ABATE', 'FEIGN', 'MAJOR', 'DEATH', 'FRESH', 'CRUST', 'STOOL', 'COLON', 'ABASE', 'MARRY', 'REACT', 'BATTY', 'PRIDE', 'FLOSS', 'HELIX', 'CROAK', 'STAFF', 'PAPER', 'UNFED', 'WHELP', 'TRAWL', 'OUTDO', 'ADOBE', 'CRAZY', 'SOWER', 'REPAY', 'DIGIT', 'CRATE', 'CLUCK', 'SPIKE', 'MIMIC', 'POUND', 'MAXIM', 'LINEN', 'UNMET', 'FLESH', 'BOOBY', 'FORTH', 'FIRST', 'STAND', 'BELLY', 'IVORY', 'SEEDY', 'PRINT', 'YEARN', 'DRAIN', 'BRIBE', 'STOUT', 'PANEL', 'CRASS', 'FLUME', 'OFFAL', 'AGREE', 'ERROR', 'SWIRL', 'ARGUE', 'BLEED', 'DELTA', 'FLICK', 'TOTEM', 'WOOER', 'FRONT', 'SHRUB', 'PARRY', 'BIOME', 'LAPEL', 'START', 'GREET', 'GONER', 'GOLEM', 'LUSTY', 'LOOPY', 'ROUND', 'AUDIT', 'LYING', 'GAMMA', 'LABOR', 'ISLET', 'CIVIC', 'FORGE', 'CORNY', 'MOULT', 'BASIC', 'SALAD', 'AGATE', 'SPICY', 'SPRAY', 'ESSAY', 'FJORD', 'SPEND', 'KEBAB', 'GUILD', 'ABACK', 'MOTOR', 'ALONE', 'HATCH', 'HYPER', 'THUMB', 'DOWRY', 'OUGHT', 'BELCH', 'DUTCH', 'PILOT', 'TWEED', 'COMET', 'JAUNT', 'ENEMA', 'STEED', 'ABYSS', 'GROWL', 'FLING', 'DOZEN', 'BOOZY', 'ERODE', 'WORLD', 'GOUGE', 'CLICK', 'BRIAR', 'GREAT', 'ALTAR', 'PULPY', 'BLURT', 'COAST', 'DUCHY', 'GROIN', 'FIXER', 'GROUP', 'ROGUE', 'BADLY', 'SMART', 'PITHY', 'GAUDY', 'CHILL', 'HERON', 'VODKA', 'FINER', 'SURER', 'RADIO', 'ROUGE', 'PERCH', 'RETCH', 'WROTE', 'CLOCK', 'TILDE', 'STORE', 'PROVE', 'BRING', 'SOLVE', 'CHEAT', 'GRIME', 'EXULT', 'USHER', 'EPOCH', 'TRIAD', 'BREAK', 'RHINO', 'VIRAL', 'CONIC', 'MASSE', 'SONIC', 'VITAL', 'TRACE', 'USING', 'PEACH', 'CHAMP', 'BATON', 'BRAKE', 'PLUCK', 'CRAZE', 'GRIPE', 'WEARY', 'PICKY', 'ACUTE', 'FERRY', 'ASIDE', 'TAPIR', 'TROLL', 'UNIFY', 'REBUS', 'BOOST', 'TRUSS', 'SIEGE', 'TIGER', 'BANAL', 'SLUMP', 'CRANK', 'GORGE', 'QUERY', 'DRINK', 'FAVOR', 'ABBEY', 'TANGY', 'PANIC', 'SOLAR', 'SHIRE', 'PROXY', 'POINT', 'ROBOT', 'PRICK', 'WINCE', 'CRIMP', 'KNOLL', 'SUGAR', 'WHACK', 'MOUNT', 'PERKY', 'COULD', 'WRUNG', 'LIGHT', 'THOSE', 'MOIST', 'SHARD', 'PLEAT', 'ALOFT', 'SKILL', 'ELDER', 'FRAME', 'HUMOR', 'PAUSE', 'ULCER', 'ULTRA', 'ROBIN', 'CYNIC', 'AROMA', 'CAULK', 'SHAKE', 'DODGE', 'SWILL', 'TACIT', 'OTHER', 'THORN', 'TROVE', 'BLOKE', 'VIVID', 'SPILL', 'CHANT', 'CHOKE', 'RUPEE', 'NASTY', 'MOURN', 'AHEAD', 'BRINE', 'CLOTH', 'HOARD', 'SWEET', 'MONTH', 'LAPSE', 'WATCH', 'TODAY', 'FOCUS', 'SMELT', 'TEASE', 'CATER', 'MOVIE', 'SAUTE', 'ALLOW', 'RENEW', 'THEIR', 'SLOSH', 'PURGE', 'CHEST', 'DEPOT', 'EPOXY', 'NYMPH', 'FOUND', 'SHALL', 'STOVE', 'LOWLY', 'SNOUT', 'TROPE', 'FEWER', 'SHAWL', 'NATAL', 'COMMA', 'FORAY', 'SCARE', 'STAIR', 'BLACK', 'SQUAD', 'ROYAL', 'CHUNK', 'MINCE', 'SHAME', 'CHEEK', 'AMPLE', 'FLAIR', 'FOYER', 'CARGO', 'OXIDE', 'PLANT', 'OLIVE', 'INERT', 'ASKEW', 'HEIST', 'SHOWN', 'ZESTY', 'TRASH', 'LARVA', 'FORGO', 'STORY', 'HAIRY', 'TRAIN', 'HOMER', 'BADGE', 'MIDST', 'CANNY', 'SHINE', 'GECKO', 'FARCE', 'SLUNG', 'TIPSY', 'METAL', 'YIELD', 'DELVE', 'BEING', 'SCOUR', 'GLASS', 'GAMER', 'SCRAP', 'MONEY', 'HINGE', 'ALBUM', 'VOUCH', 'ASSET', 'TIARA', 'CREPT', 'BAYOU', 'ATOLL', 'MANOR', 'CREAK', 'SHOWY', 'PHASE', 'FROTH', 'DEPTH', 'GLOOM', 'FLOOD', 'TRAIT', 'GIRTH', 'PIETY', 'GOOSE', 'FLOAT', 'DONOR', 'ATONE', 'PRIMO', 'APRON', 'BLOWN', 'CACAO', 'LOSER', 'INPUT', 'GLOAT', 'AWFUL', 'BRINK', 'SMITE', 'BEADY', 'RUSTY', 'RETRO', 'DROLL', 'GAWKY', 'HUTCH', 'PINTO', 'EGRET', 'LILAC', 'SEVER', 'FIELD', 'FLUFF', 'AGAPE', 'VOICE', 'STEAD', 'BERTH', 'MADAM', 'NIGHT', 'BLAND', 'LIVER', 'WEDGE', 'ROOMY', 'WACKY', 'FLOCK', 'ANGRY', 'TRITE', 'APHID', 'TRYST', 'MIDGE', 'POWER', 'ELOPE', 'CINCH', 'MOTTO', 'STOMP', 'UPSET', 'BLUFF', 'CRAMP', 'QUART', 'COYLY', 'YOUTH', 'RHYME', 'BUGGY', 'ALIEN', 'SMEAR', 'UNFIT', 'PATTY', 'CLING', 'GLEAN', 'LABEL', 'HUNKY', 'KHAKI', 'POKER', 'GRUEL', 'TWICE', 'TWANG', 'SHRUG', 'TREAT', 'WASTE', 'MERIT', 'WOVEN', 'NEEDY', 'CLOWN', 'IRONY', 'RUDER', 'GAUZE', 'CHIEF', 'ONSET', 'PRIZE', 'FUNGI', 'CHARM', 'GULLY', 'INTER', 'WHOOP', 'TAUNT', 'LEERY', 'CLASS', 'THEME', 'LOFTY', 'TIBIA', 'BOOZE', 'ALPHA', 'THYME', 'DOUBT', 'PARER', 'CHUTE', 'STICK', 'TRICE', 'ALIKE', 'RECAP', 'SAINT', 'GLORY', 'GRATE', 'ADMIT', 'BRISK', 'SOGGY', 'USURP', 'SCALD', 'SCORN', 'LEAVE', 'TWINE', 'STING', 'BOUGH', 'MARSH', 'SLOTH', 'DANDY', 'VIGOR', 'HOWDY', 'ENJOY', 'VALID', 'IONIC', 'EQUAL', 'FLOOR', 'CATCH', 'SPADE', 'STEIN', 'EXIST', 'QUIRK', 'DENIM', 'GROVE', 'SPIEL', 'MUMMY', 'FAULT', 'FOGGY', 'FLOUT', 'CARRY', 'SNEAK', 'LIBEL', 'WALTZ', 'APTLY', 'PINEY', 'INEPT', 'ALOUD', 'PHOTO', 'DREAM', 'STALE', 'UNITE', 'SNARL', 'BAKER', 'THERE', 'GLYPH', 'POOCH', 'HIPPY', 'SPELL', 'FOLLY', 'LOUSE', 'GULCH', 'VAULT', 'GODLY', 'THREW', 'FLEET', 'GRAVE', 'INANE', 'SHOCK', 'CRAVE', 'SPITE', 'VALVE', 'SKIMP', 'CLAIM', 'RAINY', 'MUSTY', 'PIQUE', 'DADDY', 'QUASI', 'ARISE', 'AGING', 'VALET', 'OPIUM', 'AVERT', 'STUCK', 'RECUT', 'MULCH', 'GENRE', 'PLUME', 'RIFLE', 'COUNT', 'INCUR', 'TOTAL', 'WREST', 'MOCHA', 'DETER', 'STUDY', 'LOVER', 'SAFER', 'RIVET', 'FUNNY', 'SMOKE', 'MOUND', 'UNDUE', 'SEDAN', 'PAGAN', 'SWINE', 'GUILE', 'GUSTY', 'EQUIP', 'TOUGH', 'CANOE', 'CHAOS', 'COVET', 'HUMAN', 'UDDER', 'LUNCH', 'BLAST', 'STRAY', 'MANGA', 'MELEE', 'LEFTY', 'QUICK', 'PASTE', 'GIVEN', 'OCTET', 'RISEN', 'GROAN', 'LEAKY', 'GRIND', 'CARVE', 'LOOSE', 'SADLY', 'SPILT', 'APPLE', 'SLACK', 'HONEY', 'FINAL', 'SHEEN', 'EERIE', 'MINTY', 'SLICK', 'DERBY', 'WHARF', 'SPELT', 'COACH', 'ERUPT', 'SINGE', 'PRICE', 'SPAWN', 'FAIRY', 'JIFFY', 'FILMY', 'STACK', 'CHOSE', 'SLEEP', 'ARDOR', 'NANNY', 'NIECE', 'WOOZY', 'HANDY', 'GRACE', 'DITTO', 'STANK', 'CREAM', 'USUAL', 'DIODE', 'VALOR', 'ANGLE', 'NINJA', 'MUDDY', 'CHASE', 'REPLY', 'PRONE', 'SPOIL', 'HEART', 'SHADE', 'DINER', 'ARSON', 'ONION', 'SLEET', 'DOWEL', 'COUCH', 'PALSY', 'BOWEL', 'SMILE', 'EVOKE', 'CREEK', 'LANCE', 'EAGLE', 'IDIOT', 'SIREN', 'BUILT', 'EMBED', 'AWARD', 'DROSS', 'ANNUL', 'GOODY', 'FROWN', 'PATIO', 'LADEN', 'HUMID', 'ELITE', 'LYMPH', 'EDIFY', 'MIGHT', 'RESET', 'VISIT', 'GUSTO', 'PURSE', 'VAPOR', 'CROCK', 'WRITE', 'SUNNY', 'LOATH', 'CHAFF', 'SLIDE', 'QUEER', 'VENOM', 'STAMP', 'SORRY', 'STILL', 'ACORN', 'APING', 'PUSHY', 'TAMER', 'HATER', 'MANIA', 'AWOKE', 'BRAWN', 'SWIFT', 'EXILE', 'BIRCH', 'LUCKY', 'FREER', 'RISKY', 'GHOST', 'PLIER', 'LUNAR', 'WINCH', 'SNARE', 'NURSE', 'HOUSE', 'BORAX', 'NICER', 'LURCH', 'EXALT', 'ABOUT', 'SAVVY', 'TOXIN', 'TUNIC', 'PRIED', 'INLAY', 'CHUMP', 'LANKY', 'CRESS', 'EATER', 'ELUDE', 'CYCLE', 'KITTY', 'BOULE', 'MORON', 'TENET', 'PLACE', 'LOBBY', 'PLUSH', 'VIGIL', 'INDEX', 'BLINK', 'CLUNG', 'QUALM', 'CROUP', 'CLINK', 'JUICY', 'STAGE', 'DECAY', 'NERVE', 'FLIER', 'SHAFT', 'CROOK', 'CLEAN', 'CHINA', 'RIDGE', 'VOWEL', 'GNOME', 'SNUCK', 'ICING', 'SPINY', 'RIGOR', 'SNAIL', 'FLOWN', 'RABID', 'PROSE', 'THANK', 'POPPY', 'BUDGE', 'FIBER', 'MOLDY', 'DOWDY', 'KNEEL', 'TRACK', 'CADDY', 'QUELL', 'DUMPY', 'PALER', 'SWORE', 'REBAR', 'SCUBA', 'SPLAT', 'FLYER', 'HORNY', 'MASON', 'DOING', 'OZONE', 'AMPLY', 'MOLAR', 'OVARY', 'BESET', 'QUEUE', 'CLIFF', 'MAGIC', 'TRUCE', 'SPORT', 'FRITZ', 'EDICT', 'TWIRL', 'VERSE', 'LLAMA', 'EATEN', 'RANGE', 'WHISK', 'HOVEL', 'REHAB', 'MACAW', 'SIGMA', 'SPOUT', 'VERVE', 'SUSHI', 'DYING', 'FETID', 'BRAIN', 'BUDDY', 'THUMP', 'SCION', 'CANDY', 'CHORD', 'BASIN', 'MARCH', 'CROWD', 'ARBOR', 'GAYLY', 'MUSKY', 'STAIN', 'DALLY', 'BLESS', 'BRAVO', 'STUNG', 'TITLE', 'RULER', 'KIOSK', 'BLOND', 'ENNUI', 'LAYER', 'FLUID', 'TATTY', 'SCORE', 'CUTIE', 'ZEBRA', 'BARGE', 'MATEY', 'BLUER', 'AIDER', 'SHOOK', 'RIVER', 'PRIVY', 'BETEL', 'FRISK', 'BONGO', 'BEGUN', 'AZURE', 'WEAVE', 'GENIE', 'SOUND', 'GLOVE', 'BRAID', 'SCOPE', 'WRYLY', 'ROVER', 'ASSAY', 'OCEAN', 'BLOOM', 'IRATE', 'LATER', 'WOKEN', 'SILKY', 'WRECK', 'DWELT', 'SLATE', 'SMACK', 'SOLID', 'AMAZE', 'HAZEL', 'WRIST', 'JOLLY', 'GLOBE', 'FLINT', 'ROUSE', 'CIVIL', 'VISTA', 'RELAX', 'COVER', 'ALIVE', 'BEECH', 'JETTY', 'BLISS', 'VOCAL', 'OFTEN', 'DOLLY', 'EIGHT', 'JOKER', 'SINCE', 'EVENT', 'ENSUE', 'SHUNT', 'DIVER', 'POSER', 'WORST', 'SWEEP', 'ALLEY', 'CREED', 'ANIME', 'LEAFY', 'BOSOM', 'DUNCE', 'STARE', 'PUDGY', 'WAIVE', 'CHOIR', 'STOOD', 'SPOKE', 'OUTGO', 'DELAY', 'BILGE', 'IDEAL', 'CLASP', 'SEIZE', 'HOTLY', 'LAUGH', 'SIEVE', 'BLOCK', 'MEANT', 'GRAPE', 'NOOSE', 'HARDY', 'SHIED', 'DRAWL', 'DAISY', 'PUTTY', 'STRUT', 'BURNT', 'TULIP', 'CRICK', 'IDYLL', 'VIXEN', 'FUROR', 'GEEKY', 'COUGH', 'NAIVE', 'SHOAL', 'STORK', 'BATHE', 'AUNTY', 'CHECK', 'PRIME', 'BRASS', 'OUTER', 'FURRY', 'RAZOR', 'ELECT', 'EVICT', 'IMPLY', 'DEMUR', 'QUOTA', 'HAVEN', 'CAVIL', 'SWEAR', 'CRUMP', 'DOUGH', 'GAVEL', 'WAGON', 'SALON', 'NUDGE', 'HAREM', 'PITCH', 'SWORN', 'PUPIL', 'EXCEL', 'STONY', 'CABIN', 'UNZIP', 'QUEEN', 'TROUT', 'POLYP', 'EARTH', 'STORM', 'UNTIL', 'TAPER', 'ENTER', 'CHILD', 'ADOPT', 'MINOR', 'FATTY', 'HUSKY', 'BRAVE', 'FILET', 'SLIME', 'GLINT', 'TREAD', 'STEAL', 'REGAL', 'GUEST', 'EVERY', 'MURKY', 'SHARE', 'SPORE', 'HOIST', 'BUXOM', 'INNER', 'OTTER', 'DIMLY', 'LEVEL', 'SUMAC', 'DONUT', 'STILT', 'ARENA', 'SHEET', 'SCRUB', 'FANCY', 'SLIMY', 'PEARL', 'SILLY', 'PORCH', 'DINGO', 'SEPIA', 'AMBLE', 'SHADY', 'BREAD', 'FRIAR', 'REIGN', 'DAIRY', 'QUILL', 'CROSS', 'BROOD', 'TUBER', 'SHEAR', 'POSIT', 'BLANK', 'VILLA', 'SHANK', 'PIGGY', 'FREAK', 'WHICH', 'AMONG', 'FECAL', 'SHELL', 'WOULD', 'ALGAE', 'LARGE', 'RABBI', 'AGONY', 'AMUSE', 'BUSHY', 'COPSE', 'SWOON', 'KNIFE', 'POUCH', 'ASCOT', 'PLANE', 'CROWN', 'URBAN', 'SNIDE', 'RELAY', 'ABIDE', 'VIOLA', 'RAJAH', 'STRAW', 'DILLY', 'CRASH', 'AMASS', 'THIRD', 'TRICK', 'TUTOR', 'WOODY', 'BLURB', 'GRIEF', 'DISCO', 'WHERE', 'SASSY', 'BEACH', 'SAUNA', 'COMIC', 'CLUED', 'CREEP', 'CASTE', 'GRAZE', 'SNUFF', 'FROCK', 'GONAD', 'DRUNK', 'PRONG', 'LURID', 'STEEL', 'HALVE', 'BUYER', 'VINYL', 'UTILE', 'SMELL', 'ADAGE', 'WORRY', 'TASTY', 'LOCAL', 'TRADE', 'FINCH', 'ASHEN', 'MODAL', 'GAUNT', 'CLOVE', 'ENACT', 'ADORN', 'ROAST', 'SPECK', 'SHEIK', 'MISSY', 'GRUNT', 'SNOOP', 'PARTY', 'TOUCH', 'MAFIA', 'EMCEE', 'ARRAY', 'SOUTH', 'VAPID', 'JELLY', 'SKULK', 'ANGST', 'TUBAL', 'LOWER', 'CREST', 'SWEAT', 'CYBER', 'ADORE', 'TARDY', 'SWAMI', 'NOTCH', 'GROOM', 'ROACH', 'HITCH', 'YOUNG', 'ALIGN', 'READY', 'FROND', 'STRAP', 'PUREE', 'REALM', 'VENUE', 'SWARM', 'OFFER', 'SEVEN', 'DRYER', 'DIARY', 'DRYLY', 'DRANK', 'ACRID', 'HEADY', 'THETA', 'JUNTO', 'PIXIE', 'QUOTH', 'BONUS', 'SHALT', 'PENNE', 'AMEND', 'DATUM', 'BUILD', 'PIANO', 'SHELF', 'LODGE', 'SUING', 'REARM', 'CORAL', 'RAMEN', 'WORTH', 'PSALM', 'INFER', 'OVERT', 'MAYOR', 'OVOID', 'GLIDE', 'USAGE', 'POISE', 'RANDY', 'CHUCK', 'PRANK', 'FISHY', 'TOOTH', 'ETHER', 'DROVE', 'IDLER', 'SWATH', 'STINT', 'WHILE', 'BEGAT', 'APPLY', 'SLANG', 'TAROT', 'RADAR', 'CREDO', 'AWARE', 'CANON', 'SHIFT', 'TIMER', 'BYLAW', 'SERUM', 'THREE', 'STEAK', 'ILIAC', 'SHIRK', 'BLUNT', 'PUPPY', 'PENAL', 'JOIST', 'BUNNY', 'SHAPE', 'BEGET', 'WHEEL', 'ADEPT', 'STUNT', 'STOLE', 'TOPAZ', 'CHORE', 'FLUKE', 'AFOOT', 'BLOAT', 'BULLY', 'DENSE', 'CAPER', 'SNEER', 'BOXER', 'JUMBO', 'LUNGE', 'SPACE', 'AVAIL', 'SHORT', 'SLURP', 'LOYAL', 'FLIRT', 'PIZZA', 'CONCH', 'TEMPO', 'DROOP', 'PLATE', 'BIBLE', 'PLUNK', 'AFOUL', 'SAVOY', 'STEEP', 'AGILE', 'STAKE', 'DWELL', 'KNAVE', 'BEARD', 'AROSE', 'MOTIF', 'SMASH', 'BROIL', 'GLARE', 'SHOVE', 'BAGGY', 'MAMMY', 'SWAMP', 'ALONG', 'RUGBY', 'WAGER', 'QUACK', 'SQUAT', 'SNAKY', 'DEBIT', 'MANGE', 'SKATE', 'NINTH', 'JOUST', 'TRAMP', 'SPURN', 'MEDAL', 'MICRO', 'REBEL', 'FLANK', 'LEARN', 'NADIR', 'MAPLE', 'COMFY', 'REMIT', 'GRUFF', 'ESTER', 'LEAST', 'MOGUL', 'FETCH', 'CAUSE', 'OAKEN', 'AGLOW', 'MEATY', 'GAFFE', 'SHYLY', 'RACER', 'PROWL', 'THIEF', 'STERN', 'POESY', 'ROCKY', 'TWEET', 'WAIST', 'SPIRE', 'GROPE', 'HAVOC', 'PATSY', 'TRULY', 'FORTY', 'DEITY', 'UNCLE', 'SWISH', 'GIVER', 'PREEN', 'BEVEL', 'LEMUR', 'DRAFT', 'SLOPE', 'ANNOY', 'LINGO', 'BLEAK', 'DITTY', 'CURLY', 'CEDAR', 'DIRGE', 'GROWN', 'HORDE', 'DROOL', 'SHUCK', 'CRYPT', 'CUMIN', 'STOCK', 'GRAVY', 'LOCUS', 'WIDER', 'BREED', 'QUITE', 'CHAFE', 'CACHE', 'BLIMP', 'DEIGN', 'FIEND', 'LOGIC', 'CHEAP', 'ELIDE', 'RIGID', 'FALSE', 'RENAL', 'PENCE', 'ROWDY', 'SHOOT', 'BLAZE', 'ENVOY', 'POSSE', 'BRIEF', 'NEVER', 'ABORT', 'MOUSE', 'MUCKY', 'SULKY', 'FIERY', 'MEDIA', 'TRUNK', 'YEAST', 'CLEAR', 'SKUNK', 'SCALP', 'BITTY', 'CIDER', 'KOALA', 'DUVET', 'SEGUE', 'CREME', 'SUPER', 'GRILL', 'AFTER', 'OWNER', 'EMBER', 'REACH', 'NOBLY', 'EMPTY', 'SPEED', 'GIPSY', 'RECUR', 'SMOCK', 'DREAD', 'MERGE', 'BURST', 'KAPPA', 'AMITY', 'SHAKY', 'HOVER', 'CAROL', 'SNORT', 'SYNOD', 'FAINT', 'HAUNT', 'FLOUR', 'CHAIR', 'DETOX', 'SHREW', 'TENSE', 'PLIED', 'QUARK', 'BURLY', 'NOVEL', 'WAXEN', 'STOIC', 'JERKY', 'BLITZ', 'BEEFY', 'LYRIC', 'HUSSY', 'TOWEL', 'QUILT', 'BELOW', 'BINGO', 'WISPY', 'BRASH', 'SCONE', 'TOAST', 'EASEL', 'SAUCY', 'VALUE', 'SPICE', 'HONOR', 'ROUTE', 'SHARP', 'BAWDY', 'RADII', 'SKULL', 'PHONY', 'ISSUE', 'LAGER', 'SWELL', 'URINE', 'GASSY', 'TRIAL', 'FLORA', 'UPPER', 'LATCH', 'WIGHT', 'BRICK', 'RETRY', 'HOLLY', 'DECAL', 'GRASS', 'SHACK', 'DOGMA', 'MOVER', 'DEFER', 'SOBER', 'OPTIC', 'CRIER', 'VYING', 'NOMAD', 'FLUTE', 'HIPPO', 'SHARK', 'DRIER', 'OBESE', 'BUGLE', 'TAWNY', 'CHALK', 'FEAST', 'RUDDY', 'PEDAL', 'SCARF', 'CRUEL', 'BLEAT', 'TIDAL', 'SLUSH', 'SEMEN', 'WINDY', 'DUSTY', 'SALLY', 'IGLOO', 'NERDY', 'JEWEL', 'SHONE', 'WHALE', 'HYMEN', 'ABUSE', 'FUGUE', 'ELBOW', 'CRUMB', 'PANSY', 'WELSH', 'SYRUP', 'TERSE', 'SUAVE', 'GAMUT', 'SWUNG', 'DRAKE', 'FREED', 'AFIRE', 'SHIRT', 'GROUT', 'ODDLY', 'TITHE', 'PLAID', 'DUMMY', 'BROOM', 'BLIND', 'TORCH', 'ENEMY', 'AGAIN', 'TYING', 'PESKY', 'ALTER', 'GAZER', 'NOBLE', 'ETHOS', 'BRIDE', 'EXTOL', 'DECOR', 'HOBBY', 'BEAST', 'IDIOM', 'UTTER', 'THESE', 'SIXTH', 'ALARM', 'ERASE', 'ELEGY', 'SPUNK', 'PIPER', 'SCALY', 'SCOLD', 'HEFTY', 'CHICK', 'SOOTY', 'CANAL', 'WHINY', 'SLASH', 'QUAKE', 'JOINT', 'SWEPT', 'PRUDE', 'HEAVY', 'WIELD', 'FEMME', 'LASSO', 'MAIZE', 'SHALE', 'SCREW', 'SPREE', 'SMOKY', 'WHIFF', 'SCENT', 'GLADE', 'SPENT', 'PRISM', 'STOKE', 'RIPER', 'ORBIT', 'COCOA', 'GUILT', 'HUMUS', 'SHUSH', 'TABLE', 'SMIRK', 'WRONG', 'NOISY', 'ALERT', 'SHINY', 'ELATE', 'RESIN', 'WHOLE', 'HUNCH', 'PIXEL', 'POLAR', 'HOTEL', 'SWORD', 'CLEAT', 'MANGO', 'RUMBA', 'PUFFY', 'FILLY', 'BILLY', 'LEASH', 'CLOUT', 'DANCE', 'OVATE', 'FACET', 'CHILI', 'PAINT', 'LINER', 'CURIO', 'SALTY', 'AUDIO', 'SNAKE', 'FABLE', 'CLOAK', 'NAVEL', 'SPURT', 'PESTO', 'BALMY', 'FLASH', 'UNWED', 'EARLY', 'CHURN', 'WEEDY', 'STUMP', 'LEASE', 'WITTY', 'WIMPY', 'SPOOF', 'SANER', 'BLEND', 'SALSA', 'THICK', 'WARTY', 'MANIC', 'BLARE', 'SQUIB', 'SPOON', 'PROBE', 'CREPE', 'KNACK', 'FORCE', 'DEBUT', 'ORDER', 'HASTE', 'TEETH', 'AGENT', 'WIDEN', 'ICILY', 'SLICE', 'INGOT', 'CLASH', 'JUROR', 'BLOOD', 'ABODE', 'THROW', 'UNITY', 'PIVOT', 'SLEPT', 'TROOP', 'SPARE', 'SEWER', 'PARSE', 'MORPH', 'CACTI', 'TACKY', 'SPOOL', 'DEMON', 'MOODY', 'ANNEX', 'BEGIN', 'FUZZY', 'PATCH', 'WATER', 'LUMPY', 'ADMIN', 'OMEGA', 'LIMIT', 'TABBY', 'MACHO', 'AISLE', 'SKIFF', 'BASIS', 'PLANK', 'VERGE', 'BOTCH', 'CRAWL', 'LOUSY', 'SLAIN', 'CUBIC', 'RAISE', 'WRACK', 'GUIDE', 'FOIST', 'CAMEO', 'UNDER', 'ACTOR', 'REVUE', 'FRAUD', 'HARPY', 'SCOOP', 'CLIMB', 'REFER', 'OLDEN', 'CLERK', 'DEBAR', 'TALLY', 'ETHIC', 'CAIRN', 'TULLE', 'GHOUL', 'HILLY', 'CRUDE', 'APART', 'SCALE', 'OLDER', 'PLAIN', 'SPERM', 'BRINY', 'ABBOT', 'RERUN', 'QUEST', 'CRISP', 'BOUND', 'BEFIT', 'DRAWN', 'SUITE', 'ITCHY', 'CHEER', 'BAGEL', 'GUESS', 'BROAD', 'AXIOM', 'CHARD', 'CAPUT', 'LEANT', 'HARSH', 'CURSE', 'PROUD', 'SWING', 'OPINE', 'TASTE', 'LUPUS', 'GUMBO', 'MINER', 'GREEN', 'CHASM', 'LIPID', 'TOPIC', 'ARMOR', 'BRUSH', 'CRANE', 'MURAL', 'ABLED', 'HABIT', 'BOSSY', 'MAKER', 'DUSKY', 'DIZZY', 'LITHE', 'BROOK', 'JAZZY', 'FIFTY', 'SENSE', 'GIANT', 'SURLY', 'LEGAL', 'FATAL', 'FLUNK', 'BEGAN', 'PRUNE', 'SMALL', 'SLANT', 'SCOFF', 'TORUS', 'NINNY', 'COVEY', 'VIPER', 'TAKEN', 'MORAL', 'VOGUE', 'OWING', 'TOKEN', 'ENTRY', 'BOOTH', 'VOTER', 'CHIDE', 'ELFIN', 'EBONY', 'NEIGH', 'MINIM', 'MELON', 'KNEED', 'DECOY', 'VOILA', 'ANKLE', 'ARROW', 'MUSHY', 'TRIBE', 'CEASE', 'EAGER', 'BIRTH', 'GRAPH', 'ODDER', 'TERRA', 'WEIRD', 'TRIED', 'CLACK', 'COLOR', 'ROUGH', 'WEIGH', 'UNCUT', 'LADLE', 'STRIP', 'CRAFT', 'MINUS', 'DICEY', 'TITAN', 'LUCID', 'VICAR', 'DRESS', 'DITCH', 'GYPSY', 'PASTA', 'TAFFY', 'FLAME', 'SWOOP', 'ALOOF', 'SIGHT', 'BROKE', 'TEARY', 'CHART', 'SIXTY', 'WORDY', 'SHEER', 'LEPER', 'NOSEY', 'BULGE', 'SAVOR', 'CLAMP', 'FUNKY', 'FOAMY', 'TOXIC', 'BRAND', 'PLUMB', 'DINGY', 'BUTTE', 'DRILL', 'TRIPE', 'BICEP', 'TENOR', 'KRILL', 'WORSE', 'DRAMA', 'HYENA', 'THINK', 'RATIO', 'COBRA', 'BASIL', 'SCRUM', 'BUSED', 'PHONE', 'COURT', 'CAMEL', 'PROOF', 'HEARD', 'ANGEL', 'PETAL', 'POUTY', 'THROB', 'MAYBE', 'FETAL', 'SPRIG', 'SPINE', 'SHOUT', 'CADET', 'MACRO', 'DODGY', 'SATYR', 'RARER', 'BINGE', 'TREND', 'NUTTY', 'LEAPT', 'AMISS', 'SPLIT', 'MYRRH', 'WIDTH', 'SONAR', 'TOWER', 'BARON', 'FEVER', 'WAVER', 'SPARK', 'BELIE', 'SLOOP', 'EXPEL', 'SMOTE', 'BALER', 'ABOVE', 'NORTH', 'WAFER', 'SCANT', 'FRILL', 'AWASH', 'SNACK', 'SCOWL', 'FRAIL', 'DRIFT', 'LIMBO', 'FENCE', 'MOTEL', 'OUNCE', 'WREAK', 'REVEL', 'TALON', 'PRIOR', 'KNELT', 'CELLO', 'FLAKE', 'DEBUG', 'ANODE', 'CRIME', 'SALVE', 'SCOUT', 'IMBUE', 'PINKY', 'STAVE', 'VAGUE', 'CHOCK', 'FIGHT', 'VIDEO', 'STONE', 'TEACH', 'CLEFT', 'FROST', 'PRAWN', 'BOOTY', 'TWIST', 'APNEA', 'STIFF', 'PLAZA', 'LEDGE', 'TWEAK', 'BOARD', 'GRANT', 'MEDIC', 'BACON', 'CABLE', 'BRAWL', 'SLUNK', 'RASPY', 'FORUM', 'DRONE', 'WOMEN', 'MUCUS', 'BOAST', 'TODDY', 'COVEN', 'TUMOR', 'TRUER', 'WRATH', 'STALL', 'STEAM', 'AXIAL', 'PURER', 'DAILY', 'TRAIL', 'NICHE', 'MEALY', 'JUICE', 'NYLON', 'PLUMP', 'MERRY', 'FLAIL', 'PAPAL', 'WHEAT', 'BERRY', 'COWER', 'ERECT', 'BRUTE', 'LEGGY', 'SNIPE', 'SINEW', 'SKIER', 'PENNY', 'JUMPY', 'RALLY', 'UMBRA', 'SCARY', 'MODEM', 'GROSS', 'AVIAN', 'GREED', 'SATIN', 'TONIC', 'PARKA', 'SNIFF', 'LIVID', 'STARK', 'TRUMP', 'GIDDY', 'REUSE', 'TABOO', 'AVOID', 'QUOTE', 'DEVIL', 'LIKEN', 'GLOSS', 'GAYER', 'BERET', 'NOISE', 'GLAND', 'DEALT', 'SLING', 'RUMOR', 'OPERA', 'THIGH', 'TONGA', 'FLARE', 'WOUND', 'WHITE', 'BULKY', 'ETUDE', 'HORSE', 'CIRCA', 'PADDY', 'INBOX', 'FIZZY', 'GRAIN', 'EXERT', 'SURGE', 'GLEAM', 'BELLE', 'SALVO', 'CRUSH', 'FRUIT', 'SAPPY', 'TAKER', 'TRACT', 'OVINE', 'SPIKY', 'FRANK', 'REEDY', 'FILTH', 'SPASM', 'HEAVE', 'MAMBO', 'RIGHT', 'CLANK', 'TRUST', 'LUMEN', 'BORNE', 'SPOOK', 'SAUCE', 'AMBER', 'LATHE', 'CARAT', 'CORER', 'DIRTY', 'SLYLY', 'AFFIX', 'ALLOY', 'TAINT', 'SHEEP', 'KINKY', 'WOOLY', 'MAUVE', 'FLUNG', 'YACHT', 'FRIED', 'QUAIL', 'BRUNT', 'GRIMY', 'CURVY', 'CAGEY', 'RINSE', 'DEUCE', 'STATE', 'GRASP', 'MILKY', 'BISON', 'GRAFT', 'SANDY', 'BASTE', 'FLASK', 'HEDGE', 'GIRLY', 'SWASH', 'BONEY', 'COUPE', 'ENDOW', 'ABHOR', 'WELCH', 'BLADE', 'TIGHT', 'GEESE', 'MISER', 'MIRTH', 'CLOUD', 'CABAL', 'LEECH', 'CLOSE', 'TENTH', 'PECAN', 'DROIT', 'GRAIL', 'CLONE', 'GUISE', 'RALPH', 'TANGO', 'BIDDY', 'SMITH', 'MOWER', 'PAYEE', 'SERIF', 'DRAPE', 'FIFTH', 'SPANK', 'GLAZE', 'ALLOT', 'TRUCK', 'KAYAK', 'VIRUS', 'TESTY', 'TEPEE', 'FULLY', 'ZONAL', 'METRO', 'CURRY', 'GRAND', 'BANJO', 'AXION', 'BEZEL', 'OCCUR', 'CHAIN', 'NASAL', 'GOOEY', 'FILER', 'BRACE', 'ALLAY', 'PUBIC', 'RAVEN', 'PLEAD', 'GNASH', 'FLAKY', 'MUNCH', 'DULLY', 'EKING', 'THING', 'SLINK', 'HURRY', 'THEFT', 'SHORN', 'PYGMY', 'RANCH', 'WRING', 'LEMON', 'SHORE', 'MAMMA', 'FROZE', 'NEWER', 'STYLE', 'MOOSE', 'ANTIC', 'DROWN', 'VEGAN', 'CHESS', 'GUPPY', 'UNION', 'LEVER', 'LORRY', 'IMAGE', 'CABBY', 'DRUID', 'EXACT', 'TRUTH', 'DOPEY', 'SPEAR', 'CRIED', 'CHIME', 'CRONY', 'STUNK', 'TIMID', 'BATCH', 'GAUGE', 'ROTOR', 'CRACK', 'CURVE', 'LATTE', 'WITCH', 'BUNCH', 'REPEL', 'ANVIL', 'SOAPY', 'METER', 'BROTH', 'MADLY', 'DRIED', 'SCENE', 'KNOWN', 'MAGMA', 'ROOST', 'WOMAN', 'THONG', 'PUNCH', 'PASTY', 'DOWNY', 'KNEAD', 'WHIRL', 'RAPID', 'CLANG', 'ANGER', 'DRIVE', 'GOOFY', 'EMAIL', 'MUSIC', 'STUFF', 'BLEEP', 'RIDER', 'MECCA', 'FOLIO', 'SETUP', 'VERSO', 'QUASH', 'FAUNA', 'GUMMY', 'HAPPY', 'NEWLY', 'FUSSY', 'RELIC', 'GUAVA', 'RATTY', 'FUDGE', 'FEMUR', 'CHIRP', 'FORTE', 'ALIBI', 'WHINE', 'PETTY', 'GOLLY', 'PLAIT', 'FLECK', 'FELON', 'GOURD', 'BROWN', 'THRUM', 'FICUS', 'STASH', 'DECRY', 'WISER', 'JUNTA', 'VISOR', 'DAUNT', 'SCREE', 'IMPEL', 'AWAIT', 'PRESS', 'WHOSE', 'TURBO', 'STOOP', 'SPEAK', 'MANGY', 'EYING', 'INLET', 'CRONE', 'PULSE', 'MOSSY', 'STAID', 'HENCE', 'PINCH', 'TEDDY', 'SULLY', 'SNORE', 'RIPEN', 'SNOWY', 'ATTIC', 'GOING', 'LEACH', 'MOUTH', 'HOUND', 'CLUMP', 'TONAL', 'BIGOT', 'PERIL', 'PIECE', 'BLAME', 'HAUTE', 'SPIED', 'UNDID', 'INTRO', 'BASAL', 'RODEO', 'GUARD', 'STEER', 'LOAMY', 'SCAMP', 'SCRAM', 'MANLY', 'HELLO', 'VAUNT', 'ORGAN', 'FERAL', 'KNOCK', 'EXTRA', 'CONDO', 'ADAPT', 'WILLY', 'POLKA', 'RAYON', 'SKIRT', 'FAITH', 'TORSO', 'MATCH', 'MERCY', 'TEPID', 'SLEEK', 'RISER', 'TWIXT', 'PEACE', 'FLUSH', 'CATTY', 'LOGIN', 'EJECT', 'ROGER', 'RIVAL', 'UNTIE', 'REFIT', 'AORTA', 'ADULT', 'JUDGE', 'ROWER', 'ARTSY', 'RURAL', 'SHAVE', 'BOBBY', 'ECLAT', 'FELLA', 'GAILY', 'HARRY', 'HASTY', 'HYDRO', 'LIEGE', 'OCTAL', 'OMBRE', 'PAYER', 'SOOTH', 'UNSET', 'UNLIT', 'VOMIT', 'FANNY', 'FETUS', 'BUTCH', 'STALK', 'FLACK', 'WIDOW', 'AUGUR'
 ];
+/*
 const aryAllCanuckleAnswersOrdered = [
-  'TERRY', /*GAME 0*/
-  'CANOE', /*1 (FEB 10, 2022 - START OF CANUCKLE)*/
-  'MAPLE', /*2 (FEB 11)*/
-  'INUIT', /*3 (FEB 12)*/
-  'PLAID', /*4 (FEB 13)*/
-  'IGLOO', /*5 (FEB 14)*/
-  'HOSER', /*6 (FEB 15)*/
-  'SYRUP', /*7 (FEB 16)*/
-  'BACON', /*8 (FEB 17)*/
-  'SORRY', /*9 (FEB 18)*/
-  'WHALE', /*10 (FEB 19)*/
-  'NORTH', /*11 (FEB 20)*/
-  'ABOOT', /*12 (FEB 21)*/
-  'BANFF', /*13 (FEB 22)*/
-  'FALLS', /*14 (FEB 23)*/
-  'TOTEM', /*15 (FEB 24)*/
-  'QUEEN', /*16 (FEB 25)*/
-  'LOONS', /*17 (FEB 26)*/
-  'METIS', /*18 (FEB 27)*/
-  'TOQUE', /*19 (FEB 28)*/
-  'CANAL', /*20 (MAR 1)*/
-  'CRUDE', /*21 (MAR 2)*/
-  'GOOSE', /*22 (MAR 3)*/
-  'LAKES', /*23 (MAR 4)*/
-  'CROWN', /*24 (MAR 5)*/
-  'SPUDS', /*25 (MAR 6)*/
-  'ROOTS', /*26 (MAR 7)*/
-  'SNOWY', /*27 (MAR 8)*/
-  'YUKON', /*28 (MAR 9)*/
-  'POLAR', /*29 (MAR 10)*/
-  'BISON', /*30 (MAR 11)*/
-  'TOWER', /*31 (MAR 12)*/
-  'BEARS', /*32 (MAR 13)*/
-  'LEAFS', /*33 (MAR 14)*/
-  'WHEAT', /*34 (MAR 15)*/
-  'PARKS', /*35 (MAR 16)*/
-  'KAYAK', /*36 (MAR 17)*/
-  'MOOSE', /*37 (MAR 18)*/
-  'PRIDE', /*38 (MAR 19)*/
-  'ROCKY', /*39 (MAR 20)*/
-  'SCOFF', /*40 (MAR 21)*/
-  'CABIN', /*41 (MAR 22)*/
-  'BEERS', /*42 (MAR 23)*/
-  'PARKA', /*43 (MAR 24)*/
-  'RINKS', /*44 (MAR 25)*/
-  'FRIES', /*45 (MAR 26)*/
-  'COAST', /*46 (MAR 27)*/
-  'ORDER', /*47 (MAR 28) USED TO BE EAGLE*/
-  'PHONE', /*48 (MAR 29)*/
-  'BIRCH', /*49 (MAR 30)*/
-  'PORTS', /*50 (MAR 31) USED TO BE PENNY*/
-  'DAIRY', /*51 (APR 1)*/
-  'SKATE', /*52 (APR 2)*/
-  'FARMS', /*53 (APR 3)*/
-  'RIVER', /*54 (APR 4)*/
-  'SPORT', /*55 (APR 5)*/
-  'GLOBE', /*56 (APR 6) USED TO BE GEESE*/
-  'CURDS', /*57 (APR 7)*/
-  'FOXES', /*58 (APR 8)*/
-  'CROPS', /*59 (APR 9) USED TO BE SPIEL*/
-  'CAMPS', /*60 (APR 10)*/
-  'RODEO', /*61 (APR 11)*/
-  'TRADE', /*62 (APR 12)*/
-  'PEACE', /*63 (APR 13)*/
-  'MINES', /*64 (APR 14)*/
-  'SHORE', /*65 (APR 15)*/
-  'CEDAR', /*66 (APR 16)*/
-  'LARGE', /*67 (APR 17)*/
-  'BRIER', /*68 (APR 18)*/
-  'TIDES', /*69 (APR 19)*/
-  'KLICK', /*70 (APR 20)*/
-  'DENIM', /*71 (APR 21)*/
-  'SHIPS', /*72 (APR 22)*/
-  'POPPY', /*73 (APR 23)*/
-  'COURT', /*74 (APR 24)*/
-  'LODGE', /*75 (APR 25)*/
-  'OCEAN', /*76 (APR 26)*/
-  'RUGBY', /*77 (APR 27)*/
-  'METRE', /*78 (APR 28)*/
-  'ELDER', /*79 (APR 29)*/
-  'SPACE', /*80 (APR 30)*/
-  'HORSE', /*81 (MAY 1)*/
-  'FOGGY', /*82 (MAY 2)*/
-  'TAXES', /*83 (MAY 3)*/
-  'TRAIN', /*84 (MAY 4)*/
-  'MUSIC', /*85 (MAY 5)*/
-  'MITTS', /*86 (MAY 6)*/
-  'GRAIN', /*87 (MAY 7)*/
-  'ROUGE', /*88 (MAY 8)*/
-  'TULIP', /*89 (MAY 9)*/
-  'WINES', /*90 (MAY 10)*/
-  'SERGE', /*91 (MAY 11)*/
-  'RURAL', /*92 (MAY 12)*/
-  'TROOP', /*93 (MAY 13)*/
-  'JUNOS', /*94 (MAY 14) USED TO BE HONEY*/
-  'TRACK', /*95 (MAY 15)*/
-  'SUNNY', /*96 (MAY 16)*/
-  'ZONES', /*97 (MAY 17)*/
-  'BEACH', /*98 (MAY 18)*/
-  'SKIER', /*99 (MAY 19)*/
-  'BASES', /*100 (MAY 20)*/
-  'SMILE', /*101 (MAY 21)*/
-  'HYDRO', /*102 (MAY 22)*/
-  'TRAIL', /*103 (MAY 23)*/
-  'SANDS', /*104 (MAY 24)*/
-  'WATER', /*105 (MAY 25)*/
-  'BOOTS', /*106 (MAY 26)*/
-  'TARTS', /*107 (MAY 27)*/
-  'DOCKS', /*108 (MAY 28)*/
-  'PRIVY', /*109 (MAY 29)*/
-  'OTTER', /*110 (MAY 30)*/
-  'FIELD', /*111 (MAY 31)*/
-  'GAMES', /*112 (JUN 1)*/
-  'SLEDS', /*113 (JUN 2)*/
-  'TREES', /*114 (JUN 3)*/
-  'UNION', /*115 (JUN 4)*/
-  'PRIME', /*116 (JUN 5)*/
-  'CHIPS', /*117 (JUN 6)*/
-  'PERCH', /*118 (JUN 7)*/
-  'BANKS', /*119 (JUN 8)*/
-  'PINES', /*120 (JUN 9)*/
-  'CHIEF', /*121 (JUN 10) USED TO BE GRAVY*/
-  'PEAKS', /*122 (JUN 11)*/
-  'ARENA', /*123 (JUN 12)*/
-  'ELECT', /*124 (JUN 13)*/
-  'HOUSE', /*125 (JUN 14)*/
-  'BAGEL', /*126 (JUN 15)*/
-  'HERON', /*127 (JUN 16)*/
-  'MOGUL', /*128 (JUN 17)*/
-  'RADIO', /*129 (JUN 18)*/
-  'LITRE', /*130 (JUN 19) USED TO BE UNITY*/
-  'ROYAL', /*131 (JUN 20)*/
-  'TAIGA', /*132 (JUN 21) USED TO BE PITCH*/
-  'HURON', /*133 (JUN 22)*/
-  'TROUT', /*134 (JUN 23)*/
-  'SCARF', /*135 (JUN 24)*/
-  'BEADS', /*136 (JUN 25)*/
-  'STORM', /*137 (JUN 26)*/
-  'PIZZA', /*138 (JUN 27)*/
-  'TAFFY', /*139 (JUN 28)*/
-  'GREAT', /*140 (JUN 29)*/
-  'PUCKS', /*141 (JUN 30)*/
-  'PROUD'  /*142 (JUL 1, 2022 - END OF CANUCKLE)*/
+  'TERRY', //GAME 0
+  'CANOE', //1 (FEB 10, 2022 - START OF CANUCKLE)
+  'MAPLE', //2 (FEB 11)
+  'INUIT', //3 (FEB 12)
+  'PLAID', //4 (FEB 13)
+  'IGLOO', //5 (FEB 14)
+  'HOSER', //6 (FEB 15)
+  'SYRUP', //7 (FEB 16)
+  'BACON', //8 (FEB 17)
+  'SORRY', //9 (FEB 18)
+  'WHALE', //10 (FEB 19)
+  'NORTH', //11 (FEB 20)
+  'ABOOT', //12 (FEB 21)
+  'BANFF', //13 (FEB 22)
+  'FALLS', //14 (FEB 23)
+  'TOTEM', //15 (FEB 24)
+  'QUEEN', //16 (FEB 25)
+  'LOONS', //17 (FEB 26)
+  'METIS', //18 (FEB 27)
+  'TOQUE', //19 (FEB 28)
+  'CANAL', //20 (MAR 1)
+  'CRUDE', //21 (MAR 2)
+  'GOOSE', //22 (MAR 3)
+  'LAKES', //23 (MAR 4)
+  'CROWN', //24 (MAR 5)
+  'SPUDS', //25 (MAR 6)
+  'ROOTS', //26 (MAR 7)
+  'SNOWY', //27 (MAR 8)
+  'YUKON', //28 (MAR 9)
+  'POLAR', //29 (MAR 10)
+  'BISON', //30 (MAR 11)
+  'TOWER', //31 (MAR 12)
+  'BEARS', //32 (MAR 13)
+  'LEAFS', //33 (MAR 14)
+  'WHEAT', //34 (MAR 15)
+  'PARKS', //35 (MAR 16)
+  'KAYAK', //36 (MAR 17)
+  'MOOSE', //37 (MAR 18)
+  'PRIDE', //38 (MAR 19)
+  'ROCKY', //39 (MAR 20)
+  'SCOFF', //40 (MAR 21)
+  'CABIN', //41 (MAR 22)
+  'BEERS', //42 (MAR 23)
+  'PARKA', //43 (MAR 24)
+  'RINKS', //44 (MAR 25)
+  'FRIES', //45 (MAR 26)
+  'COAST', //46 (MAR 27)
+  'ORDER', //47 (MAR 28) USED TO BE EAGLE
+  'PHONE', //48 (MAR 29)
+  'BIRCH', //49 (MAR 30)
+  'PORTS', //50 (MAR 31) USED TO BE PENNY
+  'DAIRY', //51 (APR 1)
+  'SKATE', //52 (APR 2)
+  'FARMS', //53 (APR 3)
+  'RIVER', //54 (APR 4)
+  'SPORT', //55 (APR 5)
+  'GLOBE', //56 (APR 6) USED TO BE GEESE
+  'CURDS', //57 (APR 7)
+  'FOXES', //58 (APR 8)
+  'CROPS', //59 (APR 9) USED TO BE SPIEL
+  'CAMPS', //60 (APR 10)
+  'RODEO', //61 (APR 11)
+  'TRADE', //62 (APR 12)
+  'PEACE', //63 (APR 13)
+  'MINES', //64 (APR 14)
+  'SHORE', //65 (APR 15)
+  'CEDAR', //66 (APR 16)
+  'LARGE', //67 (APR 17)
+  'BRIER', //68 (APR 18)
+  'TIDES', //69 (APR 19)
+  'KLICK', //70 (APR 20)
+  'DENIM', //71 (APR 21)
+  'SHIPS', //72 (APR 22)
+  'POPPY', //73 (APR 23)
+  'COURT', //74 (APR 24)
+  'LODGE', //75 (APR 25)
+  'OCEAN', //76 (APR 26)
+  'RUGBY', //77 (APR 27)
+  'METRE', //78 (APR 28)
+  'ELDER', //79 (APR 29)
+  'SPACE', //80 (APR 30)
+  'HORSE', //81 (MAY 1)
+  'FOGGY', //82 (MAY 2)
+  'TAXES', //83 (MAY 3)
+  'TRAIN', //84 (MAY 4)
+  'MUSIC', //85 (MAY 5)
+  'MITTS', //86 (MAY 6)
+  'GRAIN', //87 (MAY 7)
+  'ROUGE', //88 (MAY 8)
+  'TULIP', //89 (MAY 9)
+  'WINES', //90 (MAY 10)
+  'SERGE', //91 (MAY 11)
+  'RURAL', //92 (MAY 12)
+  'TROOP', //93 (MAY 13)
+  'JUNOS', //94 (MAY 14) USED TO BE HONEY
+  'TRACK', //95 (MAY 15)
+  'SUNNY', //96 (MAY 16)
+  'ZONES', //97 (MAY 17)
+  'BEACH', //98 (MAY 18)
+  'SKIER', //99 (MAY 19)
+  'BASES', //100 (MAY 20)
+  'SMILE', //101 (MAY 21)
+  'HYDRO', //102 (MAY 22)
+  'TRAIL', //103 (MAY 23)
+  'SANDS', //104 (MAY 24)
+  'WATER', //105 (MAY 25)
+  'BOOTS', //106 (MAY 26)
+  'TARTS', //107 (MAY 27)
+  'DOCKS', //108 (MAY 28)
+  'PRIVY', //109 (MAY 29)
+  'OTTER', //110 (MAY 30)
+  'FIELD', //111 (MAY 31)
+  'GAMES', //112 (JUN 1)
+  'SLEDS', //113 (JUN 2)
+  'TREES', //114 (JUN 3)
+  'UNION', //115 (JUN 4)
+  'PRIME', //116 (JUN 5)
+  'CHIPS', //117 (JUN 6)
+  'PERCH', //118 (JUN 7)
+  'BANKS', //119 (JUN 8)
+  'PINES', //120 (JUN 9)
+  'CHIEF', //121 (JUN 10) USED TO BE GRAVY
+  'PEAKS', //122 (JUN 11)
+  'ARENA', //123 (JUN 12)
+  'ELECT', //124 (JUN 13)
+  'HOUSE', //125 (JUN 14)
+  'BAGEL', //126 (JUN 15)
+  'HERON', //127 (JUN 16)
+  'MOGUL', //128 (JUN 17)
+  'RADIO', //129 (JUN 18)
+  'LITRE', //130 (JUN 19) USED TO BE UNITY
+  'ROYAL', //131 (JUN 20)
+  'TAIGA', //132 (JUN 21) USED TO BE PITCH
+  'HURON', //133 (JUN 22)
+  'TROUT', //134 (JUN 23)
+  'SCARF', //135 (JUN 24)
+  'BEADS', //136 (JUN 25)
+  'STORM', //137 (JUN 26)
+  'PIZZA', //138 (JUN 27)
+  'TAFFY', //139 (JUN 28)
+  'GREAT', //140 (JUN 29)
+  'PUCKS', //141 (JUN 30)
+  'PROUD'  //142 (JUL 1, 2022 - END OF CANUCKLE)
 ];
+*/
 //#endregion word arrays
 //#region constants
 const testMode = Boolean(false);          //testMode = true: allow non-Answers and non-Guesses
@@ -165,7 +167,7 @@ const logAutoTest = Boolean(true);        //logAutoTest = true: automated testin
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
 const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
-const modeCanuckle = Boolean(false);      //modeCanuckle = true: play Canuckle, false: play Wordle
+//const modeCanuckle = Boolean(false);      //modeCanuckle = true: play Canuckle, false: play Wordle
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
@@ -177,13 +179,13 @@ const stateTBD = 'tbd';                   //metadata attribute for unknown
 const aryAllPossibleAnswers = [];         //array of all possible answers (possibly without previous answers)
 const millisecondsPerDay = 24 * 60 * 60 * 1000; //hours*minutes*seconds*milliseconds = millseconds per day
 const start = new Date(2021, 5, 19);      //date of first Wordle (0 indexed)
-const startCanuckle = new Date(2022, 1, 9);      //date of first Canuckle (0 indexed)
+//const startCanuckle = new Date(2022, 1, 9);      //date of first Canuckle (0 indexed)
 const today = new Date();                 //today's date
 //#endregion constants
 //#region globals;
 //let diffDays = Math.floor((today - start) / oneDay);                //#days (changed from .round to .floor)
 let diffDays = daysBetween(start, today); //new function to computer days between two dates
-const diffDaysCanuckle = daysBetween(startCanuckle, today); //new function to computer days between two dates
+//const diffDaysCanuckle = daysBetween(startCanuckle, today); //new function to computer days between two dates
 let boolAutoTest = Boolean(false);        //boolAutoTest = true: run automated testing
 let autoResults = Boolean(true);          //autoResults = true: auto enter guess results based on Today's Answer
 let streakSaver = Boolean(true);          //streakSaver = true: Greenify Guess if it's Today's Answer
@@ -229,7 +231,7 @@ function UIeventHandlers() {                                                    
 function initialize() {                                             //set default selections
   container = document.querySelector('.fireworks-container');
   consoleLog(logGeneral, 'today: ' + today + ', Wordle day#: ' + diffDays);
-  consoleLog(logGeneral, 'today: ' + today + ', Canuckle day#: ' + diffDaysCanuckle);
+  //consoleLog(logGeneral, 'today: ' + today + ', Canuckle day#: ' + diffDaysCanuckle);
   let answerOffset = 0;
   if (!prevAnswers) { answerOffset = diffDays - 1; }                //skip previous answers
   for (let i = 0; i < aryAllAnswersOrdered.length - answerOffset; i++) {
@@ -513,9 +515,9 @@ function celebrate(guessPosition, message) {                        //Easter Egg
     fireworks = '';                                                 //'destroy' instance
     document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
-  fireworks = new Fireworks(container, { /* options */ });          //eslint-disable-line
-  fireworks.setOptions({ traceSpeed: 2 });                          //fireworks options
-  /*{
+  fireworks = new Fireworks(container, {                            //eslint-disable-line
+  //fireworks.setOptions({ traceSpeed: 2 });                          //fireworks options
+  //{
     autoresize: true,
     opacity: 0.5,
     acceleration: 1.05,
@@ -523,7 +525,8 @@ function celebrate(guessPosition, message) {                        //Easter Egg
     gravity: 1.5,
     particles: 50,
     trace: 3,
-    traceSpeed: 10,
+    //traceSpeed: 10,
+    traceSpeed: 2,
     explosion: 5,
     intensity: 30,
     flickering: 50,
@@ -563,7 +566,7 @@ function celebrate(guessPosition, message) {                        //Easter Egg
       move: false,
       max: 1
     }
-  }*/
+  });
   fireworks.start();                                                //launch fireworks effect
 }//celebrate()
 //#endregion helper functions
@@ -706,11 +709,11 @@ function solveIt() {
           consoleLog(logGeneral, 'aryAllAnswersOrdered.indexOf(guessWord): ' + aryAllAnswersOrdered.indexOf(guessWord));
           consoleLog(logGeneral, 'diffDays: ' + diffDays);
           let boolStreakSaver = false;
-          if (modeCanuckle) {
-            boolStreakSaver = streakSaver && (aryAllCanuckleAnswersOrdered.indexOf(guessWord) === diffDaysCanuckle);
-          } else {
-            boolStreakSaver = streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays);
-          }//if else
+          //if (modeCanuckle) {
+          //boolStreakSaver = streakSaver && (aryAllCanuckleAnswersOrdered.indexOf(guessWord) === diffDaysCanuckle);
+          //} else {
+          boolStreakSaver = streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays);
+          //}//if else
           if (boolStreakSaver) {
             celebrate(guessPosition, 'Streak Saver easter egg!');
             //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
@@ -730,11 +733,11 @@ function solveIt() {
         //consoleLog(logAutoResults, 'pattern: ' + aryPatternLetters);
         //consoleLog(logAutoResults, 'today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
         let todayAnswer = '';
-        if (modeCanuckle) {
-          todayAnswer = aryAllCanuckleAnswersOrdered[diffDaysCanuckle];
-        } else {
-          todayAnswer = aryAllAnswersOrdered[diffDays];
-        }//if else
+        //if (modeCanuckle) {
+        //todayAnswer = aryAllCanuckleAnswersOrdered[diffDaysCanuckle];
+        //} else {
+        todayAnswer = aryAllAnswersOrdered[diffDays];
+        //}//if else
         consoleLog(logAutoResults, 'todayAnswer: ' + todayAnswer);
         //╔═════════════════╗
         //║ automatic GREEN ║
