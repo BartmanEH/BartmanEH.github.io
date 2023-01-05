@@ -524,7 +524,7 @@ function celebrate(guessPosition, message) {                        //Easter Egg
   }//if
   //fireworks = new Fireworks(container, {});                         //eslint-disable-line
   new Fireworks.default(container)                                  //eslint-disable-line
-  fireworks.setOptions({ traceSpeed: 1 });                          //fireworks options
+  fireworks.updateOptions({ traceSpeed: 1 });                          //fireworks options
   /*{
     autoresize: true,
     opacity: 0.5,
