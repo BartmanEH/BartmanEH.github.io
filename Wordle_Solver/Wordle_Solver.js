@@ -520,8 +520,8 @@ function celebrate(guessPosition, message) {                        //Easter Egg
     fireworks = '';                                                 //'destroy' instance
     document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
-  fireworks = new Fireworks(container, { traceSpeed: 1 });                         //eslint-disable-line
-  //fireworks.setOptions({ traceSpeed: 1 });                          //fireworks options
+  fireworks = new Fireworks(container, {});                         //eslint-disable-line
+  fireworks.setOptions({ speed: 1 });                          //fireworks options
   /*{
     autoresize: true,
     opacity: 0.5,
