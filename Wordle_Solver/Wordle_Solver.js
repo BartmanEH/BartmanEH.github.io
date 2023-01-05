@@ -524,7 +524,6 @@ function celebrate(guessPosition, message) {                        //Easter Egg
   }//if
   //fireworks = new Fireworks(container, {});                         //eslint-disable-line
   fireworks = new Fireworks.default(container)                      //eslint-disable-line
-  fireworks.updateOptions({ traceSpeed: 1 });                          //fireworks options
   /*{
     autoresize: true,
     opacity: 0.5,
@@ -577,6 +576,7 @@ function celebrate(guessPosition, message) {                        //Easter Egg
   });
   */
   fireworks.start();                                                //launch fireworks effect
+  fireworks.updateOptions({ traceSpeed: 1 });                       //fireworks options
 }//celebrate()
 //#endregion helper functions
 //#region automated testing
