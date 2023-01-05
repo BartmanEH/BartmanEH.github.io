@@ -523,7 +523,7 @@ function celebrate(guessPosition, message) {                        //Easter Egg
     document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
   //fireworks = new Fireworks(container, {});                         //eslint-disable-line
-  new fireworks = Fireworks.default(container)                      //eslint-disable-line
+  fireworks = new Fireworks.default(container)                      //eslint-disable-line
   fireworks.updateOptions({ traceSpeed: 1 });                          //fireworks options
   /*{
     autoresize: true,
