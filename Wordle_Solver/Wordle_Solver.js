@@ -716,7 +716,7 @@ function solveIt() {
           boolStreakSaver = streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays);
           //}//if else
           if (boolStreakSaver) {
-            celebrate(guessPosition, 'Streak Saver easter egg!');
+            //celebrate(guessPosition, 'Streak Saver easter egg!');
             //aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
             aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
             aryExcludeLetters = aryIncludeLetters = [];
