@@ -515,9 +515,9 @@ function celebrate(guessPosition, message) {                        //Easter Egg
     fireworks = '';                                                 //'destroy' instance
     document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
-  fireworks = new Fireworks(container, {                            //eslint-disable-line
-  //fireworks.setOptions({ traceSpeed: 2 });                          //fireworks options
-  //{
+  fireworks = new Fireworks(container, {});                         //eslint-disable-line
+  fireworks.setOptions({ traceSpeed: 2 });                          //fireworks options
+  /*{
     autoresize: true,
     opacity: 0.5,
     acceleration: 1.05,
@@ -567,6 +567,7 @@ function celebrate(guessPosition, message) {                        //Easter Egg
       max: 1
     }
   });
+  */
   fireworks.start();                                                //launch fireworks effect
 }//celebrate()
 //#endregion helper functions
