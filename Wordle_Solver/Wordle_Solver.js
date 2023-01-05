@@ -576,7 +576,7 @@ function celebrate(guessPosition, message) {                        //Easter Egg
   });
   */
   fireworks.start();                                                //launch fireworks effect
-  fireworks.updateOptions({ traceSpeed: 1 });                       //fireworks options
+  fireworks.updateOptions({ traceSpeed: 0.01 });                       //fireworks options
 }//celebrate()
 //#endregion helper functions
 //#region automated testing
