@@ -1,4 +1,4 @@
-import { Fireworks } from 'fireworks';
+import { Fireworks } from 'fireworks-js';
 import { ToastMaker } from 'toastmaker';
 //#region word arrays
 const aryAllPossibleGuesses = [
@@ -523,7 +523,7 @@ function celebrate(guessPosition, message) {                        //Easter Egg
     document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
   fireworks = new Fireworks(container, {});
-  fireworks.setOptions({ speed: 1 });                          //fireworks options
+  fireworks.setOptions({ traceSpeed: 1 });                       //fireworks options
   /*{
     autoresize: true,
     opacity: 0.5,
