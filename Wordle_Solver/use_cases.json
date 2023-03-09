@@ -576,6 +576,23 @@
         "FORAY",
         "MORAL"
       ]
+    },
+    {
+      "id": "25",
+      "comment": "valid",
+      "guess": [
+        "AORTA"
+      ],
+      "pattern": [
+        "GBYBB"
+      ],
+      "possibilities": [
+        "SAINT",
+        "SALAD",
+        "SALSA",
+        "SQUAD",
+        "SQUAT"
+      ]
     }
   ]
 }
