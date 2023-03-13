@@ -45,7 +45,9 @@
 		<title>IES: Wordle Solver</title>
 		<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/fireworks-js@latest/dist/fireworks.js"></script> -->
 		<!-- <script type="text/javascript" src="https://unpkg.com/fireworks-js@latest/dist/fireworks.js"></script> -->
-		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/fireworks-js@latest/dist/index.umd.js"></script><!--tested with v2.10.0-->
+		<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/fireworks-js@latest/dist/index.umd.js"></script> --><!--tested with v2.10.0-->
+		<!-- v2 of Fireworks has 'scrolling canvas' issue!! -->
+		<script src="https://cdn.jsdelivr.net/npm/fireworks-js@1.x/dist/fireworks.js"></script>
 		<script type="text/javascript" src="https://unpkg.com/toastmaker/dist/toastmaker.min.js"></script>
 		<link type="text/css" rel="stylesheet" href="https://unpkg.com/toastmaker/dist/toastmaker.min.css">
 		<script type="text/javascript" src="../Wordle_Solver/Wordle_Solver.js"></script>
@@ -132,14 +134,15 @@
 					<span id="labelDay">&nbsp;&nbsp;Wordle&nbsp;day&nbsp;#<input type="number" id="dayNum-input" name="dayNum" value="1" min="1" class="dayNum"></span>
 				</div>
 				<div id="resultsMode-div" class="help" display="none">
+					<div id="spacer_3" class="spacer-short"></div>
 					<span id="labelResultsMode">Manual Results Mode</span>
 				</div>
 				<div id="help-outer" class="flex-container flex-space-around">
 					<div id="help-inner" class="flex-item">
 						<span id="help-span" class="help flex-space-around">
 							<ul class="main-ul">
-								<li>Enter your guess words for NYT <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a></li>
-								<li>Results are automatic for today's answer</li>
+								<li>Enter guess words for NYT <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a></li>
+								<li>Letter colouring are as per Wordle:</li>
 								<!-- could not make CSS selector styling work-->
 								<li style="list-style-type: none;">
 									<ul style="padding-inline-start: 20px !important;">
@@ -149,22 +152,17 @@
 									</ul>
 								</li>
 								<li>Possible answers will be shown (scroll down!)</li>
+								<input type="radio" id="manualResults" name="resultsMode" value="automatic" checked>
+									Automatic results for today's answer <strong>OR</strong><br>
+								<input type="radio" id="autoResults" name="resultsMode" value="manual">
+									Manual results: tap each guess letter
 								<li>Other features:</li>
 								<li style="list-style-type: none;"><!-- could not make CSS selector styling work-->
 									<ul style="padding-inline-start: 20px !important;"><!-- could not make CSS selector styling work-->
 										<li>Tap Wordle Solver logo to reset</li>
-										<li>Tap the Date Picker to play a Wordle Archive date</li>
-										<li style="list-style-type: none;"><!-- could not make CSS selector styling work-->
-											<ul style="padding-inline-start: 20px !important;"><!-- could not make CSS selector styling work-->
-												<li>...or the day# to choose day directly</li>
-											</ul>
-										</li>
-										<li>Tap Bart image in footer for manual results mode</li>
-										<li style="list-style-type: none;"><!-- could not make CSS selector styling work-->
-											<ul style="padding-inline-start: 20px !important;"><!-- could not make CSS selector styling work-->
-												<li>Then tap each guess letter to match Wordle results</li>
-											</ul>
-										</li>
+										<li>Tap the Date Picker to select a Wordle Archive date</li>
+										<li>Tap the day# to choose Wordle Archive day directly</li>
+										<li>Tap Bart image in footer for <strong>spoiler</strong></li>
 									</ul>
 								</li>
 							</ul>
