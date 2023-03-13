@@ -403,6 +403,8 @@ function celebrate(guessPosition, message) {                        //Easter Egg
 //#region automated testing
 async function automatedTesting() {
   toast('automated testing');
+  const tempboolAutoResults = boolAutoResults;                      //store auto results setting
+  boolAutoResults = false;                                          //disable auto results
   const requestURL = '/Wordle_Solver/use_cases.json';
   const request = new Request(requestURL);
   const response = await fetch(request);
@@ -479,6 +481,7 @@ async function automatedTesting() {
     consoleLog(logAutoTest, useCaseResults + ' FAILED!', 'error');
     toast(useCaseResults + ' FAILED!');
   }
+  boolAutoResults = tempboolAutoResults;                            //restore auto results setting
 }//automatedTesting()
 //#endregion automated testing
 //#region solveIt
