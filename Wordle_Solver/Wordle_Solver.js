@@ -12,7 +12,6 @@ const aryAllAnswersOrdered = [
 //#endregion word arrays
 //#region constants
 const testMode = Boolean(false);          //testMode = true: allow non-Answers and non-Guesses
-const prevAnswers = Boolean(true);        //prevAnswers = true: include previous Answers
 const logGeneral = Boolean(false);        //logGeneral = true: show general info messages on console
 const logTabbing = Boolean(false);        //logTabbing = true: show auto focus next tab debug info messages on console
 const logKeyboard = Boolean(false);       //logKeyboard = true: show keyboard/tap info messages on console
@@ -40,6 +39,7 @@ const today = new Date();                 //today's date
 //let diffDays = Math.floor((today - start) / oneDay);                //#days (changed from .round to .floor)
 let diffDays = daysBetween(start, today); //new function to compute days between two dates
 let boolAnswersOnly = Boolean(false);     //boolAnswersOnly = true: include only possible Answers, not possible Guesses
+let boolPrevAnswers = Boolean(true);      //boolPrevAnswers = true: include previous Answers
 let boolAutoResults = Boolean(true);      //boolAutoResults = true: auto enter guess results based on Today's Answer
 let boolAutoTest = Boolean(false);        //boolAutoTest = true: run automated testing
 let streakSaver = Boolean(true);          //streakSaver = true: Greenify Guess if it's Today's Answer
@@ -97,7 +97,7 @@ async function initialize() {                                       //set defaul
   consoleLog(logGeneral, 'today: ' + today + ', Wordle day#: ' + diffDays);
   aryAllPossibleAnswers = [];
   let answerOffset = 0;
-  if (!prevAnswers && boolAnswersOnly) { answerOffset = diffDays - 1; }         //skip previous answers
+  if (!boolPrevAnswers && boolAnswersOnly) { answerOffset = diffDays - 1; }         //skip previous answers
   for (let i = 0; i < aryAllAnswersOrdered.length - answerOffset; i++) {
     //aryAllPossibleAnswers[i] = aryAllAnswersOrdered[i + answerOffset];
     aryAllPossibleAnswers.push(aryAllAnswersOrdered[i + answerOffset]);
@@ -147,10 +147,11 @@ function resultsModeClicked(e) {
   //e.preventDefault();
 }//resultsModeClicked()
 function copyrightClicked() {
-  boolAnswersOnly = !boolAnswersOnly;                               //toggle Answers only boolean switch to include all possible Guesses
+  boolAnswersOnly = !boolAnswersOnly;                               //toggle Answers only boolean switch
+  boolPrevAnswers = !boolPrevAnswers;                               //toggle Previous Answers only boolean switch
   window.scroll(0, 0);                                              //scroll to top of page
-  consoleLog(logAutoResults, 'Results include Answers only: ' + boolAnswersOnly);
-  toast('Results include Answers only: ' + (boolAnswersOnly ? 'enabled' : 'disabled'));
+  consoleLog(logAutoResults, 'Results include future Answers only: ' + boolAnswersOnly);
+  toast('Results include future Answers only: ' + (boolAnswersOnly ? 'enabled' : 'disabled'));
   resetGrid();                                                      //reset grid
   initialize();                                                     //initialize
 }//copyrightClicked()
@@ -346,9 +347,9 @@ function buildStrFilteredFiveLetterWords(array) {                   //helper fun
   for (const word of array) {
     if (aryAllAnswersOrdered.includes(word)) {                      //word is a possible Answer
       if (aryAllAnswersOrdered.indexOf(word) >= diffDays) {
-        strBuilt += '<strong><em>' + word + '</em></strong>' + '&nbsp &nbsp';  //bold word
+        strBuilt += '<strong><em>' + word + '</em></strong> &nbsp &nbsp';  //bold word
       } else {
-        strBuilt += '<strong>' + word + '</strong>' + '&nbsp &nbsp';  //bold word
+        strBuilt += '<strong>' + word + '</strong> &nbsp &nbsp';    //bold word
       }//if else
     } else {                                                        //word is not a possible Answer, Guess only
       strBuilt += word + '&nbsp &nbsp';                             //do not bold word
