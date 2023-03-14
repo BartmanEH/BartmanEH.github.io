@@ -39,7 +39,7 @@ const today = new Date();                 //today's date
 //#region globals;
 //let diffDays = Math.floor((today - start) / oneDay);                //#days (changed from .round to .floor)
 let diffDays = daysBetween(start, today); //new function to compute days between two dates
-let boolAnswersOnly = Boolean(true);      //boolAnswersOnly = true: include only possible Answers, not possible Guesses
+let boolAnswersOnly = Boolean(false);     //boolAnswersOnly = true: include only possible Answers, not possible Guesses
 let boolAutoResults = Boolean(true);      //boolAutoResults = true: auto enter guess results based on Today's Answer
 let boolAutoTest = Boolean(false);        //boolAutoTest = true: run automated testing
 let streakSaver = Boolean(true);          //streakSaver = true: Greenify Guess if it's Today's Answer
@@ -97,7 +97,7 @@ async function initialize() {                                       //set defaul
   consoleLog(logGeneral, 'today: ' + today + ', Wordle day#: ' + diffDays);
   aryAllPossibleAnswers = [];
   let answerOffset = 0;
-  if (!prevAnswers) { answerOffset = diffDays - 1; }                //skip previous answers
+  if (!prevAnswers && boolAnswersOnly) { answerOffset = diffDays - 1; }         //skip previous answers
   for (let i = 0; i < aryAllAnswersOrdered.length - answerOffset; i++) {
     //aryAllPossibleAnswers[i] = aryAllAnswersOrdered[i + answerOffset];
     aryAllPossibleAnswers.push(aryAllAnswersOrdered[i + answerOffset]);
@@ -345,7 +345,11 @@ function buildStrFilteredFiveLetterWords(array) {                   //helper fun
   let strBuilt = '';
   for (const word of array) {
     if (aryAllAnswersOrdered.includes(word)) {                      //word is a possible Answer
-      strBuilt += '<strong>' + word + '</strong>' + '&nbsp &nbsp';  //bold word
+      if (aryAllAnswersOrdered.indexOf(word) >= diffDays) {
+        strBuilt += '<strong><em>' + word + '</em></strong>' + '&nbsp &nbsp';  //bold word
+      } else {
+        strBuilt += '<strong>' + word + '</strong>' + '&nbsp &nbsp';  //bold word
+      }//if else
     } else {                                                        //word is not a possible Answer, Guess only
       strBuilt += word + '&nbsp &nbsp';                             //do not bold word
     }//if else
