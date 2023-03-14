@@ -5,7 +5,8 @@ body {
 	background-color: #121212;
 	color: #f3f3f3;
 /*	font-family: Arial,sans-serif;*/
-	font-family: "Source Sans Pro", "Trebuchet MS", Helvetica, sans-serif;
+	/* font-family: "Source Sans Pro", "Trebuchet MS", Helvetica, sans-serif; */
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
 	/* font-size: 9pt; */
 	font-size: 12px;
 	text-align: center;
@@ -14,6 +15,10 @@ body {
 	height: 100%;
 	max-width: 900px;
 	-webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+}
+
+a, a:visited {
+	color:inherit;
 }
 
 /* marker */
@@ -282,6 +287,11 @@ sub { bottom: -0.25em; }
 	padding: 0px;
 }
 
+.spacer-short {
+	height: 7.5px;
+	padding: 0px;
+}
+
 .spacer-sub {
 	height: 0px;
 	padding: 0px;
@@ -462,8 +472,8 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .main-ul {
-	list-style-position: inside;
-	padding-inline-start: 0px !important;
+	/* list-style-position: inside; */
+	padding-inline-start: 20px !important;
 	font-size: 14px !important;
 }​
 

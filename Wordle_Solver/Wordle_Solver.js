@@ -38,7 +38,7 @@ const today = new Date();                 //today's date
 //#endregion constants
 //#region globals;
 //let diffDays = Math.floor((today - start) / oneDay);                //#days (changed from .round to .floor)
-let diffDays = daysBetween(start, today); //new function to computer days between two dates
+let diffDays = daysBetween(start, today); //new function to compute days between two dates
 let boolAnswersOnly = Boolean(true);      //boolAnswersOnly = true: include only possible Answers, not possible Guesses
 let boolAutoResults = Boolean(true);      //boolAutoResults = true: auto enter guess results based on Today's Answer
 let boolAutoTest = Boolean(false);        //boolAutoTest = true: run automated testing
@@ -48,24 +48,26 @@ let numFiveLetterWords = 0;               //global tracking number of possible w
 let container = '';                       //global Easter Egg container
 let fireworks = '';                       //global Easter Egg effect
 let version = '';                         //global version
+let useCaseData = [];
 //#endregion globals
 //#region init
 document.addEventListener('DOMContentLoaded', function () {         //fires when DOM loaded (ready)
   getVersion();                                                     //retrieve version data from file
+  getUseCases();                                                    //retrieve use case data from file
   consoleLog(logGeneral, 'DOM ready!');                             //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
 });//DOM loaded
-async function getVersion() {                                                   //must be async function!
-  const requestURL = '/Wordle_Solver/version.json';  //json version info data
+async function getVersion() {                                       //must be async function!
+  const requestURL = '/Wordle_Solver/version.json';                 //json version info data
   const request = new Request(requestURL);
   const response = await fetch(request);
   const versionData = await response.json();
   version = versionData.buildMajor + '.' + versionData.buildMinor + '.' + versionData.buildRevision + '-' + versionData.buildTag;
   consoleLog(logGeneral, 'version: v' + version);                               //log version
   document.getElementById('version').innerHTML = 'v' + version.toString();      //update webpage footer version info
-}//getVersion
-function UIeventHandlers() {                                                    //attach handlers to UI events
+}//getVersion()
+function UIeventHandlers() {                                        //attach handlers to UI events
   const textInputs = document.querySelectorAll('input[type="text"]');           //get all text inputs
   for (const textInput of textInputs) {
     textInput.addEventListener('click', (e) => { inputClicked(e); });           //text input click handler
@@ -84,7 +86,13 @@ function UIeventHandlers() {                                                    
     elem.addEventListener('change', function (e) { resultsModeClicked(e); });
   });
 }//UIeventHandlers()
-function initialize() {                                             //set default selections
+async function getUseCases() {                                      //must be async function!
+  const requestURL = '/Wordle_Solver/use_cases.json';
+  const request = new Request(requestURL);
+  const response = await fetch(request);
+  useCaseData = await response.json();
+}//getUseCases()
+async function initialize() {                                       //set default selections
   container = document.querySelector('.fireworks-container');
   consoleLog(logGeneral, 'today: ' + today + ', Wordle day#: ' + diffDays);
   aryAllPossibleAnswers = [];
@@ -95,9 +103,8 @@ function initialize() {                                             //set defaul
     aryAllPossibleAnswers.push(aryAllAnswersOrdered[i + answerOffset]);
   }//for
   if (!boolAnswersOnly) {                                           //add all possible Guesses
-    //aryAllPossibleAnswers = aryAllPossibleAnswers.concat(aryAllPossibleGuesses);  //this adds duplicates
     for (const word of aryAllPossibleGuesses) {
-      if (!(aryAllPossibleAnswers.includes(word))) {                //if the word is not already in the array
+      if (!aryAllPossibleAnswers.includes(word)) {                  //if the word is not already in the array
         aryAllPossibleAnswers.push(word);                           //add it!
       }//if
     }//for
@@ -123,15 +130,22 @@ function initialize() {                                             //set defaul
 //#endregion init
 //#region helper functions
 function resultsModeClicked(e) {
-  boolAutoResults = !boolAutoResults;                               //toggle automatic results boolean switch
-  streakSaver = !streakSaver;                                       //toggle Streak Saver boolean switch
+  if (document.querySelector('input[name="resultsMode"]:checked').value === 'automatic') {
+    boolAutoResults = true;                                         //enable auto results
+    streakSaver = true;                                             //enable streak saver
+  } else if (document.querySelector('input[name="resultsMode"]:checked').value === 'manual') {
+    boolAutoResults = false;                                        //disable auto results
+    streakSaver = false;                                            //disable streak saver
+  } else {
+    consoleLog(true, 'Something\'s wrong!');                        //radio button values changed?
+  }//if else
   window.scroll(0, 0);                                              //scroll to top of page
   consoleLog(logAutoResults, 'automatic results: ' + boolAutoResults);
   toast('automatic results ' + (boolAutoResults ? 'enabled' : 'disabled'));
   resetGrid();                                                      //reset grid
   initialize();                                                     //initialize
   //e.preventDefault();
-}
+}//resultsModeClicked()
 function copyrightClicked() {
   boolAnswersOnly = !boolAnswersOnly;                               //toggle Answers only boolean switch to include all possible Guesses
   window.scroll(0, 0);                                              //scroll to top of page
@@ -401,14 +415,8 @@ function celebrate(guessPosition, message) {                        //Easter Egg
 }//celebrate()
 //#endregion helper functions
 //#region automated testing
-async function automatedTesting() {
+function automatedTesting() {                                 //
   toast('automated testing');
-  const tempboolAutoResults = boolAutoResults;                      //store auto results setting
-  boolAutoResults = false;                                          //disable auto results
-  const requestURL = '/Wordle_Solver/use_cases.json';
-  const request = new Request(requestURL);
-  const response = await fetch(request);
-  const useCaseData = await response.json();
   console.clear();
   consoleLog(logAutoTest, 'commencing automated testing');
   //consoleLog(logAutoTest, useCaseData);
@@ -481,7 +489,6 @@ async function automatedTesting() {
     consoleLog(logAutoTest, useCaseResults + ' FAILED!', 'error');
     toast(useCaseResults + ' FAILED!');
   }
-  boolAutoResults = tempboolAutoResults;                            //restore auto results setting
 }//automatedTesting()
 //#endregion automated testing
 //#region solveIt
@@ -525,15 +532,19 @@ function solveIt() {
           aryExcludeLetters = aryIncludeLetters = [];
           return;                                                   //terminate further processing
         } else if (guessWord === 'ATEST') {
-          const tempboolAnswersOnly = boolAnswersOnly;              //store boolAnswersOnly setting
-          const tempboolAutoResults = boolAutoResults;              //store boolAutoResults setting
+          const tempboolAnswersOnly = boolAnswersOnly;              //store setting
+          const tempboolAutoResults = boolAutoResults;              //store setting
           boolAnswersOnly = false;                                  //include all possible guesses for testing
+          boolAutoResults = false;                                  //disable auto results
+          document.getElementById('automaticResults').checked = boolAutoResults;
           boolAutoTest = true;                                      //set bool for automatic testing
           resetGrid();
           initialize();
-          boolAnswersOnly = tempboolAnswersOnly;                    //restore boolAnswersOnly setting
-          boolAutoResults = tempboolAutoResults;                    //restore boolAutoResults setting
           boolAutoTest = false;                                     //clear bool for automatic testing
+          boolAnswersOnly = tempboolAnswersOnly;                    //restore setting
+          boolAutoResults = tempboolAutoResults;                    //restore setting
+          document.getElementById('automaticResults').checked = boolAutoResults;
+          initialize();
           return;                                                   //terminate further processing
         } else if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
           errorHandler('"' + guessWord + '" is not a possible guess word!');
