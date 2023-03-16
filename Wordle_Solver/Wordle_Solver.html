@@ -127,14 +127,14 @@
 						<input type="text" maxlength="1" id="guess_6_5" autocomplete="off" name="guess_6_5_input" class="noselect" value=" " data-state="stateTBD">
 					</div>
 				</div>
-				<div id="spacer_2" class="spacer-normal"></div>
+				<div id="spacer-short" class="spacer-normal"></div>
 				<div id="datePicker-div" class="help">
 					<span id="labelDate">Date:&nbsp;</span>
 					<input type="date" id="datePicker-input" name="datePicker" value="2021-05-19" min="2021-05-19" class="datePicker">
-					<span id="labelDay">&nbsp;&nbsp;Wordle&nbsp;day&nbsp;#<input type="number" id="dayNum-input" name="dayNum" value="1" min="1" class="dayNum"></span>
+					<span id="labelDay">&nbsp;&nbsp;Day&nbsp;#<input type="number" id="dayNum-input" name="dayNum" value="1" min="1" class="dayNum"></span>
 				</div>
 				<div id="resultsMode-div" class="help" display="none">
-					<div id="spacer_3" class="spacer-short"></div>
+					<div id="spacer-short" class="spacer-short"></div>
 					<span id="labelResultsMode">Manual Results Mode</span>
 				</div>
 				<div id="help-outer" class="flex-container flex-space-around">
@@ -143,7 +143,6 @@
 							<ul class="main-ul">
 								<li>Enter guess words for NYT <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a></li>
 								<!-- <li>Letter colouring are as per Wordle:</li> -->
-								<!-- could not make CSS selector styling work-->
 								<!-- <li style="list-style-type: none;">
 									<ul style="padding-inline-start: 20px !important; font-size: 12px !important;">
 										<li>Black:&nbsp;&nbsp;&nbsp;exclude letter</li>
@@ -152,17 +151,16 @@
 									</ul>
 								</li> -->
 								<li>Possible answers will be shown (scroll down!)</li>
-								<input type="radio" id="automaticResults" name="resultsMode" value="automatic" checked>
-									Automatic results for today's answer <strong>OR</strong><br>
-								<input type="radio" id="manualResults" name="resultsMode" value="manual">
-									Manual results: tap each guess letter
+								<li style="list-style-type: none;"><input type="radio" id="automaticResults" name="resultsMode" value="automatic" checked>
+									Automatic results for today's answer <strong>OR</strong><br></li>
+								<li style="list-style-type: none;"><input type="radio" id="manualResults" name="resultsMode" value="manual">
+									Manual results: multi-tap each guess letter</li>
 								<li>Other features:</li>
-								<li style="list-style-type: none;"><!-- could not make CSS selector styling work-->
-									<ul style="padding-inline-start: 20px !important; font-size: 12px !important;"><!-- could not make CSS selector styling work-->
+								<li style="list-style-type: none;">
+									<ul style="padding-inline-start: 20px !important; font-size: 12px !important;">
 										<li>Tap Wordle Solver logo to reset</li>
-										<li>Tap the Date Picker to select a Wordle Archive date</li>
-										<li>Tap the day# to choose Wordle Archive day directly</li>
-										<li>Tap copyright &copy; symbol in footer to include future Answers only</li>
+										<li>Tap <i>Date Picker</i> or <i>Day #</i> to select a Wordle Archive</li>
+										<li>Tap &copy; symbol in footer to include future Answers only</li>
 										<li>Tap Bart image in footer for <strong>spoiler</strong></li>
 									</ul>
 								</li>
