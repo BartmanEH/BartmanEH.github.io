@@ -1,3 +1,8 @@
+//╔════════╗
+//║ To Do: ║
+//╠════════╩══════════════════════════════════════════════════════════════╗
+//║ minor bug: day# 635, Answer=CIDER, Guess=CEDER, results include CEDER ║
+//╚═══════════════════════════════════════════════════════════════════════╝
 //import { Fireworks } from 'fireworks-js';
 //import { ToastMaker } from 'toastmaker';
 //#region word arrays
@@ -729,7 +734,7 @@ function solveIt() {
     //╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
     //║ let's do some error checking, shall we? we have the whole Guess word here meow                                ║
     //╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
-    //║  3 rules to error-check Guess word entry matches Wordle results:                                              ║
+    //║ rules to error-check Guess word entry matches Wordle results:                                                 ║
     //║ (1) any guess word letters must be Green that are in same Green pattern array positions                       ║
     //║ (2) any guess word letters must be Gray that are in exclude array                                             ║
     //║ (3) all guess word letters must be yellow or Green that are in include array (incl. multiples of same letter) ║
@@ -790,15 +795,12 @@ function solveIt() {
       const wordLetter = word.substring(letterPosition - 1, letterPosition);
       if ((patternLetter !== '*') && (wordLetter !== patternLetter)) {
         boolGREENsTest = false;
-      } else if (wordLetter === patternLetter) {  //GREEN letter match
+      } else if (wordLetter === patternLetter) {                    //GREEN letter match
         word = word.substring(0, letterPosition - 1) + '*' + word.substring(letterPosition);
         consoleLog(logFiltering, 'Green match word: ' + word);
       }//if
     }//for
-    if (!boolGREENsTest) {                                          //word doesn't match Green pattern
-      consoleLog(logFiltering, 'no match, continuing');
-      continue;                                                     //continue FOR word loop
-    } else {                                                        //word matches Green patter
+    if (boolGREENsTest) {                                           //word matches Green pattern
       consoleLog(logFiltering, 'interim match word: ' + word);      //continue scrutinzing
       boolExclude = aryExcludeLetters.every(function (excludeLetter) { return !word.includes(excludeLetter); });
       consoleLog(logFiltering, 'word: ' + word + ' boolExclude: ' + boolExclude);
@@ -808,9 +810,12 @@ function solveIt() {
         if (boolInclude) {                                          //word includes all Include letters
           aryFilteredFiveLetterWords.push(iterationWord);
           consoleLog(logFiltering, 'pushing word: ' + word);
-        }//if
-      }//if boolExlude
-    }//if else !boolGREENsTest
+        }//if boolInclude
+      }//if boolExclude
+    } else {                                                        //word doesn't match Green pattern
+      consoleLog(logFiltering, 'no match, continuing');
+      continue;                                                     //continue FOR word loop
+    }//if else boolGREENsTest
   }//for word
   consoleLog(logFiltering, aryFilteredFiveLetterWords);
   const aryScrutinizedFilteredFiveLetterWords = [];
@@ -836,9 +841,9 @@ function solveIt() {
                 consoleLog(logFiltering, 'reject: ' + word + ' wordLetterPosition === letterPosition');
               } else {
                 //consoleLog(logFiltering, 'keep ' + word);
-                continue;                                           //keep word; don't set boolG2G, stop further checking
+                continue;                                           //keep word; don't unset boolG2G, stop further checking
               }//if else
-            }//ife
+            }//if
           }//for
         }//if else
       }//for
