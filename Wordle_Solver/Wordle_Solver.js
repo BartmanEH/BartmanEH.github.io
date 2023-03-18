@@ -352,9 +352,9 @@ function buildStrFilteredFiveLetterWords(array) {                   //helper fun
   for (const word of array) {
     if (aryAllAnswersOrdered.includes(word)) {                      //word is a possible Answer
       if (aryAllAnswersOrdered.indexOf(word) >= diffDays) {
-        strBuilt += '<strong><em>' + word + '</em></strong> &nbsp &nbsp';  //bold word
+        strBuilt += '<strong><em><u>' + word + '</u></em></strong> &nbsp &nbsp';  //bold word
       } else {
-        strBuilt += '<strong>' + word + '</strong> &nbsp &nbsp';    //bold word
+        strBuilt += word + '&nbsp&nbsp';    //bold word
       }//if else
     } else {                                                        //word is not a possible Answer, Guess only
       strBuilt += word + '&nbsp &nbsp';                             //do not bold word
@@ -767,13 +767,13 @@ function solveIt() {
             break;                                                  //no more checking required for this include letter
           }//if else
         }//if
-      }//for
+      }//for guessWordCheckPosition
       if (boolCheck) {
         consoleLog(logErrorChecking, 'Letter "' + includeLetter + '" cannot change to Gray in guess word: ' + guessWord + '!');
         errorHandler('Letter "' + includeLetter + '" cannot change to Gray in guess word: ' + guessWord + '!');   //Gray letter is in includes array!
         return;                                                     //terminate further processing
       }//if
-    }//for
+    }//for aryIncludeLettersPosition
     //╔═══════════════════╗
     //║ end of guess loop ║
     //╚═══════════════════╝
