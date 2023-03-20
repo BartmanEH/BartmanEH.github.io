@@ -26,7 +26,7 @@ const logErrorChecking = Boolean(false);  //logErrorChecking = true: error check
 const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
-const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
+const logDatePicker = Boolean(true);     //logDatePicker = true: date picker results debug messages on console
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
@@ -37,7 +37,8 @@ const stateMisplaced = 'misplaced';       //metadata attribute for Yellow
 const stateCorrect = 'correct';           //metadata attribute for Green
 const stateTBD = 'tbd';                   //metadata attribute for unknown
 const millisecondsPerDay = 24 * 60 * 60 * 1000; //hours*minutes*seconds*milliseconds = millseconds per day
-const start = new Date(2021, 5, 19);      //date of first Wordle (0 indexed)
+//const start = new Date(2021, 5, 19);      //date of first Wordle (month is 0 indexed)
+const start = new Date('2021-06-19T00:00:00');      //date of first Wordle
 const today = new Date();                 //today's date
 //#endregion constants
 //#region globals;
@@ -189,11 +190,12 @@ function dayNumChanged() {
 }//dayNumChanged()
 function datePickerChanged() {
   //const dateValue = new Date(document.getElementById('datePicker-input').value).getTime();
-  const dateValue = new Date(document.getElementById('datePicker-input').value);
+  //const dateValue = new Date(document.getElementById('datePicker-input').value);
+  const dateValue = document.getElementById('datePicker-input').value;
   //let diff = dateValue - new Date(start).getTime();                 //difference in milliseconds
-  //diff = Math.round(diff / oneDay);                                 //round ms to days
   //let diff = daysBetween(dateValue, new Date(start).getTime());
-  let diff = daysBetween(start, dateValue);
+  //let diff = daysBetween(start, dateValue);
+  let diff = daysBetween(start, dateValue) + 1;                     //20230320 changed this to +1 to make date picker changes work
   consoleLog(logDatePicker, 'dateValue - start: ' + diff);
   if (diff < 0) {
     consoleLog(logDatePicker, 'error: date before official start!');
@@ -202,7 +204,6 @@ function datePickerChanged() {
   } else if (daysBetween(dateValue, today) <= 0) {
     consoleLog(logDatePicker, 'error: future date!');
     diff = daysBetween(start, today);                               //difference in days
-    //diff = Math.round(diff / oneDay);                               //round ms to days
     document.getElementById('datePicker-input').value = formatDate(today);
   }//if else
   diffDays = diff;
@@ -226,6 +227,7 @@ function daysBetween(startDate, endDate) {
   consoleLog(logDatePicker, 'daysBetween: ' + daysBetween);
   consoleLog(logDatePicker, 'Math.floor(daysBetween): ' + Math.floor(daysBetween));
   return Math.floor(daysBetween);
+  //return Math.round(daysBetween);
 }//daysBetween()
 function formatDate(dateValue) {                                    //helper function to format date to string
   let dd = dateValue.getDate();
