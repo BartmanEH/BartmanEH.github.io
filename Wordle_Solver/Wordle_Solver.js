@@ -354,15 +354,15 @@ function buildStrFilteredFiveLetterWords(array) {                   //helper fun
   const linkStart = '<a style="text-decoration:none;" target="_blank" href="https://www.merriam-webster.com/dictionary/';
   const space = '&nbsp &nbsp';                                      //must have a normal space between the non-breaking spaces
   for (const word of array) {
-    const linkEnd = word.toLowerCase() + '">' + word + '</a>';
+    const linkEnd = word.toLowerCase() + '">' + word + '</a></span>';
     if (aryAllAnswersOrdered.includes(word)) {                      //word is a possible Answer
       if (aryAllAnswersOrdered.indexOf(word) >= diffDays) {         //bold and italicize word
-        strBuilt += '<strong><em><u><span>' + linkStart + linkEnd + '</span></u></em></strong>' + space;
+        strBuilt += '<strong><em><u><span>' + linkStart + linkEnd + '</u></em></strong>' + space;
       } else {                                                      //word is a possible Answer, bold word
-        strBuilt += '<strong><span style="font-size: 90%";>' + linkStart + linkEnd + '</span></strong>' + space;
+        strBuilt += '<strong><span style="font-size: 90%";>' + linkStart + linkEnd + '</strong>' + space;
       }//if else
     } else {                                                        //word is not a possible Answer, Guess only, do not bold
-      strBuilt += '<span style="font-size: 80%";>' + linkStart + linkEnd + '</span>' + space;
+      strBuilt += '<span style="font-size: 80%";>' + linkStart + linkEnd + space;
     }//if else
   }//for
   return strBuilt;
