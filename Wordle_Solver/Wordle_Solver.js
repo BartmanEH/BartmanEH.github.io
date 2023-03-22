@@ -351,18 +351,18 @@ function imageClicked(e) {                                          //image inpu
 }//imageClicked()
 function buildStrFilteredFiveLetterWords(array) {                   //helper function to concatenate strings (words)
   let strBuilt = '';
-  const dictLinkStart = '<a style="text-decoration:none;" target="_blank" href="https://www.merriam-webster.com/dictionary/';
+  const linkStart = '<a style="text-decoration:none;" target="_blank" href="https://www.merriam-webster.com/dictionary/';
   const space = '&nbsp &nbsp';                                      //must have a normal space between the non-breaking spaces
   for (const word of array) {
-    const dictLinkEnd = word.toLowerCase() + '">' + word + '</a>';
+    const linkEnd = word.toLowerCase() + '">' + word + '</a>';
     if (aryAllAnswersOrdered.includes(word)) {                      //word is a possible Answer
       if (aryAllAnswersOrdered.indexOf(word) >= diffDays) {         //bold and italicize word
-        strBuilt += '<strong><em><u><span>' + dictLinkStart + word.toLowerCase() + '">' + word + '</a></span></u></em></strong>' + space;
+        strBuilt += '<strong><em><u><span>' + linkStart + linkEnd + '</span></u></em></strong>' + space;
       } else {                                                      //word is a possible Answer, bold word
-        strBuilt += '<strong><span style="font-size: 90%";>' + dictLinkStart + dictLinkEnd + '</span></strong>' + space;
+        strBuilt += '<strong><span style="font-size: 90%";>' + linkStart + linkEnd + '</span></strong>' + space;
       }//if else
     } else {                                                        //word is not a possible Answer, Guess only, do not bold
-      strBuilt += '<span style="font-size: 80%";>' + dictLinkStart + dictLinkEnd + '</span>' + space;
+      strBuilt += '<span style="font-size: 80%";>' + linkStart + linkEnd + '</span>' + space;
     }//if else
   }//for
   return strBuilt;
