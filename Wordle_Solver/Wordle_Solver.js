@@ -233,8 +233,8 @@ function formatDate(dateValue) {                                    //helper fun
   let dd = dateValue.getDate();
   let mm = dateValue.getMonth() + 1; //0-indexed; January is 0!
   const yyyy = dateValue.getFullYear();
-  if (dd < 10) { dd = '0' + dd; }
-  if (mm < 10) { mm = '0' + mm; }
+  if (dd < 10) { dd = '0' + dd; }//if
+  if (mm < 10) { mm = '0' + mm; }//if
   return yyyy + '-' + mm + '-' + dd;
 }//formatDate()
 function resetGrid() {                                              //clear letter grid
@@ -400,7 +400,7 @@ function isSubsetInclDupes(includesArray, wordArray) {              //is include
     //a !== undefined && a !== null ? a : b       equivalent method
   }//for
   for (const entry of wordArray) {
-    if (occurrences.has(entry)) { occurrences.set(entry, occurrences.get(entry) - 1); }
+    if (occurrences.has(entry)) { occurrences.set(entry, occurrences.get(entry) - 1); }//if
   }//for
   return [...occurrences.values()].every(count => count <= 0);
 }//isSubsetInclDupes()
@@ -447,7 +447,7 @@ function automatedTesting() {                                 //
     //consoleLog(logAutoTest, 'guess(' + useCase.guess.length + '): ' + useCase.guess);
     //consoleLog(logAutoTest, 'pattern(' + useCase.pattern.length + '): ' + useCase.pattern);
     //consoleLog(logAutoTest, 'possibilities(' + useCase.possibilities.length + '): ' + useCase.possibilities);
-    //consoleLog(logAutoTest, 'testing use case id: ' + useCase.id); }
+    //consoleLog(logAutoTest, 'testing use case id: ' + useCase.id);
     for (let useCaseGuess = 1; useCaseGuess <= useCase.guess.length; useCaseGuess++) {
       const guessWord = useCase.guess[useCaseGuess - 1].toString();
       //consoleLog(logAutoTest, 'guess: ' + guessWord);
@@ -473,7 +473,7 @@ function automatedTesting() {                                 //
           consoleLog(logAutoTest, 'invalid Pattern Colour!');
         }//if else
       }//for letterPosition
-    }//for guessPosition
+    }//for useCases
     const aryUseCasePossibilities = [];
     for (let useCasePossibilities = 1; useCasePossibilities <= useCase.possibilities.length; useCasePossibilities++) {
       aryUseCasePossibilities.push(useCase.possibilities[useCasePossibilities - 1].toString());
@@ -497,7 +497,7 @@ function automatedTesting() {                                 //
     resetGrid();                                                    //reset Grid for next use case
   });//forEach useCase
   useCaseResultsIds = useCaseResultsIds.slice(0, -2);
-  if (useCaseResultsIds.length > 2) { useCaseResults += 's'; }
+  if (useCaseResultsIds.length > 2) { useCaseResults += 's'; }//if
   useCaseResults += ' ' + useCaseResultsIds;
   if (useCasesPassed) {
     consoleLog(logAutoTest, 'all ' + useCaseData.useCases.length + ' use cases PASSED!', 'warn');
@@ -505,7 +505,7 @@ function automatedTesting() {                                 //
   } else {
     consoleLog(logAutoTest, useCaseResults + ' FAILED!', 'error');
     toast(useCaseResults + ' FAILED!');
-  }
+  }//if else
 }//automatedTesting()
 //#endregion automated testing
 //#region solveIt
@@ -566,7 +566,7 @@ function solveIt() {
         } else if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
           errorHandler('"' + guessWord + '" is not a possible guess word!');
           consoleLog(logFilterRules, '"' + guessWord + '" is not a possible guess word!');
-          if (!testMode) { return; }
+          if (!testMode) { return; }//if
         } else {
           consoleLog(logGeneral, 'aryAllAnswersOrdered.indexOf(guessWord): ' + aryAllAnswersOrdered.indexOf(guessWord));
           consoleLog(logGeneral, 'diffDays: ' + diffDays);
