@@ -569,20 +569,19 @@ function solveIt() {
       guessWord += letter;
       //check for trigger guess words
       if ((guessWord !== '     ') && (guessWord !== '') && (guessWord.length === 5)) {
-        //if ((guessWord !== '     ') && (guessWord !== '')) {
-        //consoleLog(logFilterRules, 'testing guess word: ' + guessWord + ' for trigger');
+        consoleLog(logFilterRules, 'testing guess word: ' + guessWord + ' for trigger');
         if (guessWord === 'HUOMO') {
           celebrate(guessPosition, 'Huomos easter egg!');
           aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
           aryExcludeLetters = aryIncludeLetters = [];
           return;                                                   //terminate further processing
-        } else if (guessWord === 'ATEST') {
+        } else if (guessWord === 'ATEST') {                         //run automated testing
           const tempboolAnswersOnly = boolAnswersOnly;              //store setting
           const tempboolAutoResults = boolAutoResults;              //store setting
           boolAnswersOnly = false;                                  //include all possible guesses for testing
           boolAutoResults = false;                                  //disable auto results
           document.getElementById('automaticResults').checked = boolAutoResults;
-          boolAutoTest = true;                                      //set bool for automatic testing
+          boolAutoTest = true;                                      //set bool to trigger automatic testing
           resetGrid();
           initialize();
           boolAutoTest = false;                                     //clear bool for automatic testing
@@ -591,11 +590,11 @@ function solveIt() {
           document.getElementById('automaticResults').checked = boolAutoResults;
           initialize();
           return;                                                   //terminate further processing
-        } else if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) {
+        } else if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) { //invalid guess word
           errorHandler('"' + guessWord + '" is not a possible guess word!');
           consoleLog(logFilterRules, '"' + guessWord + '" is not a possible guess word!');
           if (!testMode) { return; }//if
-        } else {
+        } else {                                                    //guess = answer?
           consoleLog(logGeneral, 'aryAllAnswersOrdered.indexOf(guessWord): ' + aryAllAnswersOrdered.indexOf(guessWord));
           consoleLog(logGeneral, 'diffDays: ' + diffDays);
           let boolStreakSaver = false;
