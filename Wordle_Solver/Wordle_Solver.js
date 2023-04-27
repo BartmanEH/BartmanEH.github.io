@@ -71,7 +71,7 @@ let container = '';                       //global Easter Egg container
 let fireworks = '';                       //global Easter Egg effect
 let version = '';                         //global version
 let useCaseData = [];
-const curlResponse = '';
+let curlResponse = '';
 //#endregion globals
 //#region init
 document.addEventListener('DOMContentLoaded', function () {         //fires when DOM loaded (ready)
@@ -85,10 +85,11 @@ document.addEventListener('DOMContentLoaded', function () {         //fires when
 async function getSolution() {                                      //get today's solution from Wordle API via PHP
   fetch('https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php')
     .then(response => response.text())
-    .then(curlResponse => {                                                 //do something with the data
-      consoleLog(spoilerModePre, curlResponse);
+    .then(data => {                                                 //do something with the data
+      consoleLog(spoilerModePre, data);
+      curlResponse = data;
     });
-  const solution = JSON.parse(curlResponse).solution.toUpperCase(); /*global curlResponse*/ //curlResponse var exported from PHP
+  const solution = JSON.parse(curlResponse).solution.toUpperCase();
   consoleLog(spoilerModePre, 'Today\'s answer via PHP cURL: ' + solution);
 }//getSolution()
 async function getVersion() {                                       //must be async function!
