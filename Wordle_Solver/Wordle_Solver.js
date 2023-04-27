@@ -71,7 +71,7 @@ let container = '';                       //global Easter Egg container
 let fireworks = '';                       //global Easter Egg effect
 let version = '';                         //global version
 let useCaseData = [];
-let curlResponse = '';
+let solution = '';
 //#endregion globals
 //#region init
 document.addEventListener('DOMContentLoaded', function () {         //fires when DOM loaded (ready)
@@ -87,10 +87,9 @@ async function getSolution() {                                      //get today'
     //.then(response => response.text())
     .then(data => {                                                 //do something with the data
       consoleLog(spoilerModePre, data);
-      curlResponse = data;
+      solution = JSON.parse(data).solution.toUpperCase();
+      consoleLog(spoilerModePre, 'Today\'s answer via PHP cURL: ' + solution);
     });
-  const solution = JSON.parse(curlResponse).solution.toUpperCase();
-  consoleLog(spoilerModePre, 'Today\'s answer via PHP cURL: ' + solution);
 }//getSolution()
 async function getVersion() {                                       //must be async function!
   const requestURL = '/Wordle_Solver/version.json';                 //json version info data
