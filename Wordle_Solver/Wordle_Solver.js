@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {         //fires when
 });//DOM loaded
 async function getSolution() {                                      //get today's solution from Wordle API via PHP
   await fetch('https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php')
-    .then(response => response.text())
+    //.then(response => response.text())
     .then(data => {                                                 //do something with the data
       consoleLog(spoilerModePre, data);
       curlResponse = data;
