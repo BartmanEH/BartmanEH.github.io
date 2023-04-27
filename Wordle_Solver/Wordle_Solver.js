@@ -84,9 +84,8 @@ document.addEventListener('DOMContentLoaded', function () {         //fires when
 async function getSolution() {                                      //get today's solution from Wordle API via PHP
   fetch('https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php')
     .then(response => response.text())
-    .then(data => {
-      //do something with the data
-      consoleLog(spoilerModePre, data);
+    .then(curlResponse => {                                                 //do something with the data
+      consoleLog(spoilerModePre, curlResponse);
     });
   const solution = JSON.parse(curlResponse).solution.toUpperCase(); /*global curlResponse*/ //curlResponse var exported from PHP
   consoleLog(spoilerModePre, 'Today\'s answer via PHP cURL: ' + solution);
