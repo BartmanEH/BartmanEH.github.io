@@ -82,8 +82,8 @@ document.addEventListener('DOMContentLoaded', function () {         //fires when
   initialize();                                                     //initialize things
 });//DOM loaded
 async function getSolution() {                                      //get today's solution from Wordle API via PHP
-  const solution = JSON.parse(curlResponse).solution.toUpperCase(); /*global curlResponse*/ //curlResponse var exported from PHP
-  consoleLog(spoilerModePre, 'Today\'s answer via PHP cURL: ' + solution);
+  //const solution = JSON.parse(curlResponse).solution.toUpperCase(); /*global curlResponse*/ //curlResponse var exported from PHP
+  //consoleLog(spoilerModePre, 'Today\'s answer via PHP cURL: ' + solution);
 }//getSolution()
 async function getVersion() {                                       //must be async function!
   const requestURL = '/Wordle_Solver/version.json';                 //json version info data
