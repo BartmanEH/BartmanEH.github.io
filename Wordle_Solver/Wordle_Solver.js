@@ -82,12 +82,12 @@ document.addEventListener('DOMContentLoaded', function () {         //fires when
   initialize();                                                     //initialize things
 });//DOM loaded
 async function getSolution() {                                      //get today's solution from Wordle API via PHP
-  fetch('https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php')
-    .then(response => response.text())
-    .then(data => {
-      //do something with the data
-      console.log(data);
-    });
+  fetch('https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php');
+  //.then(response => response.text())
+  //.then(data => {
+  //  //do something with the data
+  //  console.log(data);
+  //});
   const solution = JSON.parse(curlResponse).solution.toUpperCase(); /*global curlResponse*/ //curlResponse var exported from PHP
   consoleLog(spoilerModePre, 'Today\'s answer via PHP cURL: ' + solution);
 }//getSolution()
