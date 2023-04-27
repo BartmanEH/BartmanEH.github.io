@@ -43,7 +43,7 @@ const logFiltered = Boolean(false);       //logFiltered = true: filtered debug m
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
 const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
-const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
+const spoilerModePre = Boolean(true);    //spoilerMode = true: show Today's Answer in console
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
@@ -82,8 +82,14 @@ document.addEventListener('DOMContentLoaded', function () {         //fires when
   initialize();                                                     //initialize things
 });//DOM loaded
 async function getSolution() {                                      //get today's solution from Wordle API via PHP
-  //const solution = JSON.parse(curlResponse).solution.toUpperCase(); /*global curlResponse*/ //curlResponse var exported from PHP
-  //consoleLog(spoilerModePre, 'Today\'s answer via PHP cURL: ' + solution);
+  fetch('https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php')
+    .then(response => response.text())
+    .then(data => {
+      //do something with the data
+      console.log(data);
+    });
+  const solution = JSON.parse(curlResponse).solution.toUpperCase(); /*global curlResponse*/ //curlResponse var exported from PHP
+  consoleLog(spoilerModePre, 'Today\'s answer via PHP cURL: ' + solution);
 }//getSolution()
 async function getVersion() {                                       //must be async function!
   const requestURL = '/Wordle_Solver/version.json';                 //json version info data
