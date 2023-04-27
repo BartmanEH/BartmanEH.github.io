@@ -71,6 +71,7 @@ let container = '';                       //global Easter Egg container
 let fireworks = '';                       //global Easter Egg effect
 let version = '';                         //global version
 let useCaseData = [];
+const curlResponse = '';
 //#endregion globals
 //#region init
 document.addEventListener('DOMContentLoaded', function () {         //fires when DOM loaded (ready)
