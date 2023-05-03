@@ -71,7 +71,6 @@ let container = '';                       //global Easter Egg container
 let fireworks = '';                       //global Easter Egg effect
 let version = '';                         //global version
 let useCaseData = [];
-let solution = '';
 //#endregion globals
 //#region init
 document.addEventListener('DOMContentLoaded', function () {         //fires when DOM loaded (ready)
@@ -83,19 +82,18 @@ document.addEventListener('DOMContentLoaded', function () {         //fires when
   initialize();                                                     //initialize things
 });//DOM loaded
 async function getSolution() {                                      //get today's solution from Wordle API via PHP
-  await fetch('https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php')
-    //.then(response => response.text())
-    .then(data => {                                                 //do something with the data
-      consoleLog(spoilerModePre, data);
-      solution = JSON.parse(data).solution.toUpperCase();
-      consoleLog(spoilerModePre, 'Today\'s answer via PHP cURL: ' + solution);
-    });
+  const solutionURL = 'https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php';
+  const requestSolution = new Request(solutionURL);
+  const responseSolution = await fetch(requestSolution);
+  const solutionJSON = await responseSolution.json();
+  const solution = JSON.parse(solutionJSON).solution.toUpperCase();
+  consoleLog(spoilerModePre, 'Today\'s answer via PHP cURL: ' + solution);
 }//getSolution()
 async function getVersion() {                                       //must be async function!
-  const requestURL = '/Wordle_Solver/version.json';                 //json version info data
-  const request = new Request(requestURL);
-  const response = await fetch(request);
-  const versionData = await response.json();
+  const versionURL = '/Wordle_Solver/version.json';                 //json version info data
+  const requestVersion = new Request(versionURL);
+  const responseVersion = await fetch(requestVersion);
+  const versionData = await responseVersion.json();
   version = versionData.buildMajor + '.' + versionData.buildMinor + '.' + versionData.buildRevision + '-' + versionData.buildTag;
   consoleLog(logGeneral, 'version: v' + version);                               //log version
   document.getElementById('version').innerHTML = 'v' + version.toString();      //update webpage footer version info
