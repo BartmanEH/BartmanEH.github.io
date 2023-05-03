@@ -70,23 +70,31 @@ let numFiveLetterWords = 0;               //global tracking number of possible w
 let container = '';                       //global Easter Egg container
 let fireworks = '';                       //global Easter Egg effect
 let version = '';                         //global version
+let solution = '';                        //global solution
 let useCaseData = [];
 //#endregion globals
 //#region init
 document.addEventListener('DOMContentLoaded', function () {         //fires when DOM loaded (ready)
-  getSolution();                                                    //retrieve today's solution from PHP
+  getSolution(today);                                               //retrieve today's solution from PHP
   getVersion();                                                     //retrieve version data from file
   getUseCases();                                                    //retrieve use case data from file
   consoleLog(logGeneral, 'DOM ready!');                             //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
 });//DOM loaded
-async function getSolution() {                                      //get today's solution from Wordle API via PHP
-  const solutionURL = 'https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php';
+async function getSolution(date) {                                  //get solution for 'date' from Wordle API via PHP
+  //consoleLog(spoilerModePre, 'date: ' + date);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}`;
+  consoleLog(spoilerModePre, 'formattedDate: ' + formattedDate);
+  const solutionDate = formattedDate;
+  const solutionURL = 'https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
   const requestSolution = new Request(solutionURL);
   const responseSolution = await fetch(requestSolution);
   const solutionJSON = await responseSolution.json();
-  const solution = JSON.parse(solutionJSON).solution.toUpperCase();
+  solution = JSON.parse(solutionJSON).solution.toUpperCase();
   consoleLog(spoilerModePre, 'Today\'s answer via PHP cURL: ' + solution);
 }//getSolution()
 async function getVersion() {                                       //must be async function!
@@ -212,6 +220,7 @@ function dayNumChanged() {
   }//if
   consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
   resetGrid();
+  getSolution(archiveDate);                                         //get solution for new date
 }//dayNumChanged()
 function datePickerChanged() {
   //const dateValue = new Date(document.getElementById('datePicker-input').value).getTime();
@@ -241,6 +250,9 @@ function datePickerChanged() {
   consoleLog(logDatePicker, 'diffDays: ' + diffDays);
   consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
   resetGrid();
+  const date = new Date(dateValue);
+  date.setDate(date.getDate() + 1);                                 //needed + 1 day to work
+  getSolution(date);                                                //get solution for new date
 }//datePickerChanged()
 function treatAsUTC(date) {
   const result = new Date(date);
@@ -591,10 +603,13 @@ function solveIt() {
           errorHandler('"' + guessWord + '" is not a possible guess word!');
           consoleLog(logFilterRules, '"' + guessWord + '" is not a possible guess word!');
           if (!testMode) { return; }//if
-        } else {                                                    //guess = answer?
+        } else {                                                    //guess = answer/solution?
           consoleLog(logGeneral, 'aryAllAnswersOrdered.indexOf(guessWord): ' + aryAllAnswersOrdered.indexOf(guessWord));
           consoleLog(logGeneral, 'diffDays: ' + diffDays);
           let boolStreakSaver = false;
+          if (guessWord === solution) {                             //guess = solution
+            consoleLog(spoilerModePre, 'guess word = solution!');
+          }//if
           boolStreakSaver = streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays);
           if (boolStreakSaver) {
             celebrate(guessPosition, 'Streak Saver easter egg!');
