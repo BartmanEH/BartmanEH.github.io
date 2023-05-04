@@ -52,14 +52,15 @@ const stateIncorrect = 'incorrect';       //metadata attribute for Black
 const stateMisplaced = 'misplaced';       //metadata attribute for Yellow
 const stateCorrect = 'correct';           //metadata attribute for Green
 const stateTBD = 'tbd';                   //metadata attribute for unknown
-const millisecondsPerDay = 24 * 60 * 60 * 1000; //hours*minutes*seconds*milliseconds = millseconds per day
-//const start = new Date(2021, 5, 19);      //date of first Wordle (month is 0 indexed)
+const millisecondsPerDay = 24 * 60 * 60 * 1000;     //hours*minutes*seconds*milliseconds = millseconds per day
+//const start = new Date(2021, 5, 19);              //date of first Wordle (month is 0 indexed)
 const start = new Date('2021-06-19T00:00:00');      //date of first Wordle
-const today = new Date();                 //today's date
+const today = new Date();                           //today's date
 //#endregion constants
 //#region globals;
-//let diffDays = Math.floor((today - start) / oneDay);                //#days (changed from .round to .floor)
 let diffDays = daysBetween(start, today); //new function to compute days between two dates
+let answer = '';                          //answer via built-in answers array
+let solution = '';                        //solution obtained via Wordle API
 let boolAnswersOnly = Boolean(false);     //boolAnswersOnly = true: include only possible Answers, not possible Guesses
 let boolPrevAnswers = Boolean(true);      //boolPrevAnswers = true: include previous Answers
 let boolAutoResults = Boolean(true);      //boolAutoResults = true: auto enter guess results based on Today's Answer
@@ -70,7 +71,6 @@ let numFiveLetterWords = 0;               //global tracking number of possible w
 let container = '';                       //global Easter Egg container
 let fireworks = '';                       //global Easter Egg effect
 let version = '';                         //global version
-let solution = '';                        //global solution
 let useCaseData = [];
 //#endregion globals
 //#region init
@@ -100,12 +100,15 @@ async function getSolution(date) {                                  //get soluti
   //good result: {"id":613,"solution":"nanny","print_date":"2023-06-03","days_since_launch":714,"editor":"Tracy Bennett"}
   ///bad result: {"status":"ERROR","errors":["Not Found"],"results":[]}
   if ('solution' in solutionJSON) {
-    solution = solutionJSON.solution.toUpperCase();
-  } else {
+    solution = solutionJSON.solution.toUpperCase();                 //solution for date available via Wordle API
+    answer = solution;                                              //use Wordle API solution as answer
+  } else {                                                          //solution for date NOT available via Wordle API
     consoleLog(spoilerModePre, 'date out of range OR Wordle API changed!');
     solution = '';
+    answer = aryAllAnswersOrdered[diffDays];                        //use built-in answer array for answer
   }//if
   consoleLog(spoilerModePre, 'solution via PHP cURL: ' + solution);
+  consoleLog(spoilerModePre, 'answer: ' + answer);
 }//getSolution()
 async function getVersion() {                                       //must be async function!
   const versionURL = '/Wordle_Solver/version.json';                 //json version info data
@@ -158,7 +161,7 @@ async function initialize() {                                                   
       }//if
     }//for
   }//if
-  consoleLog(spoilerModePre, 'Wordle Day #:' + (diffDays) + ', Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
+  consoleLog(spoilerModePre, 'Wordle Day #:' + (diffDays) + ', Today\'s answer: ' + answer);
   numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-input').valueAsDate = today;
@@ -228,7 +231,7 @@ function dayNumChanged() {
     fireworks = '';                                                 //'destroy' instance
     document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
-  consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
+  consoleLog(spoilerModePre, 'Today\'s answer: ' + answer);
   resetGrid();
   getSolution(archiveDate);                                         //get solution for new date
 }//dayNumChanged()
@@ -255,7 +258,7 @@ function datePickerChanged() {
     document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
   }//if
   consoleLog(logDatePicker, 'diffDays: ' + diffDays);
-  consoleLog(spoilerModePre, 'Today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
+  consoleLog(spoilerModePre, 'Today\'s answer: ' + answer);
   resetGrid();
   const date = new Date(dateValue);
   date.setDate(date.getDate() + 1);                                 //needed + 1 day to work
@@ -390,7 +393,7 @@ function imageClicked(e) {                                          //image inpu
     }//if else
     window.location.reload();                                       //reload page
   } else if (e.target.id === 'BartmanEH_logo_img') {                //BartmanEH logo clicked
-    toast('today\'s answer: ' + aryAllAnswersOrdered[diffDays], 'bottom');
+    toast('today\'s answer: ' + answer, 'bottom');
   }//if else
 }//imageClicked()
 function buildStrFilteredFiveLetterWords(array) {                   //helper function to concatenate strings (words)
@@ -627,7 +630,7 @@ function solveIt() {
           }//if
         }//if else
       }//if
-      if (boolAutoResults) {                //automatic results based on today's answer: aryAllAnswersOrdered[diffDays]
+      if (boolAutoResults) {                //automatic results based on answer
         //╔═══════════════════╗
         //║ automatic results ║
         //╚═══════════════════╝
@@ -635,9 +638,8 @@ function solveIt() {
         //consoleLog(logAutoResults, 'exclude: ' + aryExcludeLetters);
         //consoleLog(logAutoResults, 'include: ' + aryIncludeLetters);
         //consoleLog(logAutoResults, 'pattern: ' + aryPatternLetters);
-        //consoleLog(logAutoResults, 'today\'s answer: ' + aryAllAnswersOrdered[diffDays]);
-        let todayAnswer = '';
-        todayAnswer = aryAllAnswersOrdered[diffDays];
+        //consoleLog(logAutoResults, 'today\'s answer: ' + answer);
+        let todayAnswer = answer;
         consoleLog(logAutoResults, 'todayAnswer: ' + todayAnswer);
         //╔═════════════════╗
         //║ automatic GREEN ║
