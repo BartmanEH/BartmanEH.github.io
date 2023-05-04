@@ -84,6 +84,8 @@ document.addEventListener('DOMContentLoaded', function () {         //fires when
 });//DOM loaded
 async function getSolution(date) {                                  //get solution for 'date' from Wordle API via PHP
   //consoleLog(spoilerModePre, 'date: ' + date);
+  if (typeof date === 'undefined') date = today;                    //no date var passed to function so use today
+  if (!(date instanceof Date)) date = new Date(date);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
@@ -93,9 +95,17 @@ async function getSolution(date) {                                  //get soluti
   const solutionURL = 'https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
   const requestSolution = new Request(solutionURL);
   const responseSolution = await fetch(requestSolution);
-  const solutionJSON = await responseSolution.json();
-  solution = JSON.parse(solutionJSON).solution.toUpperCase();
-  consoleLog(spoilerModePre, 'Today\'s answer via PHP cURL: ' + solution);
+  const solutionJSONstring = await responseSolution.json();
+  const solutionJSON = JSON.parse(solutionJSONstring);
+  //good result: {"id":613,"solution":"nanny","print_date":"2023-06-03","days_since_launch":714,"editor":"Tracy Bennett"}
+  ///bad result: {"status":"ERROR","errors":["Not Found"],"results":[]}
+  if ('solution' in solutionJSON) {
+    solution = solutionJSON.solution.toUpperCase();
+  } else {
+    consoleLog(spoilerModePre, 'date out of range OR Wordle API changed!');
+    solution = '';
+  }//if
+  consoleLog(spoilerModePre, 'solution via PHP cURL: ' + solution);
 }//getSolution()
 async function getVersion() {                                       //must be async function!
   const versionURL = '/Wordle_Solver/version.json';                 //json version info data
@@ -226,10 +236,7 @@ function datePickerChanged() {
   //const dateValue = new Date(document.getElementById('datePicker-input').value).getTime();
   //const dateValue = new Date(document.getElementById('datePicker-input').value);
   const dateValue = document.getElementById('datePicker-input').value;
-  //let diff = dateValue - new Date(start).getTime();                 //difference in milliseconds
-  //let diff = daysBetween(dateValue, new Date(start).getTime());
-  //let diff = daysBetween(start, dateValue);
-  let diff = daysBetween(start, dateValue) + 1;                     //20230320 changed this to +1 to make date picker changes work
+  let diff = daysBetween(start, dateValue) + 1;                     //20230320 added +1 to make date picker work
   consoleLog(logDatePicker, 'dateValue - start: ' + diff);
   if (diff < 0) {
     consoleLog(logDatePicker, 'error: date before official start!');
