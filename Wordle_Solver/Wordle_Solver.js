@@ -22,7 +22,7 @@
 //║ curl --silent "https://www.nytimes.com/svc/wordle/v2/YYYY-MM-DD.json" | jq --raw-output '.solution' | tr '[:lower:]' '[:upper:]'           ║
 //║ tr '[:lower:]' '[:upper:]' <<< $(jq --raw-output '.solution' <<< $(curl --silent "https://www.nytimes.com/svc/wordle/v2/2023-06-05.json")) ║
 //║ awk '{print toupper($0)}' <<< $(jq --raw-output '.solution' <<< $(curl --silent "https://www.nytimes.com/svc/wordle/v2/2023-06-05.json"))  ║
-//║ the following macOS terminal command for zsh will create a function for the session that can be called subsequently:                       ║
+//║ the following macOS terminal commands for zsh will create a function for the session that can be called subsequently:                      ║
 //║ getSolution() { result=$(curl --silent "https://www.nytimes.com/svc/wordle/v2/$1.json" | jq --raw-output 'if has("solution") then .solution else empty end'); if [[ -n $result ]]; then result_upper=$(echo "$result" | tr '[:lower:]' '[:upper:]'); printf "\033[32m%s\033[0m\n" "$result_upper"; else echo "\033[31mno solution found\!\033[0m"; fi }                                                                                                                          ║
 //║ getSolution 2023-06-12                                                                                                                     ║
 //╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
