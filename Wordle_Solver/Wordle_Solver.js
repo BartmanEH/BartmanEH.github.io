@@ -117,6 +117,7 @@ async function getSolution(date) {                                  //get soluti
     answer = aryAllAnswersOrdered[diffDays];                        //use built-in answer array for answer
     consoleLog(spoilerModePre, 'solution via PHP cURL: unavailable!');
     consoleLog(spoilerModePre, 'built-in answer: ' + answer);
+    toast('solution not available!');
     return false;                                                   //indicate failure
   }//if
 }//getSolution()
