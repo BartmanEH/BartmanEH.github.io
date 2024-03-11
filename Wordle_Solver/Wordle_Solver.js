@@ -428,10 +428,10 @@ function buildStrFilteredFiveLetterWords(array) {                   //helper fun
     const linkEnd = word.toLowerCase() + '">' + word + '</a></span>';
     if (aryAllAnswersOrdered.includes(word)) {                      //word is a possible Answer
       if (aryAllAnswersOrdered.indexOf(word) >= diffDays) {         //word is a possible Future Answer; bold, italicize and underline word
-        strBuilt += '<strong><em><u><span>' + linkStart + linkEnd + '</u></em></strong>' + space;
+        strBuilt += '<strong><em><u><span>' + linkStart + linkEnd + '</span></u></em></strong>' + space;
         consoleLog(logAnswers, 'Future Answer');
       } else {                                                      //word is a possible Answer, bold word
-        strBuilt += '<strong><span style="font-size: 90%";>' + linkStart + linkEnd + '</strong>' + space;
+        strBuilt += '<strong><span style="font-size: 90%";>' + linkStart + linkEnd + '</span></strong>' + space;
         consoleLog(logAnswers, 'Answer');
       }//if else
     } else {                                                        //word is not a possible Answer; Guess only
