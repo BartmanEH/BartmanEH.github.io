@@ -49,6 +49,7 @@ const logFiltered = Boolean(false);       //logFiltered = true: filtered debug m
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
 const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
+const logAnswers = Boolean(true);         //logAnswers = true: answer string debug messages on console
 const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
@@ -428,8 +429,10 @@ function buildStrFilteredFiveLetterWords(array) {                   //helper fun
     if (aryAllAnswersOrdered.includes(word)) {                      //word is a possible Answer
       if (aryAllAnswersOrdered.indexOf(word) >= diffDays) {         //word is a possible Future Answer; bold, italicize and underline word
         strBuilt += '<strong><em><u><span>' + linkStart + linkEnd + '</u></em></strong>' + space;
+        consoleLog(logAnswers, 'Future Answer');
       } else {                                                      //word is a possible Answer, bold word
         strBuilt += '<strong><span style="font-size: 90%";>' + linkStart + linkEnd + '</strong>' + space;
+        consoleLog(logAnswers, 'Answer');
       }//if else
     } else {                                                        //word is not a possible Answer; Guess only
       strBuilt += '<span style="font-size: 80%";>' + linkStart + linkEnd + space;
