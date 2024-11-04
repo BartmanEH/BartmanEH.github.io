@@ -41,43 +41,51 @@ getSolution.sh script contents:
 
 #!/bin/zsh
 
+# use undocumented Wordle API to fetch Solutions
+# v3
+# 20241031
+# usage: getSolution YYYY-MM-DD
+
 first_run="true"
 output=""
 
 getSolution() {
-    result=$(curl --silent "https://www.nytimes.com/svc/wordle/v2/$1.json" | jq --raw-output 'if has("solution") then .solution else empty end')
-    if [[ -n $result ]]; then
-        if [[ $first_run == "true" ]]; then
-            printf ", '"
-            output+=", '"
-            first_run="false"
-        else
-            printf "', '"
-            output+="', '"
-        fi
-        result_upper=$(echo "$result" | tr '[:lower:]' '[:upper:]')
-        printf "\033[32m%s\033[0m" "$result_upper"
-        output+="$result_upper"
+  result=$(curl --silent "https://www.nytimes.com/svc/wordle/v2/$1.json" | jq --raw-output 'if has("solution") then .solution else empty end')
+  if [[ -n $result ]]; then
+    if [[ $first_run == "true" ]]; then
+      printf "\n, '"
+      output+=", '"
+      first_run="false"
     else
-        printf "'\n\n\033[31mno further solutions after date: %s\n\nSolutions copied to clipboard!\033[0m\n\n" "$final_date"
-        output+="'"
-        return 1
+      printf "', '"
+      output+="', '"
     fi
+    result_upper=$(echo "$result" | tr '[:lower:]' '[:upper:]')
+    printf "\033[32m%s\033[0m" "$result_upper"
+    output+="$result_upper"
+  else
+    # Calculate and print next solution fetch date
+    next_day=$(date -j -v+1d -f "%Y-%m-%d" "$final_date" +%Y-%m-%d)
+    printf "\n\n\033[38;5;208mSolutions copied to clipboard!\n\n\033[31mno further solutions after date: %s\n\nnext solution date retrieval: getSolution.sh %s\n\n\033[0m" "$final_date" "$next_day"
+    output+="'"
+    return 1
+  fi
 }
 
 if [[ -z $1 ]]; then
-    echo "Please enter the Start date (YYYY-MM-DD): "
-    read date
+  echo "Please enter the Start date (YYYY-MM-DD): "
+  read date
 else
-    date=$1
+  date=$1
 fi
 
 while getSolution "$date"; do
-    final_date=$date
-    date=$(date -j -v+1d -f "%Y-%m-%d" "$date" +%Y-%m-%d)
+  final_date=$date
+  date=$(date -j -v+1d -f "%Y-%m-%d" "$date" +%Y-%m-%d)
 done
 
 echo -n $output | pbcopy
+
 */
 //#endregion word arrays
 //#region constants
