@@ -98,9 +98,9 @@ const logErrorChecking = Boolean(false);  //logErrorChecking = true: error check
 const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
-const logDatePicker = Boolean(true);     //logDatePicker = true: date picker results debug messages on console
+const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
 const logAnswers = Boolean(false);        //logAnswers = true: answer string debug messages on console
-const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
+const spoilerModePre = Boolean(true);    //spoilerMode = true: show Today's Answer in console
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
@@ -150,8 +150,8 @@ async function getSolution(date) {                                  //get soluti
   const formattedDate = `${year}-${month}-${day}`;
   //consoleLog(spoilerModePre, 'formattedDate: ' + formattedDate);
   const solutionDate = formattedDate;
-  //const solutionURL = 'https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
-  const solutionURL = 'http://innoengserv.freesite.online/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
+  const solutionURL = 'https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
+  //const solutionURL = 'http://innoengserv.freesite.online/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
   const requestSolution = new Request(solutionURL);
   const responseSolution = await fetch(requestSolution);
   const solutionJSONstring = await responseSolution.json();
