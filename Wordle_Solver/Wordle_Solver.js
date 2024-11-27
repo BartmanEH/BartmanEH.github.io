@@ -140,8 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {         //fires when
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
 });//DOM loaded
-/*
-async function getSolution(date) {                                  //get solution for 'date' from Wordle API via PHP
+async function getSolution(date) {                                  //get solution for date from Wordle API via PHP (CORS)
   //consoleLog(spoilerModePre, 'date: ' + date);
   if (typeof date === 'undefined') date = today;                    //no date var passed to function so use today
   if (!(date instanceof Date)) date = new Date(date);
@@ -173,48 +172,6 @@ async function getSolution(date) {                                  //get soluti
     toast('solution not available!');
     return false;                                                   //indicate failure
   }//if
-}//getSolution()
-*/
-async function getSolution(date) {                                  //get solution for 'date' from Wordle API
-  // No date var passed to function so use today
-  if (typeof date === 'undefined') date = today;                    //no date var passed to function so use today
-  if (!(date instanceof Date)) date = new Date(date);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const formattedDate = `${year}-${month}-${day}`;
-  const solutionDate = formattedDate;
-  //consoleLog(spoilerModePre, 'formattedDate: ' + formattedDate);
-  const solutionURL = `https://www.nytimes.com/svc/wordle/v2/${formattedDate}.json`;
-  try {
-    // Fetch JSON data from the Wordle API
-    const responseSolution = await fetch(solutionURL);
-    // Check for successful response
-    if (!responseSolution.ok) {
-      throw new Error(`Error fetching solution: ${responseSolution.statusText}`);
-    }
-    // Parse JSON data
-    const solutionJSON = await responseSolution.json();
-    // Check if solution exists for the date
-    if ('solution' in solutionJSON) {
-      const solution = solutionJSON.solution.toUpperCase();         //solution for date available via Wordle API
-      answer = solution;                                            //use Wordle API solution as answer
-      consoleLog(spoilerModePre, 'solution via Wordle API: ' + solution);
-      consoleLog(spoilerModePre, 'built-in answer: ' + answer);
-      return true;                                                  //indicate success
-    } else {                                                        //solution for date NOT available via Wordle API
-      consoleLog(spoilerModePre, 'date out of range OR Wordle API changed!');
-      solution = '';
-      answer = aryAllAnswersOrdered[diffDays];                      //use built-in answer array for answer
-      consoleLog(spoilerModePre, 'solution via Wordle API: unavailable!');
-      consoleLog(spoilerModePre, 'built-in answer: ' + answer);
-      toast('solution not available!');
-      return false;                                                 //indicate failure
-    }//if
-  } catch (error) {
-    console.error('Error fetching solution:', error);
-    return false; // Indicate failure
-  }//try
 }//getSolution()
 async function getVersion() {                                       //must be async function!
   const versionURL = '/Wordle_Solver/version.json';                 //json version info data
