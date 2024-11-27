@@ -110,8 +110,9 @@ const stateMisplaced = 'misplaced';       //metadata attribute for Yellow
 const stateCorrect = 'correct';           //metadata attribute for Green
 const stateTBD = 'tbd';                   //metadata attribute for unknown
 const millisecondsPerDay = 24 * 60 * 60 * 1000;     //hours*minutes*seconds*milliseconds = millseconds per day
-//const start = new Date(2021, 5, 19);              //date of first Wordle (month is 0 indexed)
-const start = new Date('2021-05-19T00:00:00');      //date of first Wordle
+//const start = new Date(2021, 5, 19);              //date of first Wordle June 19, 2021 (month is 0 indexed)
+//const start = new Date('2021-05-19T00:00:00');    //date of first Wordle June 19, 2021 (month is 0 indexed)
+const start = new Date('2021/6/19');                //date of first Wordle June 19, 2021
 const today = new Date();                           //today's date
 //#endregion constants
 //#region globals;
