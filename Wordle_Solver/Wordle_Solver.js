@@ -150,7 +150,8 @@ async function getSolution(date) {                                  //get soluti
   const formattedDate = `${year}-${month}-${day}`;
   //consoleLog(spoilerModePre, 'formattedDate: ' + formattedDate);
   const solutionDate = formattedDate;
-  const solutionURL = 'https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
+  //const solutionURL = 'https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
+  const solutionURL = 'https://innoengserv.freesite.online/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
   const requestSolution = new Request(solutionURL);
   const responseSolution = await fetch(requestSolution);
   const solutionJSONstring = await responseSolution.json();
