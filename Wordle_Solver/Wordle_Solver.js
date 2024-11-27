@@ -153,9 +153,17 @@ async function getSolution(date) {                                  //get soluti
   const solutionURL = 'https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
   //const solutionURL = 'http://innoengserv.freesite.online/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
   const requestSolution = new Request(solutionURL);
-  const responseSolution = await fetch(requestSolution);
-  const solutionJSONstring = await responseSolution.json();
-  const solutionJSON = JSON.parse(solutionJSONstring);
+  let solutionJSON = {}; // Initialize an empty object
+  try {
+    const responseSolution = await fetch(requestSolution);
+    if (!responseSolution.ok) {
+      throw new Error(`Error fetching solution: ${responseSolution.statusText}`);
+    }//if
+    solutionJSON = await responseSolution.json();
+  } catch (error) {
+    console.error('Error fetching solution:', error);
+    // You might want to handle the error differently, such as displaying an error message to the user.
+  }//try
   //good result: {"id":613,"solution":"nanny","print_date":"2023-06-03","days_since_launch":714,"editor":"Tracy Bennett"}
   ///bad result: {"status":"ERROR","errors":["Not Found"],"results":[]}
   if ('solution' in solutionJSON) {
