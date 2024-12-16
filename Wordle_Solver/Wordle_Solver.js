@@ -164,6 +164,7 @@ async function getSolution(date) {                                  //get soluti
     solutionJSON = await responseSolution.json();
   } catch (error) {
     console.error('Error fetching solution:', error);
+    consoleLog(true, 'Error fetching solution: ' + error);
   }//try
   //good result: {"id":613,"solution":"nanny","print_date":"2023-06-03","days_since_launch":714,"editor":"Tracy Bennett"}
   ///bad result: {"status":"ERROR","errors":["Not Found"],"results":[]}
