@@ -149,7 +149,7 @@ async function getSolution(date) {                                  //get soluti
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   const formattedDate = `${year}-${month}-${day}`;
-  //consoleLog(spoilerModePre, 'formattedDate: ' + formattedDate);
+  consoleLog(spoilerModePre, 'formattedDate: ' + formattedDate);
   const solutionDate = formattedDate;
   const solutionURL = 'https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
   //const solutionURL = 'http://innoengserv.freesite.online/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
