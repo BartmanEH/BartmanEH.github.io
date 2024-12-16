@@ -154,9 +154,9 @@ async function getSolution(date) {                                  //get soluti
   const solutionURL = 'https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
   //const solutionURL = 'http://innoengserv.freesite.online/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
   const requestSolution = new Request(solutionURL);
+  consoleLog(spoilerModePre, 'solutionURL: ' + solutionURL);
   let solutionJSON = {}; // Initialize an empty object
   answer = aryAllAnswersOrdered[diffDays];                          //init w built-in answer array; long API fetch fail timeout
-  /*
   try {                                                             //try to get most recent solution online via API
     const responseSolution = await fetch(requestSolution);
     if (!responseSolution.ok) {
@@ -184,38 +184,6 @@ async function getSolution(date) {                                  //get soluti
     toast('solution not available!');
     return false;                                                   //indicate failure
   }//if
-  */
-  try {                                                             //try to get most recent solution online via API
-    const responseSolution = await fetch(requestSolution);
-    if (!responseSolution.ok) {
-      throw new Error(`Error fetching solution: ${responseSolution.statusText}`);
-    }//if
-    const solutionJSON = await responseSolution.json();
-    if ('solution' in solutionJSON) {                               //Check if 'solution' exists in the parsed JSON
-      solution = solutionJSON.solution.toUpperCase();               //Solution for date available via Wordle API
-      answer = solution;                                            //Use Wordle API solution as answer
-      consoleLog(spoilerModePre, 'solution via PHP cURL: ' + solution);
-      consoleLog(spoilerModePre, 'built-in answer: ' + answer);
-      return true;                                                  //Indicate success
-    } else {                                                        //Solution for date NOT available via Wordle API
-      consoleLog(spoilerModePre, 'date out of range OR Wordle API changed!');
-      solution = '';
-      answer = aryAllAnswersOrdered[diffDays];                      //Use built-in answer array for answer
-      consoleLog(spoilerModePre, 'solution via PHP cURL: unavailable!');
-      consoleLog(spoilerModePre, 'built-in answer: ' + answer);
-      toast('solution not available!');
-      return false;                                                 //Indicate failure
-    }//if
-  } catch (error) {
-    console.error('Error fetching solution:', error);
-    consoleLog(true, 'Error fetching solution: ' + error);
-    solution = '';
-    answer = aryAllAnswersOrdered[diffDays];                        //Fallback to built-in answer
-    consoleLog(spoilerModePre, 'solution via PHP cURL: unavailable!');
-    consoleLog(spoilerModePre, 'built-in answer: ' + answer);
-    toast('solution not available!');
-    return false;                                                   //Indicate failure
-  }//try
 }//getSolution()
 async function getVersion() {                                       //must be async function!
   const versionURL = '/Wordle_Solver/version.json';                 //json version info data
