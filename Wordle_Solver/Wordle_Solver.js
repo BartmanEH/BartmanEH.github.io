@@ -98,9 +98,9 @@ const logErrorChecking = Boolean(false);  //logErrorChecking = true: error check
 const logFiltered = Boolean(false);       //logFiltered = true: filtered debug messages on console
 const logAutoTest = Boolean(true);        //logAutoTest = true: automated testing debug messages on console
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
-const logDatePicker = Boolean(true);     //logDatePicker = true: date picker results debug messages on console
+const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
 const logAnswers = Boolean(false);        //logAnswers = true: answer string debug messages on console
-const spoilerModePre = Boolean(true);    //spoilerMode = true: show Today's Answer in console
+const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
@@ -165,12 +165,12 @@ async function getSolution(date) {                                  //get soluti
     solutionJSON = await responseSolution.json();
     consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
     try {
-      solutionJSON = JSON.parse(solutionJSON); // Parse the string into an object
+      solutionJSON = JSON.parse(solutionJSON);                      //parse the string into an object
       console.log("Final Parsed solutionJSON:", solutionJSON, "Type:", typeof solutionJSON);
     } catch (error) {
       console.error("Error parsing solutionJSON:", error);
       return false; // Exit on parsing error
-    }
+    }//try
     consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
   } catch (error) {
     console.error('Error fetching solution:', error);
