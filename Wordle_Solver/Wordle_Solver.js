@@ -163,6 +163,7 @@ async function getSolution(date) {                                  //get soluti
       throw new Error(`Error fetching solution: ${responseSolution.statusText}`);
     }//if
     solutionJSON = await responseSolution.json();
+    consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
   } catch (error) {
     console.error('Error fetching solution:', error);
     consoleLog(true, 'Error fetching solution: ' + error);
