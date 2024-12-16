@@ -164,6 +164,14 @@ async function getSolution(date) {                                  //get soluti
     }//if
     solutionJSON = await responseSolution.json();
     consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
+    try {
+      solutionJSON = JSON.parse(solutionJSON); // Parse the string into an object
+      console.log("Final Parsed solutionJSON:", solutionJSON, "Type:", typeof solutionJSON);
+    } catch (error) {
+      console.error("Error parsing solutionJSON:", error);
+      return false; // Exit on parsing error
+    }
+    consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
   } catch (error) {
     console.error('Error fetching solution:', error);
     consoleLog(true, 'Error fetching solution: ' + error);
