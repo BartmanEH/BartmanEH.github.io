@@ -261,10 +261,26 @@ async function initialize() {                                                   
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
   if (boolAutoTest) { automatedTesting(); }                         //run automated testing
-  document.getElementById('guess_1_1').focus();                     //set focus to first letter of first guess
+  //document.getElementById('guess_1_1').focus();                     //set focus to first letter of first guess
+  focusInit();
 }//initialize()
 //#endregion init
 //#region helper functions
+function focusInit() {
+  const fakeInput = document.createElement('input')                 //create invisible dummy input to receive the focus first
+  fakeInput.setAttribute('type', 'text')
+  fakeInput.style.position = 'absolute'
+  fakeInput.style.opacity = 0
+  fakeInput.style.height = 0
+  fakeInput.style.fontSize = '16px'                                 //disable auto zoom
+  //may need to append to another element depending on the browser's auto zoom/scroll behavior
+  document.body.prepend(fakeInput)
+  fakeInput.focus()                                                 //focus so that subsequent async focus will work
+  setTimeout(() => {                                                //now we can focus the real target input
+    document.getElementById('guess_1_1').focus();                   //set focus to first letter of first guess
+    fakeInput.remove()                                              //cleanup  
+  }, 1000)
+}//focusInit()
 function resultsModeClicked(e) {
   if (document.querySelector('input[name="resultsMode"]:checked').value === 'automatic') {
     boolAutoResults = true;                                         //enable auto results
