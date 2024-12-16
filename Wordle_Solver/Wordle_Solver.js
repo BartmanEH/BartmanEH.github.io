@@ -163,12 +163,12 @@ async function getSolution(date) {                                  //get soluti
       throw new Error(`Error fetching solution: ${responseSolution.statusText}`);
     }//if
     solutionJSON = await responseSolution.json();
-    consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
+    consoleLog(spoilerModePre, 'Preliminary parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
     try {
       solutionJSON = JSON.parse(solutionJSON);                      //parse the string into an object
-      console.log("Final Parsed solutionJSON:", solutionJSON, "Type:", typeof solutionJSON);
+      consoleLog(spoilerModePre, 'Final parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
     } catch (error) {
-      console.error("Error parsing solutionJSON:", error);
+      consoleLog(true, 'Error parsing solutionJSON: ', error);
       return false; // Exit on parsing error
     }//try
     consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
