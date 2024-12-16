@@ -262,7 +262,7 @@ async function initialize() {                                                   
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
   if (boolAutoTest) { automatedTesting(); }                         //run automated testing
   //document.getElementById('guess_1_1').focus();                     //set focus to first letter of first guess
-  focusInit();
+  focusInit();                                                      //set focus to first letter of first guess using hacky method
 }//initialize()
 //#endregion init
 //#region helper functions
@@ -273,6 +273,7 @@ function focusInit() {
   fakeInput.style.opacity = 0
   fakeInput.style.height = 0
   fakeInput.style.fontSize = '16px'                                 //disable auto zoom
+  //fakeInput.inputMode = 'none'                                      //set this to disable keyboard popup
   //may need to append to another element depending on the browser's auto zoom/scroll behavior
   document.body.prepend(fakeInput)
   fakeInput.focus()                                                 //focus so that subsequent async focus will work
