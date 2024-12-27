@@ -180,14 +180,18 @@ async function getSolution(date) {                                  //get soluti
   ///bad result: {"status":"ERROR","errors":["Not Found"],"results":[]}
   if ('solution' in solutionJSON) {
     solution = solutionJSON.solution.toUpperCase();                 //solution for date available via Wordle API
+    if (answer !== solution) {                                      //if built-in answer does not match API solution
+      toastMessage('API solution does not match built-in Answer!');
+    }//if
     answer = solution;                                              //use Wordle API solution as answer
     consoleLog(spoilerModePre, 'solution via PHP cURL: ' + solution);
     consoleLog(spoilerModePre, 'built-in answer: ' + answer);
     return true;                                                    //indicate success
   } else {                                                          //solution for date NOT available via Wordle API
     consoleLog(spoilerModePre, 'date out of range OR Wordle API changed!');
-    solution = '';
-    answer = aryAllAnswersOrdered[diffDays];                        //use built-in answer array for answer
+    //solution = '';
+    //answer = aryAllAnswersOrdered[diffDays];                        //use built-in answer array for answer
+    //answer was already initialized
     consoleLog(spoilerModePre, 'solution via PHP cURL: unavailable!');
     consoleLog(spoilerModePre, 'built-in answer: ' + answer);
     toast('solution not available!');
