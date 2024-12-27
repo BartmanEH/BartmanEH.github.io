@@ -181,7 +181,7 @@ async function getSolution(date) {                                  //get soluti
   if ('solution' in solutionJSON) {
     solution = solutionJSON.solution.toUpperCase();                 //solution for date available via Wordle API
     if (answer !== solution) {                                      //if built-in answer does not match API solution
-      toastMessage('API solution does not match built-in Answer!');
+      toast('API solution does not match built-in Answer!');
     }//if
     answer = solution;                                              //use Wordle API solution as answer
     consoleLog(spoilerModePre, 'solution via PHP cURL: ' + solution);
