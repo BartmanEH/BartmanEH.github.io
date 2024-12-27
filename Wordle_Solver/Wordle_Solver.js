@@ -515,7 +515,7 @@ function buildStrFilteredFiveLetterWords(array) {                   //helper fun
   for (const word of array) {
     const linkEnd = word.toLowerCase() + '">' + word + '</a></span>';
     if (aryAllAnswersOrdered.includes(word)) {                      //word is a possible Answer
-      if (aryAllAnswersOrdered.indexOf(word) >= diffDays) {         //word is a possible Future Answer; bold, italicize and underline word
+      if (aryAllAnswersOrdered.indexOf(word) >= diffDays - 1) {         //word is a possible Future Answer; bold, italicize and underline word
         strBuilt += '<strong><em><u><span>' + linkStart + linkEnd + '</span></u></em></strong>' + space;
         consoleLog(logAnswers, 'Future Answer: ' + word + 'index: ' + aryAllAnswersOrdered.indexOf(word));
       } else {                                                      //word is a possible Answer, bold word
