@@ -577,9 +577,9 @@ function celebrate(guessPosition, message) {                        //Easter Egg
   stopFireworks();
   //fireworks = new Fireworks.default(container, { /* options */ })   /*global Fireworks*/
   fireworks = new Fireworks(container);                             /*global Fireworks*/
-  fireworks.start();                                                //launch fireworks effect
   //fireworks.updateOptions({ traceSpeed: 1 });                       //fireworks v2
   fireworks.setOptions({ traceSpeed: 1 });                          //fireworks v1 (doesn't seem to work)
+  fireworks.start();                                                //launch fireworks effect
 }//celebrate()
 //#endregion helper functions
 //#region automated testing
