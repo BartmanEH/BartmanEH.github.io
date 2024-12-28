@@ -337,11 +337,7 @@ async function dayNumChanged() {
   diffDays = dayNum;
   document.getElementById('datePicker-input').value = formatDate(archiveDate);
   document.getElementById('dayNum-input').value = diffDays;
-  if (fireworks !== '') {                                           //fireworks are on
-    fireworks.stop();                                               //stop fireworks
-    fireworks = '';                                                 //'destroy' instance
-    document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
-  }//if
+  stopFireworks();
   resetGrid();
 }//dayNumChanged()
 async function datePickerChanged() {
@@ -368,11 +364,7 @@ async function datePickerChanged() {
   }//if else
   diffDays = diff;
   document.getElementById('dayNum-input').value = diffDays;
-  if (fireworks !== '') {                                           //fireworks are on
-    fireworks.stop();                                               //stop fireworks
-    fireworks = '';                                                 //'destroy' instance
-    document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
-  }//if
+  stopFireworks();
   consoleLog(logDatePicker, 'archiveDate: ' + formatDate(dateValue));
   consoleLog(logDatePicker, 'diffDays: ' + diffDays);
   //consoleLog(logDatePicker, 'dayNum: ' + dayNum);
@@ -500,11 +492,7 @@ function imageClicked(e) {                                          //image inpu
       window.location.replace('../index.html');                     //back to main index page (local or gh-pages)
     }//if else
   } else if (e.target.id === 'Wordle_Solver_logo_img') {            //Wordle Logo clicked
-    if (fireworks !== '') {                                         //fireworks are on
-      fireworks.stop();                                             //stop fireworks
-      fireworks = '';                                               //'destroy' instance
-      document.getElementsByTagName('canvas')[0].remove();          //remove fireworks canvas
-    }//if else
+    stopFireworks();
     window.location.reload();                                       //reload page
   } else if (e.target.id === 'BartmanEH_logo_img') {                //BartmanEH logo clicked
     toast('today\'s answer: ' + answer, 'bottom');
@@ -571,6 +559,13 @@ function compareArrays(array1, array2) {                            //compare tw
     return value === array2Sorted[index];
   });
 }//compareArrays()
+function stopFireworks() {                                          //stop fireworks effect
+  if (fireworks !== '') {                                           //fireworks are on
+    fireworks.stop();                                               //stop fireworks
+    fireworks = '';                                                 //'destroy' instance
+    document.getElementsByTagName('canvas')[0].remove();            //remove fireworks canvas
+  }//if else
+}//stopFireworks()
 function celebrate(guessPosition, message) {                        //Easter Egg graphics
   for (let guessLetterPosition = 1; guessLetterPosition <= 5; guessLetterPosition++) {
     const gridId = 'guess_' + guessPosition + '_' + guessLetterPosition;
@@ -579,11 +574,7 @@ function celebrate(guessPosition, message) {                        //Easter Egg
     document.getElementById(gridId).dataset.state = stateCorrect;             //set metadata attribute to Green
   }//for
   errorHandler(message);
-  if (fireworks !== '') {                                           //fireworks are on
-    fireworks.stop();                                               //stop fireworks
-    fireworks = '';                                                 //'destroy' instance
-    document.getElementsByTagName('canvas')[0].remove();            //remove fireworks 'canvas' element
-  }//if
+  stopFireworks();
   //fireworks = new Fireworks.default(container, { /* options */ })   /*global Fireworks*/
   fireworks = new Fireworks(container);                             /*global Fireworks*/
   fireworks.start();                                                //launch fireworks effect
