@@ -577,10 +577,10 @@ function celebrate(guessPosition, message) {                        //Easter Egg
   const container = document.querySelector('.fireworks-container')
   stopFireworks();
   //fireworks = new Fireworks.default(container, { /* options */ })   /*global Fireworks*/
-  fireworks = new Fireworks(container);                             /*global Fireworks*/
+  fireworks = new Fireworks(container, { traceSpeed: 1 });          /*global Fireworks*/
   fireworks.start();                                                //launch fireworks effect
   //fireworks.updateOptions({ traceSpeed: 1 });                       //fireworks v2
-  fireworks.setOptions({ traceSpeed: 1 });                          //fireworks v1 (doesn't seem to work)
+  //fireworks.setOptions({ traceSpeed: 1 });                          //fireworks v1 (doesn't seem to work)
 // after initialization you can change the fireworks parameters
 fireworks.setOptions({ delay: { min: 10, max: 15 }})
 }//celebrate()
