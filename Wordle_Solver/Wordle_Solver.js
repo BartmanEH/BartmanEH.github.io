@@ -576,12 +576,8 @@ function celebrate(guessPosition, message) {                        //Easter Egg
   errorHandler(message);
   const container = document.querySelector('.fireworks-container')
   stopFireworks();
-  //fireworks = new Fireworks.default(container, { /* options */ })   /*global Fireworks*/
-  const fireworks = new Fireworks(container, { speed: 1 });    /*global Fireworks*/
+  const fireworks = new Fireworks(container, { traceSpeed: 3 });    /*global Fireworks*/
   fireworks.start();                                                //launch fireworks effect
-  //fireworks.updateOptions({ traceSpeed: 1 });                       //fireworks v2
-  //fireworks.setOptions({ traceSpeed: 1 });                          //fireworks v1 (doesn't seem to work)
-// after initialization you can change the fireworks parameters
 }//celebrate()
 //#endregion helper functions
 //#region automated testing
