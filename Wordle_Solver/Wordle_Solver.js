@@ -574,12 +574,15 @@ function celebrate(guessPosition, message) {                        //Easter Egg
     document.getElementById(gridId).dataset.state = stateCorrect;             //set metadata attribute to Green
   }//for
   errorHandler(message);
+  const container = document.querySelector('.fireworks-container')
   stopFireworks();
   //fireworks = new Fireworks.default(container, { /* options */ })   /*global Fireworks*/
   fireworks = new Fireworks(container);                             /*global Fireworks*/
+  fireworks.start();                                                //launch fireworks effect
   //fireworks.updateOptions({ traceSpeed: 1 });                       //fireworks v2
   fireworks.setOptions({ traceSpeed: 1 });                          //fireworks v1 (doesn't seem to work)
-  fireworks.start();                                                //launch fireworks effect
+// after initialization you can change the fireworks parameters
+fireworks.setOptions({ delay: { min: 10, max: 15 }})
 }//celebrate()
 //#endregion helper functions
 //#region automated testing
