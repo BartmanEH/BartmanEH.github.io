@@ -575,9 +575,13 @@ function celebrate(guessPosition, message) {                        //Easter Egg
   }//for
   errorHandler(message);
   stopFireworks();
-  const container = document.querySelector('.fireworks-container')
-  const fireworks = new Fireworks(container, { traceSpeed: 3 });    /*global Fireworks*/
-  fireworks.start();                                                //launch fireworks effect
+  const container = document.querySelector('.fireworks-container');
+  if (typeof Fireworks !== 'undefined') { 
+    const fireworks = new Fireworks(container, { traceSpeed: 3 });    /*global Fireworks*/
+    fireworks.start();                                                //launch fireworks effect
+  } else {
+    console.error("Fireworks library not loaded."); 
+  }//if else
 }//celebrate()
 //#endregion helper functions
 //#region automated testing
