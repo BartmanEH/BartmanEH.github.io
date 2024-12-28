@@ -26,7 +26,7 @@
 //║ getSolution() { result=$(curl --silent "https://www.nytimes.com/svc/wordle/v2/$1.json" | jq --raw-output 'if has("solution") then .solution else empty end'); if [[ -n $result ]]; then result_upper=$(echo "$result" | tr '[:lower:]' '[:upper:]'); printf "\033[32m%s\033[0m\n" "$result_upper"; else echo "\033[31mno solution found\!\033[0m"; fi }
 //║ getSolution 2023-06-12                                                                                                                     ║
 //╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
-import { Fireworks } from 'fireworks-js';
+//import { Fireworks } from 'fireworks-js';
 //import { ToastMaker } from 'toastmaker';
 //#region word arrays
 const aryAllPossibleGuesses = [
@@ -574,8 +574,8 @@ function celebrate(guessPosition, message) {                        //Easter Egg
     document.getElementById(gridId).dataset.state = stateCorrect;             //set metadata attribute to Green
   }//for
   errorHandler(message);
-  const container = document.querySelector('.fireworks-container')
   stopFireworks();
+  const container = document.querySelector('.fireworks-container')
   const fireworks = new Fireworks(container, { traceSpeed: 3 });    /*global Fireworks*/
   fireworks.start();                                                //launch fireworks effect
 }//celebrate()
