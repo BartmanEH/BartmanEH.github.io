@@ -576,16 +576,8 @@ function celebrate(guessPosition, message) {                        //Easter Egg
   errorHandler(message);
   stopFireworks();
   const container = document.querySelector('.fireworks-container');
-  if (typeof Fireworks !== 'undefined') { 
-    try {
-      const fireworks = new Fireworks(container, { traceSpeed: 3 }); 
-      fireworks.start(); 
-    } catch (error) {
-      console.error("Error creating Fireworks instance:", error); 
-    }
-  } else {
-    console.error("Fireworks library not loaded."); 
-  }//if else
+  const fireworks = new Fireworks(container, { traceSpeed: 3 });    /*global Fireworks*/
+  fireworks.start();                                                //launch fireworks effect
 }//celebrate()
 //#endregion helper functions
 //#region automated testing
