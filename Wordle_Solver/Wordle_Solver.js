@@ -582,7 +582,6 @@ function celebrate(guessPosition, message) {                        //Easter Egg
   //fireworks.updateOptions({ traceSpeed: 1 });                       //fireworks v2
   //fireworks.setOptions({ traceSpeed: 1 });                          //fireworks v1 (doesn't seem to work)
 // after initialization you can change the fireworks parameters
-fireworks.setOptions({ delay: { min: 10, max: 15 }})
 }//celebrate()
 //#endregion helper functions
 //#region automated testing
