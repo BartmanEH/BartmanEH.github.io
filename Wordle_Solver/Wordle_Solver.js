@@ -41,10 +41,9 @@ getSolution.sh script contents:
 
 #!/bin/zsh
 
-# use undocumented Wordle API to fetch Solutions
-# v4
-# 20241230
-# usage: getSolution YYYY-MM-DD
+# Use undocumented Wordle API to fetch Solutions
+# v47
+# 2025-02-11
 
 first_run="true"
 output=""
@@ -52,6 +51,7 @@ output=""
 getSolution() {
   result=$(curl --silent "https://www.nytimes.com/svc/wordle/v2/$1.json" | jq --raw-output 'if has("solution") then .solution else empty end')
   if [[ -n $result ]]; then
+    # Only proceed if a solution is found
     if [[ $first_run == "true" ]]; then
       printf "\n, '"
       output+=", '"
@@ -63,14 +63,11 @@ getSolution() {
     result_upper=$(echo "$result" | tr '[:lower:]' '[:upper:]')
     printf "\033[32m%s\033[0m" "$result_upper"
     output+="$result_upper"
+    return 0  # Indicate success
   else
-    # Calculate and print next solution fetch date
-    printf "'"
-    output+="'"
-    next_day=$(date -j -v+1d -f "%Y-%m-%d" "$final_date" +%Y-%m-%d)
-    printf "\n\033[38;5;208mSolutions copied to clipboard!\n\n\033[31mno further solutions after date: %s\nnext solution date retrieval: getSolution.sh %s\n\n\033[0m" "$final_date" "$next_day"
-    echo -n $output | pbcopy
-    return 1
+    # No solution found, handle the case gracefully
+    #printf "\n\033[33mNo solution found for date: $1\n\033[0m"
+    return 1  # Indicate no solution found
   fi
 }
 
@@ -83,20 +80,41 @@ fi
 
 # Calculate the previous day
 prev_date=$(date -j -v-1d -f "%Y-%m-%d" "$date" +%Y-%m-%d)
+
 # Get the solution for the previous day
 result=$(curl --silent "https://www.nytimes.com/svc/wordle/v2/$prev_date.json" | jq --raw-output 'if has("solution") then .solution else empty end')
 if [[ -n $result ]]; then
   result_upper=$(echo "$result" | tr '[:lower:]' '[:upper:]')
-  printf "\nprevious day result: \033[32m%s\033[0m\n" "$result_upper"
+  printf "\nprevious day result: \033[32m%s\033[0m [$prev_date]\n" "$result_upper"
 else
   printf "\nno previous day result!\n"
 fi
 
 # Continue with the loop for subsequent days
-while getSolution "$date"; do
-  final_date=$date
-  date=$(date -j -v+1d -f "%Y-%m-%d" "$date" +%Y-%m-%d)
+while true; do
+  # Attempt to get solution for the current date
+  if ! getSolution "$date"; then  # Break the loop if no solution is found
+    break
+  fi
+
+  # Attempt to increment the date
+  new_date=$(date -j -v+1d -f "%Y-%m-%d" "$date" +%Y-%m-%d)
+
+  # Check if the date increment succeeded
+  if [[ -z "$new_date" ]]; then
+    printf "\n\033[31mError incrementing date: $date. Likely reached maximum date.\n\033[0m"
+    break
+  fi
+
+  date="$new_date"
 done
+
+# Copy the solutions to the clipboard
+echo -n $output | pbcopy
+
+# Inform user about next solution retrieval date and any missing solutions
+prev_date=$(date -j -v-1d -f "%Y-%m-%d" "$date" +%Y-%m-%d) 
+printf "\n\033[38;5;208mSolutions copied to clipboard!\n\n\033[31mno further solutions after date: %s\nNext solution retrieval: getSolution.sh %s\n\n\033[0m" "$prev_date" "$date"
 */
 //#endregion word arrays
 //#region constants
