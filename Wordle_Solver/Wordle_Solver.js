@@ -188,7 +188,7 @@ async function getSolution(date) {                                  //get soluti
   const solutionURL = 'https://corsproxy.io/' + encodeURIComponent('https://www.nytimes.com/svc/wordle/v2/' + solutionDate + '.json');
   const requestSolution = new Request(solutionURL);
   consoleLog(spoilerModePre, 'solutionURL: ' + solutionURL);
-  let solutionJSON = {};                                            //initialize an empty object
+  const solutionJSON = {};                                            //initialize an empty object
   answer = aryAllAnswersOrdered[diffDays];                          //init w built-in answer array; long API fetch fail timeout
   /*
   try {                                                             //try to get most recent solution online via API
