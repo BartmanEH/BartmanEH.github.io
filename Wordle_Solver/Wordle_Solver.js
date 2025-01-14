@@ -132,7 +132,7 @@ const logAutoTest = Boolean(true);        //logAutoTest = true: automated testin
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
 const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
 const logAnswers = Boolean(false);        //logAnswers = true: answer string debug messages on console
-const spoilerModePre = Boolean(true);    //spoilerMode = true: show Today's Answer in console
+const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
@@ -190,29 +190,6 @@ async function getSolution(date) {                                  //get soluti
   const requestSolution = new Request(solutionURL);
   consoleLog(spoilerModePre, 'solutionURL: ' + solutionURL);
   answer = aryAllAnswersOrdered[diffDays];                          //init w built-in answer array; long API fetch fail timeout
-  /*
-  try {                                                             //try to get most recent solution online via API
-    const responseSolution = await fetch(requestSolution);
-    const rawResponse = await responseSolution.text();
-    consoleLog(spoilerModePre, 'Raw Response: ' + rawResponse);
-    if (!responseSolution.ok) {
-      throw new Error(`Error fetching solution: ${responseSolution.statusText}`);
-    }//if
-    solutionJSON = await responseSolution.json();
-    consoleLog(spoilerModePre, 'Preliminary parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
-    try {
-      solutionJSON = JSON.parse(solutionJSON);                      //parse the string into an object
-      consoleLog(spoilerModePre, 'Final parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
-    } catch (error) {
-      consoleLog(true, 'Error parsing solutionJSON: ' + error);
-      return false;                                                 //exit on parsing error
-    }//try
-    consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
-  } catch (error) {
-    console.error('Error fetching solution:', error);
-    consoleLog(true, 'Error fetching solution: ' + error);
-  }//try
-  */
   try {
     const responseSolution = await fetch(requestSolution);
     if (!responseSolution.ok) {
@@ -239,7 +216,6 @@ async function getSolution(date) {                                  //get soluti
       return false; //indicate failure
     }//if else
   } catch (error) {
-    console.error('Error fetching/parsing solution:', error);
     consoleLog(true, 'Error fetching/parsing solution: ' + error);
     return false; //Indicate failure in the catch block as well
   }//try
