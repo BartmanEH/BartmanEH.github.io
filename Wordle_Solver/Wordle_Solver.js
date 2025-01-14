@@ -232,6 +232,9 @@ async function getSolution(date) {                                  //get soluti
   ///bad result: {"status":"ERROR","errors":["Not Found"],"results":[]}
   consoleLog(spoilerModePre, 'Type of solutionJSON: ' + typeof solutionJSON);
   consoleLog(spoilerModePre, 'solutionJSON: ' + solutionJSON); //Log the actual value
+  console.log('Using console.log:', solutionJSON);                    //Output: [object Object] (not helpful)
+  console.dir('Using console.dir:', solutionJSON);                    //Shows the properties!
+  console.log('Using JSON.stringify:', JSON.stringify(solutionJSON, null, 2)); //Formatted JSON string
   if ('solution' in solutionJSON) {
     solution = solutionJSON.solution.toUpperCase();                 //solution for date available via Wordle API
     if (answer !== solution) {                                      //built-in Answer does not match API solution
