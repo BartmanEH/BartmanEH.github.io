@@ -199,7 +199,7 @@ async function getSolution(date) {                                  //get soluti
       solutionJSON = JSON.parse(solutionJSON);                      //parse the string into an object
       consoleLog(spoilerModePre, 'Final parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
     } catch (error) {
-      consoleLog(true, 'Error parsing solutionJSON: ', error);
+      consoleLog(true, 'Error parsing solutionJSON: ' + error);
       return false;                                                 //exit on parsing error
     }//try
     consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
