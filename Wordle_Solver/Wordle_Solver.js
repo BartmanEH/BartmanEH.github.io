@@ -185,7 +185,8 @@ async function getSolution(date) {                                  //get soluti
   const solutionDate = formattedDate;
   //const solutionURL = 'https://www.innoengserv.com/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
   //const solutionURL = 'http://innoengserv.freesite.online/Wordle_Solver/Wordle_Solver_solution.php?solutionDate=' + solutionDate;
-  const solutionURL = 'https://corsproxy.io/' + encodeURIComponent('https://www.nytimes.com/svc/wordle/v2/' + solutionDate + '.json');
+  //const solutionURL = 'https://corsproxy.io/' + encodeURIComponent('https://www.nytimes.com/svc/wordle/v2/' + solutionDate + '.json');
+  const solutionURL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://www.nytimes.com/svc/wordle/v2/' + solutionDate + '.json');
   const requestSolution = new Request(solutionURL);
   consoleLog(spoilerModePre, 'solutionURL: ' + solutionURL);
   const solutionJSON = {};                                            //initialize an empty object
