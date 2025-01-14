@@ -130,7 +130,7 @@ const logAutoTest = Boolean(true);        //logAutoTest = true: automated testin
 const logAutoResults = Boolean(false);    //logAutoResults = true: automated results debug messages on console
 const logDatePicker = Boolean(false);     //logDatePicker = true: date picker results debug messages on console
 const logAnswers = Boolean(false);        //logAnswers = true: answer string debug messages on console
-const spoilerModePre = Boolean(false);    //spoilerMode = true: show Today's Answer in console
+const spoilerModePre = Boolean(true);    //spoilerMode = true: show Today's Answer in console
 const rgbGray = 'rgb(58, 58, 60)';        //Gray   = #3a3a3c rgb(58, 58, 60)
 const rgbBlack = 'rgb(0, 0, 0)';          //Black  = #000000 rgb(0, 0, 0)
 const rgbYellow = 'rgb(181, 159, 59)';    //Yellow = #b59f3b rgb(181, 159, 59)
