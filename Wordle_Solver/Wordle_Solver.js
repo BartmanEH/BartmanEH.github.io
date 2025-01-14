@@ -217,17 +217,26 @@ async function getSolution(date) {                                  //get soluti
   try {
     const responseSolution = await fetch(requestSolution);
     if (!responseSolution.ok) {
-      throw new Error(`Error fetching solution: ${responseSolution.statusText}`);
+      //More informative error message including status code
+      throw new Error(`HTTP error ${responseSolution.status}: ${responseSolution.statusText}`);
     }//if
-    let solutionJSON; //Declare outside the inner try block
-    if (typeof solutionJSON !== 'object') { //Check if already populated (optional)
-      solutionJSON = await responseSolution.json();
+    //Remove unnecessary type check. response.json() will handle non-JSON responses.
+    const solutionJSON = await responseSolution.json();
+    consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + JSON.stringify(solutionJSON, null, 2) + ', Type: ' + typeof solutionJSON); //Use JSON.stringify for better logging
+    if (solutionJSON && 'solution' in solutionJSON) { //Check if solution exists
+      //Process the solution data
+      consoleLog(spoilerModePre, 'Solution found: ' + solutionJSON.solution);
+    } else {
+      //Handle cases where 'solution' is missing
+      consoleLog(spoilerModePre, 'Solution not found in the response. Full response: ' + JSON.stringify(solutionJSON, null, 2));
+      //You might want to throw an error here or handle it differently
+      //Example: throw new Error('Solution data not found in API response.');
     }//if
-    consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
-    //process the solution data from solutionJSON
   } catch (error) {
-    console.error('Error fetching solution:', error);
-    consoleLog(true, 'Error fetching solution: ' + error);
+    console.error('Error fetching/parsing solution:', error);
+    consoleLog(true, 'Error fetching/parsing solution: ' + error);
+    //Consider re-throwing the error if you want it to propagate up the call stack
+    //throw error;
   }//try
   //good result: {"id":613,"solution":"nanny","print_date":"2023-06-03","days_since_launch":714,"editor":"Tracy Bennett"}
   ///bad result: {"status":"ERROR","errors":["Not Found"],"results":[]}
