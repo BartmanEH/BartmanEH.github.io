@@ -38,7 +38,6 @@ const aryAllAnswersOrdered = [
 //next solution date retrieval: getSolution.sh 2025-02-03
 /*
 getSolution.sh script contents:
-
 #!/bin/zsh
 
 # Use undocumented Wordle API to fetch Solutions
@@ -57,12 +56,13 @@ getSolution() {
       output+=", '"
       first_run="false"
     else
-      printf "', '"
-      output+="', '"
+      printf ", '"
+      output+=", '"
     fi
     result_upper=$(echo "$result" | tr '[:lower:]' '[:upper:]')
-    printf "\033[32m%s\033[0m" "$result_upper"
+    printf "\033[32m%s\033[0m'" "$result_upper"
     output+="$result_upper"
+    output+="'"
     return 0  # Indicate success
   else
     # No solution found, handle the case gracefully
@@ -85,9 +85,10 @@ prev_date=$(date -j -v-1d -f "%Y-%m-%d" "$date" +%Y-%m-%d)
 result=$(curl --silent "https://www.nytimes.com/svc/wordle/v2/$prev_date.json" | jq --raw-output 'if has("solution") then .solution else empty end')
 if [[ -n $result ]]; then
   result_upper=$(echo "$result" | tr '[:lower:]' '[:upper:]')
-  printf "\nprevious day result: \033[32m%s\033[0m [$prev_date]\n" "$result_upper"
+  printf "\nlast result $prev_date: \033[32m%s\033[0m\n" "$result_upper"
 else
-  printf "\nno previous day result!\n"
+  printf "\033[31m\nno previous day result!\n\n\033[0m"
+  return 1
 fi
 
 # Continue with the loop for subsequent days
@@ -96,16 +97,13 @@ while true; do
   if ! getSolution "$date"; then  # Break the loop if no solution is found
     break
   fi
-
   # Attempt to increment the date
   new_date=$(date -j -v+1d -f "%Y-%m-%d" "$date" +%Y-%m-%d)
-
   # Check if the date increment succeeded
   if [[ -z "$new_date" ]]; then
     printf "\n\033[31mError incrementing date: $date. Likely reached maximum date.\n\033[0m"
     break
   fi
-
   date="$new_date"
 done
 
@@ -113,8 +111,12 @@ done
 echo -n $output | pbcopy
 
 # Inform user about next solution retrieval date and any missing solutions
-prev_date=$(date -j -v-1d -f "%Y-%m-%d" "$date" +%Y-%m-%d) 
-printf "\n\033[38;5;208mSolutions copied to clipboard!\n\n\033[31mno further solutions after date: %s\nNext solution retrieval: getSolution.sh %s\n\n\033[0m" "$prev_date" "$date"
+prev_date=$(date -j -v-1d -f "%Y-%m-%d" "$date" +%Y-%m-%d)
+if [[ -z "$output" ]]; then
+  printf "\n\033[31mno solutions after date: %s\nNext solution retrieval: getSolution.sh %s\n\n\033[0m" "$prev_date" "$date"
+else
+  printf "\n\033[38;5;208mSolutions copied to clipboard!\n\n\033[31mno solutions after date: %s\nNext solution retrieval: getSolution.sh %s\n\n\033[0m" "$prev_date" "$date"
+fi
 */
 //#endregion word arrays
 //#region constants
@@ -157,7 +159,7 @@ let boolAutoTest = Boolean(false);        //boolAutoTest = true: run automated t
 let streakSaver = Boolean(true);          //streakSaver = true: Greenify Guess if it's Today's Answer
 let aryAllPossibleAnswers = [];           //array of all possible answers (possibly without previous answers)
 let numFiveLetterWords = 0;               //global tracking number of possible words
-let container = '';                       //global Easter Egg container
+let container = '';                       //eslint-disable-line -- global container for Wordle Solver
 let fireworks = '';                       //global Easter Egg effect
 let version = '';                         //global version
 let useCaseData = [];
@@ -188,6 +190,7 @@ async function getSolution(date) {                                  //get soluti
   consoleLog(spoilerModePre, 'solutionURL: ' + solutionURL);
   let solutionJSON = {};                                            //initialize an empty object
   answer = aryAllAnswersOrdered[diffDays];                          //init w built-in answer array; long API fetch fail timeout
+  /*
   try {                                                             //try to get most recent solution online via API
     const responseSolution = await fetch(requestSolution);
     const rawResponse = await responseSolution.text();
@@ -205,6 +208,22 @@ async function getSolution(date) {                                  //get soluti
       return false;                                                 //exit on parsing error
     }//try
     consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
+  } catch (error) {
+    console.error('Error fetching solution:', error);
+    consoleLog(true, 'Error fetching solution: ' + error);
+  }//try
+  */
+  try {
+    const responseSolution = await fetch(requestSolution);
+    if (!responseSolution.ok) {
+      throw new Error(`Error fetching solution: ${responseSolution.statusText}`);
+    }//if
+    let solutionJSON; //Declare outside the inner try block
+    if (typeof solutionJSON !== 'object') { //Check if already populated (optional)
+      solutionJSON = await responseSolution.json();
+    }//if
+    consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + solutionJSON + ', Type: ' + typeof solutionJSON);
+    //process the solution data from solutionJSON
   } catch (error) {
     console.error('Error fetching solution:', error);
     consoleLog(true, 'Error fetching solution: ' + error);
