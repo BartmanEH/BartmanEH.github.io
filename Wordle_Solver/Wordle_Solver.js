@@ -217,53 +217,33 @@ async function getSolution(date) {                                  //get soluti
   try {
     const responseSolution = await fetch(requestSolution);
     if (!responseSolution.ok) {
-      //More informative error message including status code
       throw new Error(`HTTP error ${responseSolution.status}: ${responseSolution.statusText}`);
     }//if
-    //Remove unnecessary type check. response.json() will handle non-JSON responses.
     const solutionJSON = await responseSolution.json();
-    consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + JSON.stringify(solutionJSON, null, 2) + ', Type: ' + typeof solutionJSON); //Use JSON.stringify for better logging
+    consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + JSON.stringify(solutionJSON, null, 2) + ', Type: ' + typeof solutionJSON);
     if (solutionJSON && 'solution' in solutionJSON) { //Check if solution exists
-      //Process the solution data
       consoleLog(spoilerModePre, 'Solution found: ' + solutionJSON.solution);
+      solution = solutionJSON.solution.toUpperCase();
+      if (answer !== solution) {
+        toast('API Answer and built-in Answer differ!');
+      }//if
+      answer = solution;
+      consoleLog(spoilerModePre, 'solution via API: ' + solution);
+      consoleLog(spoilerModePre, 'built-in answer: ' + answer);
+      return true; //indicate success
     } else {
-      //Handle cases where 'solution' is missing
-      consoleLog(spoilerModePre, 'Solution not found in the response. Full response: ' + JSON.stringify(solutionJSON, null, 2));
-      //You might want to throw an error here or handle it differently
-      //Example: throw new Error('Solution data not found in API response.');
-    }//if
+      consoleLog(spoilerModePre, 'No solution property found in API response. Full response: ' + JSON.stringify(solutionJSON, null, 2)); // More specific message
+      consoleLog(spoilerModePre, 'date out of range OR Wordle API changed!');
+      consoleLog(spoilerModePre, 'solution via API: unavailable!');
+      consoleLog(spoilerModePre, 'built-in answer: ' + answer);
+      toast('solution not available!');
+      return false; //indicate failure
+    }//if else
   } catch (error) {
     console.error('Error fetching/parsing solution:', error);
     consoleLog(true, 'Error fetching/parsing solution: ' + error);
-    //Consider re-throwing the error if you want it to propagate up the call stack
-    //throw error;
+    return false; //Indicate failure in the catch block as well
   }//try
-  //good result: {"id":613,"solution":"nanny","print_date":"2023-06-03","days_since_launch":714,"editor":"Tracy Bennett"}
-  ///bad result: {"status":"ERROR","errors":["Not Found"],"results":[]}
-  consoleLog(spoilerModePre, 'Type of solutionJSON: ' + typeof solutionJSON);
-  consoleLog(spoilerModePre, 'solutionJSON: ' + solutionJSON); //Log the actual value
-  console.log('Using console.log:', solutionJSON);                    //Output: [object Object] (not helpful)
-  console.dir('Using console.dir:', solutionJSON);                    //Shows the properties!
-  console.log('Using JSON.stringify:', JSON.stringify(solutionJSON, null, 2)); //Formatted JSON string
-  if ('solution' in solutionJSON) {
-    solution = solutionJSON.solution.toUpperCase();                 //solution for date available via Wordle API
-    if (answer !== solution) {                                      //built-in Answer does not match API solution
-      toast('API Answer and built-in Answer differ!');
-    }//if
-    answer = solution;                                              //use Wordle API solution as answer
-    consoleLog(spoilerModePre, 'solution via PHP cURL: ' + solution);
-    consoleLog(spoilerModePre, 'built-in answer: ' + answer);
-    return true;                                                    //indicate success
-  } else {                                                          //solution for date NOT available via Wordle API
-    consoleLog(spoilerModePre, 'date out of range OR Wordle API changed!');
-    //solution = '';
-    //answer = aryAllAnswersOrdered[diffDays];                        //use built-in answer array for answer
-    //answer was already initialized
-    consoleLog(spoilerModePre, 'solution via PHP cURL: unavailable!');
-    consoleLog(spoilerModePre, 'built-in answer: ' + answer);
-    toast('solution not available!');
-    return false;                                                   //indicate failure
-  }//if
 }//getSolution()
 async function getVersion() {                                       //must be async function!
   const versionURL = '/Wordle_Solver/version.json';                 //json version info data
