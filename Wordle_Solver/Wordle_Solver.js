@@ -230,6 +230,8 @@ async function getSolution(date) {                                  //get soluti
   }//try
   //good result: {"id":613,"solution":"nanny","print_date":"2023-06-03","days_since_launch":714,"editor":"Tracy Bennett"}
   ///bad result: {"status":"ERROR","errors":["Not Found"],"results":[]}
+  consoleLog(spoilerModePre, 'Type of solutionJSON:', typeof solutionJSON);
+  consoleLog(spoilerModePre, 'solutionJSON:', solutionJSON); //Log the actual value
   if ('solution' in solutionJSON) {
     solution = solutionJSON.solution.toUpperCase();                 //solution for date available via Wordle API
     if (answer !== solution) {                                      //built-in Answer does not match API solution
