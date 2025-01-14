@@ -189,7 +189,6 @@ async function getSolution(date) {                                  //get soluti
   const solutionURL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://www.nytimes.com/svc/wordle/v2/' + solutionDate + '.json');
   const requestSolution = new Request(solutionURL);
   consoleLog(spoilerModePre, 'solutionURL: ' + solutionURL);
-  const solutionJSON = {};                                            //initialize an empty object
   answer = aryAllAnswersOrdered[diffDays];                          //init w built-in answer array; long API fetch fail timeout
   /*
   try {                                                             //try to get most recent solution online via API
@@ -232,7 +231,7 @@ async function getSolution(date) {                                  //get soluti
       consoleLog(spoilerModePre, 'built-in answer: ' + answer);
       return true; //indicate success
     } else {
-      consoleLog(spoilerModePre, 'No solution property found in API response. Full response: ' + JSON.stringify(solutionJSON, null, 2)); // More specific message
+      consoleLog(spoilerModePre, 'No solution property found in API response. Full response: ' + JSON.stringify(solutionJSON, null, 2));
       consoleLog(spoilerModePre, 'date out of range OR Wordle API changed!');
       consoleLog(spoilerModePre, 'solution via API: unavailable!');
       consoleLog(spoilerModePre, 'built-in answer: ' + answer);
