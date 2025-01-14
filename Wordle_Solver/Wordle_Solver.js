@@ -190,6 +190,8 @@ async function getSolution(date) {                                  //get soluti
   answer = aryAllAnswersOrdered[diffDays];                          //init w built-in answer array; long API fetch fail timeout
   try {                                                             //try to get most recent solution online via API
     const responseSolution = await fetch(requestSolution);
+    const rawResponse = await responseSolution.text();
+    consoleLog(spoilerModePre, 'Raw Response: ' + rawResponse);
     if (!responseSolution.ok) {
       throw new Error(`Error fetching solution: ${responseSolution.statusText}`);
     }//if
