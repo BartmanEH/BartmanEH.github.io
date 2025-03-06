@@ -87,8 +87,13 @@ if [[ -n $result ]]; then
   result_upper=$(echo "$result" | tr '[:lower:]' '[:upper:]')
   printf "\nlast result $prev_date: \033[32m%s\033[0m\n" "$result_upper"
 else
-  printf "\033[31m\nno previous day result!\n\n\033[0m"
-  return 1
+  printf "\033[31m\nno previous day result!\n\033[0m"
+  # Only return 1 for dates other than 2021-06-19
+  if [[ "$date" == "2021-06-19" ]]; then
+    printf "\033[33m\ncontinuing with special start date: $date\n\033[0m"
+  else
+    return 1
+  fi
 fi
 
 # Continue with the loop for subsequent days
