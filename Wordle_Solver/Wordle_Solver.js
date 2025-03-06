@@ -37,7 +37,7 @@ const aryAllAnswersOrdered = [
 ];
 //next solution date retrieval: getSolution.sh 2025-03-31
 /*
-getSolution.sh script contents:
+getSolution.sh script contents 20250306:
 #!/bin/zsh
 
 # Use undocumented Wordle API to fetch Solutions
