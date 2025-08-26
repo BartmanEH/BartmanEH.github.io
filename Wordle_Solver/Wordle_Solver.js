@@ -201,6 +201,13 @@ async function getSolution(date) {                                  //get soluti
       throw new Error(`HTTP error ${responseSolution.status}: ${responseSolution.statusText}`);
     }//if
     const solutionJSON = await responseSolution.json();
+    //{
+    // "id":1260,
+    // "solution":"least",
+    // "print_date":"2025-09-01",
+    // "days_since_launch":1535,
+    // "editor":"Tracy Bennett"
+    //}
     consoleLog(spoilerModePre, 'Parsed solutionJSON: ' + JSON.stringify(solutionJSON, null, 2) + ', Type: ' + typeof solutionJSON);
     if (solutionJSON && 'solution' in solutionJSON) { //Check if solution exists
       consoleLog(spoilerModePre, 'Solution found: ' + solutionJSON.solution);
