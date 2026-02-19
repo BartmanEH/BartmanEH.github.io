@@ -534,12 +534,15 @@ input[type=date]::-webkit-calendar-picker-indicator {
 }
 
 #datePicker-div {
-	display: inline-flex;
+	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-wrap: nowrap;
 	white-space: nowrap;
-	gap: 0;
+	gap: 8px;
+	width: 100%;
+	max-width: 390px;
+	margin: 0 auto;
 }
 
 #labelDate,
@@ -547,6 +550,13 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	display: inline-flex;
 	align-items: center;
 	white-space: nowrap;
+	flex: 0 0 auto;
+}
+
+#datePicker-input {
+	flex: 0 0 150px;
+	min-width: 150px;
+	max-width: 150px;
 }
 
 input[type="number"]::-webkit-outer-spin-button,
