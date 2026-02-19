@@ -1728,6 +1728,21 @@
 				"SUTTA",
 				"SYLVA"
       ]
+    },
+    {
+      "id": "26",
+      "comment": "regression: CIDER/CEDER duplicate letter handling",
+      "guess": [
+        "CEDER"
+      ],
+      "pattern": [
+        "GBGGG"
+      ],
+      "possibilities": [
+        "CIDER",
+        "CODER",
+        "CYDER"
+      ]
     }
   ]
 }

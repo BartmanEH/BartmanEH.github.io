@@ -1,8 +1,8 @@
 //╔════════╗
 //║ To Do: ║
-//╠════════╩══════════════════════════════════════════════════════════════╗
-//║ minor bug: day# 635, Answer=CIDER, Guess=CEDER, results include CEDER ║
-//╚═══════════════════════════════════════════════════════════════════════╝
+//╠════════╩═╗
+//║ Nuttin!! ║
+//╚══════════╝
 //╔══════════════════════════════════════════════════════════════════════════════════════╗
 //║ Wordle solutions can be found here:                                                  ║
 //║ https://medium.com/@owenyin/here-lies-wordle-2021-2027-full-answer-list-52017ee99e86 ║
@@ -595,6 +595,13 @@ function compareArrays(array1, array2) {                            //compare tw
     return value === array2Sorted[index];
   });
 }//compareArrays()
+function charCount(str, chr) {                                      //count occurrences of chr in str
+  let count = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === chr) { count++; }
+  }
+  return count;
+}//charCount()
 function stopFireworks() {                                          //stop fireworks effect
   if (fireworks !== '') {                                           //fireworks are on
     fireworks.stop();                                               //stop fireworks
@@ -1047,11 +1054,54 @@ function solveIt() {
       aryScrutinizedFilteredFiveLetterWords.push(word);
     }//if
   }//for
-  numFiveLetterWords = aryScrutinizedFilteredFiveLetterWords.length;
+  const aryFullyScrutinizedFilteredFiveLetterWords = [];
+  for (const candidateWord of aryScrutinizedFilteredFiveLetterWords) {
+    let isValidCandidate = true;
+    for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
+      let guessWord = '';
+      const perGuessCounts = {};
+      for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
+        const gridId = 'guess_' + guessPosition + '_' + letterPosition;
+        const gridElement = document.getElementById(gridId);
+        const letter = gridElement.value.toUpperCase();
+        if (letter === ' ') { break; }                              //stop on incomplete guess row
+        guessWord += letter;
+        if (!(letter in perGuessCounts)) {
+          perGuessCounts[letter] = { minCount: 0, grayCount: 0 };
+        }//if
+        if (gridElement.dataset.state === stateIncorrect) {
+          perGuessCounts[letter].grayCount++;
+        } else if (gridElement.dataset.state === stateMisplaced || gridElement.dataset.state === stateCorrect) {
+          perGuessCounts[letter].minCount++;
+        }//if else
+      }//for letterPosition
+      if (guessWord.length !== 5) { continue; }                     //skip incomplete rows
+      for (const letter in perGuessCounts) {
+        const minCount = perGuessCounts[letter].minCount;
+        const grayCount = perGuessCounts[letter].grayCount;
+        const candidateCount = charCount(candidateWord, letter);
+        if (grayCount > 0 && minCount > 0 && candidateCount !== minCount) {
+          isValidCandidate = false;                                 //gray + green/yellow means exact count
+          break;
+        } else if (grayCount > 0 && minCount === 0 && candidateCount !== 0) {
+          isValidCandidate = false;                                 //gray-only means no occurrences allowed
+          break;
+        } else if (grayCount === 0 && candidateCount < minCount) {
+          isValidCandidate = false;                                 //all non-gray means at least this many occurrences
+          break;
+        }//if else
+      }//for letter
+      if (!isValidCandidate) { break; }
+    }//for guessPosition
+    if (isValidCandidate) {
+      aryFullyScrutinizedFilteredFiveLetterWords.push(candidateWord);
+    }//if
+  }//for candidateWord
+  numFiveLetterWords = aryFullyScrutinizedFilteredFiveLetterWords.length;
   let strPossibilities = ' ';
-  aryScrutinizedFilteredFiveLetterWords.sort();                     //sort possibilites alphabetically
+  aryFullyScrutinizedFilteredFiveLetterWords.sort();                //sort possibilites alphabetically
   if (numFiveLetterWords !== 0) {
-    strPossibilities = buildStrFilteredFiveLetterWords(aryScrutinizedFilteredFiveLetterWords);
+    strPossibilities = buildStrFilteredFiveLetterWords(aryFullyScrutinizedFilteredFiveLetterWords);
   }//if
   consoleLog(logFiltered, 'strPossibilities: "' + strPossibilities + '"');
   consoleLog(logFiltered, 'possibilities (filtered): ' + aryFilteredFiveLetterWords.length.toLocaleString());
@@ -1060,6 +1110,6 @@ function solveIt() {
   document.getElementById('possibilities').style.display = 'block'; //'unhide'
   document.getElementById('possibilities-text-span').innerHTML = strPossibilities;
   document.getElementById('words').style.display = 'block';         //'unhide'
-  return aryScrutinizedFilteredFiveLetterWords;                     //pass array to caller
+  return aryFullyScrutinizedFilteredFiveLetterWords;                //pass array to caller
 }//solveIt()
 //#endregion solveIt
