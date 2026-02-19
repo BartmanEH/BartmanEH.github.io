@@ -523,6 +523,36 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	font-size: 16px;
 	padding-left: 0px;
 	text-align: left;
+	display: inline-block;
+	vertical-align: middle;
+	box-sizing: border-box;
+	height: 1.8em;
+	line-height: 1.2;
+	margin: 0 0 0 2px;
+	-webkit-appearance: textfield;
+	appearance: textfield;
+}
+
+#datePicker-div {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: nowrap;
+	white-space: nowrap;
+	gap: 0;
+}
+
+#labelDate,
+#labelDay {
+	display: inline-flex;
+	align-items: center;
+	white-space: nowrap;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }
 
 .toastMaker {
