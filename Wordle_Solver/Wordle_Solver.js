@@ -195,7 +195,8 @@ async function getSolution(date) {                                  //get soluti
   const solutionURL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://www.nytimes.com/svc/wordle/v2/' + solutionDate + '.json');
   const requestSolution = new Request(solutionURL);
   consoleLog(spoilerModePre, 'solutionURL: ' + solutionURL);
-  const builtInAnswer = aryAllAnswersOrdered[diffDays] ?? '';
+  const builtInIndex = daysBetween(start, date);
+  const builtInAnswer = aryAllAnswersOrdered[builtInIndex] ?? '';
   const hasBuiltInAnswer = builtInAnswer !== '';
   answer = builtInAnswer;                                            //temporary fallback while waiting for API
   try {
@@ -222,7 +223,7 @@ async function getSolution(date) {                                  //get soluti
       consoleLog(spoilerModePre, 'solution via API: ' + solution);
       consoleLog(spoilerModePre, 'built-in answer: ' + builtInAnswer);
       if (!hasBuiltInAnswer) {
-        consoleLog(true, 'built-in answer unavailable for day ' + diffDays + '; using API answer: ' + solution, 'warn');
+        consoleLog(true, 'built-in answer unavailable for day ' + builtInIndex + '; using API answer: ' + solution, 'warn');
       }//if
       return true; //indicate success
     } else {
