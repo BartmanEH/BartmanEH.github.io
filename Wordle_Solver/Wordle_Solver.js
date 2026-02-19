@@ -984,10 +984,31 @@ function solveIt() {
     consoleLog(true, 'include: ' + aryIncludeLetters);              //║ FILTERING ║
     consoleLog(true, 'pattern: ' + aryPatternLetters);              //╚═══════════╝
   }//if
+  const excludedGuessWords = new Set();                             //completed non-winning guesses cannot be the answer
+  for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
+    let guessWord = '';
+    let isCompleteGuess = true;
+    let isAllGreenGuess = true;
+    for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
+      const gridId = 'guess_' + guessPosition + '_' + letterPosition;
+      const gridElement = document.getElementById(gridId);
+      const letter = gridElement.value.toUpperCase();
+      if (letter === ' ') {
+        isCompleteGuess = false;
+        break;
+      }//if
+      guessWord += letter;
+      if (gridElement.dataset.state !== stateCorrect) { isAllGreenGuess = false; }
+    }//for
+    if (isCompleteGuess && guessWord.length === 5 && !isAllGreenGuess) {
+      excludedGuessWords.add(guessWord);
+    }//if
+  }//for
   for (let word of aryAllPossibleAnswers) {                         //loop through all possible words
     let boolExclude = Boolean(false);                               //true if word excludes all exclude letters
     let boolInclude = Boolean(false);                               //true if word includes any include letter
     const iterationWord = word;
+    if (excludedGuessWords.has(iterationWord)) { continue; }        //a prior non-winning guess cannot be the answer
     consoleLog(logFiltering, 'word: ' + word);
     //scrutinize GREENs
     let boolGREENsTest = Boolean(true);                             //true if word matches Green Pattern
