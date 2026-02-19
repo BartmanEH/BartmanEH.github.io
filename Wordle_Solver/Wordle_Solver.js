@@ -170,15 +170,14 @@ let version = '';                         //global version
 let useCaseData = [];
 //#endregion globals
 //#region init
-document.addEventListener('DOMContentLoaded', async function () {   //fires when DOM loaded (ready)
-  await Promise.allSettled([                                        //wait for async startup fetches before UI init
-    getSolution(today),                                             //retrieve today's solution from API
-    getVersion(),                                                   //retrieve version data from file
-    getUseCases()                                                   //retrieve use case data from file
-  ]);
+document.addEventListener('DOMContentLoaded', function () {         //fires when DOM loaded (ready)
   consoleLog(logGeneral, 'DOM ready!');                             //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
+  answer = aryAllAnswersOrdered[diffDays] ?? '';                    //seed from built-in so UI is immediately usable
   initialize();                                                     //initialize things
+  getVersion().catch((error) => { consoleLog(true, 'getVersion error: ' + error, 'warn'); });
+  getUseCases().catch((error) => { consoleLog(true, 'getUseCases error: ' + error, 'warn'); });
+  getSolution(today).catch((error) => { consoleLog(true, 'getSolution error: ' + error, 'warn'); });
 });//DOM loaded
 async function getSolution(date) {                                  //get solution for date from Wordle API via PHP (CORS)
   //consoleLog(spoilerModePre, 'date: ' + date);
