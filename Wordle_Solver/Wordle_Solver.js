@@ -196,7 +196,8 @@ async function getSolution(date) {                                  //get soluti
   const solutionURL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://www.nytimes.com/svc/wordle/v2/' + solutionDate + '.json');
   const requestSolution = new Request(solutionURL);
   consoleLog(spoilerModePre, 'solutionURL: ' + solutionURL);
-  answer = aryAllAnswersOrdered[diffDays];                          //init w built-in answer array; long API fetch fail timeout
+  const builtInAnswer = aryAllAnswersOrdered[diffDays] ?? '';
+  answer = builtInAnswer;                                            //init w built-in answer array; long API fetch fail timeout
   try {
     const responseSolution = await fetch(requestSolution);
     if (!responseSolution.ok) {
@@ -214,12 +215,12 @@ async function getSolution(date) {                                  //get soluti
     if (solutionJSON && 'solution' in solutionJSON) { //Check if solution exists
       consoleLog(spoilerModePre, 'Solution found: ' + solutionJSON.solution);
       solution = solutionJSON.solution.toUpperCase();
-      if (answer !== solution) {
+      if (builtInAnswer !== '' && builtInAnswer !== solution) {
         toast('API Answer and built-in Answer differ!');
       }//if
       answer = solution;
       consoleLog(spoilerModePre, 'solution via API: ' + solution);
-      consoleLog(spoilerModePre, 'built-in answer: ' + answer);
+      consoleLog(spoilerModePre, 'built-in answer: ' + builtInAnswer);
       return true; //indicate success
     } else {
       consoleLog(spoilerModePre, 'No solution property found in API response. Full response: ' + JSON.stringify(solutionJSON, null, 2));
@@ -530,7 +531,7 @@ function imageClicked(e) {                                          //image inpu
     stopFireworks();
     window.location.reload();                                       //reload page
   } else if (e.target.id === 'BartmanEH_logo_img') {                //BartmanEH logo clicked
-    toast('today\'s answer: ' + answer, 'bottom');
+    toast('today\'s answer: ' + (answer || 'unavailable'), 'bottom');
   }//if else
 }//imageClicked()
 function buildStrFilteredFiveLetterWords(array) {                   //helper function to concatenate strings (words)
@@ -767,7 +768,8 @@ function solveIt() {
           }//if
         }//if else
       }//if
-      if (boolAutoResults) {                                        //automatic results based on answer
+      const canAutoScore = boolAutoResults && typeof answer === 'string' && answer.length === 5;
+      if (canAutoScore) {                                           //automatic results based on answer
         //╔═══════════════════╗
         //║ automatic results ║
         //╚═══════════════════╝
