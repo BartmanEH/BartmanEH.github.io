@@ -1059,6 +1059,7 @@ function solveIt() {
     let isValidCandidate = true;
     for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
       let guessWord = '';
+      let isAllGreenGuess = true;
       const perGuessCounts = {};
       for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
         const gridId = 'guess_' + guessPosition + '_' + letterPosition;
@@ -1071,11 +1072,17 @@ function solveIt() {
         }//if
         if (gridElement.dataset.state === stateIncorrect) {
           perGuessCounts[letter].grayCount++;
+          isAllGreenGuess = false;
         } else if (gridElement.dataset.state === stateMisplaced || gridElement.dataset.state === stateCorrect) {
           perGuessCounts[letter].minCount++;
+          if (gridElement.dataset.state !== stateCorrect) { isAllGreenGuess = false; }
         }//if else
       }//for letterPosition
       if (guessWord.length !== 5) { continue; }                     //skip incomplete rows
+      if (!isAllGreenGuess && candidateWord === guessWord) {
+        isValidCandidate = false;                                   //a non-winning guess cannot remain a possibility
+        break;
+      }//if
       for (const letter in perGuessCounts) {
         const minCount = perGuessCounts[letter].minCount;
         const grayCount = perGuessCounts[letter].grayCount;
