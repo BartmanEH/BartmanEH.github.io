@@ -529,8 +529,10 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	height: 1.8em;
 	line-height: 1.2;
 	margin: 0 0 0 2px;
-	-webkit-appearance: textfield;
-	appearance: textfield;
+	-webkit-appearance: none;
+	appearance: none;
+	border-radius: 0;
+	border: 1px solid #3a3a3c;
 }
 
 #datePicker-div {
