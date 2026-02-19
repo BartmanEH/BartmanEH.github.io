@@ -196,7 +196,8 @@ async function getSolution(date) {                                  //get soluti
   const requestSolution = new Request(solutionURL);
   consoleLog(spoilerModePre, 'solutionURL: ' + solutionURL);
   const builtInAnswer = aryAllAnswersOrdered[diffDays] ?? '';
-  answer = builtInAnswer;                                            //init w built-in answer array; long API fetch fail timeout
+  const hasBuiltInAnswer = builtInAnswer !== '';
+  answer = builtInAnswer;                                            //temporary fallback while waiting for API
   try {
     const responseSolution = await fetch(requestSolution);
     if (!responseSolution.ok) {
@@ -217,9 +218,12 @@ async function getSolution(date) {                                  //get soluti
       if (builtInAnswer !== '' && builtInAnswer !== solution) {
         toast('API Answer and built-in Answer differ!');
       }//if
-      answer = solution;
+      answer = solution;                                             //API takes precedence over built-in when available
       consoleLog(spoilerModePre, 'solution via API: ' + solution);
       consoleLog(spoilerModePre, 'built-in answer: ' + builtInAnswer);
+      if (!hasBuiltInAnswer) {
+        consoleLog(true, 'built-in answer unavailable for day ' + diffDays + '; using API answer: ' + solution, 'warn');
+      }//if
       return true; //indicate success
     } else {
       consoleLog(spoilerModePre, 'No solution property found in API response. Full response: ' + JSON.stringify(solutionJSON, null, 2));
