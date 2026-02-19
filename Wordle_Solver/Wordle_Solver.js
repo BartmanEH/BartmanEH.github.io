@@ -149,7 +149,7 @@ const stateTBD = 'tbd';                   //metadata attribute for unknown
 const millisecondsPerDay = 24 * 60 * 60 * 1000;     //hours*minutes*seconds*milliseconds = millseconds per day
 //const start = new Date(2021, 5, 19);              //date of first Wordle June 19, 2021 (month is 0 indexed)
 //const start = new Date('2021-05-19T00:00:00');    //date of first Wordle June 19, 2021 (month is 0 indexed)
-const start = new Date('2021/6/19');                //date of first Wordle June 19, 2021
+const start = new Date(2021, 5, 19);                //date of first Wordle June 19, 2021 (month is 0 indexed)
 const today = new Date();                           //today's date
 //#endregion constants
 //#region globals;
@@ -170,10 +170,12 @@ let version = '';                         //global version
 let useCaseData = [];
 //#endregion globals
 //#region init
-document.addEventListener('DOMContentLoaded', function () {         //fires when DOM loaded (ready)
-  getSolution(today);                                               //retrieve today's solution from PHP
-  getVersion();                                                     //retrieve version data from file
-  getUseCases();                                                    //retrieve use case data from file
+document.addEventListener('DOMContentLoaded', async function () {   //fires when DOM loaded (ready)
+  await Promise.allSettled([                                        //wait for async startup fetches before UI init
+    getSolution(today),                                             //retrieve today's solution from API
+    getVersion(),                                                   //retrieve version data from file
+    getUseCases()                                                   //retrieve use case data from file
+  ]);
   consoleLog(logGeneral, 'DOM ready!');                             //log DOM ready
   UIeventHandlers();                                                //attach handlers to UI events
   initialize();                                                     //initialize things
@@ -376,13 +378,12 @@ async function dayNumChanged() {
 }//dayNumChanged()
 async function datePickerChanged() {
   const dateValue = document.getElementById('datePicker-input').value;
-  const date = new Date(dateValue);
-  date.setDate(date.getDate() + 1);                                 //needed + 1 day to work
+  const date = new Date(dateValue + 'T00:00:00');                   //parse date input in local time
   const solutionResult = await getSolution(date);                   //get solution for new date
   consoleLog(true, 'solutionResult: ' + solutionResult);
-  let diff = daysBetween(start, dateValue) + 1;                     //20230320 added +1 to make date picker work
+  let diff = daysBetween(start, date);
   consoleLog(logDatePicker, 'dateValue minus start: ' + diff);
-  if ((daysBetween(dateValue, today) <= 0) && !boolFutureDate) {
+  if ((daysBetween(date, today) < 0) && !boolFutureDate) {
     consoleLog(logDatePicker, 'error: future date!');
     diff = daysBetween(start, today);                               //difference in days
     document.getElementById('datePicker-input').value = formatDate(today);
@@ -399,7 +400,7 @@ async function datePickerChanged() {
   diffDays = diff;
   document.getElementById('dayNum-input').value = diffDays;
   stopFireworks();
-  consoleLog(logDatePicker, 'archiveDate: ' + formatDate(dateValue));
+  consoleLog(logDatePicker, 'archiveDate: ' + formatDate(date));
   consoleLog(logDatePicker, 'diffDays: ' + diffDays);
   //consoleLog(logDatePicker, 'dayNum: ' + dayNum);
   resetGrid();
@@ -484,7 +485,7 @@ function inputKeyup(e) {                                            //handler fo
 }//inputKeyup()
 function findTabStop(element, direction) {                          //find next tab stop in 'direction'
   consoleLog(logTabbing, 'direction: ' + direction);
-  const universe = document.querySelectorAll('input[type=text');    //only input type=text (AKA the grid)
+  const universe = document.querySelectorAll('input[type=text]');   //only input type=text (AKA the grid)
   const list = Array.prototype.filter.call(universe, function (item) { return item.tabIndex >= '0'; });
   consoleLog(logTabbing, 'universe.length: ' + universe.length);
   consoleLog(logTabbing, 'list.indexOf(element): ' + list.indexOf(element));
@@ -1015,7 +1016,7 @@ function solveIt() {
   //╚═══════════════════════════════════════════════════════════════════════════════════════════════╝
   for (const word of aryFilteredFiveLetterWords) {                  //scrutinize Yellow letter include positions
     let boolG2G = Boolean(true);
-    for (let guessPosition = 1; guessPosition <= 5; guessPosition++) {
+    for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
       for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
         const gridId = 'guess_' + guessPosition + '_' + letterPosition;
         const gridElement = document.getElementById(gridId);
