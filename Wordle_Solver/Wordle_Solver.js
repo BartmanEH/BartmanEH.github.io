@@ -170,6 +170,8 @@ let container = '';                       //eslint-disable-line -- global contai
 let fireworks = '';                       // global Easter Egg effect
 let version = '';                         // global version
 let useCaseData = [];
+let invalidGuessLock = false;             // block new letter entry after invalid 5-letter guess
+let invalidGuessPosition = 0;             // guess row that currently contains invalid word
 // #endregion globals
 // #region init
 document.addEventListener('DOMContentLoaded', function () {         // fires when DOM loaded (ready)
@@ -468,6 +470,8 @@ function syncDesktopDatePickerDisplay() {
   } // if
 } // syncDesktopDatePickerDisplay()
 function resetGrid() {                                              // clear letter grid
+  invalidGuessLock = false;
+  invalidGuessPosition = 0;
   for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
     for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
       const gridId = 'guess_' + guessPosition + '_' + letterPosition;
@@ -483,6 +487,16 @@ function resetGrid() {                                              // clear let
   document.getElementById('help-inner').style.display = 'block';    // show help div
 } // resetGrid()
 function inputKeydown(e) {                                          // handler for keydown event
+  if (invalidGuessLock) {
+    const guessPosition = Number((e.target.id.split('_')[1] ?? 0));
+    const isBackspace = (e.key === 'Backspace') || (e.keyCode === 8);
+    if (!(isBackspace && guessPosition === invalidGuessPosition)) {
+      e.preventDefault();
+      const invalidGridId = 'guess_' + invalidGuessPosition + '_5';
+      document.getElementById(invalidGridId).focus();
+      return;
+    } // if
+  } // if
   if ((e.shiftKey && (e.keyCode === 9)) || (e.keyCode === 9)) {     // Shift+Tab or Tab
     e.preventDefault();                                             // bypass normal processing
   } // if
@@ -494,6 +508,10 @@ function inputKeyup(e) {                                            // handler f
     chrKeyPressed = e.target.value.charCodeAt();                    // convert to ASCII code indirectly
   } else { chrKeyPressed = e.which; }                               // assume iOS; get ASCII code directly
   if (chrKeyPressed === 8) {                                        // backspace/delete key?
+    if (invalidGuessLock && Number((e.target.id.split('_')[1] ?? 0)) === invalidGuessPosition) {
+      invalidGuessLock = false;                                     // first backspace unlocks further entry
+      invalidGuessPosition = 0;
+    } // if
     consoleLog(logKeyboard, 'delete/backspace');                    // clear previous grid position
     findTabStop(e.target, 'backward').focus();                      // focus previous focussable element
     e.target.value = ' ';                                           // set default letter value
@@ -792,9 +810,12 @@ function solveIt() {
           document.getElementById('automaticResults').checked = boolAutoResults;
           initialize();
           return;                                                   // terminate further processing
-        } else if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) { // invalid guess word
+      } else if (!((aryAllPossibleGuesses.includes(guessWord)) || (aryAllPossibleAnswers.includes(guessWord)))) { // invalid guess word
           errorHandler('"' + guessWord + '" is not a possible guess word!');
           consoleLog(logFilterRules, '"' + guessWord + '" is not a possible guess word!');
+          invalidGuessLock = true;
+          invalidGuessPosition = guessPosition;
+          document.getElementById('guess_' + guessPosition + '_5').focus();
           if (!testMode) { return; } // if
         } else {                                                    // guess = answer/solution?
           consoleLog(logGeneral, 'aryAllAnswersOrdered.indexOf(guessWord): ' + aryAllAnswersOrdered.indexOf(guessWord));
