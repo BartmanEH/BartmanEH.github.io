@@ -926,7 +926,7 @@ function solveIt() {
           } // if
         } // if
         if (aryPatternLetters[letterPosition - 1] === letter) {     // was Green in a previous Guess
-          errorHandler('Green "' + letter + '" cannot change to Gray!');
+          errorHandler('Green "' + letter + '" cannot change to Gray in same column!');
           return;
         } // if
         // ╔════════╗
@@ -1041,8 +1041,9 @@ function solveIt() {
         } // if
       } // for guessWordCheckPosition
       if (boolCheck) {
-        consoleLog(logErrorChecking, 'Letter "' + includeLetter + '" cannot change to Gray in guess word: ' + guessWord + '!');
-        errorHandler('Letter "' + includeLetter + '" cannot change to Gray in guess word: ' + guessWord + '!');   // Gray letter is in includes array!
+        const previousColor = aryPatternLetters.includes(includeLetter) ? 'Yellow/Green' : 'Yellow';
+        consoleLog(logErrorChecking, 'Letter "' + includeLetter + '" cannot change from ' + previousColor + ' to Gray in guess word: ' + guessWord + '!');
+        errorHandler('Letter "' + includeLetter + '" cannot change from ' + previousColor + ' to Gray in guess word: ' + guessWord + '!');   // Gray letter is in includes array!
         return;                                                     // terminate further processing
       } // if
     } // for aryIncludeLettersPosition
