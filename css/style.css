@@ -536,10 +536,10 @@ input[type=date]::-webkit-calendar-picker-indicator {
 }
 
 #dayNum-input {
-	width: 52px !important;
-	flex: 0 0 52px;
-	min-width: 52px;
-	max-width: 52px;
+	width: 47px !important;
+	flex: 0 0 47px;
+	min-width: 47px;
+	max-width: 47px;
 }
 
 #datePicker-div {
@@ -566,9 +566,9 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	position: relative;
 	display: inline-flex;
 	align-items: center;
-	flex: 0 0 150px;
-	min-width: 150px;
-	max-width: 150px;
+	flex: 0 0 120px;
+	min-width: 120px;
+	max-width: 120px;
 }
 
 #datePicker-input {
@@ -600,20 +600,20 @@ input[type=date]::-webkit-calendar-picker-indicator {
 @media (max-width: 700px) {
 	#dayNum-input,
 	.dayNum {
-		width: 56px !important;
-		flex: 0 0 56px;
-		min-width: 56px;
-		max-width: 56px;
+		width: 50px !important;
+		flex: 0 0 50px;
+		min-width: 50px;
+		max-width: 50px;
 	}
 }
 
 @supports (-webkit-touch-callout: none) {
 	#dayNum-input,
 	.dayNum {
-		width: 56px !important;
-		flex: 0 0 56px !important;
-		min-width: 56px !important;
-		max-width: 56px !important;
+		width: 50px !important;
+		flex: 0 0 50px !important;
+		min-width: 50px !important;
+		max-width: 50px !important;
 	}
 }
 
