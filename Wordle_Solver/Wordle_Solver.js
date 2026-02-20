@@ -900,9 +900,9 @@ function solveIt() {
           errorHandler('Green "' + letter + '" cannot change to Gray!');
           return;
         } // if
-      // ╔════════╗
-      // ║ YELLOW ║
-      // ╚════════╝
+        // ╔════════╗
+        // ║ YELLOW ║
+        // ╚════════╝
       } else if (gridElement.dataset.state === stateMisplaced) {    // stateMisplaced; AKA Yellow
         if (aryPatternLetters[letterPosition - 1] === letter) {     // was Green in a previous Guess
           errorHandler('Green "' + letter + '" cannot change to Yellow in same column!');
@@ -941,9 +941,9 @@ function solveIt() {
             continue;
           } // if else
         } // if else
-      // ╔═══════╗
-      // ║ GREEN ║
-      // ╚═══════╝
+        // ╔═══════╗
+        // ║ GREEN ║
+        // ╚═══════╝
       } else if (gridElement.dataset.state === stateCorrect) {      // stateCorrect; AKA Green
         // consoleLog(logFilterRules, 'top of Green test, boolFirstGreenOccurrence: ' + boolFirstGreenOccurrence);
         if (aryExcludeLetters.includes(letter)) {                   // if it's an exclude letter, take it out
