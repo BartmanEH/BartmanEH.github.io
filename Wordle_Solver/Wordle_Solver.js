@@ -503,12 +503,20 @@ function inputKeydown(e) {                                          // handler f
 } // inputKeydown()
 function inputKeyup(e) {                                            // handler for keyup event
   consoleLog(logKeyboard, 'keyup event fired: e.which: ' + e.which + ' e.target.value: ' + e.target.value);
+  const guessPosition = Number((e.target.id.split('_')[1] ?? 0));
+  const isBackspaceKey = (e.key === 'Backspace') || (e.which === 8) || (e.keyCode === 8);
+  if (invalidGuessLock && !(isBackspaceKey && guessPosition === invalidGuessPosition)) {
+    e.target.value = ' ';
+    const invalidGridId = 'guess_' + invalidGuessPosition + '_5';
+    document.getElementById(invalidGridId).focus();
+    return;
+  } // if
   let chrKeyPressed;
   if (e.which === 229) {                                            // Android
     chrKeyPressed = e.target.value.charCodeAt();                    // convert to ASCII code indirectly
   } else { chrKeyPressed = e.which; }                               // assume iOS; get ASCII code directly
   if (chrKeyPressed === 8) {                                        // backspace/delete key?
-    if (invalidGuessLock && Number((e.target.id.split('_')[1] ?? 0)) === invalidGuessPosition) {
+    if (invalidGuessLock && guessPosition === invalidGuessPosition) {
       invalidGuessLock = false;                                     // first backspace unlocks further entry
       invalidGuessPosition = 0;
     } // if
