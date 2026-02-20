@@ -979,6 +979,10 @@ function solveIt() {
           consoleLog(logFilterRules, 'splicing Gray Exclude now Green letter' + letter);  // this should not happen with auto results!
           aryExcludeLetters.splice(aryExcludeLetters.indexOf(letter), 1);
         } // if
+        if (!boolAutoResults && aryIncludeLetters.includes(letter)) {
+          errorHandler('Yellow "' + letter + '" cannot change to Green!');
+          return;
+        } // if
         if (aryPatternLetters[letterPosition - 1] === '*') {        // new Green
           consoleLog(logFilterRules, 'pattern Green ' + letter);
           aryBoolFirstYellowOccurrence[letter] = true;
