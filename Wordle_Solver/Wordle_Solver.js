@@ -302,6 +302,7 @@ async function initialize() {                                                   
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-display').style.display = boolIOS ? 'none' : 'block';
   if (!boolIOS) { document.getElementById('datePicker-input').classList.add('desktop-date-format'); }
+  normalizeDatePickerOverlay();
   setDatePickerValue(today);
   // document.getElementById('datePicker-input').setAttribute('max', formatDate(today));
   document.getElementById('dayNum-input').value = diffDays;
@@ -469,6 +470,33 @@ function syncDesktopDatePickerDisplay() {
     updateDatePickerDisplay(parsedDate);
   } // if
 } // syncDesktopDatePickerDisplay()
+function normalizeDatePickerOverlay() {                             // fallback for PHP templates/CSS that don't match GH Pages layout
+  if (boolIOS) { return; }
+  const inputElement = document.getElementById('datePicker-input');
+  const displayElement = document.getElementById('datePicker-display');
+  if (!inputElement || !displayElement) { return; }
+  let wrapperElement = document.getElementById('datePicker-wrap');
+  if (!wrapperElement) {
+    wrapperElement = document.createElement('span');
+    wrapperElement.id = 'datePicker-wrap';
+    inputElement.parentNode.insertBefore(wrapperElement, inputElement);
+    wrapperElement.appendChild(inputElement);
+  } // if
+  if (displayElement.parentElement !== wrapperElement) {
+    wrapperElement.appendChild(displayElement);
+  } // if
+  wrapperElement.style.position = 'relative';
+  wrapperElement.style.display = 'inline-flex';
+  wrapperElement.style.alignItems = 'center';
+  if (!wrapperElement.style.width) { wrapperElement.style.width = '120px'; }
+  inputElement.style.width = '100%';
+  displayElement.style.position = 'absolute';
+  displayElement.style.left = '8px';
+  displayElement.style.top = '50%';
+  displayElement.style.transform = 'translateY(-50%)';
+  displayElement.style.pointerEvents = 'none';
+  displayElement.style.whiteSpace = 'nowrap';
+} // normalizeDatePickerOverlay()
 function resetGrid() {                                              // clear letter grid
   invalidGuessLock = false;
   invalidGuessPosition = 0;
