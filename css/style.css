@@ -519,7 +519,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	background-color: #000000 !important;
 	color: #f3f3f3 !important;
 	outline: none;
-	width: 56px !important;
+	width: 88px !important;
 	font-size: 16px;
 	padding-left: 0px;
 	text-align: left;
@@ -533,6 +533,12 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	appearance: none;
 	border-radius: 0;
 	border: 1px solid #3a3a3c;
+}
+
+#dayNum-input {
+	flex: 0 0 88px;
+	min-width: 88px;
+	max-width: 88px;
 }
 
 #datePicker-div {
