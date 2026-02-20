@@ -301,7 +301,11 @@ async function initialize() {                                                   
   numFiveLetterWords = aryAllPossibleAnswers.length;                // number of 5-letter words
   document.getElementById('possibilities').style.display = 'none';
   document.getElementById('datePicker-display').style.display = boolIOS ? 'none' : 'block';
-  if (!boolIOS) { document.getElementById('datePicker-input').classList.add('desktop-date-format'); }
+  if (!boolIOS) {
+    document.getElementById('datePicker-input').classList.add('desktop-date-format');
+    const datePickerWrap = document.getElementById('datePicker-wrap');
+    if (datePickerWrap) { datePickerWrap.classList.add('datePicker-enhanced'); }
+  } // if
   normalizeDatePickerOverlay();
   setDatePickerValue(today);
   // document.getElementById('datePicker-input').setAttribute('max', formatDate(today));
@@ -488,6 +492,7 @@ function normalizeDatePickerOverlay() {                             // fallback 
   wrapperElement.style.position = 'relative';
   wrapperElement.style.display = 'inline-flex';
   wrapperElement.style.alignItems = 'center';
+  wrapperElement.classList.add('datePicker-enhanced');
   if (!wrapperElement.style.width) { wrapperElement.style.width = '120px'; }
   inputElement.style.width = '100%';
   displayElement.style.position = 'absolute';

@@ -578,6 +578,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
 }
 
 #datePicker-display {
+	display: none;
 	position: absolute;
 	left: 8px;
 	top: 50%;
@@ -587,6 +588,18 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	font-size: 16px;
 	color: #f3f3f3;
 	white-space: nowrap;
+}
+
+#datePicker-wrap.datePicker-enhanced #datePicker-display {
+	display: block;
+}
+
+#datePicker-wrap.datePicker-enhanced #datePicker-input {
+	color: transparent !important;
+}
+
+#datePicker-wrap.datePicker-enhanced #datePicker-input::-webkit-datetime-edit {
+	color: transparent;
 }
 
 #datePicker-input.desktop-date-format {
