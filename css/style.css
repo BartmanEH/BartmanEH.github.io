@@ -519,7 +519,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	background-color: #000000 !important;
 	color: #f3f3f3 !important;
 	outline: none;
-	width: 88px !important;
+	width: 64px !important;
 	font-size: 16px;
 	padding-left: 0px;
 	text-align: left;
@@ -536,9 +536,10 @@ input[type=date]::-webkit-calendar-picker-indicator {
 }
 
 #dayNum-input {
-	flex: 0 0 88px;
-	min-width: 88px;
-	max-width: 88px;
+	width: 64px !important;
+	flex: 0 0 64px;
+	min-width: 64px;
+	max-width: 64px;
 }
 
 #datePicker-div {
@@ -565,6 +566,26 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	flex: 0 0 150px;
 	min-width: 150px;
 	max-width: 150px;
+}
+
+@media (max-width: 700px) {
+	#dayNum-input,
+	.dayNum {
+		width: 72px !important;
+		flex: 0 0 72px;
+		min-width: 72px;
+		max-width: 72px;
+	}
+}
+
+@supports (-webkit-touch-callout: none) {
+	#dayNum-input,
+	.dayNum {
+		width: 72px !important;
+		flex: 0 0 72px !important;
+		min-width: 72px !important;
+		max-width: 72px !important;
+	}
 }
 
 input[type="number"]::-webkit-outer-spin-button,
