@@ -151,6 +151,8 @@ const millisecondsPerDay = 24 * 60 * 60 * 1000;     //hours*minutes*seconds*mill
 //const start = new Date('2021-05-19T00:00:00');    //date of first Wordle June 19, 2021 (month is 0 indexed)
 const start = new Date(2021, 5, 19);                //date of first Wordle June 19, 2021 (month is 0 indexed)
 const today = new Date();                           //today's date
+const boolIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const dateDisplayFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
 //#endregion constants
 //#region globals;
 let diffDays = daysBetween(start, today); //new function to compute days between two dates
@@ -261,6 +263,9 @@ function UIeventHandlers() {                                                    
     imageInput.addEventListener('click', (e) => { imageClicked(e); });          //image input click handler
   }//for imageInputs
   document.getElementById('datePicker-input').addEventListener('change', (e) => { datePickerChanged(e); }); //date input change handler
+  if (!boolIOS) {
+    document.getElementById('datePicker-input').addEventListener('input', () => { syncDesktopDatePickerDisplay(); });
+  }//if
   document.getElementById('dayNum-input').addEventListener('change', (e) => { dayNumChanged(e); });         //day num input change handler
   document.getElementById('copyright').addEventListener('click', (e) => { copyrightClicked(e); });          //copyright symbol click handler
   document.querySelectorAll('input[name="resultsMode"]').forEach((elem) => {                                //radio button change handler
@@ -293,7 +298,9 @@ async function initialize() {                                                   
   consoleLog(spoilerModePre, 'Wordle Day #:' + (diffDays) + ', Today\'s answer: ' + answer);
   numFiveLetterWords = aryAllPossibleAnswers.length;                //number of 5-letter words
   document.getElementById('possibilities').style.display = 'none';
-  document.getElementById('datePicker-input').valueAsDate = today;
+  document.getElementById('datePicker-display').style.display = boolIOS ? 'none' : 'block';
+  if (!boolIOS) { document.getElementById('datePicker-input').classList.add('desktop-date-format'); }
+  setDatePickerValue(today);
   //document.getElementById('datePicker-input').setAttribute('max', formatDate(today));
   document.getElementById('dayNum-input').value = diffDays;
   if (boolAutoResults) {
@@ -370,13 +377,13 @@ async function dayNumChanged() {
     archiveDate.setDate(archiveDate.getDate() - dayNum);
     dayNum = daysBetween(start, today);                             //difference in days
     archiveDate.setDate(archiveDate.getDate() + dayNum);
-    document.getElementById('datePicker-input').value = formatDate(today);
+    setDatePickerValue(today);
   }//if else
   consoleLog(logDatePicker, 'archiveDate: ' + formatDate(archiveDate));
   consoleLog(logDatePicker, 'diffDays: ' + diffDays);
   consoleLog(logDatePicker, 'dayNum: ' + dayNum);
   diffDays = dayNum;
-  document.getElementById('datePicker-input').value = formatDate(archiveDate);
+  setDatePickerValue(archiveDate);
   document.getElementById('dayNum-input').value = diffDays;
   stopFireworks();
   resetGrid();
@@ -391,16 +398,18 @@ async function datePickerChanged() {
   if ((daysBetween(date, today) < 0) && !boolFutureDate) {
     consoleLog(logDatePicker, 'error: future date!');
     diff = daysBetween(start, today);                               //difference in days
-    document.getElementById('datePicker-input').value = formatDate(today);
+    setDatePickerValue(today);
   } else if (diff < 0) {
     consoleLog(logDatePicker, 'error: date before official start!');
     diff = 0;
-    document.getElementById('datePicker-input').value = formatDate(start);
+    setDatePickerValue(start);
   } else if (!solutionResult) {
     consoleLog(true, 'I\'m here!');
     consoleLog(logDatePicker, formatDate(date) + ' is too far in future; solution unknown!');
     diff = daysBetween(start, today);                               //difference in days
-    document.getElementById('datePicker-input').value = formatDate(today);
+    setDatePickerValue(today);
+  } else {
+    setDatePickerValue(date);
   }//if else
   diffDays = diff;
   document.getElementById('dayNum-input').value = diffDays;
@@ -433,6 +442,32 @@ function formatDate(dateValue) {                                    //helper fun
     return dateValue;
   }
 }//formatDate()
+function formatDateDisplay(dateValue) {                             //desktop date display format: Mmm DD, YYYY
+  if (dateValue instanceof Date && !Number.isNaN(dateValue.getTime())) {
+    return dateDisplayFormatter.format(dateValue);
+  } else {
+    return '';
+  }
+}//formatDateDisplay()
+function setDatePickerValue(dateValue) {
+  document.getElementById('datePicker-input').value = formatDate(dateValue);
+  updateDatePickerDisplay(dateValue);
+}//setDatePickerValue()
+function updateDatePickerDisplay(dateValue) {
+  if (boolIOS) { return; }                                          //iOS keeps native display
+  const displayElement = document.getElementById('datePicker-display');
+  if (!displayElement) { return; }
+  displayElement.textContent = formatDateDisplay(dateValue);
+}//updateDatePickerDisplay()
+function syncDesktopDatePickerDisplay() {
+  if (boolIOS) { return; }
+  const value = document.getElementById('datePicker-input').value;
+  if (!value) { return; }
+  const parsedDate = new Date(value + 'T00:00:00');
+  if (!Number.isNaN(parsedDate.getTime())) {
+    updateDatePickerDisplay(parsedDate);
+  }//if
+}//syncDesktopDatePickerDisplay()
 function resetGrid() {                                              //clear letter grid
   for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
     for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {

@@ -131,7 +131,10 @@
 				<div id="spacer-short" class="spacer-normal"></div>
 				<div id="datePicker-div" class="help">
 					<span id="labelDate">Date:&nbsp;</span>
-					<input type="date" id="datePicker-input" name="datePicker" value="2021-05-19" min="2021-05-19" class="datePicker">
+					<span id="datePicker-wrap">
+						<input type="date" id="datePicker-input" name="datePicker" value="2021-05-19" min="2021-05-19" class="datePicker">
+						<span id="datePicker-display" aria-hidden="true"></span>
+					</span>
 					<span id="labelDay">&nbsp;&nbsp;Day&nbsp;#<input type="number" id="dayNum-input" name="dayNum" value="1" min="1" class="dayNum"></span>
 				</div>
 				<div id="resultsMode-div" class="help" display="none">

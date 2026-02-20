@@ -519,7 +519,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	background-color: #000000 !important;
 	color: #f3f3f3 !important;
 	outline: none;
-	width: 64px !important;
+	width: 52px !important;
 	font-size: 16px;
 	padding-left: 0px;
 	text-align: left;
@@ -536,10 +536,10 @@ input[type=date]::-webkit-calendar-picker-indicator {
 }
 
 #dayNum-input {
-	width: 64px !important;
-	flex: 0 0 64px;
-	min-width: 64px;
-	max-width: 64px;
+	width: 52px !important;
+	flex: 0 0 52px;
+	min-width: 52px;
+	max-width: 52px;
 }
 
 #datePicker-div {
@@ -562,29 +562,58 @@ input[type=date]::-webkit-calendar-picker-indicator {
 	flex: 0 0 auto;
 }
 
-#datePicker-input {
+#datePicker-wrap {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
 	flex: 0 0 150px;
 	min-width: 150px;
 	max-width: 150px;
 }
 
+#datePicker-input {
+	width: 100%;
+	min-width: 0;
+	max-width: 100%;
+}
+
+#datePicker-display {
+	position: absolute;
+	left: 8px;
+	top: 50%;
+	transform: translateY(-50%);
+	pointer-events: none;
+	font-family: "Source Sans Pro", "Trebuchet MS", Helvetica, sans-serif;
+	font-size: 16px;
+	color: #f3f3f3;
+	white-space: nowrap;
+}
+
+#datePicker-input.desktop-date-format {
+	color: transparent !important;
+}
+
+#datePicker-input.desktop-date-format::-webkit-datetime-edit {
+	color: transparent;
+}
+
 @media (max-width: 700px) {
 	#dayNum-input,
 	.dayNum {
-		width: 72px !important;
-		flex: 0 0 72px;
-		min-width: 72px;
-		max-width: 72px;
+		width: 56px !important;
+		flex: 0 0 56px;
+		min-width: 56px;
+		max-width: 56px;
 	}
 }
 
 @supports (-webkit-touch-callout: none) {
 	#dayNum-input,
 	.dayNum {
-		width: 72px !important;
-		flex: 0 0 72px !important;
-		min-width: 72px !important;
-		max-width: 72px !important;
+		width: 56px !important;
+		flex: 0 0 56px !important;
+		min-width: 56px !important;
+		max-width: 56px !important;
 	}
 }
 
