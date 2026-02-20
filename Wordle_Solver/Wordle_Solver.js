@@ -666,6 +666,52 @@ function charCount(str, chr) {                                      // count occ
   }
   return count;
 } // charCount()
+function getWordlePattern(guessWord, answerWord) {                  // return 5-char pattern: 0 Gray, 1 Yellow, 2 Green
+  const pattern = ['0', '0', '0', '0', '0'];
+  const remainingLetters = {};
+  for (let i = 0; i < 5; i++) {
+    const guessLetter = guessWord[i];
+    const answerLetter = answerWord[i];
+    if (guessLetter === answerLetter) {
+      pattern[i] = '2';
+    } else {
+      remainingLetters[answerLetter] = (remainingLetters[answerLetter] ?? 0) + 1;
+    } // if else
+  } // for
+  for (let i = 0; i < 5; i++) {
+    if (pattern[i] !== '0') { continue; }
+    const guessLetter = guessWord[i];
+    if ((remainingLetters[guessLetter] ?? 0) > 0) {
+      pattern[i] = '1';
+      remainingLetters[guessLetter]--;
+    } // if
+  } // for
+  return pattern.join('');
+} // getWordlePattern()
+function sortByExpectedRemaining(candidateWords, possibleAnswers) {
+  const answerCount = possibleAnswers.length;
+  if (answerCount === 0) { return candidateWords.slice().sort(); }
+  const scoreByWord = new Map();
+  for (const candidateWord of candidateWords) {
+    const buckets = new Map();
+    for (const possibleAnswer of possibleAnswers) {
+      const pattern = getWordlePattern(candidateWord, possibleAnswer);
+      buckets.set(pattern, (buckets.get(pattern) ?? 0) + 1);
+    } // for
+    let sumSquares = 0;
+    for (const bucketSize of buckets.values()) {
+      sumSquares += bucketSize * bucketSize;
+    } // for
+    scoreByWord.set(candidateWord, sumSquares / answerCount);
+  } // for
+  const sortedWords = candidateWords.slice();
+  sortedWords.sort(function (a, b) {
+    const scoreDiff = (scoreByWord.get(a) ?? 0) - (scoreByWord.get(b) ?? 0);
+    if (scoreDiff !== 0) { return scoreDiff; }
+    return a.localeCompare(b);
+  });
+  return sortedWords;
+} // sortByExpectedRemaining()
 function stopFireworks() {                                          // stop fireworks effect
   if (fireworks !== '') {                                           // fireworks are on
     fireworks.stop();                                               // stop fireworks
@@ -1057,6 +1103,7 @@ function solveIt() {
     consoleLog(true, 'pattern: ' + aryPatternLetters);              // ╚═══════════╝
   } // if
   const excludedGuessWords = new Set();                             // completed non-winning guesses cannot be the answer
+  let numCompleteGuesses = 0;
   for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
     let guessWord = '';
     let isCompleteGuess = true;
@@ -1072,6 +1119,7 @@ function solveIt() {
       guessWord += letter;
       if (gridElement.dataset.state !== stateCorrect) { isAllGreenGuess = false; }
     } // for
+    if (isCompleteGuess && guessWord.length === 5) { numCompleteGuesses++; }
     if (isCompleteGuess && guessWord.length === 5 && !isAllGreenGuess) {
       excludedGuessWords.add(guessWord);
     } // if
@@ -1199,7 +1247,13 @@ function solveIt() {
   } // for candidateWord
   numFiveLetterWords = aryFullyScrutinizedFilteredFiveLetterWords.length;
   let strPossibilities = ' ';
-  aryFullyScrutinizedFilteredFiveLetterWords.sort();                // sort possibilites alphabetically
+  if (numCompleteGuesses > 0) {                                     // rank only after at least one full guess entered
+    const rankedWords = sortByExpectedRemaining(aryFullyScrutinizedFilteredFiveLetterWords, aryFullyScrutinizedFilteredFiveLetterWords);
+    aryFullyScrutinizedFilteredFiveLetterWords.length = 0;
+    aryFullyScrutinizedFilteredFiveLetterWords.push(...rankedWords);
+  } else {
+    aryFullyScrutinizedFilteredFiveLetterWords.sort();              // before first full guess, keep alphabetical
+  } // if else
   if (numFiveLetterWords !== 0) {
     strPossibilities = buildStrFilteredFiveLetterWords(aryFullyScrutinizedFilteredFiveLetterWords);
   } // if
