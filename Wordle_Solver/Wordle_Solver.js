@@ -712,6 +712,26 @@ function sortByExpectedRemaining(candidateWords, possibleAnswers) {
   });
   return sortedWords;
 } // sortByExpectedRemaining()
+function sortByActualRemaining(candidateWords, possibleAnswers, actualAnswer) {
+  const scoreByWord = new Map();
+  for (const candidateWord of candidateWords) {
+    const actualPattern = getWordlePattern(candidateWord, actualAnswer);
+    let remainingCount = 0;
+    for (const possibleAnswer of possibleAnswers) {
+      if (getWordlePattern(candidateWord, possibleAnswer) === actualPattern) {
+        remainingCount++;
+      } // if
+    } // for
+    scoreByWord.set(candidateWord, remainingCount);
+  } // for
+  const sortedWords = candidateWords.slice();
+  sortedWords.sort(function (a, b) {
+    const scoreDiff = (scoreByWord.get(a) ?? 0) - (scoreByWord.get(b) ?? 0);
+    if (scoreDiff !== 0) { return scoreDiff; }
+    return a.localeCompare(b);
+  });
+  return sortedWords;
+} // sortByActualRemaining()
 function stopFireworks() {                                          // stop fireworks effect
   if (fireworks !== '') {                                           // fireworks are on
     fireworks.stop();                                               // stop fireworks
@@ -1248,7 +1268,10 @@ function solveIt() {
   numFiveLetterWords = aryFullyScrutinizedFilteredFiveLetterWords.length;
   let strPossibilities = ' ';
   if (numCompleteGuesses > 0) {                                     // rank only after at least one full guess entered
-    const rankedWords = sortByExpectedRemaining(aryFullyScrutinizedFilteredFiveLetterWords, aryFullyScrutinizedFilteredFiveLetterWords);
+    const canRankAgainstActualAnswer = boolAutoResults && typeof answer === 'string' && answer.length === 5;
+    const rankedWords = canRankAgainstActualAnswer
+      ? sortByActualRemaining(aryFullyScrutinizedFilteredFiveLetterWords, aryFullyScrutinizedFilteredFiveLetterWords, answer)
+      : sortByExpectedRemaining(aryFullyScrutinizedFilteredFiveLetterWords, aryFullyScrutinizedFilteredFiveLetterWords);
     aryFullyScrutinizedFilteredFiveLetterWords.length = 0;
     aryFullyScrutinizedFilteredFiveLetterWords.push(...rankedWords);
   } else {
