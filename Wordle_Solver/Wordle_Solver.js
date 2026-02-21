@@ -146,9 +146,9 @@ const stateIncorrect = 'incorrect';       // metadata attribute for Black
 const stateMisplaced = 'misplaced';       // metadata attribute for Yellow
 const stateCorrect = 'correct';           // metadata attribute for Green
 const stateTBD = 'tbd';                   // metadata attribute for unknown
-const millisecondsPerDay = 24 * 60 * 60 * 1000;     // hours*minutes*seconds*milliseconds = millseconds per day
+const millisecondsPerDay = 24 * 60 * 60 * 1000;     // hours*minutes*seconds*milliseconds = milliseconds per day
 // const start = new Date(2021, 5, 19);              //date of first Wordle June 19, 2021 (month is 0 indexed)
-// const start = new Date('2021-05-19T00:00:00');    //date of first Wordle June 19, 2021 (month is 0 indexed)
+// const start = new Date('2021-05-19T00:00:00');    //date of first Wordle May 19, 2021 (ISO month is 1 indexed)
 const start = new Date(2021, 5, 19);                // date of first Wordle June 19, 2021 (month is 0 indexed)
 const today = new Date();                           // today's date
 const boolIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {         // fires whe
   getUseCases().catch((error) => { consoleLog(true, 'getUseCases error: ' + error, 'warn'); });
   getSolution(today).catch((error) => { consoleLog(true, 'getSolution error: ' + error, 'warn'); });
 }); // DOM loaded
-async function getSolution(date) {                                  // get solution for date from Wordle API via PHP (CORS)
+async function getSolution(date) {                                  // get solution for date from Wordle API via CORS proxy
   // consoleLog(spoilerModePre, 'date: ' + date);
   if (typeof date === 'undefined') date = today;                    // no date var passed to function so use today
   if (!(date instanceof Date)) date = new Date(date);
@@ -656,7 +656,7 @@ function buildStrFilteredFiveLetterWords(array) {                   // helper fu
   return strBuilt;
 } // buildStrFilteredFiveLetterWords()
 function toast(toastMessage, position) {
-  if (typeof position === 'undefined') position = 'bottom';         // default to top if no position provided in call
+  if (typeof position === 'undefined') position = 'bottom';         // default to bottom if no position provided in call
   ToastMaker(toastMessage, 3000, { styles: { fontSize: '20px' }, valign: position }); /* global ToastMaker*/
 } // toast()
 function errorHandler(strError) {                                   // helper function to display results error messages
@@ -666,7 +666,7 @@ function errorHandler(strError) {                                   // helper fu
 } // errorHandler()
 function consoleLog(boolLogSwitch, strMessage, logType) {           // helper function to display console log messages
   if (typeof boolLogSwitch === 'undefined') boolLogSwitch = true;   // default to true if no log switch provided in call
-  if (typeof logType === 'undefined') logType = 'normal';           // default to true if no log switch provided in call
+  if (typeof logType === 'undefined') logType = 'normal';           // default log type
   if (logType === 'normal' && boolLogSwitch) {                      // default log type if no log type provided in call
     console.log(strMessage);                                        // normal console log message
   } else if (logType === 'warn' && boolLogSwitch) {
@@ -854,7 +854,7 @@ function automatedTesting() {                                       // automated
         } else if (letterColor === 'G') {                           // is it Green?
           gridElement.style.backgroundColor = rgbGreen;             // make background Green
           gridElement.style.border = '2px solid ' + rgbGreen;       // make border Green too
-          gridElement.dataset.state = stateCorrect;                 // set metadata attribute for Gren
+          gridElement.dataset.state = stateCorrect;                 // set metadata attribute for Green
         } else {                                                    // pattern data error
           consoleLog(logAutoTest, 'invalid Pattern Colour!');
         } // if else
@@ -1031,7 +1031,7 @@ function solveIt() {
             gridElement.style.backgroundColor = rgbYellow;          // make background Yellow
             gridElement.style.border = '2px solid ' + rgbYellow;    // make border Yellow too
             gridElement.dataset.state = stateMisplaced;             // set metadata attribute for Yellow
-            todayAnswer = todayAnswer.substring(0, todayAnswer.indexOf(gridLetter)) + '+' + todayAnswer.substring(todayAnswer.indexOf(gridLetter) + 1); // overwrite GREEN letter with +
+            todayAnswer = todayAnswer.substring(0, todayAnswer.indexOf(gridLetter)) + '+' + todayAnswer.substring(todayAnswer.indexOf(gridLetter) + 1); // consume matched answer letter with +
             consoleLog(logAutoResults, 'todayAnswer: ' + todayAnswer);
           } // if
         } // for guessWordCheckPosition
