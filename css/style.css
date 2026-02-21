@@ -777,14 +777,3 @@ legend span { /*fieldset legend positioning*/
 .ui-mobile-viewport {
 	background-color: black;
 }
-
-@media (hover: none) and (pointer: coarse) {
-	@supports (-webkit-touch-callout: none) {
-		.wrapper.Wordle_Solver {
-			min-height: calc(100vh + 140px);
-		}
-		.Wordle_Solver .content {
-			padding-bottom: 50px;
-		}
-	}
-}
