@@ -172,6 +172,7 @@ let version = '';                         // global version
 let useCaseData = [];
 let invalidGuessLock = false;             // block new letter entry after invalid 5-letter guess
 let invalidGuessPosition = 0;             // guess row that currently contains invalid word
+let fireworksContainerBaseHeight = 0;     // lock fireworks container to original height
 // #endregion globals
 // #region init
 document.addEventListener('DOMContentLoaded', function () {         // fires when DOM loaded (ready)
@@ -282,6 +283,18 @@ async function getUseCases() {                                                  
 } // getUseCases()
 async function initialize() {                                                   // set default selections
   container = document.querySelector('.fireworks-container');
+  if (container) {
+    // Lock to initial measured height so iOS pull-down stretch does not grow the fireworks canvas.
+    if (fireworksContainerBaseHeight === 0) {
+      fireworksContainerBaseHeight = Math.ceil(container.getBoundingClientRect().height);
+    } // if
+    if (fireworksContainerBaseHeight > 0) {
+      container.style.height = fireworksContainerBaseHeight + 'px';
+      container.style.maxHeight = fireworksContainerBaseHeight + 'px';
+      container.style.overflow = 'hidden';
+      container.style.position = 'relative';
+    } // if
+  } // if
   consoleLog(logGeneral, 'today: ' + today + ', Wordle day#: ' + diffDays);
   aryAllPossibleAnswers = [];
   let answerOffset = 0;
@@ -784,7 +797,14 @@ function celebrate(guessPosition, message) {                        // Easter Eg
   stopFireworks();
   const container = document.querySelector('.fireworks-container');
   if (!container) { return; }
-  fireworks = new Fireworks(container, { traceSpeed: 3 });          /* global Fireworks*/
+  if (fireworksContainerBaseHeight > 0) {
+    container.style.height = fireworksContainerBaseHeight + 'px';
+    container.style.maxHeight = fireworksContainerBaseHeight + 'px';
+    container.style.overflow = 'hidden';
+    container.style.position = 'relative';
+  } // if
+  const fireworksTraceSpeed = boolIOS ? 3 : 2.1;                    // desktop at 70% speed, iOS unchanged
+  fireworks = new Fireworks(container, { traceSpeed: fireworksTraceSpeed }); /* global Fireworks*/
   fireworks.start();                                                // launch fireworks effect
 } // celebrate()
 // #endregion helper functions
