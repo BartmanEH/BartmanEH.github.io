@@ -770,7 +770,8 @@ function stopFireworks() {                                          // stop fire
   if (fireworks !== '') {                                           // fireworks are on
     fireworks.stop();                                               // stop fireworks
     fireworks = '';                                                 // 'destroy' instance
-    document.getElementsByTagName('canvas')[0].remove();            // remove fireworks canvas
+    const fireworksCanvas = document.querySelector('.fireworks-container canvas');
+    if (fireworksCanvas) { fireworksCanvas.remove(); }              // remove fireworks canvas if present
   } // if else
 } // stopFireworks()
 function celebrate(guessPosition, message) {                        // Easter Egg graphics
@@ -783,7 +784,8 @@ function celebrate(guessPosition, message) {                        // Easter Eg
   errorHandler(message);
   stopFireworks();
   const container = document.querySelector('.fireworks-container');
-  const fireworks = new Fireworks(container, { traceSpeed: 3 });    /* global Fireworks*/
+  if (!container) { return; }
+  fireworks = new Fireworks(container, { traceSpeed: 3 });          /* global Fireworks*/
   fireworks.start();                                                // launch fireworks effect
 } // celebrate()
 // #endregion helper functions
@@ -932,7 +934,7 @@ function solveIt() {
           if (guessWord === solution) {                             // guess = solution
             consoleLog(spoilerModePre, 'guess word = solution!');
           } // if
-          boolStreakSaver = streakSaver && (aryAllAnswersOrdered.indexOf(guessWord) === diffDays);
+          boolStreakSaver = streakSaver && (typeof answer === 'string') && (guessWord === answer);
           if (boolStreakSaver) {
             celebrate(guessPosition, 'Streak Saver easter egg!');
             // aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
