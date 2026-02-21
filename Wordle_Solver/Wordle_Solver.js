@@ -793,12 +793,11 @@ function celebrate(guessPosition, message) {                        // Easter Eg
   container.style.maxHeight = fireworksContainerBaseHeight + 'px';
   container.style.overflow = 'hidden';
   container.style.position = 'relative';
-  const fireworksMotionSpeed = 1;                                   // match demo feel
+  const fireworksMotionSpeed = 1;                                   // v2 demo-aligned trace speed
   fireworks = new Fireworks(container, {
-    speed: fireworksMotionSpeed,                                     // v1 API
-    trace: 3,                                                        // v1 API
-    traceSpeed: fireworksMotionSpeed,                                // v2 API
-    traceLength: 3                                                   // v2 API
+    traceSpeed: fireworksMotionSpeed,
+    traceLength: 3,
+    autoresize: false
   });                                                                /* global Fireworks*/
   fireworks.start();                                                // launch fireworks effect
   requestAnimationFrame(() => {
