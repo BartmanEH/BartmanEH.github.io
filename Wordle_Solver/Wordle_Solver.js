@@ -179,7 +179,6 @@ document.addEventListener('DOMContentLoaded', function () {         // fires whe
   UIeventHandlers();                                                // attach handlers to UI events
   answer = aryAllAnswersOrdered[diffDays] ?? '';                    // seed from built-in so UI is immediately usable
   initialize();                                                     // initialize things
-  setupIOSFooterScrollBehavior();                                   // ensure footer version requires scroll on iOS
   getVersion().catch((error) => { consoleLog(true, 'getVersion error: ' + error, 'warn'); });
   getUseCases().catch((error) => { consoleLog(true, 'getUseCases error: ' + error, 'warn'); });
   getSolution(today).catch((error) => { consoleLog(true, 'getSolution error: ' + error, 'warn'); });
@@ -253,22 +252,6 @@ async function getVersion() {                                       // must be a
   consoleLog(logGeneral, 'version: v' + version);                               // log version
   document.getElementById('version').innerHTML = 'v' + version.toString();      // update webpage footer version info
 } // getVersion()
-function enforceIOSFooterScroll() {                                 // keep footer below initial viewport on iOS
-  if (!boolIOS) { return; }
-  const root = document.getElementById('root');
-  if (!root) { return; }
-  const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-  root.style.minHeight = Math.ceil(viewportHeight + 180) + 'px';
-}
-function setupIOSFooterScrollBehavior() {
-  if (!boolIOS) { return; }
-  enforceIOSFooterScroll();
-  window.addEventListener('resize', enforceIOSFooterScroll);
-  window.addEventListener('orientationchange', enforceIOSFooterScroll);
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', enforceIOSFooterScroll);
-  } // if
-}
 function UIeventHandlers() {                                                    // attach handlers to UI events
   const textInputs = document.querySelectorAll('input[type="text"]');           // get all text inputs
   for (const textInput of textInputs) {
