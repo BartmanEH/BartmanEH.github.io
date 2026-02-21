@@ -78,6 +78,17 @@ a, a:visited {
 	margin: 0;
 }
 
+@supports (-webkit-touch-callout: none) {
+	.Wordle_Solver .footer {
+		height: 34px;
+	}
+	.Wordle_Solver .footer #version {
+		top: 38px;
+		font-size: 12px;
+		line-height: 1;
+	}
+}
+
 /* #root {
 	top: 0;
 	left: 0;
