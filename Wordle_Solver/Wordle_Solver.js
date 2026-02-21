@@ -281,7 +281,6 @@ async function getUseCases() {                                                  
   useCaseData = await response.json();
 } // getUseCases()
 async function initialize() {                                                   // set default selections
-  container = document.querySelector('.fireworks-container');
   consoleLog(logGeneral, 'today: ' + today + ', Wordle day#: ' + diffDays);
   aryAllPossibleAnswers = [];
   let answerOffset = 0;
