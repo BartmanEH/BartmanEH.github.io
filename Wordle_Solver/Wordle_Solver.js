@@ -639,10 +639,11 @@ function buildStrFilteredFiveLetterWords(array) {                   // helper fu
   const space = '&nbsp; &nbsp;';                                    // must have normal space between non-breaking spaces
   for (const word of array) {
     const linkEnd = word.toLowerCase() + '">' + word + '</a></span>';
+    const isDailyAnswer = typeof answer === 'string' && answer.length === 5 && word === answer;
     if (aryAllAnswersOrdered.includes(word)) {                      // word is a possible Answer
-      if (aryAllAnswersOrdered.indexOf(word) >= diffDays - 1) {         // word is a possible Future Answer; bold, italicize and underline word
+      if (isDailyAnswer) {                                          // daily Answer; bold, italicize and underline word
         strBuilt += '<strong><em><u><span>' + linkStart + linkEnd + '</span></u></em></strong>' + space;
-        consoleLog(logAnswers, 'Future Answer: ' + word + 'index: ' + aryAllAnswersOrdered.indexOf(word));
+        consoleLog(logAnswers, 'Daily Answer: ' + word + 'index: ' + aryAllAnswersOrdered.indexOf(word));
       } else {                                                      // word is a possible Answer, bold word
         strBuilt += '<strong><span style="font-size: 90%;">' + linkStart + linkEnd + '</span></strong>' + space;
         consoleLog(logAnswers, 'Answer: ' + word + 'index: ' + aryAllAnswersOrdered.indexOf(word));
