@@ -770,8 +770,7 @@ function stopFireworks() {                                          // stop fire
   if (fireworks !== '') {                                           // fireworks are on
     fireworks.stop();                                               // stop fireworks
     fireworks = '';                                                 // 'destroy' instance
-    const fireworksCanvas = document.querySelector('.fireworks-container canvas');
-    if (fireworksCanvas) { fireworksCanvas.remove(); }              // remove fireworks canvas if present
+    document.querySelectorAll('.wordle-fireworks-canvas').forEach((canvas) => { canvas.remove(); });
   } // if else
 } // stopFireworks()
 function celebrate(guessPosition, message) {                        // Easter Egg graphics
@@ -785,8 +784,23 @@ function celebrate(guessPosition, message) {                        // Easter Eg
   stopFireworks();
   const container = document.querySelector('.fireworks-container');
   if (!container) { return; }
+  const existingCanvases = new Set(document.querySelectorAll('canvas'));
   fireworks = new Fireworks(container, { traceSpeed: 3 });          /* global Fireworks*/
   fireworks.start();                                                // launch fireworks effect
+  const createdCanvas = container.querySelector('canvas') ?? [...document.querySelectorAll('canvas')].find((canvas) => !existingCanvases.has(canvas));
+  if (createdCanvas) {
+    const containerRect = container.getBoundingClientRect();
+    container.style.position = 'relative';
+    container.style.overflow = 'hidden';
+    createdCanvas.classList.add('wordle-fireworks-canvas');
+    createdCanvas.style.position = 'absolute';
+    createdCanvas.style.left = '0';
+    createdCanvas.style.top = '0';
+    createdCanvas.style.width = Math.ceil(containerRect.width) + 'px';
+    createdCanvas.style.height = Math.ceil(containerRect.height) + 'px';
+    createdCanvas.style.maxHeight = Math.ceil(containerRect.height) + 'px';
+    createdCanvas.style.pointerEvents = 'none';
+  } // if
 } // celebrate()
 // #endregion helper functions
 // #region automated testing
@@ -934,7 +948,10 @@ function solveIt() {
           if (guessWord === solution) {                             // guess = solution
             consoleLog(spoilerModePre, 'guess word = solution!');
           } // if
-          boolStreakSaver = streakSaver && (typeof answer === 'string') && (guessWord === answer);
+          const expectedAnswer = (typeof answer === 'string' && answer.length === 5)
+            ? answer
+            : ((typeof solution === 'string' && solution.length === 5) ? solution : (aryAllAnswersOrdered[diffDays] ?? ''));
+          boolStreakSaver = streakSaver && guessWord === expectedAnswer;
           if (boolStreakSaver) {
             celebrate(guessPosition, 'Streak Saver easter egg!');
             // aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
