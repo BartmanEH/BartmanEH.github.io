@@ -787,13 +787,13 @@ function celebrate(guessPosition, message) {                        // Easter Eg
   if (!container) { return; }
   if (fireworksContainerBaseHeight === 0) {
     const measuredHeight = Math.ceil(container.getBoundingClientRect().height);
-    fireworksContainerBaseHeight = Math.max(measuredHeight, boolIOS ? 220 : 260);
+    fireworksContainerBaseHeight = Math.max(measuredHeight, boolIOS ? 440 : 520);
   } // if
   container.style.height = fireworksContainerBaseHeight + 'px';
   container.style.maxHeight = fireworksContainerBaseHeight + 'px';
   container.style.overflow = 'hidden';
   container.style.position = 'relative';
-  const fireworksTraceSpeed = boolIOS ? 3 : 2.1;                    // desktop at 70% speed, iOS unchanged
+  const fireworksTraceSpeed = boolIOS ? 1.8 : 1.26;                 // both platforms at 60% of current speed
   fireworks = new Fireworks(container, { traceSpeed: fireworksTraceSpeed }); /* global Fireworks*/
   fireworks.start();                                                // launch fireworks effect
   requestAnimationFrame(() => {
