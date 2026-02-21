@@ -793,7 +793,7 @@ function celebrate(guessPosition, message) {                        // Easter Eg
   container.style.maxHeight = fireworksContainerBaseHeight + 'px';
   container.style.overflow = 'hidden';
   container.style.position = 'relative';
-  const fireworksMotionSpeed = 1;                                   // v2 demo-aligned trace speed
+  const fireworksMotionSpeed = 0.7;                                 // 30% slower overall motion
   const fireworksLibrary = globalThis.Fireworks;
   const FireworksCtor = (typeof fireworksLibrary === 'function')
     ? fireworksLibrary
