@@ -57,6 +57,13 @@ a, a:visited {
 	justify-content: center;
 	line-height: 1.2;
 	white-space: nowrap;
+	position: fixed;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100%;
+	max-width: 400px;
+	z-index: 10;
 }
 
 .Wordle_Solver .footer #version {
