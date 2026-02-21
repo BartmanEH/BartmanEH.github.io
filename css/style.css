@@ -36,6 +36,10 @@ a, a:visited {
 	padding-bottom: 50px;  /* Height of the footer element */ 
 }
 
+.Wordle_Solver .content {
+	padding-bottom: 36px;
+}
+
 .footer {
 	font-size: 14px;
 	width: 100%;
@@ -46,11 +50,19 @@ a, a:visited {
 	overflow: visible;
 }
 
+.Wordle_Solver .footer {
+	height: 36px;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	line-height: 1;
+}
+
 .Wordle_Solver .footer #version {
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: calc(100% + 6px);
+	top: calc(100% + 2px);
 	font-size: 12px;
 	line-height: 1;
 	margin-top: 0;
