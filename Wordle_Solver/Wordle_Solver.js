@@ -138,17 +138,17 @@ const logAutoResults = Boolean(false);    // logAutoResults = true: automated re
 const logDatePicker = Boolean(false);     // logDatePicker = true: date picker results debug messages on console
 const logAnswers = Boolean(false);        // logAnswers = true: answer string debug messages on console
 const spoilerModePre = Boolean(false);    // spoilerMode = true: show Today's Answer in console
-const rgbGray = 'rgb(58, 58, 60)';        // Gray   = #3a3a3c rgb(58, 58, 60)
-const rgbBlack = 'rgb(0, 0, 0)';          // Black  = #000000 rgb(0, 0, 0)
-const rgbYellow = 'rgb(181, 159, 59)';    // Yellow = #b59f3b rgb(181, 159, 59)
-const rgbGreen = 'rgb(83, 141, 78)';      // Green  = #538d4e rgb(83, 141, 78)
+const rgbGray = 'rgb(58, 58, 60)';      // Gray   = #3a3a3c rgb(58, 58, 60)
+const rgbBlack = 'rgb(0, 0, 0)';        // Black  = #000000 rgb(0, 0, 0)
+const rgbYellow = 'rgb(181, 159, 59)';  // Yellow = #b59f3b rgb(181, 159, 59)
+const rgbGreen = 'rgb(83, 141, 78)';    // Green  = #538d4e rgb(83, 141, 78)
 const stateIncorrect = 'incorrect';       // metadata attribute for Black
 const stateMisplaced = 'misplaced';       // metadata attribute for Yellow
 const stateCorrect = 'correct';           // metadata attribute for Green
 const stateTBD = 'tbd';                   // metadata attribute for unknown
 const millisecondsPerDay = 24 * 60 * 60 * 1000;     // hours*minutes*seconds*milliseconds = milliseconds per day
-// const start = new Date(2021, 5, 19);              //date of first Wordle June 19, 2021 (month is 0 indexed)
-// const start = new Date('2021-05-19T00:00:00');    //date of first Wordle May 19, 2021 (ISO month is 1 indexed)
+// const start = new Date(2021, 5, 19);                // date of first Wordle June 19, 2021 (month is 0 indexed)
+// const start = new Date('2021-05-19T00:00:00');      // date of first Wordle May 19, 2021 (ISO month is 1 indexed)
 const start = new Date(2021, 5, 19);                // date of first Wordle June 19, 2021 (month is 0 indexed)
 const today = new Date();                           // today's date
 const boolIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -166,7 +166,6 @@ let boolAutoTest = Boolean(false);        // boolAutoTest = true: run automated 
 let streakSaver = Boolean(true);          // streakSaver = true: Greenify Guess if it's Today's Answer
 let aryAllPossibleAnswers = [];           // array of all possible answers (possibly without previous answers)
 let numFiveLetterWords = 0;               // global tracking number of possible words
-let container = '';                       //eslint-disable-line -- global container for Wordle Solver
 let fireworks = '';                       // global Easter Egg effect
 let version = '';                         // global version
 let useCaseData = [];
@@ -203,7 +202,7 @@ async function getSolution(date) {                                  // get solut
   const builtInIndex = daysBetween(start, date);
   const builtInAnswer = aryAllAnswersOrdered[builtInIndex] ?? '';
   const hasBuiltInAnswer = builtInAnswer !== '';
-  answer = builtInAnswer;                                            // temporary fallback while waiting for API
+  answer = builtInAnswer;                                           // temporary fallback while waiting for API
   try {
     const responseSolution = await fetch(requestSolution);
     if (!responseSolution.ok) {
@@ -224,7 +223,7 @@ async function getSolution(date) {                                  // get solut
       if (builtInAnswer !== '' && builtInAnswer !== solution) {
         toast('API Answer and built-in Answer differ!');
       } // if
-      answer = solution;                                             // API takes precedence over built-in when available
+      answer = solution;                                            // API takes precedence over built-in when available
       consoleLog(spoilerModePre, 'solution via API: ' + solution);
       consoleLog(spoilerModePre, 'built-in answer: ' + builtInAnswer);
       if (!hasBuiltInAnswer) {
@@ -904,12 +903,12 @@ function solveIt() {
   let aryExcludeLetters = [];
   let aryIncludeLetters = [];
   let aryPatternLetters = ['*', '*', '*', '*', '*'];
-  forGuessLoop:                                                     //eslint-disable-line
+  forGuessLoop:
   for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
     let guessWord = '';
     const aryBoolFirstGreenOccurrence = [];
     const aryBoolFirstYellowOccurrence = [];
-    forLetterLoop:                                                  //eslint-disable-line
+    forLetterLoop:
     for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
       const gridId = 'guess_' + guessPosition + '_' + letterPosition;
       const gridElement = document.getElementById(gridId);
@@ -918,10 +917,10 @@ function solveIt() {
         // errorHandler('gridCoord contains &lt;space&gt;! ' + gridCoord);
         if (letterPosition !== 1) {
           // consoleLog(logAutoResults, 'guessWord.length: ' + guessWord.length + ' breaking forGuessLoop');
-          break forGuessLoop;                                       //eslint-disable-line
+          break forGuessLoop;
         } else {
           // consoleLog(logAutoResults, 'guessWord.length: ' + guessWord.length + ' breaking forLetterLoop');
-          break forLetterLoop;                                      //eslint-disable-line
+          break forLetterLoop;
         } // if else
       } // if
       guessWord += letter;
