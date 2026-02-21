@@ -1299,20 +1299,21 @@ function solveIt() {
       aryFullyScrutinizedFilteredFiveLetterWords.push(candidateWord);
     } // if
   } // for candidateWord
-  numFiveLetterWords = aryFullyScrutinizedFilteredFiveLetterWords.length;
+  const aryUniqueFullyScrutinizedFilteredFiveLetterWords = [...new Set(aryFullyScrutinizedFilteredFiveLetterWords)];
+  numFiveLetterWords = aryUniqueFullyScrutinizedFilteredFiveLetterWords.length;
   let strPossibilities = ' ';
   if (numCompleteGuesses > 0) {                                     // rank only after at least one full guess entered
     const canRankAgainstActualAnswer = boolAutoResults && typeof answer === 'string' && answer.length === 5;
     const rankedWords = canRankAgainstActualAnswer
-      ? sortByActualRemaining(aryFullyScrutinizedFilteredFiveLetterWords, aryFullyScrutinizedFilteredFiveLetterWords, answer)
-      : sortByExpectedRemaining(aryFullyScrutinizedFilteredFiveLetterWords, aryFullyScrutinizedFilteredFiveLetterWords);
-    aryFullyScrutinizedFilteredFiveLetterWords.length = 0;
-    aryFullyScrutinizedFilteredFiveLetterWords.push(...rankedWords);
+      ? sortByActualRemaining(aryUniqueFullyScrutinizedFilteredFiveLetterWords, aryUniqueFullyScrutinizedFilteredFiveLetterWords, answer)
+      : sortByExpectedRemaining(aryUniqueFullyScrutinizedFilteredFiveLetterWords, aryUniqueFullyScrutinizedFilteredFiveLetterWords);
+    aryUniqueFullyScrutinizedFilteredFiveLetterWords.length = 0;
+    aryUniqueFullyScrutinizedFilteredFiveLetterWords.push(...rankedWords);
   } else {
-    aryFullyScrutinizedFilteredFiveLetterWords.sort();              // before first full guess, keep alphabetical
+    aryUniqueFullyScrutinizedFilteredFiveLetterWords.sort();        // before first full guess, keep alphabetical
   } // if else
   if (numFiveLetterWords !== 0) {
-    strPossibilities = buildStrFilteredFiveLetterWords(aryFullyScrutinizedFilteredFiveLetterWords);
+    strPossibilities = buildStrFilteredFiveLetterWords(aryUniqueFullyScrutinizedFilteredFiveLetterWords);
   } // if
   consoleLog(logFiltered, 'strPossibilities: "' + strPossibilities + '"');
   consoleLog(logFiltered, 'possibilities (filtered): ' + aryFilteredFiveLetterWords.length.toLocaleString());
@@ -1321,6 +1322,6 @@ function solveIt() {
   document.getElementById('possibilities').style.display = 'block'; // 'unhide'
   document.getElementById('possibilities-text-span').innerHTML = strPossibilities;
   document.getElementById('words').style.display = 'block';         // 'unhide'
-  return aryFullyScrutinizedFilteredFiveLetterWords;                // pass array to caller
+  return aryUniqueFullyScrutinizedFilteredFiveLetterWords;          // pass array to caller
 } // solveIt()
 // #endregion solveIt
