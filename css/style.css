@@ -53,9 +53,10 @@ a, a:visited {
 .Wordle_Solver .footer {
 	height: 36px;
 	display: flex;
-	align-items: flex-end;
+	align-items: center;
 	justify-content: center;
-	line-height: 1;
+	line-height: 1.2;
+	white-space: nowrap;
 }
 
 .Wordle_Solver .footer #version {
