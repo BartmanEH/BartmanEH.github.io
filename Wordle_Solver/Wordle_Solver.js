@@ -793,12 +793,8 @@ function celebrate(guessPosition, message) {                        // Easter Eg
   container.style.maxHeight = fireworksContainerBaseHeight + 'px';
   container.style.overflow = 'hidden';
   container.style.position = 'relative';
-  const fireworksTraceSpeed = boolIOS ? 0.45 : 0.35;                // force much slower trace movement
-  fireworks = new Fireworks(container, {
-    traceSpeed: fireworksTraceSpeed,
-    intensity: 12,
-    delay: { min: 40, max: 90 }
-  });                                                                /* global Fireworks*/
+  const fireworksTraceSpeed = boolIOS ? 0.75 : 0.6;                 // slower motion, keep full activity
+  fireworks = new Fireworks(container, { traceSpeed: fireworksTraceSpeed }); /* global Fireworks*/
   fireworks.start();                                                // launch fireworks effect
   requestAnimationFrame(() => {
     const canvas = container.querySelector('canvas');
