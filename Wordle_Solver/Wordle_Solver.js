@@ -794,11 +794,19 @@ function celebrate(guessPosition, message) {                        // Easter Eg
   container.style.overflow = 'hidden';
   container.style.position = 'relative';
   const fireworksMotionSpeed = 1;                                   // v2 demo-aligned trace speed
-  fireworks = new Fireworks(container, {
+  const fireworksLibrary = globalThis.Fireworks;
+  const FireworksCtor = (typeof fireworksLibrary === 'function')
+    ? fireworksLibrary
+    : ((fireworksLibrary && typeof fireworksLibrary.default === 'function') ? fireworksLibrary.default : null);
+  if (!FireworksCtor) {
+    consoleLog(true, 'Fireworks constructor unavailable (expected globalThis.Fireworks or globalThis.Fireworks.default)', 'warn');
+    return;
+  } // if
+  fireworks = new FireworksCtor(container, {
     traceSpeed: fireworksMotionSpeed,
     traceLength: 3,
     autoresize: false
-  });                                                                /* global Fireworks*/
+  });
   fireworks.start();                                                // launch fireworks effect
   requestAnimationFrame(() => {
     const canvas = container.querySelector('canvas');
