@@ -177,6 +177,7 @@ let fireworksContainerBaseHeight = 0;     // lock fireworks container to origina
 document.addEventListener('DOMContentLoaded', function () {         // fires when DOM loaded (ready)
   consoleLog(logGeneral, 'DOM ready!');                             // log DOM ready
   UIeventHandlers();                                                // attach handlers to UI events
+  setupIOSInitialTapFocus();                                        // iOS: first tap anywhere focuses first guess box
   answer = aryAllAnswersOrdered[diffDays] ?? '';                    // seed from built-in so UI is immediately usable
   initialize();                                                     // initialize things
   getVersion().catch((error) => { consoleLog(true, 'getVersion error: ' + error, 'warn'); });
@@ -340,6 +341,19 @@ function focusInit() {
     fakeInput.remove();                                             // cleanup
   }, 1000);
 } // focusInit()
+function setupIOSInitialTapFocus() {
+  if (!boolIOS) { return; }
+  const focusOnFirstTap = function () {
+    const firstInput = document.getElementById('guess_1_1');
+    if (!firstInput) { return; }
+    firstInput.focus();
+    firstInput.setSelectionRange(0, 0);
+    document.removeEventListener('touchstart', focusOnFirstTap);
+    document.removeEventListener('mousedown', focusOnFirstTap);
+  };
+  document.addEventListener('touchstart', focusOnFirstTap, { passive: true });
+  document.addEventListener('mousedown', focusOnFirstTap);
+} // setupIOSInitialTapFocus()
 function resultsModeClicked() {
   if (document.querySelector('input[name="resultsMode"]:checked').value === 'automatic') {
     boolAutoResults = true;                                         // enable auto results
