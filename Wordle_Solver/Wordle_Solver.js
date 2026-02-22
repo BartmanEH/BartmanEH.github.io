@@ -320,8 +320,8 @@ async function initialize() {                                                   
   document.getElementById('words').style.display = 'none';
   consoleLog(logGeneral, 'number of 5-letter words: ' + numFiveLetterWords.toLocaleString());
   if (boolAutoTest) { automatedTesting(); }                         // run automated testing
-  // document.getElementById('guess_1_1').focus();                     //set focus to first letter of first guess
-  focusInit();                                                      // set focus to first letter of first guess using hacky method
+  // document.getElementById('guess_1_1').focus();                   // set focus to first letter of first guess
+  if (!boolIOS) { focusInit(); }                                    // iOS uses first-tap focus to allow keyboard popup
 } // initialize()
 // #endregion init
 // #region helper functions
@@ -346,13 +346,13 @@ function setupIOSInitialTapFocus() {
   const focusOnFirstTap = function () {
     const firstInput = document.getElementById('guess_1_1');
     if (!firstInput) { return; }
-    firstInput.focus();
+    firstInput.focus({ preventScroll: true });
     firstInput.setSelectionRange(0, 0);
-    document.removeEventListener('touchstart', focusOnFirstTap);
-    document.removeEventListener('mousedown', focusOnFirstTap);
+    document.removeEventListener('touchend', focusOnFirstTap, true);
+    document.removeEventListener('click', focusOnFirstTap, true);
   };
-  document.addEventListener('touchstart', focusOnFirstTap, { passive: true });
-  document.addEventListener('mousedown', focusOnFirstTap);
+  document.addEventListener('touchend', focusOnFirstTap, { capture: true, passive: true });
+  document.addEventListener('click', focusOnFirstTap, true);
 } // setupIOSInitialTapFocus()
 function resultsModeClicked() {
   if (document.querySelector('input[name="resultsMode"]:checked').value === 'automatic') {
