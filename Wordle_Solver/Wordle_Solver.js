@@ -204,6 +204,7 @@ async function getSolution(date) {                                  // get solut
   const builtInAnswer = aryAllAnswersOrdered[builtInIndex] ?? '';
   const hasBuiltInAnswer = builtInAnswer !== '';
   answer = builtInAnswer;                                           // temporary fallback while waiting for API
+  solution = hasBuiltInAnswer ? builtInAnswer : '';
   try {
     const responseSolution = await fetch(requestSolution);
     if (!responseSolution.ok) {
@@ -236,11 +237,19 @@ async function getSolution(date) {                                  // get solut
       consoleLog(spoilerModePre, 'date out of range OR Wordle API changed!');
       consoleLog(spoilerModePre, 'solution via API: unavailable!');
       consoleLog(spoilerModePre, 'built-in answer: ' + answer);
+      if (hasBuiltInAnswer) {
+        consoleLog(true, 'API response missing solution for ' + solutionDate + '; using built-in answer: ' + builtInAnswer, 'warn');
+        return true;
+      } // if
       toast('solution not available!');
       return false; // indicate failure
     } // if else
   } catch (error) {
     consoleLog(true, 'Error fetching/parsing solution: ' + error);
+    if (hasBuiltInAnswer) {
+      consoleLog(true, 'API fetch failed for ' + solutionDate + '; using built-in answer: ' + builtInAnswer, 'warn');
+      return true;
+    } // if
     return false; // Indicate failure in the catch block as well
   } // catch
 } // getSolution()
@@ -285,7 +294,7 @@ async function initialize() {                                                   
   consoleLog(logGeneral, 'today: ' + today + ', Wordle day#: ' + diffDays);
   aryAllPossibleAnswers = [];
   let answerOffset = 0;
-  if (!boolPrevAnswers && boolAnswersOnly) { answerOffset = diffDays - 1; }     // skip previous answers
+  if (!boolPrevAnswers && boolAnswersOnly) { answerOffset = diffDays + 1; }     // future Answers start after today
   for (let i = 0; i < aryAllAnswersOrdered.length - answerOffset; i++) {
     // aryAllPossibleAnswers[i] = aryAllAnswersOrdered[i + answerOffset];
     aryAllPossibleAnswers.push(aryAllAnswersOrdered[i + answerOffset]);
@@ -380,24 +389,29 @@ function copyrightClicked() {
   initialize();                                                     // initialize
 } // copyrightClicked()
 async function dayNumChanged() {
-  diffDays = daysBetween(start, today); // used to be: diffDays = Math.floor((today - start) / oneDay);
+  const todayDiffDays = daysBetween(start, today);
+  diffDays = todayDiffDays;                                          // used to be: diffDays = Math.floor((today - start) / oneDay);
   let dayNum = +document.getElementById('dayNum-input').value;      // The unary plus (+) coerces its operand into a number
-  const archiveDate = new Date(start);
-  archiveDate.setDate(archiveDate.getDate() + dayNum);
-  const solutionResult = await getSolution(archiveDate);            // get solution for new date
-  if ((dayNum > diffDays) && !boolFutureDate) {                     // do not allow choosing date in the future
+  if (!Number.isFinite(dayNum)) {
+    consoleLog(logDatePicker, 'error: invalid dayNum! ' + dayNum);
+    dayNum = todayDiffDays;
+  } // if
+  dayNum = Math.trunc(dayNum);
+  if ((dayNum > todayDiffDays) && !boolFutureDate) {                 // do not allow choosing date in the future
     consoleLog(logDatePicker, 'error: future dayNum! ' + dayNum);
-    dayNum = diffDays;
+    dayNum = todayDiffDays;
   } else if (dayNum < 0) {
     consoleLog(logDatePicker, 'error: negative dayNum!' + dayNum);
     dayNum = 0;
-  } else if (!solutionResult) {
-    consoleLog(logDatePicker, formatDate(archiveDate) + ' is too far in future; solution unknown!');
-    archiveDate.setDate(archiveDate.getDate() - dayNum);
-    dayNum = daysBetween(start, today);                             // difference in days
-    archiveDate.setDate(archiveDate.getDate() + dayNum);
-    setDatePickerValue(today);
   } // if else
+  const archiveDate = new Date(start);
+  archiveDate.setDate(archiveDate.getDate() + dayNum);
+  const solutionResult = await getSolution(archiveDate);            // get solution for new date
+  if (!solutionResult) {
+    consoleLog(logDatePicker, formatDate(archiveDate) + ' is too far in future; solution unknown!');
+    dayNum = todayDiffDays;
+    archiveDate.setTime(today.getTime());
+  } // if
   consoleLog(logDatePicker, 'archiveDate: ' + formatDate(archiveDate));
   consoleLog(logDatePicker, 'diffDays: ' + diffDays);
   consoleLog(logDatePicker, 'dayNum: ' + dayNum);
@@ -409,27 +423,31 @@ async function dayNumChanged() {
 } // dayNumChanged()
 async function datePickerChanged() {
   const dateValue = document.getElementById('datePicker-input').value;
-  const date = new Date(dateValue + 'T00:00:00');                   // parse date input in local time
-  const solutionResult = await getSolution(date);                   // get solution for new date
-  consoleLog(true, 'solutionResult: ' + solutionResult);
+  const todayDiffDays = daysBetween(start, today);
+  let date = new Date(dateValue + 'T00:00:00');                     // parse date input in local time
+  if (Number.isNaN(date.getTime())) {
+    consoleLog(logDatePicker, 'error: invalid date value! ' + dateValue);
+    date = new Date(today);
+  } // if
   let diff = daysBetween(start, date);
   consoleLog(logDatePicker, 'dateValue minus start: ' + diff);
   if ((daysBetween(date, today) < 0) && !boolFutureDate) {
     consoleLog(logDatePicker, 'error: future date!');
-    diff = daysBetween(start, today);                               // difference in days
-    setDatePickerValue(today);
+    date = new Date(today);
+    diff = todayDiffDays;
   } else if (diff < 0) {
     consoleLog(logDatePicker, 'error: date before official start!');
+    date = new Date(start);
     diff = 0;
-    setDatePickerValue(start);
-  } else if (!solutionResult) {
-    consoleLog(true, 'I\'m here!');
-    consoleLog(logDatePicker, formatDate(date) + ' is too far in future; solution unknown!');
-    diff = daysBetween(start, today);                               // difference in days
-    setDatePickerValue(today);
-  } else {
-    setDatePickerValue(date);
   } // if else
+  const solutionResult = await getSolution(date);                   // get solution for new date
+  consoleLog(true, 'solutionResult: ' + solutionResult);
+  if (!solutionResult) {
+    consoleLog(logDatePicker, formatDate(date) + ' is too far in future; solution unknown!');
+    date = new Date(today);
+    diff = todayDiffDays;
+  } // if
+  setDatePickerValue(date);
   diffDays = diff;
   document.getElementById('dayNum-input').value = diffDays;
   stopFireworks();
@@ -831,6 +849,12 @@ function celebrate(guessPosition, message) {                        // Easter Eg
 // #endregion helper functions
 // #region automated testing
 function automatedTesting() {                                       // automated testing
+  const useCases = Array.isArray(useCaseData.useCases) ? useCaseData.useCases : null;
+  if (useCases === null) {
+    consoleLog(true, 'use case data unavailable for automated testing', 'warn');
+    toast('use cases unavailable!');
+    return;
+  } // if
   toast('automated testing');
   console.clear();
   consoleLog(logAutoTest, 'commencing automated testing');
@@ -839,7 +863,7 @@ function automatedTesting() {                                       // automated
   let useCaseResults = 'Use Case';
   let useCaseResultsIds = '';
   let useCasesPassed = Boolean(true);
-  useCaseData.useCases.forEach(useCase => {                         // loop thru all use cases
+  useCases.forEach(useCase => {                                     // loop thru all use cases
     // consoleLog(logAutoTest, useCase);
     // consoleLog(logAutoTest, 'id(' + useCase.id.length + '): ' + useCase.id);
     // consoleLog(logAutoTest, 'guess(' + useCase.guess.length + '): ' + useCase.guess);
@@ -898,8 +922,8 @@ function automatedTesting() {                                       // automated
   if (useCaseResultsIds.length > 2) { useCaseResults += 's'; } // if
   useCaseResults += ' ' + useCaseResultsIds;
   if (useCasesPassed) {
-    consoleLog(logAutoTest, 'all ' + useCaseData.useCases.length + ' use cases PASSED!', 'warn');
-    toast('all ' + useCaseData.useCases.length + ' use cases PASSED!');
+    consoleLog(logAutoTest, 'all ' + useCases.length + ' use cases PASSED!', 'warn');
+    toast('all ' + useCases.length + ' use cases PASSED!');
   } else {
     consoleLog(logAutoTest, useCaseResults + ' FAILED!', 'error');
     toast(useCaseResults + ' FAILED!');
