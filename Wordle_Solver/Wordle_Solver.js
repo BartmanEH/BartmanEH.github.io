@@ -254,8 +254,8 @@ async function getSolution(date) {                                  // get solut
   } // catch
 } // getSolution()
 async function getVersion() {                                       // must be async function!
-  const versionURL = '/Wordle_Solver/version.json';                 // json version info data
-  const requestVersion = new Request(versionURL);
+  const versionURL = '/Wordle_Solver/version.json?v=' + encodeURIComponent(version || '4.8.0-RELEASE'); // json version info data
+  const requestVersion = new Request(versionURL, { cache: 'no-store' });
   const responseVersion = await fetch(requestVersion);
   const versionData = await responseVersion.json();
   version = versionData.buildMajor + '.' + versionData.buildMinor + '.' + versionData.buildRevision + '-' + versionData.buildTag;
