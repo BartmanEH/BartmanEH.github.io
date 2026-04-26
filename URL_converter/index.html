@@ -276,9 +276,31 @@
 				}
 			});
 
+			function decodeEntities(str) {
+				// Run until stable so double-encoded &amp;amp; → &amp; → & is fully resolved
+				let prev;
+				do {
+					prev = str;
+					str = str
+						.replace(/&amp;/g, "&")
+						.replace(/&lt;/g, "<")
+						.replace(/&gt;/g, ">")
+						.replace(/&quot;/g, '"');
+				} while (str !== prev);
+				return str;
+			}
+
 			async function runConversion(raw) {
-				// Decode HTML entities that appear when copying URLs from rendered HTML
-				raw = raw.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"');
+				raw = decodeEntities(raw.trim());
+
+				// Decode percent-encoded query strings — happens when a URL shortener or proxy
+				// encodes ? and & before redirecting (%3F → ?, %26 → &, %3D → =)
+				raw = raw.replace(/https?:\/\/\S+/gi, (urlMatch) => {
+					if (/%3F/i.test(urlMatch)) {
+						try { return decodeURIComponent(urlMatch); } catch {}
+					}
+					return urlMatch;
+				});
 
 				let parsed;
 				try {
@@ -321,6 +343,10 @@
 					}
 
 					statusEl.textContent = "Resolved — parsing long URL...";
+					resolved = decodeEntities(resolved);
+					if (/%3F/i.test(resolved)) {
+						try { resolved = decodeURIComponent(resolved); } catch {}
+					}
 					try {
 						parsed = parseUserInput(resolved, parsed.fallbackName, "long-url");
 					} catch (err) {
