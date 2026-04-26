@@ -279,7 +279,6 @@
 		<script type="module">
 			import {
 				parseUserInput,
-				tryResolveShortUrl,
 				convertLegacyStatus,
 				convertClassicUrl,
 				buildMigrationNotes,
@@ -386,35 +385,24 @@
 				}
 
 				if (parsed.kind === "short-url") {
-					setStatus("Resolving short URL...", "busy");
+					setStatus("Resolving via proxy...", "busy");
 					let resolved = null;
 
-					// 1. Try direct browser fetch
 					try {
-						resolved = await tryResolveShortUrl(parsed.source);
-					} catch {
-						// CORS blocked — expected for most shorteners
-					}
-
-					// 2. Fall back to cors-anywhere proxy
-					if (!resolved) {
-						setStatus("Direct fetch blocked — trying proxy...", "busy");
-						try {
-							resolved = await resolveViaProxy(parsed.source);
-						} catch (proxyErr) {
-							if (proxyErr && proxyErr.kind === "proxy-auth") {
-								showProxyAuthHint(proxyErr.proxyUrl);
+						resolved = await resolveViaProxy(parsed.source);
+					} catch (proxyErr) {
+						if (proxyErr && proxyErr.kind === "proxy-auth") {
+							showProxyAuthHint(proxyErr.proxyUrl);
+						} else {
+							const previewUrl = tinyUrlPreview(parsed.source);
+							if (previewUrl) {
+								showShortUrlHint(parsed.source, previewUrl);
 							} else {
-								const previewUrl = tinyUrlPreview(parsed.source);
-								if (previewUrl) {
-									showShortUrlHint(parsed.source, previewUrl);
-								} else {
-									showWarning(proxyErr.message || "Could not resolve short URL.");
-								}
+								showWarning(proxyErr.message || "Could not resolve short URL.");
 							}
-							setStatus(`Snapshot ${mapping.meta?.effectiveDate ?? "unknown"}`, "ready");
-							return;
 						}
+						setStatus(`Snapshot ${mapping.meta?.effectiveDate ?? "unknown"}`, "ready");
+						return;
 					}
 
 					setStatus("Resolved — parsing...", "busy");
@@ -482,7 +470,7 @@
 
 			async function resolveViaProxy(shortUrl) {
 				const controller = new AbortController();
-				const timeoutId = setTimeout(() => controller.abort(), 15_000);
+				const timeoutId = setTimeout(() => controller.abort(), 5_000);
 				let response;
 				try {
 					response = await fetch(CORS_PROXY + shortUrl, {
@@ -492,7 +480,7 @@
 					});
 				} catch (err) {
 					clearTimeout(timeoutId);
-					if (err.name === "AbortError") throw new Error("Proxy timed out after 15 s.");
+					if (err.name === "AbortError") throw new Error("Proxy timed out after 5 s.");
 					throw new Error("Proxy unreachable: " + err.message);
 				}
 				clearTimeout(timeoutId);

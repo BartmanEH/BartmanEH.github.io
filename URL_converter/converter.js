@@ -176,7 +176,7 @@ function splitBucket(value) {
 
 export async function tryResolveShortUrl(shortUrl) {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10_000);
+  const timeoutId = setTimeout(() => controller.abort(), 5_000);
 
   let response;
   try {
@@ -191,7 +191,7 @@ export async function tryResolveShortUrl(shortUrl) {
     clearTimeout(timeoutId);
     if (error.name === "AbortError") {
       throw new Error(
-        "Short URL resolution timed out after 10 s. Open the short URL once, copy the final long URL, and paste that here."
+        "Short URL resolution timed out after 5 s. Open the short URL once, copy the final long URL, and paste that here."
       );
     }
     throw new Error(
