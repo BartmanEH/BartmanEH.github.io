@@ -163,12 +163,14 @@
 			}
 			.kind-badge {
 				display: inline-block;
-				background: #005387;
-				color: white;
 				font-size: 11px;
-				border-radius: 4px;
-				padding: 2px 8px;
+				color: #888888;
+				border: 1px solid #444;
+				border-radius: 3px;
+				padding: 1px 6px;
 				margin-bottom: 10px;
+				cursor: default;
+				user-select: none;
 			}
 			.error-box {
 				background: #2a1010;
@@ -464,7 +466,7 @@
 					</div>
 					<a class="open-btn" href="${escAttr(url)}" target="_blank" rel="noopener">Open in new tab</a>
 					<div class="warning-box" style="margin-bottom:12px;">
-						<strong>Verify your results</strong> — the conversion is based on a data snapshot and may not be perfectly accurate. Check your shiny collection manually after importing.
+						<strong>Verify your results</strong> — the conversion uses a data snapshot from April 25, 2026. Shiny forms released after that date are not in the snapshot and will be silently dropped from the conversion. Check your collection manually after importing.
 					</div>
 					<div class="notes-box">
 						<div class="notes-title">Migration notes</div>
