@@ -1,0 +1,442 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="IES - Shiny URL Converter">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="apple-mobile-web-app-title" content="IES">
+		<meta name="application-name" content="IES">
+		<meta name="mobile-web-app-capable" content="yes">
+		<link rel="apple-touch-icon" sizes="57x57" href="../img/favicon/apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../img/favicon/apple-touch-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../img/favicon/apple-touch-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../img/favicon/apple-touch-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="../img/favicon/apple-touch-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../img/favicon/apple-touch-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="../img/favicon/apple-touch-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../img/favicon/apple-touch-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="../img/favicon/apple-touch-icon-180x180.png">
+		<link rel="icon" type="image/png" href="../img/favicon/favicon-192x192.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="../img/favicon/favicon-32x32.png" sizes="32x32">
+		<meta name="msapplication-TileColor" content="#2b5797">
+		<meta name="msapplication-TileImage" content="../img/favicon/mstile-144x144.png">
+		<link type="text/css" rel="stylesheet" href="../css/style.css">
+		<title>IES: Shiny URL Converter</title>
+		<style>
+			.converter-wrap {
+				max-width: 640px;
+				margin: 0 auto;
+				padding: 16px 12px 16px 12px;
+				text-align: left;
+			}
+			.converter-title {
+				font-size: 18px;
+				font-weight: bold;
+				color: #FF9900;
+				text-align: center;
+				margin-bottom: 4px;
+			}
+			.converter-subtitle {
+				font-size: 13px;
+				color: #bbbbbb;
+				text-align: center;
+				margin-bottom: 16px;
+			}
+			.converter-label {
+				font-size: 13px;
+				color: #cccccc;
+				margin-bottom: 4px;
+				display: block;
+			}
+			#input-area {
+				width: 100%;
+				box-sizing: border-box;
+				background-color: #1e1e1e;
+				color: #f3f3f3;
+				border: 2px solid #3a3a3c;
+				border-radius: 6px;
+				padding: 8px;
+				font-family: "Trebuchet MS", Helvetica, sans-serif;
+				font-size: 13px;
+				resize: vertical;
+				min-height: 80px;
+			}
+			#input-area:focus {
+				outline: none;
+				border-color: #005387;
+			}
+			.mode-row {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 6px;
+				margin: 10px 0 14px 0;
+			}
+			.mode-btn {
+				padding: 5px 12px;
+				border-radius: 5px;
+				border: 2px solid #555;
+				background: #2a2a2a;
+				color: #cccccc;
+				font-family: "Trebuchet MS", Helvetica, sans-serif;
+				font-size: 12px;
+				cursor: pointer;
+			}
+			.mode-btn.selected {
+				border-color: #005387;
+				background: #005387;
+				color: #ffffff;
+				font-weight: bold;
+			}
+			.convert-btn {
+				display: block;
+				width: 100%;
+				padding: 12px;
+				font-size: 16px;
+				font-family: Arial, sans-serif;
+				border-radius: 6px;
+				border: 2px solid #d6d6d6;
+				cursor: pointer;
+				background: linear-gradient(to bottom, #ededed 5%, #bababa 100%);
+				color: #000000;
+				box-shadow: 0px 6px 0px -1px #555555;
+				margin-bottom: 18px;
+			}
+			.convert-btn:active {
+				position: relative;
+				top: 2px;
+				box-shadow: 0px 2px 0px 0px #555555;
+			}
+			.convert-btn:hover {
+				background: linear-gradient(to bottom, #bababa 5%, #ededed 100%);
+			}
+			.convert-btn:disabled {
+				opacity: 0.5;
+				cursor: default;
+			}
+			#output-section {
+				display: none;
+			}
+			.output-label {
+				font-size: 12px;
+				color: #aaaaaa;
+				margin-bottom: 3px;
+			}
+			.output-url-box {
+				background: #1e1e1e;
+				border: 2px solid #3a3a3c;
+				border-radius: 6px;
+				padding: 10px;
+				font-size: 12px;
+				word-break: break-all;
+				color: #f3f3f3;
+				margin-bottom: 10px;
+				display: flex;
+				align-items: flex-start;
+				gap: 8px;
+			}
+			.output-url-text {
+				flex: 1;
+			}
+			.copy-btn {
+				flex-shrink: 0;
+				padding: 4px 10px;
+				font-size: 11px;
+				border-radius: 4px;
+				border: 1px solid #555;
+				background: #2a2a2a;
+				color: #cccccc;
+				cursor: pointer;
+				white-space: nowrap;
+			}
+			.copy-btn:hover { background: #3a3a3a; }
+			.open-btn {
+				display: inline-block;
+				padding: 8px 20px;
+				border-radius: 5px;
+				border: 2px solid #005387;
+				background: #005387;
+				color: #ffffff;
+				font-family: Arial, sans-serif;
+				font-size: 14px;
+				cursor: pointer;
+				text-decoration: none;
+				margin-bottom: 16px;
+			}
+			.open-btn:hover { background: #006ab5; border-color: #006ab5; }
+			.notes-box {
+				background: #1a1a1a;
+				border: 1px solid #333;
+				border-radius: 6px;
+				padding: 10px 12px;
+				margin-bottom: 10px;
+			}
+			.notes-title {
+				font-size: 12px;
+				font-weight: bold;
+				color: #FF9900;
+				margin-bottom: 6px;
+			}
+			.notes-list {
+				margin: 0;
+				padding: 0 0 0 16px;
+				font-size: 12px;
+				color: #cccccc;
+				line-height: 1.6;
+			}
+			.kind-badge {
+				display: inline-block;
+				background: #005387;
+				color: white;
+				font-size: 11px;
+				border-radius: 4px;
+				padding: 2px 8px;
+				margin-bottom: 10px;
+			}
+			.error-box {
+				background: #2a1010;
+				border: 1px solid #8b3333;
+				border-radius: 6px;
+				padding: 10px 12px;
+				color: #ff6b6b;
+				font-size: 13px;
+				margin-bottom: 10px;
+			}
+			.warning-box {
+				background: #2a2010;
+				border: 1px solid #8b7033;
+				border-radius: 6px;
+				padding: 8px 12px;
+				color: #ffcc55;
+				font-size: 12px;
+				margin-bottom: 10px;
+			}
+			.back-link {
+				display: block;
+				text-align: center;
+				font-size: 13px;
+				color: #aaaaaa;
+				margin-bottom: 8px;
+				text-decoration: none;
+			}
+			.back-link:hover { color: #ffffff; }
+			.status-indicator {
+				font-size: 12px;
+				color: #888888;
+				text-align: center;
+				margin-bottom: 8px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrapper">
+			<div class="header"></div>
+			<div class="content" style="padding-bottom: 60px;">
+				<div class="converter-wrap">
+					<div class="converter-title">Shiny URL Converter</div>
+					<div class="converter-subtitle">Convert legacy pokemongo-shiny or classic Pokemon-shiny URLs to the current format</div>
+
+					<label class="converter-label" for="input-area">Paste old URL, TinyURL, or legacy status string:</label>
+					<textarea id="input-area" placeholder="https://tinyurl.com/... or https://rplus.github.io/pokemongo-shiny/?status=00012... or a raw digit string"></textarea>
+
+					<div class="mode-row" role="group" aria-label="Input mode">
+						<button class="mode-btn selected" data-mode="auto">Auto-detect</button>
+						<button class="mode-btn" data-mode="status-string">Status string</button>
+						<button class="mode-btn" data-mode="tiny-url">TinyURL</button>
+						<button class="mode-btn" data-mode="long-url">Long URL</button>
+					</div>
+
+					<div id="status-indicator" class="status-indicator">Loading data...</div>
+
+					<button class="convert-btn" id="convert-btn" disabled>Convert</button>
+
+					<div id="output-section">
+						<div id="error-area"></div>
+						<div id="result-area"></div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<p>
+					<a class="back-link" href="../index.html">&larr; Back to IES</a>
+				</p>
+			</div>
+		</div>
+
+		<script type="module">
+			import {
+				parseUserInput,
+				tryResolveShortUrl,
+				convertLegacyStatus,
+				convertClassicUrl,
+				buildMigrationNotes,
+				buildClassicMigrationNotes,
+			} from "./converter.js";
+
+			let mapping = null;
+			let crosswalk = null;
+			let selectedMode = "auto";
+
+			const statusEl = document.getElementById("status-indicator");
+			const convertBtn = document.getElementById("convert-btn");
+			const outputSection = document.getElementById("output-section");
+			const errorArea = document.getElementById("error-area");
+			const resultArea = document.getElementById("result-area");
+
+			async function loadData() {
+				try {
+					const [mappingRes, crosswalkRes] = await Promise.all([
+						fetch("./data/current-mapping.json"),
+						fetch("./data/classic-crosswalk.json"),
+					]);
+					if (!mappingRes.ok) throw new Error(`current-mapping.json: HTTP ${mappingRes.status}`);
+					if (!crosswalkRes.ok) throw new Error(`classic-crosswalk.json: HTTP ${crosswalkRes.status}`);
+					mapping = await mappingRes.json();
+					crosswalk = await crosswalkRes.json();
+					statusEl.textContent = `Data loaded — snapshot ${mapping.meta?.effectiveDate ?? "unknown"}, ${mapping.rows?.length?.toLocaleString() ?? "?"} rows`;
+					convertBtn.disabled = false;
+				} catch (err) {
+					statusEl.textContent = "Failed to load data: " + err.message;
+					statusEl.style.color = "#ff6b6b";
+				}
+			}
+
+			document.querySelectorAll(".mode-btn").forEach((btn) => {
+				btn.addEventListener("click", () => {
+					document.querySelectorAll(".mode-btn").forEach((b) => b.classList.remove("selected"));
+					btn.classList.add("selected");
+					selectedMode = btn.dataset.mode;
+				});
+			});
+
+			convertBtn.addEventListener("click", async () => {
+				const raw = document.getElementById("input-area").value;
+				errorArea.innerHTML = "";
+				resultArea.innerHTML = "";
+				outputSection.style.display = "block";
+
+				convertBtn.disabled = true;
+				convertBtn.textContent = "Converting...";
+
+				try {
+					await runConversion(raw);
+				} finally {
+					convertBtn.disabled = false;
+					convertBtn.textContent = "Convert";
+				}
+			});
+
+			async function runConversion(raw) {
+				let parsed;
+				try {
+					parsed = parseUserInput(raw, "Shiny Checklist", selectedMode);
+				} catch (err) {
+					showError(err.message);
+					return;
+				}
+
+				if (parsed.kind === "short-url") {
+					statusEl.textContent = "Resolving short URL...";
+					try {
+						const resolved = await tryResolveShortUrl(parsed.source);
+						statusEl.textContent = "Resolved — parsing long URL...";
+						raw = resolved;
+						try {
+							parsed = parseUserInput(resolved, parsed.fallbackName, "long-url");
+						} catch (err) {
+							showError(err.message);
+							return;
+						}
+					} catch (err) {
+						showWarning(err.message);
+						statusEl.textContent = `Data loaded — snapshot ${mapping.meta?.effectiveDate ?? "unknown"}`;
+						return;
+					}
+					statusEl.textContent = `Data loaded — snapshot ${mapping.meta?.effectiveDate ?? "unknown"}`;
+				}
+
+				if (parsed.kind === "grouped-status") {
+					const newUrl = `https://rplus.github.io/pokemongo-shiny/?name=${encodeURIComponent(parsed.name)}&status=${encodeURIComponent(parsed.status)}`;
+					showResult({
+						badge: "Already grouped",
+						url: newUrl,
+						notes: ["This URL is already in the current grouped format — no conversion needed."],
+					});
+					return;
+				}
+
+				if (parsed.kind === "legacy-status") {
+					let result;
+					try {
+						result = convertLegacyStatus({ status: parsed.status, name: parsed.name, mapping });
+					} catch (err) {
+						showError(err.message);
+						return;
+					}
+					const notes = buildMigrationNotes(result, mapping);
+					showResult({ badge: "Legacy flat status", url: result.newUrl, notes });
+					return;
+				}
+
+				if (parsed.kind === "classic-url") {
+					let result;
+					try {
+						result = convertClassicUrl({ legacyEntries: parsed.legacyEntries, name: parsed.name, mapping, crosswalk });
+					} catch (err) {
+						showError(err.message);
+						return;
+					}
+					const notes = buildClassicMigrationNotes(result, mapping, crosswalk);
+					showResult({ badge: "Classic Pokemon-shiny URL", url: result.newUrl, notes });
+					return;
+				}
+
+				showError("Unrecognised input kind: " + parsed.kind);
+			}
+
+			function showError(message) {
+				errorArea.innerHTML = `<div class="error-box">${escHtml(message)}</div>`;
+			}
+
+			function showWarning(message) {
+				errorArea.innerHTML = `<div class="warning-box">${escHtml(message)}</div>`;
+			}
+
+			function showResult({ badge, url, notes }) {
+				const noteItems = notes.map((n) => `<li>${escHtml(n)}</li>`).join("");
+				resultArea.innerHTML = `
+					<div class="kind-badge">${escHtml(badge)}</div>
+					<div class="output-label">Converted URL</div>
+					<div class="output-url-box">
+						<span class="output-url-text" id="converted-url">${escHtml(url)}</span>
+						<button class="copy-btn" id="copy-btn">Copy</button>
+					</div>
+					<a class="open-btn" href="${escAttr(url)}" target="_blank" rel="noopener">Open in new tab</a>
+					<div class="notes-box">
+						<div class="notes-title">Migration notes</div>
+						<ul class="notes-list">${noteItems}</ul>
+					</div>
+				`;
+				document.getElementById("copy-btn").addEventListener("click", () => {
+					navigator.clipboard.writeText(url).then(() => {
+						const btn = document.getElementById("copy-btn");
+						if (btn) { btn.textContent = "Copied!"; setTimeout(() => { btn.textContent = "Copy"; }, 1500); }
+					});
+				});
+			}
+
+			function escHtml(str) {
+				return String(str)
+					.replace(/&/g, "&amp;")
+					.replace(/</g, "&lt;")
+					.replace(/>/g, "&gt;")
+					.replace(/"/g, "&quot;");
+			}
+
+			function escAttr(str) {
+				return String(str).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+			}
+
+			loadData();
+		</script>
+	</body>
+</html>
