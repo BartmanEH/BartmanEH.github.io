@@ -227,12 +227,23 @@
 				line-height: 1.6;
 				margin-bottom: 10px;
 			}
+			#version {
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 50px;
+				display: block;
+				font-size: 12px;
+				line-height: 1;
+				margin: 0;
+				color: #888;
+			}
 		</style>
 	</head>
 	<body>
 		<div class="wrapper">
 			<div class="header"></div>
-			<div class="content">
+			<div class="content" style="padding-bottom:50px;">
 				<div class="converter-wrap">
 					<div class="converter-header">
 						<div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
@@ -258,7 +269,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="footer"></div>
+			<div class="footer">
+				<p>&copy;2016 <input type="image" alt="Bart" src="../img/BartmanEH.png" class="footer_img" style="height:30px;">Stassen, P.Eng.</p>
+				<span id="version">v1.0</span>
+			</div>
 		</div>
 
 		<script type="module">
