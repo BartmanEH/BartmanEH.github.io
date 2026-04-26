@@ -336,19 +336,41 @@
 
 				if (parsed.kind === "short-url") {
 					statusEl.textContent = "Resolving short URL...";
+					let resolved = null;
+
+					// 1. Try direct browser fetch
 					try {
-						const resolved = await tryResolveShortUrl(parsed.source);
-						statusEl.textContent = "Resolved — parsing long URL...";
-						raw = resolved;
+						resolved = await tryResolveShortUrl(parsed.source);
+					} catch {
+						// CORS blocked — expected for most shorteners
+					}
+
+					// 2. Fall back to cors-anywhere proxy
+					if (!resolved) {
+						statusEl.textContent = "Direct fetch blocked — trying proxy...";
 						try {
-							parsed = parseUserInput(resolved, parsed.fallbackName, "long-url");
-						} catch (err) {
-							showError(err.message);
+							resolved = await resolveViaProxy(parsed.source);
+						} catch (proxyErr) {
+							if (proxyErr && proxyErr.kind === "proxy-auth") {
+								showProxyAuthHint(proxyErr.proxyUrl);
+							} else {
+								const previewUrl = tinyUrlPreview(parsed.source);
+								if (previewUrl) {
+									showShortUrlHint(previewUrl);
+								} else {
+									showWarning(proxyErr.message || "Could not resolve short URL.");
+								}
+							}
+							statusEl.textContent = `Data loaded — snapshot ${mapping.meta?.effectiveDate ?? "unknown"}`;
 							return;
 						}
+					}
+
+					statusEl.textContent = "Resolved — parsing long URL...";
+					try {
+						parsed = parseUserInput(resolved, parsed.fallbackName, "long-url");
 					} catch (err) {
-						showWarning(err.message);
-						statusEl.textContent = `Data loaded — snapshot ${mapping.meta?.effectiveDate ?? "unknown"}`;
+						showError(err.message);
 						return;
 					}
 					statusEl.textContent = `Data loaded — snapshot ${mapping.meta?.effectiveDate ?? "unknown"}`;
@@ -399,6 +421,84 @@
 
 			function showWarning(message) {
 				errorArea.innerHTML = `<div class="warning-box">${escHtml(message)}</div>`;
+			}
+
+			const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
+
+			async function resolveViaProxy(shortUrl) {
+				const controller = new AbortController();
+				const timeoutId = setTimeout(() => controller.abort(), 15_000);
+				let response;
+				try {
+					response = await fetch(CORS_PROXY + shortUrl, {
+						redirect: "follow",
+						cache: "no-store",
+						signal: controller.signal,
+					});
+				} catch (err) {
+					clearTimeout(timeoutId);
+					if (err.name === "AbortError") throw new Error("Proxy timed out after 15 s.");
+					throw new Error("Proxy unreachable: " + err.message);
+				}
+				clearTimeout(timeoutId);
+
+				if (response.status === 403) {
+					throw { kind: "proxy-auth", proxyUrl: CORS_PROXY + "corsdemo" };
+				}
+				if (!response.ok) {
+					throw new Error(`Proxy returned HTTP ${response.status}.`);
+				}
+
+				// cors-anywhere rewrites redirect Location headers to pass through itself,
+				// so the final response.url is CORS_PROXY + <actual destination URL>.
+				let finalUrl = response.url;
+				if (finalUrl.startsWith(CORS_PROXY)) {
+					finalUrl = finalUrl.slice(CORS_PROXY.length);
+				}
+				if (!finalUrl || finalUrl === shortUrl) {
+					throw new Error("Proxy resolved but destination URL could not be determined.");
+				}
+				return finalUrl;
+			}
+
+			function showProxyAuthHint(proxyUrl) {
+				errorArea.innerHTML = `
+					<div class="warning-box">
+						<strong>One-time proxy access required</strong><br><br>
+						The CORS proxy needs a quick one-time approval before it can expand short URLs.
+						<div style="margin-top:10px;">
+							<a href="${escAttr(proxyUrl)}" target="_blank" rel="noopener" class="open-btn" style="font-size:13px;padding:6px 16px;">Request temporary access &rarr;</a>
+						</div>
+						<div style="margin-top:10px;font-size:11px;color:#aaaaaa;">
+							Click the button above and then click <em>"Request temporary access to the demo server"</em>, then come back and click Convert again.
+						</div>
+					</div>
+				`;
+			}
+
+			function tinyUrlPreview(shortUrl) {
+				try {
+					const u = new URL(shortUrl);
+					if (u.hostname === "tinyurl.com" || u.hostname === "www.tinyurl.com") {
+						return "https://preview.tinyurl.com" + u.pathname;
+					}
+				} catch {}
+				return null;
+			}
+
+			function showShortUrlHint(previewUrl) {
+				errorArea.innerHTML = `
+					<div class="warning-box">
+						<strong>CORS blocked</strong> — the browser cannot follow this redirect directly.<br><br>
+						Use TinyURL's preview page instead: it shows the full destination URL before any JavaScript runs, so the <code style="background:#1a1a1a;padding:1px 4px;border-radius:3px;">?status=…</code> parameter won't be stripped.
+						<div style="margin-top:10px;">
+							<a href="${escAttr(previewUrl)}" target="_blank" rel="noopener" class="open-btn" style="font-size:13px;padding:6px 16px;">Open TinyURL preview &rarr;</a>
+						</div>
+						<div style="margin-top:10px;font-size:11px;color:#aaaaaa;">
+							Copy the full URL from that page, then paste it back here and convert.
+						</div>
+					</div>
+				`;
 			}
 
 			function showResult({ badge, url, notes }) {
