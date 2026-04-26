@@ -398,7 +398,7 @@
 							} else {
 								const previewUrl = tinyUrlPreview(parsed.source);
 								if (previewUrl) {
-									showShortUrlHint(previewUrl);
+									showShortUrlHint(parsed.source, previewUrl);
 								} else {
 									showWarning(proxyErr.message || "Could not resolve short URL.");
 								}
@@ -532,17 +532,13 @@
 				return null;
 			}
 
-			function showShortUrlHint(previewUrl) {
+			function showShortUrlHint(shortUrl, previewUrl) {
 				errorArea.innerHTML = `
 					<div class="warning-box">
-						<strong>CORS blocked</strong> — the browser cannot follow this redirect directly.<br><br>
-						Use TinyURL's preview page instead: it shows the full destination URL before any JavaScript runs, so the <code style="background:#1a1a1a;padding:1px 4px;border-radius:3px;">?status=…</code> parameter won't be stripped.
-						<div style="margin-top:10px;">
-							<a href="${escAttr(previewUrl)}" target="_blank" rel="noopener" class="open-btn" style="font-size:13px;padding:6px 16px;">Open TinyURL preview &rarr;</a>
-						</div>
-						<div style="margin-top:10px;font-size:11px;color:#aaaaaa;">
-							Copy the full URL from that page, then paste it back here and convert.
-						</div>
+						<strong>Could not expand automatically</strong> — click your TinyURL below to open the preview page, copy the full destination URL from there, then paste it back here and convert.<br><br>
+						<a href="${escAttr(previewUrl)}" target="_blank" rel="noopener"
+						   style="font-family:'Courier New',Courier,monospace;font-size:12px;color:#FF9900;word-break:break-all;"
+						>${escHtml(shortUrl)}</a>
 					</div>
 				`;
 			}
