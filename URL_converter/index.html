@@ -270,7 +270,7 @@
 				</div>
 			</div>
 			<div class="footer">
-				<p>&copy;2016 <input type="image" alt="Bart" src="../img/BartmanEH.png" class="footer_img" style="height:30px;">Stassen, P.Eng.</p>
+				<p>&copy;2026 <input type="image" alt="Bart" src="../img/BartmanEH.png" class="footer_img" style="height:30px;">Stassen, P.Eng.</p>
 				<span id="version">v1.0</span>
 			</div>
 		</div>
@@ -316,6 +316,13 @@
 					setStatus("Failed to load data: " + err.message, "error");
 				}
 			}
+
+			document.getElementById("input-area").addEventListener("keydown", (e) => {
+				if (e.key === "Enter" && !e.shiftKey && !convertBtn.disabled) {
+					e.preventDefault();
+					convertBtn.click();
+				}
+			});
 
 			convertBtn.addEventListener("click", async () => {
 				const raw = document.getElementById("input-area").value;
