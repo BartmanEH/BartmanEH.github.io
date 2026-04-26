@@ -24,192 +24,231 @@
 		<title>IES: Shiny URL Converter</title>
 		<style>
 			.converter-wrap {
-				max-width: 640px;
-				margin: 0 auto;
-				padding: 16px 12px 16px 12px;
+				max-width: 600px;
+				margin: 20px auto;
+				padding: 24px 20px;
 				text-align: left;
+				background: #1a1a1a;
+				border: 1px solid #2c2c2c;
+				border-radius: 12px;
+			}
+			.converter-header {
+				border-left: 3px solid #FF9900;
+				padding-left: 12px;
+				margin-bottom: 20px;
 			}
 			.converter-title {
-				font-size: 18px;
+				font-size: 20px;
 				font-weight: bold;
 				color: #FF9900;
-				text-align: center;
 				margin-bottom: 4px;
 			}
 			.converter-subtitle {
-				font-size: 13px;
-				color: #bbbbbb;
-				text-align: center;
-				margin-bottom: 16px;
+				font-size: 12px;
+				color: #888;
+				line-height: 1.5;
 			}
+			.converter-subtitle a { color: #FF9900; }
 			.converter-label {
-				font-size: 13px;
-				color: #cccccc;
-				margin-bottom: 4px;
+				font-size: 10px;
+				text-transform: uppercase;
+				letter-spacing: 0.6px;
+				color: #666;
+				margin-bottom: 6px;
 				display: block;
 			}
 			#input-area {
 				width: 100%;
 				box-sizing: border-box;
-				background-color: #1e1e1e;
+				background-color: #111;
 				color: #f3f3f3;
-				border: 2px solid #3a3a3c;
+				border: 1px solid #333;
 				border-radius: 6px;
-				padding: 8px;
-				font-family: "Trebuchet MS", Helvetica, sans-serif;
-				font-size: 13px;
+				padding: 10px 12px;
+				font-family: "Courier New", Courier, monospace;
+				font-size: 12px;
+				line-height: 1.5;
 				resize: vertical;
-				min-height: 80px;
+				min-height: 90px;
+				margin-bottom: 10px;
 			}
 			#input-area:focus {
 				outline: none;
 				border-color: #005387;
+				box-shadow: 0 0 0 3px rgba(0,83,135,0.2);
 			}
+			.status-indicator {
+				display: flex;
+				align-items: center;
+				gap: 7px;
+				font-size: 11px;
+				color: #666;
+				margin-bottom: 10px;
+				min-height: 16px;
+			}
+			.status-dot {
+				width: 6px;
+				height: 6px;
+				border-radius: 50%;
+				background: #444;
+				flex-shrink: 0;
+				transition: background 0.3s;
+			}
+			.status-dot.ready  { background: #4caf50; }
+			.status-dot.busy   { background: #FF9900; }
+			.status-dot.error  { background: #f44336; }
 			.convert-btn {
 				display: block;
 				width: 100%;
-				padding: 12px;
-				font-size: 16px;
+				padding: 11px;
+				font-size: 14px;
 				font-family: Arial, sans-serif;
+				font-weight: bold;
+				letter-spacing: 0.3px;
 				border-radius: 6px;
-				border: 2px solid #d6d6d6;
+				border: none;
 				cursor: pointer;
-				background: linear-gradient(to bottom, #ededed 5%, #bababa 100%);
-				color: #000000;
-				box-shadow: 0px 6px 0px -1px #555555;
-				margin-bottom: 18px;
+				background: #005387;
+				color: #ffffff;
+				margin-bottom: 16px;
+				transition: background 0.15s;
 			}
-			.convert-btn:active {
-				position: relative;
-				top: 2px;
-				box-shadow: 0px 2px 0px 0px #555555;
-			}
-			.convert-btn:hover {
-				background: linear-gradient(to bottom, #bababa 5%, #ededed 100%);
-			}
-			.convert-btn:disabled {
-				opacity: 0.5;
-				cursor: default;
-			}
-			#output-section {
-				display: none;
-			}
+			.convert-btn:hover   { background: #006ab5; }
+			.convert-btn:active  { background: #004070; }
+			.convert-btn:disabled { background: #1c3448; color: #555; cursor: default; }
+			#output-section { display: none; }
 			.output-label {
-				font-size: 12px;
-				color: #aaaaaa;
-				margin-bottom: 3px;
+				font-size: 10px;
+				text-transform: uppercase;
+				letter-spacing: 0.6px;
+				color: #666;
+				margin-bottom: 6px;
 			}
 			.output-url-box {
-				background: #1e1e1e;
-				border: 2px solid #3a3a3c;
+				background: #111;
+				border: 1px solid #2a2a2a;
+				border-left: 3px solid #005387;
 				border-radius: 6px;
-				padding: 10px;
+				padding: 10px 12px;
+				font-family: "Courier New", Courier, monospace;
 				font-size: 12px;
+				line-height: 1.5;
 				word-break: break-all;
-				color: #f3f3f3;
-				margin-bottom: 10px;
+				color: #c8d8e8;
+				margin-bottom: 12px;
 				display: flex;
 				align-items: flex-start;
-				gap: 8px;
+				gap: 10px;
 			}
-			.output-url-text {
-				flex: 1;
-			}
+			.output-url-text { flex: 1; }
 			.copy-btn {
 				flex-shrink: 0;
-				padding: 4px 10px;
+				padding: 3px 10px;
 				font-size: 11px;
 				border-radius: 4px;
-				border: 1px solid #555;
-				background: #2a2a2a;
-				color: #cccccc;
+				border: 1px solid #3a3a3a;
+				background: transparent;
+				color: #777;
 				cursor: pointer;
 				white-space: nowrap;
+				transition: all 0.1s;
 			}
-			.copy-btn:hover { background: #3a3a3a; }
+			.copy-btn:hover { background: #222; color: #bbb; border-color: #555; }
 			.open-btn {
 				display: inline-block;
 				padding: 8px 20px;
 				border-radius: 5px;
-				border: 2px solid #005387;
+				border: none;
 				background: #005387;
 				color: #ffffff;
 				font-family: Arial, sans-serif;
-				font-size: 14px;
+				font-size: 13px;
+				font-weight: bold;
 				cursor: pointer;
 				text-decoration: none;
-				margin-bottom: 16px;
+				margin-bottom: 14px;
+				transition: background 0.15s;
 			}
-			.open-btn:hover { background: #006ab5; border-color: #006ab5; }
-			.notes-box {
-				background: #1a1a1a;
-				border: 1px solid #333;
-				border-radius: 6px;
-				padding: 10px 12px;
-				margin-bottom: 10px;
-			}
-			.notes-title {
-				font-size: 12px;
-				font-weight: bold;
-				color: #FF9900;
-				margin-bottom: 6px;
-			}
-			.notes-list {
-				margin: 0;
-				padding: 0 0 0 16px;
-				font-size: 12px;
-				color: #cccccc;
-				line-height: 1.6;
-			}
+			.open-btn:hover { background: #006ab5; }
 			.kind-badge {
 				display: inline-block;
-				font-size: 11px;
-				color: #888888;
-				border: 1px solid #444;
+				font-size: 10px;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+				color: #555;
+				border: 1px solid #2c2c2c;
 				border-radius: 3px;
 				padding: 1px 6px;
 				margin-bottom: 10px;
 				cursor: default;
 				user-select: none;
 			}
-			.error-box {
-				background: #2a1010;
-				border: 1px solid #8b3333;
+			.notes-box {
+				background: #111;
+				border: 1px solid #222;
 				border-radius: 6px;
-				padding: 10px 12px;
-				color: #ff6b6b;
-				font-size: 13px;
+				padding: 12px 14px;
+				margin-bottom: 10px;
+			}
+			.notes-title {
+				font-size: 10px;
+				font-weight: bold;
+				text-transform: uppercase;
+				letter-spacing: 0.6px;
+				color: #555;
+				margin-bottom: 8px;
+			}
+			.notes-list {
+				margin: 0;
+				padding: 0 0 0 16px;
+				font-size: 12px;
+				color: #777;
+				line-height: 1.7;
+			}
+			.error-box {
+				background: #180a0a;
+				border: 1px solid #3a1818;
+				border-left: 3px solid #c94040;
+				border-radius: 6px;
+				padding: 10px 14px;
+				color: #ff8888;
+				font-size: 12px;
+				line-height: 1.6;
 				margin-bottom: 10px;
 			}
 			.warning-box {
-				background: #2a2010;
-				border: 1px solid #8b7033;
+				background: #161200;
+				border: 1px solid #3a3000;
+				border-left: 3px solid #cc9900;
 				border-radius: 6px;
-				padding: 8px 12px;
-				color: #ffcc55;
+				padding: 10px 14px;
+				color: #d4a800;
 				font-size: 12px;
+				line-height: 1.6;
 				margin-bottom: 10px;
-			}
-			.status-indicator {
-				font-size: 12px;
-				color: #888888;
-				text-align: center;
-				margin-bottom: 8px;
 			}
 		</style>
 	</head>
 	<body>
 		<div class="wrapper">
 			<div class="header"></div>
-			<div class="content" style="padding-bottom: 60px;">
+			<div class="content">
 				<div class="converter-wrap">
-					<div class="converter-title">Shiny URL Converter</div>
-					<div class="converter-subtitle">Convert legacy <a href="https://rplus.github.io/pokemongo-shiny/" target="_blank" rel="noopener" style="color:#FF9900;">pokemongo-shiny</a> or classic <a href="https://rplus.github.io/Pokemon-shiny/" target="_blank" rel="noopener" style="color:#FF9900;">Pokemon-shiny</a> URLs to the current format</div>
+					<div class="converter-header">
+						<div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
+							<img src="../img/IES_logo.svg" alt="IES" class="filter-white" style="height:36px;width:auto;">
+							<div class="converter-title">Shiny URL Converter</div>
+						</div>
+						<div class="converter-subtitle">Convert legacy <a href="https://rplus.github.io/pokemongo-shiny/" target="_blank" rel="noopener">pokemongo-shiny</a> or classic <a href="https://rplus.github.io/Pokemon-shiny/" target="_blank" rel="noopener">Pokemon-shiny</a> URLs to the current format</div>
+					</div>
 
-					<label class="converter-label" for="input-area">Paste old URL, TinyURL, or legacy status string:</label>
+					<label class="converter-label" for="input-area">Paste old URL, TinyURL, or legacy status string</label>
 					<textarea id="input-area" placeholder="https://tinyurl.com/... or https://rplus.github.io/pokemongo-shiny/?status=00012... or a raw digit string"></textarea>
 
-					<div id="status-indicator" class="status-indicator">Loading data...</div>
+					<div id="status-indicator" class="status-indicator">
+						<span class="status-dot" id="status-dot"></span>
+						<span id="status-text">Loading data...</span>
+					</div>
 
 					<button class="convert-btn" id="convert-btn" disabled>Convert</button>
 
@@ -235,11 +274,17 @@
 			let mapping = null;
 			let crosswalk = null;
 
-			const statusEl = document.getElementById("status-indicator");
+			const statusDot  = document.getElementById("status-dot");
+			const statusText = document.getElementById("status-text");
 			const convertBtn = document.getElementById("convert-btn");
 			const outputSection = document.getElementById("output-section");
 			const errorArea = document.getElementById("error-area");
 			const resultArea = document.getElementById("result-area");
+
+			function setStatus(text, state = "idle") {
+				statusText.textContent = text;
+				statusDot.className = "status-dot" + (state !== "idle" ? " " + state : "");
+			}
 
 			async function loadData() {
 				try {
@@ -251,11 +296,10 @@
 					if (!crosswalkRes.ok) throw new Error(`classic-crosswalk.json: HTTP ${crosswalkRes.status}`);
 					mapping = await mappingRes.json();
 					crosswalk = await crosswalkRes.json();
-					statusEl.textContent = `Data loaded — snapshot ${mapping.meta?.effectiveDate ?? "unknown"}, ${mapping.rows?.length?.toLocaleString() ?? "?"} rows`;
+					setStatus(`Snapshot ${mapping.meta?.effectiveDate ?? "unknown"} · ${mapping.rows?.length?.toLocaleString() ?? "?"} rows`, "ready");
 					convertBtn.disabled = false;
 				} catch (err) {
-					statusEl.textContent = "Failed to load data: " + err.message;
-					statusEl.style.color = "#ff6b6b";
+					setStatus("Failed to load data: " + err.message, "error");
 				}
 			}
 
@@ -311,7 +355,7 @@
 				}
 
 				if (parsed.kind === "short-url") {
-					statusEl.textContent = "Resolving short URL...";
+					setStatus("Resolving short URL...", "busy");
 					let resolved = null;
 
 					// 1. Try direct browser fetch
@@ -323,7 +367,7 @@
 
 					// 2. Fall back to cors-anywhere proxy
 					if (!resolved) {
-						statusEl.textContent = "Direct fetch blocked — trying proxy...";
+						setStatus("Direct fetch blocked — trying proxy...", "busy");
 						try {
 							resolved = await resolveViaProxy(parsed.source);
 						} catch (proxyErr) {
@@ -337,12 +381,12 @@
 									showWarning(proxyErr.message || "Could not resolve short URL.");
 								}
 							}
-							statusEl.textContent = `Data loaded — snapshot ${mapping.meta?.effectiveDate ?? "unknown"}`;
+							setStatus(`Snapshot ${mapping.meta?.effectiveDate ?? "unknown"}`, "ready");
 							return;
 						}
 					}
 
-					statusEl.textContent = "Resolved — parsing long URL...";
+					setStatus("Resolved — parsing...", "busy");
 					resolved = decodeEntities(resolved);
 					if (/%3F/i.test(resolved)) {
 						try { resolved = decodeURIComponent(resolved); } catch {}
@@ -353,7 +397,7 @@
 						showError(err.message);
 						return;
 					}
-					statusEl.textContent = `Data loaded — snapshot ${mapping.meta?.effectiveDate ?? "unknown"}`;
+					setStatus(`Snapshot ${mapping.meta?.effectiveDate ?? "unknown"}`, "ready");
 				}
 
 				if (parsed.kind === "grouped-status") {
