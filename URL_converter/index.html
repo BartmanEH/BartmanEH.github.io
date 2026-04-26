@@ -65,28 +65,6 @@
 				outline: none;
 				border-color: #005387;
 			}
-			.mode-row {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 6px;
-				margin: 10px 0 14px 0;
-			}
-			.mode-btn {
-				padding: 5px 12px;
-				border-radius: 5px;
-				border: 2px solid #555;
-				background: #2a2a2a;
-				color: #cccccc;
-				font-family: "Trebuchet MS", Helvetica, sans-serif;
-				font-size: 12px;
-				cursor: pointer;
-			}
-			.mode-btn.selected {
-				border-color: #005387;
-				background: #005387;
-				color: #ffffff;
-				font-weight: bold;
-			}
 			.convert-btn {
 				display: block;
 				width: 100%;
@@ -210,15 +188,6 @@
 				font-size: 12px;
 				margin-bottom: 10px;
 			}
-			.back-link {
-				display: block;
-				text-align: center;
-				font-size: 13px;
-				color: #aaaaaa;
-				margin-bottom: 8px;
-				text-decoration: none;
-			}
-			.back-link:hover { color: #ffffff; }
 			.status-indicator {
 				font-size: 12px;
 				color: #888888;
@@ -233,17 +202,10 @@
 			<div class="content" style="padding-bottom: 60px;">
 				<div class="converter-wrap">
 					<div class="converter-title">Shiny URL Converter</div>
-					<div class="converter-subtitle">Convert legacy pokemongo-shiny or classic Pokemon-shiny URLs to the current format</div>
+					<div class="converter-subtitle">Convert legacy <a href="https://rplus.github.io/pokemongo-shiny/" target="_blank" rel="noopener" style="color:#FF9900;">pokemongo-shiny</a> or classic <a href="https://rplus.github.io/Pokemon-shiny/" target="_blank" rel="noopener" style="color:#FF9900;">Pokemon-shiny</a> URLs to the current format</div>
 
 					<label class="converter-label" for="input-area">Paste old URL, TinyURL, or legacy status string:</label>
 					<textarea id="input-area" placeholder="https://tinyurl.com/... or https://rplus.github.io/pokemongo-shiny/?status=00012... or a raw digit string"></textarea>
-
-					<div class="mode-row" role="group" aria-label="Input mode">
-						<button class="mode-btn selected" data-mode="auto">Auto-detect</button>
-						<button class="mode-btn" data-mode="status-string">Status string</button>
-						<button class="mode-btn" data-mode="tiny-url">TinyURL</button>
-						<button class="mode-btn" data-mode="long-url">Long URL</button>
-					</div>
 
 					<div id="status-indicator" class="status-indicator">Loading data...</div>
 
@@ -255,11 +217,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="footer">
-				<p>
-					<a class="back-link" href="../index.html">&larr; Back to IES</a>
-				</p>
-			</div>
+			<div class="footer"></div>
 		</div>
 
 		<script type="module">
@@ -274,7 +232,6 @@
 
 			let mapping = null;
 			let crosswalk = null;
-			let selectedMode = "auto";
 
 			const statusEl = document.getElementById("status-indicator");
 			const convertBtn = document.getElementById("convert-btn");
@@ -300,14 +257,6 @@
 				}
 			}
 
-			document.querySelectorAll(".mode-btn").forEach((btn) => {
-				btn.addEventListener("click", () => {
-					document.querySelectorAll(".mode-btn").forEach((b) => b.classList.remove("selected"));
-					btn.classList.add("selected");
-					selectedMode = btn.dataset.mode;
-				});
-			});
-
 			convertBtn.addEventListener("click", async () => {
 				const raw = document.getElementById("input-area").value;
 				errorArea.innerHTML = "";
@@ -331,7 +280,7 @@
 
 				let parsed;
 				try {
-					parsed = parseUserInput(raw, "Shiny Checklist", selectedMode);
+					parsed = parseUserInput(raw, "Shiny Checklist", "auto");
 				} catch (err) {
 					showError(err.message);
 					return;
@@ -514,6 +463,9 @@
 						<button class="copy-btn" id="copy-btn">Copy</button>
 					</div>
 					<a class="open-btn" href="${escAttr(url)}" target="_blank" rel="noopener">Open in new tab</a>
+					<div class="warning-box" style="margin-bottom:12px;">
+						<strong>Verify your results</strong> — the conversion is based on a data snapshot and may not be perfectly accurate. Check your shiny collection manually after importing.
+					</div>
 					<div class="notes-box">
 						<div class="notes-title">Migration notes</div>
 						<ul class="notes-list">${noteItems}</ul>
