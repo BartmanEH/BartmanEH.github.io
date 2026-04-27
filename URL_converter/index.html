@@ -228,6 +228,16 @@
 				line-height: 1.6;
 				margin-bottom: 10px;
 			}
+			.URL_Converter .footer {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				max-width: none;
+				transform: none;
+			}
+			.URL_Converter .footer p {
+				margin: 0;
+			}
 			.URL_Converter .footer #version {
 				position: absolute;
 				left: 0;
@@ -239,9 +249,12 @@
 				margin: 0;
 				color: #888;
 			}
+			.URL_Converter .content {
+				padding-bottom: 50px;
+			}
 			@supports (-webkit-touch-callout: none) {
-				.URL_Converter .footer #version {
-					top: 80px;
+				.URL_Converter .content {
+					padding-bottom: 80px;
 				}
 			}
 		</style>
@@ -249,7 +262,7 @@
 	<body class="URL_Converter">
 		<div class="wrapper">
 			<div class="header"></div>
-			<div class="content" style="padding-bottom:50px;">
+			<div class="content">
 				<div class="converter-wrap">
 					<div class="converter-header">
 						<div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
@@ -277,7 +290,7 @@
 			</div>
 			<div class="footer">
 				<p>&copy;2026 <input type="image" alt="Bart" src="../img/BartmanEH.png" class="footer_img" style="height:30px;">Stassen, P.Eng.</p>
-				<span id="version">v1.2</span>
+				<span id="version">v1.2a</span>
 			</div>
 		</div>
 
