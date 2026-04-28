@@ -1,8 +1,12 @@
 {
+  "type": "module",
   "scripts": {
     "lint": "eslint .",
     "lint:wordle": "eslint Wordle_Solver/Wordle_Solver.js",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "build:mapping": "cd URL_converter && python3 scripts/build_mapping.py",
+    "build:classic-crosswalk": "cd URL_converter && python3 scripts/build_classic_crosswalk.py",
+    "test": "cd URL_converter && node scripts/test-converter.mjs"
   },
   "dependencies": {
     "eslint": "^10.0.1"

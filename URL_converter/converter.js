@@ -297,9 +297,6 @@ export function convertClassicUrl({ legacyEntries, name, mapping, crosswalk }) {
   const pidAssignments = new Map();
   const unmappedLegacyIds = [];
   const missingCurrentRows = [];
-  const companionFills = [];
-  const seenLegacyBucketKeys = new Set();
-
   const bucketDigits = [
     { key: "dex", digit: "1" },
     { key: "own", digit: "2" },
@@ -320,24 +317,6 @@ export function convertClassicUrl({ legacyEntries, name, mapping, crosswalk }) {
         missingCurrentRows.push({ legacyId, pid: resolved.pid, digit, bucket: key });
         continue;
       }
-
-      // When the exact same legacy ID appears more than once in the same bucket
-      // and resolves to a form variant (pid contains a dot), fill the base pid
-      // if it exists and hasn't been assigned yet. This handles cases like 861
-      // appearing twice in own to signal both Grimmsnarl and Gigantamax Grimmsnarl,
-      // when the crosswalk only maps 861 to the Gigantamax form.
-      const legacyBucketKey = `${legacyId}:${key}`;
-      if (seenLegacyBucketKeys.has(legacyBucketKey)) {
-        const dotIndex = resolved.pid.indexOf(".");
-        if (dotIndex !== -1) {
-          const basePid = resolved.pid.slice(0, dotIndex);
-          if (currentPids.has(basePid) && !pidStatuses.has(basePid)) {
-            pidStatuses.set(basePid, digit);
-            companionFills.push({ legacyId, resolvedPid: resolved.pid, basePid, digit, bucket: key });
-          }
-        }
-      }
-      seenLegacyBucketKeys.add(legacyBucketKey);
 
       pidStatuses.set(resolved.pid, digit);
       const assignments = pidAssignments.get(resolved.pid) || [];
@@ -394,7 +373,6 @@ export function convertClassicUrl({ legacyEntries, name, mapping, crosswalk }) {
     missingCurrentRows,
     repeatedPids,
     conflictingPids,
-    companionFills,
   };
 }
 
@@ -476,16 +454,6 @@ export function buildClassicMigrationNotes(result, mapping, crosswalk) {
     );
   } else {
     notes.push("No current pid was assigned more than once by this classic URL.");
-  }
-
-  if (result.companionFills.length > 0) {
-    const preview = result.companionFills
-      .slice(0, 4)
-      .map((item) => `${item.legacyId} -> ${item.basePid}`)
-      .join(", ");
-    notes.push(
-      `${result.companionFills.length} base form(s) were automatically filled from a duplicated legacy id that resolved to a form variant. This handles cases like Gigantamax forms that share a legacy id with the base. Sample: ${preview}.`
-    );
   }
 
   notes.push(

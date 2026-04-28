@@ -33,38 +33,45 @@ That path works fully client-side on GitHub Pages.
 
 ## Refreshing the data snapshots
 
-The bundled files are snapshots of:
+Do this whenever new Pokémon are added to the old `Pokemon-shiny` site (e.g. Orthworm) or when the live `pm2026` sheet gets new debut dates. All commands are run from the **repository root** (not from inside `URL_converter/`).
 
-- the current grouped checklist layout from the live `pm2026` custom URL sheet feed
-- the classic `Pokemon-shiny` legacy id crosswalk
+### Step-by-step update process
 
-To rebuild the current grouped snapshot:
+**1. Rebuild the mapping** (fetches the live `pm2026` sheet, outputs `data/current-mapping.json`):
 
 ```bash
 npm run build:mapping
 ```
 
-The mapping builder follows the same default source the live webpage uses for its custom URL setting: the `pm2026` sheet feed exposed through `opensheet`.
-
-If that live sheet feed has no `_index`, the refresh script will preserve legacy flat indices by reading the previous `data/current-mapping.json` and matching rows by `pid`, with a family/group fallback for simple renames.
-
-Rows only count as released if they have a non-empty `debut` date earlier than the chosen effective date, matching the live page's filtering. Placeholder rows without a release date are skipped.
-
-To rebuild the classic crosswalk:
+**2. Rebuild the classic crosswalk** (fetches `Pokemon-shiny/pms.json` and re-resolves all legacy ids against the new mapping, outputs `data/classic-crosswalk.json`). Always run this after step 1:
 
 ```bash
 npm run build:classic-crosswalk
 ```
 
-The classic crosswalk is written to `data/classic-crosswalk.json`. It resolves old ids such as `25_4thY` or `710_xs` to current `pid`s ahead of time so the GitHub Pages app can stay fully static.
-
-Classic summary counts do not always line up 1:1 with the new app's cards. The old `Pokemon-shiny` app counts raw `dex`/`own`/`offer` bucket entries, while the new app counts current released rows and surfaces `extra` separately. Duplicated classic ids therefore collapse to a single current row in the converted result.
-
-You can also pin the effective date:
+**3. Run the regression test** to confirm the known-case URLs still convert cleanly. If the test fails you need to update the expected hashes in `URL_converter/scripts/test-converter.mjs` to match the new output (the test prints the actual hash):
 
 ```bash
-python3 scripts/build_mapping.py --effective-date 2026-04-19
+npm test
 ```
+
+**4. Update the snapshot date** in `URL_converter/index.html` — search for the string `"data snapshot from"` and change the date to today's date (matches the `effectiveDate` written by `build:mapping`).
+
+**5. Bump the version** in `URL_converter/index.html` — search for `id="version"` and increment the version string.
+
+**6. Commit and push.**
+
+### Notes on the build scripts
+
+The mapping builder preserves legacy flat indices by reading the existing `data/current-mapping.json` and matching rows by `pid`, with a family/group fallback for simple renames. New Pokémon with no legacy equivalent receive a synthetic index appended after the current maximum.
+
+Rows only count as released if they have a non-empty `debut` date earlier than today's date. To pin an older effective date:
+
+```bash
+cd URL_converter && python3 scripts/build_mapping.py --effective-date 2026-04-19
+```
+
+The classic crosswalk resolves old ids such as `25_4thY` or `710_xs` to current `pid`s ahead of time so the GitHub Pages app can stay fully static. Classic summary counts do not always line up 1:1 with the new app's cards — duplicated classic ids collapse to a single current row in the converted result.
 
 ## Running the known-case test
 
