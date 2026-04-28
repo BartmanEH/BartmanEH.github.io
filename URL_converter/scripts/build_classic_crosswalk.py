@@ -15,6 +15,7 @@ DEFAULT_CURRENT_MAPPING = Path("data/current-mapping.json")
 DEFAULT_OUTPUT = Path("data/classic-crosswalk.json")
 
 AA_FN_OVERRIDES = {
+    "25_cPI": "pm25.cFEB_2019",
     "25_23d": "pm25.cPI",
     "26_23d": "pm26.cPI",
 }
