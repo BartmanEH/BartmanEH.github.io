@@ -87,6 +87,7 @@ ISOTOPE_PID_SUFFIXES = {
     "_06": ".cFALL_2018",
     "_07": ".cNOVEMBER_2018",
     "_08": ".cWINTER_2018",
+    "_10": ".cMAY_2019_NOEVOLVE",
     "_11": ".cJAN_2020_NOEVOLVE",
     "_12": ".cAPRIL_2020_NOEVOLVE",
     "_14": ".cSPRING_2020_NOEVOLVE",
@@ -129,12 +130,15 @@ def main() -> None:
         legacy_id = build_legacy_id(row)
         pid, source = resolve_legacy_id(row, current_pids)
         if pid is None:
+            released_date = row.get("released_date")
+            shiny_released = row.get("shiny_released")
             unresolved.append(
                 {
                     "legacyId": legacy_id,
                     "family": row.get("family"),
                     "reason": source,
-                    "releasedDate": row.get("released_date"),
+                    "releasedDate": released_date,
+                    "shinyReleased": bool(shiny_released) if (not released_date and shiny_released is not None) else None,
                 }
             )
             continue

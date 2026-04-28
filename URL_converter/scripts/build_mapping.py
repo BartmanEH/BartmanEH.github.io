@@ -50,7 +50,7 @@ def main() -> None:
     current_released_rows = []
     for row in rows:
         debut = parse_debut(row.get("debut", ""))
-        if debut is not None and debut < effective_date:
+        if debut is not None and debut <= effective_date:
             current_released_rows.append(row)
 
     released_rows, resolution_stats = build_released_rows(current_released_rows, legacy_mapping)
