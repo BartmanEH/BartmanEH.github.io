@@ -80,4 +80,24 @@ module.exports = [
       "custom/inline-comment-spacing": ["warn"],
     },
   },
+  {
+    files: ["**/*.mjs"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: {
+        ...globals.node,
+        AbortController: "readonly",
+        fetch: "readonly",
+      },
+    },
+    rules: {
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" }],
+      "spaced-comment": [
+        "warn",
+        "always",
+        { exceptions: ["-", "+"], markers: ["*"], line: { exceptions: [""] } },
+      ],
+    },
+  },
 ];
