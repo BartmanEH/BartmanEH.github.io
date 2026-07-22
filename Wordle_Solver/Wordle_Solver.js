@@ -159,6 +159,8 @@ const dateDisplayFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', 
 let diffDays = daysBetween(start, today); // new function to compute days between two dates
 let answer = '';                          // answer via built-in answers array
 let solution = '';                        // solution obtained via Wordle API
+let todayAnswer = '';                     // today's answer, including API-only dates
+let todaySolutionPromise = null;          // allow the logo click to await the initial API lookup
 const boolFutureDate = Boolean(true);     // boolFutureDate = true: allow future dates
 let boolAnswersOnly = Boolean(false);     // boolAnswersOnly = false: include possible guesses, not only possible Answers
 let boolPrevAnswers = Boolean(true);      // boolPrevAnswers = true: include previous Answers
@@ -180,10 +182,12 @@ document.addEventListener('DOMContentLoaded', function () {         // fires whe
   UIeventHandlers();                                                // attach handlers to UI events
   setupIOSInitialTapFocus();                                        // iOS: first tap anywhere focuses first guess box
   answer = aryAllAnswersOrdered[diffDays] ?? '';                    // seed from built-in so UI is immediately usable
+  todayAnswer = answer;
   initialize();                                                     // initialize things
   getVersion().catch((error) => { consoleLog(true, 'getVersion error: ' + error, 'warn'); });
   getUseCases().catch((error) => { consoleLog(true, 'getUseCases error: ' + error, 'warn'); });
-  getSolution(today).catch((error) => { consoleLog(true, 'getSolution error: ' + error, 'warn'); });
+  todaySolutionPromise = getSolution(today);
+  todaySolutionPromise.catch((error) => { consoleLog(true, 'getSolution error: ' + error, 'warn'); });
 }); // DOM loaded
 async function getSolution(date) {                                  // get solution for date from Wordle API via CORS proxy
   // consoleLog(spoilerModePre, 'date: ' + date);
@@ -205,8 +209,10 @@ async function getSolution(date) {                                  // get solut
   const builtInIndex = daysBetween(start, date);
   const builtInAnswer = aryAllAnswersOrdered[builtInIndex] ?? '';
   const hasBuiltInAnswer = builtInAnswer !== '';
+  const isToday = builtInIndex === daysBetween(start, today);
   answer = builtInAnswer;                                           // temporary fallback while waiting for API
   solution = hasBuiltInAnswer ? builtInAnswer : '';
+  if (isToday) todayAnswer = builtInAnswer;
   try {
     const responseSolution = await fetch(requestSolution);
     if (!responseSolution.ok) {
@@ -228,6 +234,7 @@ async function getSolution(date) {                                  // get solut
         toast('API Answer and built-in Answer differ!');
       } // if
       answer = solution;                                            // API takes precedence over built-in when available
+      if (isToday) todayAnswer = solution;
       consoleLog(spoilerModePre, 'solution via API: ' + solution);
       consoleLog(spoilerModePre, 'built-in answer: ' + builtInAnswer);
       if (!hasBuiltInAnswer) {
@@ -650,7 +657,7 @@ function inputClicked(e) {                                          // text inpu
   } else consoleLog(logKeyboard, 'empty gridCoord clicked!');       // metadata state attribute still unset (stateTBD)
   solveIt();                                                        // autofire SolveIt!
 } // inputClicked()
-function imageClicked(e) {                                          // image input clicked
+async function imageClicked(e) {                                    // image input clicked
   if (e.target.id === 'IES_logo_img') {                             // IES logo clicked
     if (location.pathname.slice(-3) === 'php') {                    // RPi
       window.location.replace('../index.php');                      // back to main index page (RPi)
@@ -661,7 +668,15 @@ function imageClicked(e) {                                          // image inp
     stopFireworks();
     window.location.reload();                                       // reload page
   } else if (e.target.id === 'BartmanEH_logo_img') {                // BartmanEH logo clicked
-    toast('today\'s answer: ' + (answer || 'unavailable'), 'bottom');
+    if (!todayAnswer) {
+      if (!todaySolutionPromise) todaySolutionPromise = getSolution(today);
+      const foundTodaySolution = await todaySolutionPromise;
+      if (!foundTodaySolution && !todayAnswer) {                    // retry a failed initial request on demand
+        todaySolutionPromise = getSolution(today);
+        await todaySolutionPromise;
+      } // if
+    } // if
+    toast('today\'s answer: ' + (todayAnswer || 'unavailable'), 'bottom');
   } // if else
 } // imageClicked()
 function buildStrFilteredFiveLetterWords(array) {                   // helper function to concatenate strings (words)
