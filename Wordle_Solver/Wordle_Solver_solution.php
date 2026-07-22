@@ -3,7 +3,8 @@
 	// Wordle Solver: get answer (solution) for a given date in YYYY-mm-dd format
 	// use PHP for cURL (JS fetch() on Wordle API doesn't work due to CORS etc.)
 	//================================================================================
-	header('Access-Control-Allow-Origin: *');
+	// CORS is added by the web server. Sending it here as well produces two
+	// Access-Control-Allow-Origin headers, which browsers reject.
 	header('Content-Type: application/json');
 
 	$date = $_GET['solutionDate'] ?? '';
