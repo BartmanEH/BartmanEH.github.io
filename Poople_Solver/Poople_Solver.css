@@ -77,7 +77,11 @@ body {
 }
 
 .poople-title-subtitle {
+	display: flex;
+	align-self: stretch;
+	justify-content: space-between;
 	margin-top: 4px;
+	letter-spacing: 0;
 }
 
 .poople-mark {
