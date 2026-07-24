@@ -333,7 +333,7 @@ hintMode.addEventListener('change', () => {
 });
 
 async function getVersion() {
-	const versionURL = `/Poople_Solver/version.json?v=${encodeURIComponent(version || '2.0.4-BETA')}`;
+	const versionURL = `/Poople_Solver/version.json?v=${encodeURIComponent(version || '2.0.5-BETA')}`;
 	const request = new Request(versionURL, { cache: 'no-store' });
 	const response = await fetch(request);
 	if (!response.ok) {
@@ -345,7 +345,7 @@ async function getVersion() {
 }
 
 function getGameDay(epoch) {
-	return Math.floor((Date.now() - Date.parse(epoch)) / 86_400_000);
+	return Math.ceil((Date.now() - Date.parse(epoch)) / 86_400_000);
 }
 
 async function getLiveTodaysStartWord(gameDay) {
