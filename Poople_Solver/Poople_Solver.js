@@ -333,7 +333,7 @@ hintMode.addEventListener('change', () => {
 });
 
 async function getVersion() {
-	const versionURL = `/Poople_Solver/version.json?v=${encodeURIComponent(version || '2.0.6-BETA')}`;
+	const versionURL = `/Poople_Solver/version.json?v=${encodeURIComponent(version || '2.1.0-BETA')}`;
 	const request = new Request(versionURL, { cache: 'no-store' });
 	const response = await fetch(request);
 	if (!response.ok) {

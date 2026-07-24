@@ -1,12 +1,15 @@
 :root {
-	--poople-background: #202020;
-	--poople-surface: #292929;
-	--poople-text: lightgrey;
-	--poople-muted: #8c8c8c;
-	--poople-border: #707070;
-	--poople-brown: #67320b;
-	--poople-brown-light: #915d36;
-	--poople-blue: #4e7cff;
+	--poople-background: #211e1b;
+	--poople-surface: #2d2823;
+	--poople-surface-soft: #28231f;
+	--poople-text: #eadfd4;
+	--poople-muted: #aa9888;
+	--poople-border: #6f5a48;
+	--poople-brown: #8a5a2b;
+	--poople-brown-dark: #6f4621;
+	--poople-brown-light: #b47a46;
+	--poople-success: #79ad62;
+	--poople-error: #e3877e;
 }
 
 html,
@@ -41,7 +44,7 @@ body {
 	justify-content: space-between;
 	min-height: 64px;
 	padding: 7px 12px;
-	border-bottom: 1px solid rgb(112 112 112 / 50%);
+	border-bottom: 1px solid rgb(180 122 70 / 30%);
 }
 
 .ies-home {
@@ -117,9 +120,11 @@ body {
 .solver-form label {
 	display: block;
 	margin: 0 0 7px;
-	color: var(--poople-muted);
+	color: #c3aa94;
 	font-size: 13px;
 	font-weight: 600;
+	letter-spacing: .04em;
+	text-transform: uppercase;
 }
 
 .word-entry {
@@ -133,9 +138,9 @@ body {
 	height: 52px;
 	padding: 0 13px;
 	border: 2px solid var(--poople-border);
-	border-radius: 4px;
+	border-radius: 8px;
 	outline: 0;
-	background: transparent;
+	background: var(--poople-surface-soft);
 	color: var(--poople-text);
 	font-size: 25px;
 	font-weight: 750;
@@ -145,15 +150,15 @@ body {
 }
 
 #start-word:focus {
-	border-color: var(--poople-blue);
-	box-shadow: 0 0 0 3px rgb(78 124 255 / 18%);
+	border-color: var(--poople-brown-light);
+	box-shadow: 0 0 0 3px rgb(180 122 70 / 16%);
 }
 
 #solve-button,
 .hint-button {
 	border: 0;
-	border-radius: 4px;
-	background: var(--poople-blue);
+	border-radius: 8px;
+	background: var(--poople-brown);
 	color: white;
 	font: inherit;
 	font-weight: 700;
@@ -163,6 +168,19 @@ body {
 #solve-button {
 	min-width: 82px;
 	padding: 0 16px;
+	border: 1px solid var(--poople-brown-light);
+	box-shadow: 0 2px 0 var(--poople-brown-dark);
+	transition: background-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+#solve-button:hover,
+#solve-button:focus-visible {
+	background: #9b6633;
+}
+
+#solve-button:active {
+	box-shadow: none;
+	transform: translateY(2px);
 }
 
 #solve-button:disabled {
@@ -185,7 +203,7 @@ body {
 	width: 16px;
 	height: 16px;
 	margin: 0;
-	accent-color: var(--poople-blue);
+	accent-color: var(--poople-brown);
 	cursor: pointer;
 }
 
@@ -201,7 +219,7 @@ body {
 }
 
 .status.error {
-	color: #ff8e82;
+	color: var(--poople-error);
 }
 
 .solution {
@@ -265,7 +283,8 @@ body {
 	height: 48px;
 	place-items: center;
 	border: 2px solid var(--poople-border);
-	background: transparent;
+	border-radius: 8px;
+	background: var(--poople-surface);
 	color: var(--poople-text);
 	font-size: 23px;
 	font-weight: 750;
@@ -299,8 +318,8 @@ body {
 
 .reject-button:hover,
 .reject-button:focus-visible {
-	border-color: #ff8e82;
-	color: #ff8e82;
+	border-color: var(--poople-error);
+	color: var(--poople-error);
 }
 
 .path-help {
@@ -314,7 +333,7 @@ body {
 	width: min(100%, 330px);
 	margin: 22px auto 0;
 	padding-top: 15px;
-	border-top: 1px solid rgb(112 112 112 / 40%);
+	border-top: 1px solid rgb(180 122 70 / 25%);
 }
 
 .hints {
@@ -329,8 +348,15 @@ body {
 	padding: 8px 11px;
 	background: var(--poople-surface);
 	color: var(--poople-text);
+	border: 1px solid var(--poople-border);
 	font-size: 12px;
 	text-transform: uppercase;
+}
+
+.hint-button:hover,
+.hint-button:focus-visible {
+	border-color: var(--poople-brown-light);
+	background: #3a3027;
 }
 
 .hint-button.best {
@@ -350,15 +376,15 @@ body {
 }
 
 .hint-button.best strong {
-	color: #79ad62;
+	color: var(--poople-success);
 }
 
 .hint-start-over {
 	margin-top: 13px;
 	padding: 8px 14px;
 	border: 1px solid var(--poople-border);
-	border-radius: 4px;
-	background: transparent;
+	border-radius: 8px;
+	background: var(--poople-surface);
 	color: var(--poople-text);
 	font: inherit;
 	font-size: 12px;
@@ -368,7 +394,7 @@ body {
 .how-to {
 	width: min(100%, 330px);
 	margin: 24px auto 0;
-	border-top: 1px solid rgb(112 112 112 / 40%);
+	border-top: 1px solid rgb(180 122 70 / 25%);
 	color: var(--poople-muted);
 	font-size: 12px;
 	text-align: left;
@@ -441,16 +467,29 @@ body {
 
 @media (prefers-color-scheme: light) {
 	:root {
-		--poople-background: #eee;
-		--poople-surface: #dedede;
-		--poople-text: #111;
-		--poople-muted: #666;
-		--poople-border: #999;
+		--poople-background: #f7f1ea;
+		--poople-surface: #efe6dd;
+		--poople-surface-soft: #fffaf4;
+		--poople-text: #3a2a1c;
+		--poople-muted: #7a6a59;
+		--poople-border: #c9b29c;
 		--poople-brown: #915d36;
+		--poople-brown-dark: #6f4621;
+		--poople-brown-light: #a86b38;
+		--poople-error: #b3261e;
 	}
 
 	.filter-white {
 		filter: none;
+	}
+
+	.solver-form label {
+		color: #5a3e2b;
+	}
+
+	.hint-button:hover,
+	.hint-button:focus-visible {
+		background: #f3e9dd;
 	}
 }
 
