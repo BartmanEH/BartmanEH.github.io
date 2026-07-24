@@ -81,14 +81,10 @@ body {
 }
 
 .poople-mark {
-	display: grid;
+	display: block;
 	width: 34px;
 	height: 34px;
-	place-items: center;
-	border-radius: 6px;
-	background: var(--poople-brown);
-	font-family: sans-serif;
-	font-size: 20px;
+	object-fit: contain;
 }
 
 .intro {
@@ -171,6 +167,28 @@ body {
 	opacity: .6;
 }
 
+.mode-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	margin: 13px auto 0;
+	color: var(--poople-muted);
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.mode-toggle input {
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	accent-color: var(--poople-blue);
+	cursor: pointer;
+}
+
+.mode-toggle strong {
+	color: var(--poople-text);
+}
+
 .status {
 	min-height: 20px;
 	margin: 12px 0;
@@ -231,6 +249,10 @@ body {
 	border: 0;
 	background: transparent;
 	cursor: pointer;
+}
+
+.word-button:disabled {
+	cursor: default;
 }
 
 .letter-box {
@@ -307,11 +329,36 @@ body {
 	text-transform: uppercase;
 }
 
+.hint-button.best {
+	border: 1px solid #6f9e5a;
+	background: rgb(111 158 90 / 18%);
+}
+
+.hint-button .changed-letter {
+	color: #c98756;
+}
+
 .hint-button strong {
 	margin-left: 4px;
 	color: var(--poople-muted);
 	font-size: 10px;
 	font-weight: 500;
+}
+
+.hint-button.best strong {
+	color: #79ad62;
+}
+
+.hint-start-over {
+	margin-top: 13px;
+	padding: 8px 14px;
+	border: 1px solid var(--poople-border);
+	border-radius: 4px;
+	background: transparent;
+	color: var(--poople-text);
+	font: inherit;
+	font-size: 12px;
+	cursor: pointer;
 }
 
 .how-to {

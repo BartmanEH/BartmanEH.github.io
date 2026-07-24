@@ -5,15 +5,21 @@ let graph;
 let distances;
 let activeStart = '';
 let version = '';
+let hintStart = '';
+let hintCurrent = '';
+let hintTrail = [];
 const rejected = new Set();
 
 const form = document.querySelector('#solver-form');
 const input = document.querySelector('#start-word');
 const solveButton = document.querySelector('#solve-button');
 const resetButton = document.querySelector('#reset-button');
+const hintMode = document.querySelector('#hint-mode');
 const status = document.querySelector('#status');
 const solution = document.querySelector('#solution');
+const solutionHeading = document.querySelector('#solution-heading');
 const pathContainer = document.querySelector('#path');
+const pathHelp = document.querySelector('.path-help');
 const stepCount = document.querySelector('#step-count');
 const hintsSection = document.querySelector('#hints-section');
 const hintsContainer = document.querySelector('#hints');
@@ -121,6 +127,8 @@ function makeWordButton(word, previousWord) {
 }
 
 function renderHints(word, path) {
+	hintsSection.querySelector('.hint-start-over')?.remove();
+	hintsSection.querySelector('h2').textContent = 'Other next moves';
 	const pathNextWord = path[1];
 	const alternatives = rankedNextSteps(word)
 		.filter(option => option.word !== pathNextWord)
@@ -143,8 +151,89 @@ function renderHints(word, path) {
 	hintsSection.hidden = false;
 }
 
+function renderHintTrail() {
+	pathContainer.replaceChildren();
+	const trail = [...hintTrail, hintCurrent];
+
+	trail.forEach((word, index) => {
+		const row = document.createElement('div');
+		row.className = 'path-row';
+		const wordButton = makeWordButton(word, trail[index - 1]);
+		wordButton.disabled = true;
+		row.append(wordButton);
+		pathContainer.append(row);
+	});
+
+	solutionHeading.textContent = 'Your path';
+	pathHelp.textContent = 'Choose one of the ranked next words below to continue without revealing the full solution.';
+	stepCount.textContent = `${hintTrail.length} ${hintTrail.length === 1 ? 'step' : 'steps'}`;
+	solution.hidden = false;
+}
+
+function makeHintOption(option, currentDistance) {
+	const button = document.createElement('button');
+	const isBest = option.stepsRemaining === currentDistance - 1;
+	button.type = 'button';
+	button.className = `hint-button${isBest ? ' best' : ''}`;
+	button.title = `${option.stepsRemaining} steps from POOP${isBest ? ' — makes progress' : ''}`;
+
+	for (let position = 0; position < option.word.length; position += 1) {
+		const letter = document.createElement('span');
+		letter.textContent = option.word[position];
+		if (option.word[position] !== hintCurrent[position]) {
+			letter.className = 'changed-letter';
+		}
+		button.append(letter);
+	}
+
+	const distance = document.createElement('strong');
+	distance.textContent = `${option.stepsRemaining} to go${isBest ? ' ✓' : ''}`;
+	button.append(distance);
+	button.addEventListener('click', () => {
+		hintTrail.push(hintCurrent);
+		hintCurrent = option.word;
+		renderHintMode();
+	});
+	return button;
+}
+
+function renderHintMode() {
+	renderHintTrail();
+	hintsContainer.replaceChildren();
+	hintsSection.querySelector('.hint-start-over')?.remove();
+	hintsSection.hidden = false;
+
+	if (hintCurrent === TARGET) {
+		hintsSection.querySelector('h2').textContent = 'You made it!';
+		setStatus(`Reached POOP in ${hintTrail.length} ${hintTrail.length === 1 ? 'step' : 'steps'}.`);
+	} else {
+		const currentIndex = graph.index.get(hintCurrent);
+		const currentDistance = distances[currentIndex];
+		const options = rankedNextSteps(hintCurrent).slice(0, 8);
+		hintsSection.querySelector('h2').textContent = 'Choose your next word';
+		setStatus(`Pick a next move from ${hintCurrent.toUpperCase()} toward POOP.`);
+
+		for (const option of options) {
+			hintsContainer.append(makeHintOption(option, currentDistance));
+		}
+	}
+
+	const startOver = document.createElement('button');
+	startOver.type = 'button';
+	startOver.className = 'hint-start-over';
+	startOver.textContent = 'Start over';
+	startOver.addEventListener('click', () => {
+		hintCurrent = hintStart;
+		hintTrail = [];
+		renderHintMode();
+	});
+	hintsSection.append(startOver);
+}
+
 function renderPath(path) {
 	pathContainer.replaceChildren();
+	solutionHeading.textContent = 'Shortest path';
+	pathHelp.textContent = 'Tap a word to solve again from there. If Poople rejects a suggested word, exclude it and reroute.';
 
 	path.forEach((word, index) => {
 		const row = document.createElement('div');
@@ -205,6 +294,13 @@ function solve(requestedWord, successMessage = '') {
 	}
 
 	activeStart = start;
+	if (hintMode.checked) {
+		hintStart = start;
+		hintCurrent = start;
+		hintTrail = [];
+		renderHintMode();
+		return;
+	}
 	setStatus(successMessage || `A shortest route from ${start.toUpperCase()} to POOP.`);
 	renderPath(path);
 }
@@ -230,9 +326,14 @@ input.addEventListener('input', () => {
 });
 
 resetButton.addEventListener('click', reset);
+hintMode.addEventListener('change', () => {
+	if (input.value.length === 4) {
+		solve(input.value);
+	}
+});
 
 async function getVersion() {
-	const versionURL = `/Poople_Solver/version.json?v=${encodeURIComponent(version || '1.0.0-RELEASE')}`;
+	const versionURL = `/Poople_Solver/version.json?v=${encodeURIComponent(version || '2.0.1-BETA')}`;
 	const request = new Request(versionURL, { cache: 'no-store' });
 	const response = await fetch(request);
 	if (!response.ok) {
