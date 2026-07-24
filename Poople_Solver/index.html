@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="Innovative Engineering Services (IES) - Poople Solver">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="theme-color" content="#202020">
+		<meta name="apple-mobile-web-app-title" content="Poople Solver">
+		<meta name="application-name" content="Poople Solver">
+		<link rel="apple-touch-icon" sizes="180x180" href="../img/favicon/apple-touch-icon-180x180.png">
+		<link rel="icon" type="image/png" href="../img/favicon/favicon-32x32.png" sizes="32x32">
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="./Poople_Solver.css">
+		<title>IES: Poople Solver</title>
+		<script type="module" src="./Poople_Solver.js"></script>
+	</head>
+	<body>
+		<div id="root" class="wrapper Poople_Solver">
+			<header class="header poople-header">
+				<a class="ies-home" href="../index.html" aria-label="Return to IES home page">
+					<img alt="IES logo" src="../img/IES_logo.svg" class="filter-white">
+				</a>
+				<button id="reset-button" class="poople-title" type="button" aria-label="Reset Poople Solver">
+					<span>POOPLE</span>
+					<span class="poople-mark" aria-hidden="true">💩</span>
+				</button>
+			</header>
+
+			<main class="content">
+				<section class="intro" aria-labelledby="solver-heading">
+					<h1 id="solver-heading">Poople Solver</h1>
+					<p>Turn your starting word into <strong>POOP</strong>, changing exactly one letter at a time.</p>
+				</section>
+
+				<form id="solver-form" class="solver-form">
+					<label for="start-word">Starting word</label>
+					<div class="word-entry">
+						<input id="start-word" name="start-word" type="text" maxlength="4" minlength="4"
+							inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false"
+							placeholder="WORD" aria-describedby="status">
+						<button id="solve-button" type="submit">Solve</button>
+					</div>
+				</form>
+
+				<p id="status" class="status" role="status" aria-live="polite">Loading word list…</p>
+
+				<section id="solution" class="solution" aria-labelledby="solution-heading" hidden>
+					<div class="solution-heading-row">
+						<h2 id="solution-heading">Shortest path</h2>
+						<span id="step-count" class="step-count"></span>
+					</div>
+					<div id="path" class="path"></div>
+					<p class="path-help">Tap a word to solve again from there. If Poople rejects a suggested word, exclude it and reroute.</p>
+				</section>
+
+				<section id="hints-section" class="hints-section" aria-labelledby="hints-heading" hidden>
+					<h2 id="hints-heading">Other next moves</h2>
+					<div id="hints" class="hints"></div>
+				</section>
+
+				<details class="how-to">
+					<summary>How this solver works</summary>
+					<ul>
+						<li>Enter any four-letter word and select <strong>Solve</strong>.</li>
+						<li>Each row differs from the previous row by one highlighted letter.</li>
+						<li>Select <strong>Not accepted?</strong> to exclude a word and find another route.</li>
+						<li>The dictionary is broader than Poople’s own list, so an occasional suggestion may not be accepted in the game.</li>
+					</ul>
+				</details>
+			</main>
+
+			<footer class="footer">
+				<span>&copy;2026 <img alt="Bart" src="../img/BartmanEH.png" class="footer_img"> Stassen, P.Eng.</span>
+				<span id="version">v1.0</span>
+			</footer>
+		</div>
+	</body>
+</html>

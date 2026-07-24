@@ -1,0 +1,381 @@
+:root {
+	--poople-background: #202020;
+	--poople-surface: #292929;
+	--poople-text: lightgrey;
+	--poople-muted: #8c8c8c;
+	--poople-border: #707070;
+	--poople-brown: #67320b;
+	--poople-brown-light: #915d36;
+	--poople-blue: #4e7cff;
+}
+
+html,
+body {
+	background: var(--poople-background);
+	color: var(--poople-text);
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.Poople_Solver {
+	box-sizing: border-box;
+	width: min(100%, 400px);
+	margin: 0 auto;
+	background: var(--poople-background);
+	color: var(--poople-text);
+	text-align: center;
+}
+
+.Poople_Solver *,
+.Poople_Solver *::before,
+.Poople_Solver *::after {
+	box-sizing: border-box;
+}
+
+.Poople_Solver .content {
+	padding: 0 16px 72px;
+}
+
+.poople-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-height: 64px;
+	padding: 7px 12px;
+	border-bottom: 1px solid rgb(112 112 112 / 50%);
+}
+
+.ies-home {
+	display: flex;
+	align-items: center;
+}
+
+.ies-home img {
+	width: 130px;
+	max-height: 45px;
+}
+
+.poople-title {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	padding: 4px 0;
+	border: 0;
+	background: transparent;
+	color: var(--poople-text);
+	font-family: "Arial Black", Arial, sans-serif;
+	font-size: 18px;
+	font-weight: 900;
+	letter-spacing: .02em;
+	cursor: pointer;
+}
+
+.poople-mark {
+	display: grid;
+	width: 34px;
+	height: 34px;
+	place-items: center;
+	border-radius: 6px;
+	background: var(--poople-brown);
+	font-family: sans-serif;
+	font-size: 20px;
+}
+
+.intro {
+	margin: 24px auto 20px;
+}
+
+.intro h1 {
+	margin: 0 0 7px;
+	font-size: 25px;
+}
+
+.intro p {
+	max-width: 330px;
+	margin: auto;
+	color: var(--poople-muted);
+	font-size: 14px;
+	line-height: 1.45;
+}
+
+.solver-form {
+	width: min(100%, 330px);
+	margin: auto;
+	text-align: left;
+}
+
+.solver-form label {
+	display: block;
+	margin: 0 0 7px;
+	color: var(--poople-muted);
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.word-entry {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 8px;
+}
+
+#start-word {
+	min-width: 0;
+	height: 52px;
+	padding: 0 13px;
+	border: 2px solid var(--poople-border);
+	border-radius: 4px;
+	outline: 0;
+	background: transparent;
+	color: var(--poople-text);
+	font-size: 25px;
+	font-weight: 750;
+	letter-spacing: .24em;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+#start-word:focus {
+	border-color: var(--poople-blue);
+	box-shadow: 0 0 0 3px rgb(78 124 255 / 18%);
+}
+
+#solve-button,
+.hint-button {
+	border: 0;
+	border-radius: 4px;
+	background: var(--poople-blue);
+	color: white;
+	font: inherit;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+#solve-button {
+	min-width: 82px;
+	padding: 0 16px;
+}
+
+#solve-button:disabled {
+	cursor: wait;
+	filter: grayscale(1);
+	opacity: .6;
+}
+
+.status {
+	min-height: 20px;
+	margin: 12px 0;
+	color: var(--poople-muted);
+	font-size: 13px;
+}
+
+.status.error {
+	color: #ff8e82;
+}
+
+.solution {
+	width: min(100%, 330px);
+	margin: 14px auto 0;
+}
+
+.solution-heading-row {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	margin-bottom: 8px;
+}
+
+.solution h2,
+.hints-section h2 {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 650;
+}
+
+.step-count {
+	color: var(--poople-muted);
+	font-size: 12px;
+}
+
+.path {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+}
+
+.path-row {
+	position: relative;
+	display: grid;
+	grid-template-columns: 1fr auto;
+	align-items: center;
+	width: 100%;
+}
+
+.word-button {
+	display: flex;
+	justify-content: center;
+	gap: 5px;
+	width: max-content;
+	margin: auto;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+}
+
+.letter-box {
+	display: grid;
+	width: 48px;
+	height: 48px;
+	place-items: center;
+	border: 2px solid var(--poople-border);
+	background: transparent;
+	color: var(--poople-text);
+	font-size: 23px;
+	font-weight: 750;
+	text-transform: uppercase;
+}
+
+.letter-box.changed {
+	border-color: var(--poople-brown-light);
+	background: var(--poople-brown);
+}
+
+.path-row:last-child .letter-box {
+	border-color: var(--poople-brown-light);
+	background: var(--poople-brown);
+}
+
+.reject-button {
+	position: absolute;
+	right: 0;
+	width: 30px;
+	height: 30px;
+	padding: 0;
+	border: 1px solid var(--poople-border);
+	border-radius: 50%;
+	background: transparent;
+	color: var(--poople-muted);
+	font-size: 17px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.reject-button:hover,
+.reject-button:focus-visible {
+	border-color: #ff8e82;
+	color: #ff8e82;
+}
+
+.path-help {
+	margin: 12px auto 0;
+	color: var(--poople-muted);
+	font-size: 12px;
+	line-height: 1.4;
+}
+
+.hints-section {
+	width: min(100%, 330px);
+	margin: 22px auto 0;
+	padding-top: 15px;
+	border-top: 1px solid rgb(112 112 112 / 40%);
+}
+
+.hints {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 7px;
+	margin-top: 10px;
+}
+
+.hint-button {
+	padding: 8px 11px;
+	background: var(--poople-surface);
+	color: var(--poople-text);
+	font-size: 12px;
+	text-transform: uppercase;
+}
+
+.hint-button strong {
+	margin-left: 4px;
+	color: var(--poople-muted);
+	font-size: 10px;
+	font-weight: 500;
+}
+
+.how-to {
+	width: min(100%, 330px);
+	margin: 24px auto 0;
+	border-top: 1px solid rgb(112 112 112 / 40%);
+	color: var(--poople-muted);
+	font-size: 12px;
+	text-align: left;
+}
+
+.how-to summary {
+	padding: 14px 0;
+	color: var(--poople-text);
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.how-to ul {
+	margin: 0;
+	padding-left: 21px;
+	line-height: 1.55;
+}
+
+.Poople_Solver .footer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 52px;
+	color: var(--poople-muted);
+	font-size: 12px;
+}
+
+.Poople_Solver .footer .footer_img {
+	height: 31px;
+	vertical-align: middle;
+}
+
+.Poople_Solver .footer #version {
+	position: absolute;
+	right: 10px;
+	font-size: 11px;
+}
+
+[hidden] {
+	display: none !important;
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+		--poople-background: #eee;
+		--poople-surface: #dedede;
+		--poople-text: #111;
+		--poople-muted: #666;
+		--poople-border: #999;
+		--poople-brown: #915d36;
+	}
+
+	.filter-white {
+		filter: none;
+	}
+}
+
+@media (max-width: 370px) {
+	.ies-home img {
+		width: 110px;
+	}
+
+	.poople-title {
+		font-size: 16px;
+	}
+
+	.letter-box {
+		width: 44px;
+		height: 44px;
+	}
+}
