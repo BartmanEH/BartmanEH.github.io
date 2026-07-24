@@ -32,7 +32,7 @@ body {
 }
 
 .Poople_Solver .content {
-	padding: 0 16px 72px;
+	padding: 0 16px 36px;
 }
 
 .poople-header {
@@ -327,10 +327,20 @@ body {
 }
 
 .Poople_Solver .footer {
+	height: 36px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 52px;
+	line-height: 1.2;
+	white-space: nowrap;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	max-width: none;
+	transform: none;
+	z-index: auto;
+	overflow: visible;
 	color: var(--poople-muted);
 	font-size: 12px;
 }
@@ -342,12 +352,29 @@ body {
 
 .Poople_Solver .footer #version {
 	position: absolute;
-	right: 10px;
-	font-size: 11px;
+	left: 0;
+	right: 0;
+	top: 36px;
+	display: block;
+	margin: 0;
+	font-size: 12px;
+	line-height: 1;
 }
 
 [hidden] {
 	display: none !important;
+}
+
+@supports (-webkit-touch-callout: none) {
+	.Poople_Solver .footer {
+		height: 32px;
+	}
+
+	.Poople_Solver .footer #version {
+		top: 50px;
+		font-size: 12px;
+		line-height: 1;
+	}
 }
 
 @media (prefers-color-scheme: light) {

@@ -4,6 +4,7 @@ let words = [];
 let graph;
 let distances;
 let activeStart = '';
+let version = '';
 const rejected = new Set();
 
 const form = document.querySelector('#solver-form');
@@ -230,6 +231,18 @@ input.addEventListener('input', () => {
 
 resetButton.addEventListener('click', reset);
 
+async function getVersion() {
+	const versionURL = `/Poople_Solver/version.json?v=${encodeURIComponent(version || '1.0.0-RELEASE')}`;
+	const request = new Request(versionURL, { cache: 'no-store' });
+	const response = await fetch(request);
+	if (!response.ok) {
+		throw new Error(`Version request failed (${response.status})`);
+	}
+	const versionData = await response.json();
+	version = `${versionData.buildMajor}.${versionData.buildMinor}.${versionData.buildRevision}-${versionData.buildTag}`;
+	document.querySelector('#version').textContent = `v${version}`;
+}
+
 async function initialise() {
 	try {
 		const response = await fetch('./words.json');
@@ -249,4 +262,5 @@ async function initialise() {
 }
 
 solveButton.disabled = true;
+getVersion().catch(error => console.warn('Could not load version:', error));
 initialise();
