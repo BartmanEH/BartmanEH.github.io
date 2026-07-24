@@ -333,7 +333,7 @@ hintMode.addEventListener('change', () => {
 });
 
 async function getVersion() {
-	const versionURL = `/Poople_Solver/version.json?v=${encodeURIComponent(version || '2.0.1-BETA')}`;
+	const versionURL = `/Poople_Solver/version.json?v=${encodeURIComponent(version || '2.0.4-BETA')}`;
 	const request = new Request(versionURL, { cache: 'no-store' });
 	const response = await fetch(request);
 	if (!response.ok) {
@@ -344,18 +344,99 @@ async function getVersion() {
 	document.querySelector('#version').textContent = `v${version}`;
 }
 
+function getGameDay(epoch) {
+	return Math.floor((Date.now() - Date.parse(epoch)) / 86_400_000);
+}
+
+async function getLiveTodaysStartWord(gameDay) {
+	const homepageResponse = await fetch('https://poople.io/', { cache: 'no-store' });
+	if (!homepageResponse.ok) {
+		throw new Error(`Live Poople homepage request failed (${homepageResponse.status})`);
+	}
+
+	const homepage = await homepageResponse.text();
+	const scripts = [...homepage.matchAll(/<script[^>]+src="([^"]+\.js)"[^>]*>/gi)];
+	const bundleScript = scripts.find(([, source]) => source.includes('/assets/index-'));
+	if (!bundleScript) {
+		throw new Error('Could not find Poople’s live game bundle');
+	}
+
+	const bundleURL = new URL(bundleScript[1], 'https://poople.io/');
+	const bundleResponse = await fetch(bundleURL, { cache: 'no-store' });
+	if (!bundleResponse.ok) {
+		throw new Error(`Live Poople bundle request failed (${bundleResponse.status})`);
+	}
+
+	const bundle = await bundleResponse.text();
+	const marker = 'startWords=`';
+	const dataStart = bundle.indexOf(marker);
+	const dataEnd = dataStart === -1 ? -1 : bundle.indexOf('`', dataStart + marker.length);
+	if (dataStart === -1 || dataEnd === -1) {
+		throw new Error('Could not find Poople’s live start-word schedule');
+	}
+
+	const liveStartWords = bundle
+		.slice(dataStart + marker.length, dataEnd)
+		.replaceAll('\\r', '')
+		.split('\n')
+		.filter(Boolean)
+		.map(row => row.split(',')[0].toLowerCase());
+
+	const todaysStartWord = liveStartWords[gameDay];
+	if (!/^[a-z]{4}$/.test(todaysStartWord || '')) {
+		throw new Error(`Poople’s live schedule has no word for game day ${gameDay}`);
+	}
+	return todaysStartWord;
+}
+
 async function initialise() {
 	try {
-		const response = await fetch('./words.json');
-		if (!response.ok) {
-			throw new Error(`Dictionary request failed (${response.status})`);
+		const [wordsResponse, startWordsResponse] = await Promise.all([
+			fetch('./words.json'),
+			fetch('./start-words.json')
+		]);
+		if (!wordsResponse.ok) {
+			throw new Error(`Dictionary request failed (${wordsResponse.status})`);
 		}
-		words = await response.json();
+		if (!startWordsResponse.ok) {
+			throw new Error(`Start-word request failed (${startWordsResponse.status})`);
+		}
+		words = await wordsResponse.json();
+		const startWords = await startWordsResponse.json();
 		graph = buildGraph(words);
 		distances = distancesToTarget();
+		const gameDay = getGameDay(startWords.epoch);
+		const todaysStartWord = startWords.words[gameDay];
+		if (todaysStartWord) {
+			input.value = todaysStartWord.toUpperCase();
+		}
 		solveButton.disabled = false;
-		setStatus('Ready for a four-letter starting word.');
+		setStatus(todaysStartWord
+			? `Today’s Poople starting word is ${todaysStartWord.toUpperCase()}.`
+			: 'Ready for a four-letter starting word.');
 		input.focus();
+
+		getLiveTodaysStartWord(gameDay).then(liveStartWord => {
+			const localStartWord = todaysStartWord?.toUpperCase() || '';
+			const liveWord = liveStartWord.toUpperCase();
+			const fieldStillAutomatic = input.value === localStartWord || input.value === '';
+			if (fieldStillAutomatic && localStartWord && liveWord !== localStartWord) {
+				const useLiveWord = window.confirm(
+					`Poople’s live starting word is ${liveWord}, but the local schedule says ${localStartWord}.\n\nUse the live word?`
+				);
+				if (useLiveWord) {
+					input.value = liveWord;
+					setStatus(`Using Poople’s live starting word: ${liveWord}.`);
+				} else {
+					setStatus(`Keeping the local starting word: ${localStartWord}.`, true);
+				}
+			} else if (fieldStillAutomatic) {
+				input.value = liveWord;
+				setStatus(`Today’s Poople starting word is ${liveWord}.`);
+			}
+		}).catch(error => {
+			console.warn('Could not check today’s live Poople starting word:', error);
+		});
 	} catch (error) {
 		console.error(error);
 		setStatus('The word list could not be loaded. Please refresh and try again.', true);
