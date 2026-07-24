@@ -1,13 +1,13 @@
 :root {
-	--poople-background: #211e1b;
-	--poople-surface: #2d2823;
-	--poople-surface-soft: #28231f;
-	--poople-text: #eadfd4;
-	--poople-muted: #aa9888;
-	--poople-border: #6f5a48;
-	--poople-brown: #8a5a2b;
-	--poople-brown-dark: #6f4621;
-	--poople-brown-light: #b47a46;
+	--poople-background: #202020;
+	--poople-surface: rgb(127 127 127 / 20%);
+	--poople-surface-soft: transparent;
+	--poople-text: lightgrey;
+	--poople-muted: #707070;
+	--poople-border: #707070;
+	--poople-brown: #67320b;
+	--poople-brown-dark: #4f2508;
+	--poople-brown-light: #8c4410;
 	--poople-success: #79ad62;
 	--poople-error: #e3877e;
 }
@@ -44,7 +44,7 @@ body {
 	justify-content: space-between;
 	min-height: 64px;
 	padding: 7px 12px;
-	border-bottom: 1px solid rgb(180 122 70 / 30%);
+	border-bottom: 1px solid rgb(112 112 112 / 50%);
 }
 
 .ies-home {
@@ -120,7 +120,7 @@ body {
 .solver-form label {
 	display: block;
 	margin: 0 0 7px;
-	color: #c3aa94;
+	color: var(--poople-muted);
 	font-size: 13px;
 	font-weight: 600;
 	letter-spacing: .04em;
@@ -138,7 +138,7 @@ body {
 	height: 52px;
 	padding: 0 13px;
 	border: 2px solid var(--poople-border);
-	border-radius: 8px;
+	border-radius: 0;
 	outline: 0;
 	background: var(--poople-surface-soft);
 	color: var(--poople-text);
@@ -151,13 +151,13 @@ body {
 
 #start-word:focus {
 	border-color: var(--poople-brown-light);
-	box-shadow: 0 0 0 3px rgb(180 122 70 / 16%);
+	box-shadow: 0 0 0 2px rgb(145 93 54 / 20%);
 }
 
 #solve-button,
 .hint-button {
 	border: 0;
-	border-radius: 8px;
+	border-radius: 2px;
 	background: var(--poople-brown);
 	color: white;
 	font: inherit;
@@ -168,19 +168,17 @@ body {
 #solve-button {
 	min-width: 82px;
 	padding: 0 16px;
-	border: 1px solid var(--poople-brown-light);
-	box-shadow: 0 2px 0 var(--poople-brown-dark);
-	transition: background-color .15s ease, box-shadow .15s ease, transform .15s ease;
+	border: 1px solid var(--poople-border);
+	transition: filter .1s ease;
 }
 
 #solve-button:hover,
 #solve-button:focus-visible {
-	background: #9b6633;
+	filter: brightness(115%);
 }
 
 #solve-button:active {
-	box-shadow: none;
-	transform: translateY(2px);
+	filter: brightness(80%);
 }
 
 #solve-button:disabled {
@@ -264,7 +262,7 @@ body {
 .word-button {
 	display: flex;
 	justify-content: center;
-	gap: 5px;
+	gap: .4rem;
 	width: max-content;
 	margin: auto;
 	padding: 0;
@@ -279,25 +277,25 @@ body {
 
 .letter-box {
 	display: grid;
-	width: 48px;
-	height: 48px;
+	width: min(4rem, 15vw);
+	height: min(4rem, 15vw);
 	place-items: center;
 	border: 2px solid var(--poople-border);
-	border-radius: 8px;
-	background: var(--poople-surface);
+	border-radius: 0;
+	background: transparent;
 	color: var(--poople-text);
-	font-size: 23px;
-	font-weight: 750;
+	font-size: 2rem;
+	font-weight: 700;
 	text-transform: uppercase;
 }
 
 .letter-box.changed {
-	border-color: var(--poople-brown-light);
+	border-color: var(--poople-border);
 	background: var(--poople-brown);
 }
 
 .path-row:last-child .letter-box {
-	border-color: var(--poople-brown-light);
+	border-color: var(--poople-border);
 	background: var(--poople-brown);
 }
 
@@ -333,7 +331,7 @@ body {
 	width: min(100%, 330px);
 	margin: 22px auto 0;
 	padding-top: 15px;
-	border-top: 1px solid rgb(180 122 70 / 25%);
+	border-top: 1px solid rgb(112 112 112 / 40%);
 }
 
 .hints {
@@ -349,6 +347,7 @@ body {
 	background: var(--poople-surface);
 	color: var(--poople-text);
 	border: 1px solid var(--poople-border);
+	border-radius: 2px;
 	font-size: 12px;
 	text-transform: uppercase;
 }
@@ -356,7 +355,7 @@ body {
 .hint-button:hover,
 .hint-button:focus-visible {
 	border-color: var(--poople-brown-light);
-	background: #3a3027;
+	filter: brightness(90%);
 }
 
 .hint-button.best {
@@ -383,7 +382,7 @@ body {
 	margin-top: 13px;
 	padding: 8px 14px;
 	border: 1px solid var(--poople-border);
-	border-radius: 8px;
+	border-radius: 2px;
 	background: var(--poople-surface);
 	color: var(--poople-text);
 	font: inherit;
@@ -394,7 +393,7 @@ body {
 .how-to {
 	width: min(100%, 330px);
 	margin: 24px auto 0;
-	border-top: 1px solid rgb(180 122 70 / 25%);
+	border-top: 1px solid rgb(112 112 112 / 40%);
 	color: var(--poople-muted);
 	font-size: 12px;
 	text-align: left;
@@ -467,15 +466,15 @@ body {
 
 @media (prefers-color-scheme: light) {
 	:root {
-		--poople-background: #f7f1ea;
-		--poople-surface: #efe6dd;
-		--poople-surface-soft: #fffaf4;
-		--poople-text: #3a2a1c;
-		--poople-muted: #7a6a59;
-		--poople-border: #c9b29c;
+		--poople-background: #eee;
+		--poople-surface: rgb(127 127 127 / 20%);
+		--poople-surface-soft: transparent;
+		--poople-text: #111;
+		--poople-muted: #666;
+		--poople-border: #666;
 		--poople-brown: #915d36;
-		--poople-brown-dark: #6f4621;
-		--poople-brown-light: #a86b38;
+		--poople-brown-dark: #764928;
+		--poople-brown-light: #915d36;
 		--poople-error: #b3261e;
 	}
 
@@ -484,12 +483,12 @@ body {
 	}
 
 	.solver-form label {
-		color: #5a3e2b;
+		color: var(--poople-muted);
 	}
 
 	.hint-button:hover,
 	.hint-button:focus-visible {
-		background: #f3e9dd;
+		filter: brightness(90%);
 	}
 }
 
@@ -500,10 +499,5 @@ body {
 
 	.poople-title {
 		font-size: 16px;
-	}
-
-	.letter-box {
-		width: 44px;
-		height: 44px;
 	}
 }
