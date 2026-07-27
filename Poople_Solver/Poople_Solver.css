@@ -390,6 +390,11 @@ body {
 	cursor: pointer;
 }
 
+.hint-start-over:disabled {
+	cursor: default;
+	opacity: .45;
+}
+
 .how-to {
 	width: min(100%, 330px);
 	margin: 24px auto 0;

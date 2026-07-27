@@ -242,6 +242,7 @@ function renderHintMode() {
 	startOver.type = 'button';
 	startOver.className = 'hint-start-over';
 	startOver.textContent = 'Start over';
+	startOver.disabled = hintTrail.length === 0 && rejected.size === 0;
 	startOver.addEventListener('click', () => {
 		rejected.clear();
 		distances = distancesToTarget();
