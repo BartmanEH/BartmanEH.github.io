@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en-CA">
+	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="Innovative Engineering Services (IES)">
+		<meta name="viewport" content="initial-scale=1.2, maximum-scale=1.2">
+		<meta name="apple-mobile-web-app-title" content="IES">
+		<meta name="application-name" content="IES">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<link rel="apple-touch-icon" sizes="57x57" href="../img/favicon/apple-touch-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../img/favicon/apple-touch-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../img/favicon/apple-touch-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../img/favicon/apple-touch-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="../img/favicon/apple-touch-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../img/favicon/apple-touch-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="../img/favicon/apple-touch-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../img/favicon/apple-touch-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="../img/favicon/apple-touch-icon-180x180.png">
+		<link rel="icon" type="image/png" href="../img/favicon/favicon-192x192.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="../img/favicon/favicon-160x160.png" sizes="160x160">
+		<link rel="icon" type="image/png" href="../img/favicon/favicon-96x96.png" sizes="96x96">
+		<link rel="icon" type="image/png" href="../img/favicon/favicon-16x16.png" sizes="16x16">
+		<link rel="icon" type="image/png" href="../img/favicon/favicon-32x32.png" sizes="32x32">
+		<meta name="msapplication-TileColor" content="#2b5797">
+		<meta name="msapplication-TileImage" content="../img/favicon/mstile-144x144.png">
+		<script src="jquery-ui/jquery-2.2.4.min.js"></script>
+		<script src="jquery-ui/jquery-ui-1.11.4.min.js"></script>
+		<link type="text/css" rel="stylesheet" href="jquery-ui/jquery-ui.css">
+		<link type="text/css" rel="stylesheet" href="style.css">
+		<link rel="prefetch" href="../img/IES_logo.svg">
+		<link rel="prefetch" href="img/DVB-S_small_edit.bmp">
+		<link rel="prefetch" href="img/DVB-S2_small_edit.bmp">
+		<title>IES: DVB Calculator</title>
+		<script src="main_form.js?v=20260226g"></script>
+	</head>
+	<body>
+		<div class="wrapper DVB_Calc">
+			<div class="header">
+				<div id="header_container" class="flex-container flex-space-around">
+					<div id="IES_logo" class="flex-item" style="width: 50%; ">
+						<form action="../" method="get">
+							<input type="image" id="IES_logo_img" alt="IES logo" src="../img/IES_logo.svg" style="height:44px;" class="filter-white">
+						</form>
+					</div>
+					<div id="DVB_logo" class="flex-item" style="width: 50%; text-align: right">
+						<img id="DVB_logo_img" alt="DVB logo" src="img/DVB-S2X_edit.bmp" style="height: 44px;">
+					</div>
+				</div>
+			</div><!-- header -->
+			<div class="content">
+				<div id="Calculator_Mode" class="flex-container">
+					<div class="flex-item main-left">
+						<label id="Calculator_Mode_label" class="main-label">Priority Input</label><br>
+					</div>
+					<div id="Calculator_Mode_select" class="flex-item full-width">
+						<input type="radio" id="Calculator_Mode_Symbol_Rate_radio" name="Calculator_Mode" value="Symbol Rate" /><label for="Calculator_Mode_Symbol_Rate_radio">Symbol Rate</label>
+						<input type="radio" id="Calculator_Mode_Transport_Stream_Rate_radio" name="Calculator_Mode" value="Transport Stream Rate" /><label for="Calculator_Mode_Transport_Stream_Rate_radio">TS Rate</label>
+						<input type="radio" id="Calculator_Mode_Bandwidth_radio" name="Calculator_Mode" value="Bandwidth" /><label for="Calculator_Mode_Bandwidth_radio">Bandwidth</label>
+					</div>
+				</div><!-- Calculator_Mode -->
+				<div id="spacer_1" class="spacer-sub"></div>
+				<div id="main-input-placeholder" class="div-vertically-centered flex-container">
+					<div id="Symbol_Rate" class="flex-container">
+						<div class="flex-item input-left">
+							<label id="Symbol_Rate_input_label" class="main-label">Symbol Rate</label>
+						</div>
+						<div id="Symbol_Rate_input" class="flex-item input-number">
+							<input type="text" id="Symbol_Rate_input_number" autocomplete="off" name="Symbol_Rate_input" placeholder="45.000000" />
+						</div>
+						<div class="flex-item input-units">
+							<label id="Symbol_Rate_input_label_units" style="display: inline;font-weight: normal">MBaud</label>
+						</div>
+					</div><!-- Symbol_Rate -->
+					<div id="Transport_Stream_Rate" class="flex-container">
+						<div class="flex-item input-left">
+							<label id="Transport_Stream_Rate_input_label" class="main-label">TS Rate</label>
+						</div>
+						<div id="Transport_Stream_Rate_input" class="flex-item input-number">
+							<input type="text" id="Transport_Stream_Rate_input_number" autocomplete="off" name="Transport_Stream_Rate_input" placeholder="60.000000" />
+						</div>
+						<div class="flex-item input-units">
+							<label id="Transport_Stream_Rate_input_label_units" style="display: inline;font-weight: normal">Mb/s</label>
+						</div>
+					</div><!-- Transport_Stream_Rate -->
+					<div id="Bandwidth" class="flex-container">
+						<div class="flex-item input-left">
+							<label id="Bandwidth_input_label" class="main-label">Bandwidth</label>
+						</div>
+						<div id="Bandwidth_input" class="flex-item input-number">
+							<input type="text" id="Bandwidth_input_number" autocomplete="off" data-hint="" name="Bandwidth_input" placeholder="54.000000" />
+						</div>
+						<div class="flex-item input-units">
+							<label id="Bandwidth_input_label_units" style="display: inline;font-weight: normal">MHz</label>
+						</div>
+					</div><!-- Bandwidth -->
+
+					<div id="SI_prefix" class="flex-container input-right">
+						<div class="flex-item">
+							<label id="SI_prefix_label" class="main-label"></label>
+						</div>
+						<div id="SI_prefix_select" class="flex-item">
+							<input type="radio" id="SI_prefix_k_radio" name="SI_prefix" value="k" /><label for="SI_prefix_k_radio">k</label>
+							<input type="radio" id="SI_prefix_M_radio" name="SI_prefix" value="M" /><label for="SI_prefix_M_radio">M</label>
+						</div>
+					</div><!-- SI_prefix -->
+
+				</div><!-- main-input-placeholder -->
+
+				<div id="spacer_2" class="spacer-main"></div>
+				<div id="DVB_Standard" class="flex-container">
+					<div class="flex-item main-left">
+						<label id="DVB_Standard_label" class="main-label">DVB Standard</label>
+					</div>
+					<div id="DVB_Standard_select" class="flex-item">
+						<input type="radio" id="DVB_Standard_S_radio" name="DVB_Standard" value="DVB-S" /><label for="DVB_Standard_S_radio">DVB-S</label>
+						<input type="radio" id="DVB_Standard_S2_radio" name="DVB_Standard" value="DVB-S2" /><label for="DVB_Standard_S2_radio">DVB-S2</label>
+						<input type="radio" id="DVB_Standard_S2X_radio" name="DVB_Standard" value="DVB-S2X" /><label for="DVB_Standard_S2X_radio">DVB-S2X</label>
+					</div>
+				</div><!-- DVB_Standard -->
+				<div id="Modulation" class="flex-container">
+					<div class="flex-item main-left">
+<!--						<label id="Modulation_label" class="main-label">Mod. [PSK]</label>-->
+						<label id="Modulation_label" class="main-label">Modulation</label>
+					</div>
+					<div id="Modulation_select" class="flex-item">
+							<input type="radio" id="Modulation_BPSK_radio" name="Modulation" value="BPSK" /><label for="Modulation_BPSK_radio">BPSK</label>
+							<input type="radio" id="Modulation_QPSK_radio" name="Modulation" value="QPSK" /><label for="Modulation_QPSK_radio">QPSK</label>
+							<input type="radio" id="Modulation_8PSK_radio" name="Modulation" value="8PSK" /><label for="Modulation_8PSK_radio">8PSK</label>
+							<input type="radio" id="Modulation_8APSK_radio" name="Modulation" value="8APSK" /><label for="Modulation_8APSK_radio">8APSK</label>
+							<input type="radio" id="Modulation_16QAM_radio" name="Modulation" value="16QAM" /><label for="Modulation_16QAM_radio">16QAM</label>
+							<input type="radio" id="Modulation_16APSK_radio" name="Modulation" value="16APSK" /><label for="Modulation_16APSK_radio">16APSK</label>
+							<input type="radio" id="Modulation_32APSK_radio" name="Modulation" value="32APSK" /><label for="Modulation_32APSK_radio">32APSK</label>
+							<input type="radio" id="Modulation_64APSK_radio" name="Modulation" value="64APSK" /><label for="Modulation_32APSK_radio">64APSK</label>
+							<input type="radio" id="Modulation_128APSK_radio" name="Modulation" value="128APSK" /><label for="Modulation_32APSK_radio">128APSK</label>
+							<input type="radio" id="Modulation_256APSK_radio" name="Modulation" value="256APSK" /><label for="Modulation_32APSK_radio">256APSK</label>
+					</div>
+				</div><!-- Modulation -->
+				<div id="Frame_Length" class="flex-container">
+					<div class="flex-item main-left">
+						<label id="Frame_Length_label" class="main-label">Frame Length</label>
+					</div>
+					<div id="Frame_Length_select" class="flex-item">
+						<input type="radio" id="Frame_Length_Short_radio" name="Frame_Length" value="Short" /><label for="Frame_Length_Short_radio">Short</label>
+						<input type="radio" id="Frame_Length_ShortS_radio" name="Frame_Length" value="ShortS" /><label for="Frame_Length_ShortS_radio">Short-S</label>
+						<input type="radio" id="Frame_Length_Normal_radio" name="Frame_Length" value="Normal" /><label for="Frame_Length_Normal_radio">Normal</label>
+					</div>
+				</div><!-- Frame_Length -->
+				<div id="FEC_Rate" class="flex-container">
+					<div class="flex-item main-left">
+						<label id="FEC_Rate_label" class="main-label">FEC Rate</label>
+					</div>
+					<div id="FEC_Rate_select_div" class="flex-item">
+						<select id="FEC_Rate_select" name="FEC_Rate">
+							<option id="FEC_Rate_14_option" value="1/4">1/4</option>
+							<option id="FEC_Rate_13_option" value="1/3">1/3</option>
+							<option id="FEC_Rate_25_option" value="2/5">2/5</option>
+							<option id="FEC_Rate_12_option" value="1/2">1/2</option>
+							<option id="FEC_Rate_35_option" value="3/5">3/5</option>
+							<option id="FEC_Rate_23_option" value="2/3">2/3</option>
+							<option id="FEC_Rate_34_option" value="3/4">3/4</option>
+							<option id="FEC_Rate_45_option" value="4/5">4/5</option>
+							<option id="FEC_Rate_56_option" value="5/6">5/6</option>
+							<option id="FEC_Rate_78_option" value="7/8">7/8</option>
+							<option id="FEC_Rate_89_option" value="8/9">8/9</option>
+							<option id="FEC_Rate_910_option" value="9/10">9/10</option>
+						</select>
+					</div>
+				</div><!-- FEC_Rate -->
+				<div id="Roll-Off" class="flex-container">
+					<div class="flex-item main-left">
+						<label id="Roll-Off_label" class="main-label">Roll-Off</label>
+					</div>
+					<div id="Roll-Off_select" class="flex-item">
+						<input type="radio" id="Roll-Off_35_radio" name="Roll-Off" value="0.35"/><label for="Roll-Off_35_radio">35%</label>
+						<input type="radio" id="Roll-Off_25_radio" name="Roll-Off" value="0.25"/><label for="Roll-Off_25_radio">25%</label>
+						<input type="radio" id="Roll-Off_20_radio" name="Roll-Off" value="0.20"/><label for="Roll-Off_20_radio">20%</label>
+						<input type="radio" id="Roll-Off_15_radio" name="Roll-Off" value="0.15"/><label for="Roll-Off_15_radio">15%</label>
+						<input type="radio" id="Roll-Off_10_radio" name="Roll-Off" value="0.10"/><label for="Roll-Off_10_radio">10%</label>
+							<input type="radio" id="Roll-Off_05_radio" name="Roll-Off" value="0.05"/><label for="Roll-Off_05_radio"> 5%</label>
+					</div>
+				</div><!-- Roll-Off -->
+				<div id="Pilot_Insertion" class="flex-container">
+					<div class="flex-item main-left">
+						<label id="Pilot_Insertion_label" class="main-label">Pilot Insertion</label>
+					</div>
+					<div id="Pilot_Insertion_select" class="flex-item">
+						<input type="radio" id="Pilot_Insertion_On_radio" name="Pilot_Insertion" value="On" /><label for="Pilot_Insertion_On_radio">On</label>
+						<input type="radio" id="Pilot_Insertion_Off_radio" name="Pilot_Insertion" value="Off" /><label for="Pilot_Insertion_Off_radio">Off</label>
+					</div>
+				</div><!-- Pilot_Insertion -->
+				<div id="QEF">
+					<fieldset>
+						<legend>
+							<span id="QEF_label_DVBS" class="main-legend">Threshold for Quasi Error Free (QEF) BER = 10<sup>-6</sup></span>
+							<span id="QEF_label_DVBS2" class="main-legend">Threshold for Quasi Error Free (QEF) PER = 10<sup>-7</sup></span>
+						</legend>
+						<div id="QEF_Data" class="flex-container flex-space-around">
+                            <div class="flex-item-QEF-column">
+                                <div class="flex-QEF-item">
+                                    <label id="Theoretical_label" class="">Theoretical</label>
+                                </div>
+                                <div id="ideal_QEF_EsNo" class="flex-QEF-container">
+                                    <div class="flex-item QEF-left">
+                                        <label id="ideal_QEF_EsNo_label" class="QEF-label">E<sub>s</sub>/N<sub>o</sub></label>
+                                    </div>
+                                    <div class="flex-item output-number">
+                                        <input type="text" id="ideal_QEF_EsNo_number" style="background: lightgrey;" name="ideal_QEF_EsNo" readonly/>
+                                    </div>
+                                    <div class="flex-item output-units">
+                                        <label id="ideal_QEF_EsNo_ideal_label_units">dB</label>
+                                    </div>
+                                </div>
+                                <div id="ideal_QEF_EbNo" class="flex-QEF-container">
+                                    <div class="flex-item QEF-left">
+                                        <label id="ideal_QEF_EbNo_label" class="QEF-label">E<sub>b</sub>/N<sub>o</sub></label>
+                                    </div>
+                                    <div class="flex-item output-number">
+                                        <input type="text" id="ideal_QEF_EbNo_number" style="background: lightgrey;" name="ideal_QEF_EbNo" readonly/>
+                                    </div>
+                                    <div class="flex-item output-units">
+                                        <label id="ideal_QEF_EbNo_ideal_label_units">dB</label>
+                                    </div>
+                                </div>
+                            </div><!--flex-item-QEF-column-->
+                            <div class="flex-item-QEF-column">
+                                <div class="flex-QEF-item">
+                                    <label id="Actual_label" class="">Actual</label>
+                                </div>
+                                <div id="actual_QEF_EsNo" class="flex-QEF-container">
+                                    <div class="flex-item QEF-left">
+                                        <label id="actual_QEF_EsNo_label" class="QEF-label">E<sub>s</sub>/N<sub>o</sub></label>
+                                    </div>
+                                    <div class="flex-item output-number">
+                                        <input type="text" id="actual_QEF_EsNo_number" style="background: lightgrey;" name="actual_QEF_EsNo" readonly/>
+                                    </div>
+                                    <div class="flex-item output-units">
+                                        <label id="actual_QEF_EsNo_label_units">dB</label>
+                                    </div>
+                                </div>
+                                <div id="actual_QEF_EbNo" class="flex-QEF-container">
+                                    <div class="flex-item QEF-left">
+                                        <label id="actual_QEF_EbNo_label" class="QEF-label">E<sub>b</sub>/N<sub>o</sub></label>
+                                    </div>
+                                    <div class="flex-item output-number">
+                                        <input type="text" id="actual_QEF_EbNo_number" style="background: lightgrey;" name="actual_QEF_EbNo" readonly/>
+                                    </div>
+                                    <div class="flex-item output-units">
+                                        <label id="actual_QEF_EbNo_label_units">dB</label>
+                                    </div>
+                                </div>
+                            </div><!--flex-item-QEF-column-->
+						</div><!--QEF-data-->
+					</fieldset>
+				</div><!--QEF-->
+				<div id="spacer_4" class="spacer-sub"></div>
+				<div id="Calculations_Efficiency" class="flex-container">
+					<div id="Efficiency_output" class="flex-container">
+						<div class="flex-item calculation-left">
+							<label id="Efficiency_output_label" class="main-label">Efficiency</label>
+						</div>
+						<div class="flex-item calculation-number">
+							<input type="number" id="Efficiency_output_number" style="background: lightgrey;" name="Efficiency" step="any" readonly/>
+						</div>
+						<div class="flex-item calculation-units">
+							<label id="Efficiency_output_label_units">bits/Hz</label>
+						</div>
+					</div>
+				</div>
+				<div id="Calculations_other" class="flex-container">
+					<div class="flex-item-column">
+						<div id="Modulation_Multiplier_output" class="flex-container">
+							<div class="flex-item calculation-left">
+								<label id="Modulation_Multiplier_output_label" class="main-label">MOD Multiplier</label>
+							</div>
+							<div class="flex-item calculation-number">
+								<input type="number" id="Modulation_Multiplier_output_number" style="background: lightgrey;" name="Modulation_Multiplier" step="any" readonly/>
+							</div>
+							<div class="flex-item calculation-units">
+								<label id="Modulation_Multiplier_output_label_units">bits/symbol</label>
+							</div>
+						</div>
+						<div id="Symbol_Rate_output" class="flex-container">
+							<div class="flex-item calculation-left">
+								<label id="Symbol_Rate_output_label" class="main-label">Symbol Rate</label>
+							</div>
+							<div class="flex-item calculation-number">
+								<input type="number" id="Symbol_Rate_output_number" style="background: lightgrey;" name="Symbol_Rate_output" step="any" readonly/>
+							</div>
+							<div class="flex-item calculation-units">
+								<label id="Symbol_Rate_output_label_units">MBaud</label>
+							</div>
+						</div>
+						<div id="Transport_Stream_Rate_output" class="flex-container">
+							<div class="flex-item calculation-left">
+								<label id="Transport_Stream_Rate_output_label" class="main-label">TS Rate</label>
+							</div>
+							<div class="flex-item calculation-number">
+								<input type="number" id="Transport_Stream_Rate_output_number" style="background: lightgrey;" name="Transport_Stream_Rate_output" step="any" readonly/>
+							</div>
+							<div class="flex-item calculation-units">
+								<label id="Transport_Stream_Rate_output_label_units">Mb/s</label>
+							</div>
+						</div>
+						<div id="Bandwidth_output" class="flex-container">
+							<div class="flex-item calculation-left">
+								<label id="Bandwidth_output_label" class="main-label">Bandwidth</label>
+							</div>
+							<div class="flex-item calculation-number">
+								<input type="number" id="Bandwidth_output_number" style="background: lightgrey;" name="Bandwidth_output" step="any" readonly/>
+							</div>
+							<div class="flex-item calculation-units">
+								<label id="Bandwidth_output_label_units">MHz</label>
+							</div>
+						</div>
+					</div><!-- class="flex-item-column" -->
+					<div class="flex-item-column input-right">
+						<div id="email_container" class="flex-container input-right">
+							<button id="emailIt" class="myButton" style="min-width: 80px; min-height: 40px; font-size: 14px; margin-right: 5px; margin-top: 0px">email it!</button>
+						</div><!-- class="flex-container input-right" -->
+					</div><!-- class="flex-item-column" -->
+				</div><!-- Calculations -->
+			</div><!-- content -->
+				<div class="footer">
+					<form action="../" method="get">
+						<p>&copy;2022 <input type="image" alt="Bart" src="../img/BartmanEH.png" class="footer_img" style="height:30px;">Stassen, P.Eng.</p>
+					</form>
+					<span id="version">vX.Y.Z</span>
+				</div><!-- footer -->
+			</div><!-- wrapper -->
+		</body>
+	</html>
