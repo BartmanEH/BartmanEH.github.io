@@ -166,6 +166,7 @@ function renderHintTrail() {
 
 	solutionHeading.textContent = 'Your path';
 	pathHelp.textContent = 'Choose one of the ranked next words below to continue without revealing the full solution.';
+	pathHelp.hidden = hintCurrent === TARGET;
 	stepCount.textContent = `${hintTrail.length} ${hintTrail.length === 1 ? 'step' : 'steps'}`;
 	solution.hidden = false;
 }
@@ -234,6 +235,7 @@ function renderPath(path) {
 	pathContainer.replaceChildren();
 	solutionHeading.textContent = 'Shortest path';
 	pathHelp.textContent = 'Tap a word to solve again from there. If Poople rejects a suggested word, exclude it and reroute.';
+	pathHelp.hidden = false;
 
 	path.forEach((word, index) => {
 		const row = document.createElement('div');
