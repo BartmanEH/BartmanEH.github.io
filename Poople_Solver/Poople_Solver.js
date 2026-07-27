@@ -5,6 +5,7 @@ let graph;
 let distances;
 let activeStart = '';
 let version = '';
+let defaultStartWord = '';
 let hintStart = '';
 let hintCurrent = '';
 let hintTrail = [];
@@ -242,9 +243,9 @@ function renderHintMode() {
 	startOver.className = 'hint-start-over';
 	startOver.textContent = 'Start over';
 	startOver.addEventListener('click', () => {
-		hintCurrent = hintStart;
-		hintTrail = [];
-		renderHintMode();
+		rejected.clear();
+		distances = distancesToTarget();
+		solve(hintStart);
 	});
 	hintsSection.append(startOver);
 }
@@ -329,10 +330,12 @@ function reset() {
 	rejected.clear();
 	distances = distancesToTarget();
 	activeStart = '';
-	input.value = '';
+	input.value = defaultStartWord.toUpperCase();
 	solution.hidden = true;
 	hintsSection.hidden = true;
-	setStatus('Ready for a four-letter starting word.');
+	setStatus(defaultStartWord
+		? `Today’s Poople starting word is ${defaultStartWord.toUpperCase()}.`
+		: 'Ready for a four-letter starting word.');
 	input.focus();
 }
 
@@ -428,6 +431,7 @@ async function initialise() {
 		const gameDay = getGameDay(startWords.epoch);
 		const todaysStartWord = startWords.words[gameDay];
 		if (todaysStartWord) {
+			defaultStartWord = todaysStartWord;
 			input.value = todaysStartWord.toUpperCase();
 		}
 		solveButton.disabled = false;
@@ -445,12 +449,14 @@ async function initialise() {
 					`Poople’s live starting word is ${liveWord}, but the local schedule says ${localStartWord}.\n\nUse the live word?`
 				);
 				if (useLiveWord) {
+					defaultStartWord = liveStartWord;
 					input.value = liveWord;
 					setStatus(`Using Poople’s live starting word: ${liveWord}.`);
 				} else {
 					setStatus(`Keeping the local starting word: ${localStartWord}.`, true);
 				}
 			} else if (fieldStillAutomatic) {
+				defaultStartWord = liveStartWord;
 				input.value = liveWord;
 				setStatus(`Today’s Poople starting word is ${liveWord}.`);
 			}
