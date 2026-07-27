@@ -161,6 +161,24 @@ function renderHintTrail() {
 		const wordButton = makeWordButton(word, trail[index - 1]);
 		wordButton.disabled = true;
 		row.append(wordButton);
+
+		if (index > 0 && word !== TARGET) {
+			const rejectButton = document.createElement('button');
+			rejectButton.type = 'button';
+			rejectButton.className = 'reject-button';
+			rejectButton.textContent = '×';
+			rejectButton.title = `Poople does not accept ${word.toUpperCase()}`;
+			rejectButton.setAttribute('aria-label', `Exclude ${word.toUpperCase()} and step back`);
+			rejectButton.addEventListener('click', () => {
+				rejected.add(word);
+				distances = distancesToTarget();
+				hintCurrent = hintTrail.pop();
+				renderHintMode();
+				setStatus(`${word.toUpperCase()} excluded. Stepped back to ${hintCurrent.toUpperCase()}.`);
+			});
+			row.append(rejectButton);
+		}
+
 		pathContainer.append(row);
 	});
 
