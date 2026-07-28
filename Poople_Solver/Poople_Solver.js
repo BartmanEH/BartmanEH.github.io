@@ -158,6 +158,7 @@ function renderHints(word, path) {
 	hintsSection.querySelector('.hint-start-over')?.remove();
 	hintsSection.querySelector('h2').textContent = 'Other next moves';
 	const pathNextWord = path[1];
+	const currentDistance = distances[graph.index.get(word)];
 	const alternatives = rankedNextSteps(word)
 		.filter(option => option.word !== pathNextWord)
 		.slice(0, 6);
@@ -170,8 +171,10 @@ function renderHints(word, path) {
 
 	for (const option of alternatives) {
 		const button = document.createElement('button');
+		const isBest = option.stepsRemaining === currentDistance - 1;
 		button.type = 'button';
-		button.className = 'hint-button';
+		button.className = `hint-button${isBest ? ' best' : ''}`;
+		button.title = `${option.stepsRemaining} steps from POOP${isBest ? ' — makes progress' : ''}`;
 		button.innerHTML = `${option.word}<strong>${option.stepsRemaining} left</strong>`;
 		button.addEventListener('click', () => solveViaNextWord(word, option.word));
 		hintsContainer.append(button);
