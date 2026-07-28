@@ -129,6 +129,20 @@ function makeWordButton(word, previousWord) {
 	return button;
 }
 
+function solveViaNextWord(start, nextWord) {
+	const remainingPath = shortestPath(nextWord);
+	if (!remainingPath) {
+		setStatus(`No route from ${nextWord.toUpperCase()} to POOP was found with the current exclusions.`, true);
+		return;
+	}
+
+	pathRenderGeneration += 1;
+	activeStart = start;
+	input.value = start.toUpperCase();
+	setStatus(`A route from ${start.toUpperCase()} to POOP via ${nextWord.toUpperCase()}.`);
+	renderPath([start, ...remainingPath], pathRenderGeneration);
+}
+
 function renderHints(word, path) {
 	hintsSection.querySelector('.hint-start-over')?.remove();
 	hintsSection.querySelector('h2').textContent = 'Other next moves';
@@ -148,7 +162,7 @@ function renderHints(word, path) {
 		button.type = 'button';
 		button.className = 'hint-button';
 		button.innerHTML = `${option.word}<strong>${option.stepsRemaining} left</strong>`;
-		button.addEventListener('click', () => solve(option.word));
+		button.addEventListener('click', () => solveViaNextWord(word, option.word));
 		hintsContainer.append(button);
 	}
 	hintsSection.hidden = false;
