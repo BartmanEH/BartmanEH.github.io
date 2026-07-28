@@ -301,6 +301,20 @@ body {
 	background: var(--poople-brown);
 }
 
+.step-number {
+	position: absolute;
+	left: 0;
+	display: grid;
+	width: 30px;
+	height: 30px;
+	place-items: center;
+	border: 1px solid var(--poople-border);
+	border-radius: 50%;
+	color: var(--poople-muted);
+	font-size: 12px;
+	line-height: 1;
+}
+
 .reject-button {
 	position: absolute;
 	right: 0;

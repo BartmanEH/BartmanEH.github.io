@@ -131,6 +131,15 @@ function makeWordButton(word, previousWord) {
 	return button;
 }
 
+function makeStepNumber(index) {
+	const marker = document.createElement('span');
+	marker.className = 'step-number';
+	marker.textContent = index;
+	marker.title = index === 0 ? 'Starting word' : `Step ${index}`;
+	marker.setAttribute('aria-label', marker.title);
+	return marker;
+}
+
 function solveViaNextWord(start, nextWord) {
 	const remainingPath = shortestPath(nextWord);
 	if (!remainingPath) {
@@ -179,7 +188,7 @@ function renderHintTrail() {
 		row.className = 'path-row';
 		const wordButton = makeWordButton(word, trail[index - 1]);
 		wordButton.disabled = true;
-		row.append(wordButton);
+		row.append(makeStepNumber(index), wordButton);
 
 		if (index > 0 && word !== TARGET) {
 			const rejectButton = document.createElement('button');
@@ -278,7 +287,7 @@ function renderPath(path, renderGeneration) {
 	path.forEach((word, index) => {
 		const row = document.createElement('div');
 		row.className = 'path-row';
-		row.append(makeWordButton(word, path[index - 1]));
+		row.append(makeStepNumber(index), makeWordButton(word, path[index - 1]));
 
 		if (index > 0 && index < path.length - 1) {
 			const rejectButton = document.createElement('button');
