@@ -119,7 +119,9 @@ function makeWordButton(word, previousWord) {
 		const letter = document.createElement('span');
 		letter.className = 'letter-box';
 		letter.textContent = word[position];
-		if (previousWord && word[position] !== previousWord[position]) {
+		if (word[position] === TARGET[position]) {
+			letter.classList.add('target-match');
+		} else if (previousWord && word[position] !== previousWord[position]) {
 			letter.classList.add('changed');
 		}
 		button.append(letter);

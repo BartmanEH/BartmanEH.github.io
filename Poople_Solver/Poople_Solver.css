@@ -8,6 +8,8 @@
 	--poople-brown: #67320b;
 	--poople-brown-dark: #4f2508;
 	--poople-brown-light: #8c4410;
+	--poople-change: #3f2a1b;
+	--poople-change-border: #765033;
 	--poople-success: #79ad62;
 	--poople-error: #e3877e;
 }
@@ -290,11 +292,11 @@ body {
 }
 
 .letter-box.changed {
-	border-color: var(--poople-border);
-	background: var(--poople-brown);
+	border-color: var(--poople-change-border);
+	background: var(--poople-change);
 }
 
-.path-row:last-child .letter-box {
+.letter-box.target-match {
 	border-color: var(--poople-border);
 	background: var(--poople-brown);
 }
@@ -480,6 +482,8 @@ body {
 		--poople-brown: #915d36;
 		--poople-brown-dark: #764928;
 		--poople-brown-light: #915d36;
+		--poople-change: #d8c8bb;
+		--poople-change-border: #9a755a;
 		--poople-error: #b3261e;
 	}
 
