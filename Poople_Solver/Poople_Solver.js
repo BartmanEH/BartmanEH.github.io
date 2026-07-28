@@ -1,4 +1,5 @@
 const TARGET = 'poop';
+const PATH_STEP_DELAY = 750;
 
 let words = [];
 let graph;
@@ -9,6 +10,7 @@ let defaultStartWord = '';
 let hintStart = '';
 let hintCurrent = '';
 let hintTrail = [];
+let pathRenderGeneration = 0;
 const rejected = new Set();
 
 const form = document.querySelector('#solver-form');
@@ -251,7 +253,7 @@ function renderHintMode() {
 	hintsSection.append(startOver);
 }
 
-function renderPath(path) {
+function renderPath(path, renderGeneration) {
 	pathContainer.replaceChildren();
 	solutionHeading.textContent = 'Shortest path';
 	pathHelp.textContent = 'Tap a word to solve again from there. If Poople rejects a suggested word, exclude it and reroute.';
@@ -277,7 +279,17 @@ function renderPath(path) {
 			row.append(rejectButton);
 		}
 
-		pathContainer.append(row);
+		const appendRow = () => {
+			if (renderGeneration === pathRenderGeneration) {
+				pathContainer.append(row);
+			}
+		};
+
+		if (index === 0) {
+			appendRow();
+		} else {
+			setTimeout(appendRow, index * PATH_STEP_DELAY);
+		}
 	});
 
 	stepCount.textContent = `${path.length - 1} ${path.length === 2 ? 'step' : 'steps'}`;
@@ -290,6 +302,8 @@ function solve(requestedWord, successMessage = '') {
 		return;
 	}
 
+	pathRenderGeneration += 1;
+	const renderGeneration = pathRenderGeneration;
 	const start = requestedWord.trim().toLowerCase();
 	input.value = start.toUpperCase();
 
@@ -324,10 +338,11 @@ function solve(requestedWord, successMessage = '') {
 		return;
 	}
 	setStatus(successMessage || `A shortest route from ${start.toUpperCase()} to POOP.`);
-	renderPath(path);
+	renderPath(path, renderGeneration);
 }
 
 function reset() {
+	pathRenderGeneration += 1;
 	rejected.clear();
 	distances = distancesToTarget();
 	activeStart = '';
