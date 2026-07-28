@@ -365,11 +365,6 @@ input.addEventListener('input', () => {
 });
 
 resetButton.addEventListener('click', reset);
-hintMode.addEventListener('change', () => {
-	if (input.value.length === 4) {
-		solve(input.value);
-	}
-});
 
 async function getVersion() {
 	const versionURL = `/Poople_Solver/version.json?v=${encodeURIComponent(version || '2.1.1-BETA')}`;
