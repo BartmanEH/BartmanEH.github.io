@@ -1,5 +1,5 @@
 const TARGET = 'poop';
-const PATH_STEP_DELAY = 750;
+const PATH_STEP_DELAY = 333;
 
 let words = [];
 let graph;
