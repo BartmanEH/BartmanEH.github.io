@@ -1,5 +1,6 @@
 const TARGET = 'poop';
 const PATH_STEP_DELAY = 333;
+const EMOJI_RAIN_COUNT = 100;
 
 let words = [];
 let graph;
@@ -11,6 +12,7 @@ let hintStart = '';
 let hintCurrent = '';
 let hintTrail = [];
 let pathRenderGeneration = 0;
+let emojiRainCleanup;
 const rejected = new Set();
 
 const form = document.querySelector('#solver-form');
@@ -26,6 +28,31 @@ const pathHelp = document.querySelector('.path-help');
 const stepCount = document.querySelector('#step-count');
 const hintsSection = document.querySelector('#hints-section');
 const hintsContainer = document.querySelector('#hints');
+const emojiRain = document.querySelector('#emoji-rain');
+
+function startEmojiRain() {
+	window.clearTimeout(emojiRainCleanup);
+	emojiRain.replaceChildren();
+
+	const fragment = document.createDocumentFragment();
+	let longestAnimation = 0;
+	for (let index = 0; index < EMOJI_RAIN_COUNT; index += 1) {
+		const delay = Math.random() * 3000;
+		const duration = Math.random() * 1000 + 2500;
+		const drop = document.createElement('span');
+		drop.className = 'emoji-raindrop';
+		drop.textContent = '💩';
+		drop.style.left = `${Math.random() * 100}%`;
+		drop.style.animationDelay = `${delay}ms`;
+		drop.style.animationDuration = `${duration}ms`;
+		drop.style.rotate = `${Math.random() * 30 - 15}deg`;
+		fragment.append(drop);
+		longestAnimation = Math.max(longestAnimation, delay + duration);
+	}
+
+	emojiRain.append(fragment);
+	emojiRainCleanup = window.setTimeout(() => emojiRain.replaceChildren(), longestAnimation + 100);
+}
 
 function buildGraph(wordList) {
 	const index = new Map(wordList.map((word, position) => [word, position]));
@@ -256,6 +283,7 @@ function renderHintMode() {
 	if (hintCurrent === TARGET) {
 		hintsSection.querySelector('h2').textContent = 'You made it!';
 		setStatus(`Reached POOP in ${hintTrail.length} ${hintTrail.length === 1 ? 'step' : 'steps'}.`);
+		startEmojiRain();
 	} else {
 		const currentIndex = graph.index.get(hintCurrent);
 		const currentDistance = distances[currentIndex];
@@ -310,6 +338,9 @@ function renderPath(path, renderGeneration) {
 		const appendRow = () => {
 			if (renderGeneration === pathRenderGeneration) {
 				pathContainer.append(row);
+				if (word === TARGET) {
+					startEmojiRain();
+				}
 			}
 		};
 
@@ -371,6 +402,8 @@ function solve(requestedWord, successMessage = '') {
 
 function reset() {
 	pathRenderGeneration += 1;
+	window.clearTimeout(emojiRainCleanup);
+	emojiRain.replaceChildren();
 	rejected.clear();
 	distances = distancesToTarget();
 	activeStart = '';

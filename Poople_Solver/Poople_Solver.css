@@ -222,6 +222,28 @@ body {
 	color: var(--poople-error);
 }
 
+.emoji-rain {
+	position: fixed;
+	inset: -2em 0 0;
+	z-index: 1000;
+	pointer-events: none;
+	font-size: x-large;
+	overflow: hidden;
+}
+
+.emoji-raindrop {
+	position: fixed;
+	top: -2em;
+	animation: emoji-rainfall forwards ease-in;
+}
+
+@keyframes emoji-rainfall {
+	to {
+		translate: 0 calc(100vh + 2em);
+		visibility: hidden;
+	}
+}
+
 .solution {
 	width: min(100%, 330px);
 	margin: 14px auto 0;
