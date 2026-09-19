@@ -557,7 +557,7 @@ function resetGrid() {                                              // clear let
   document.getElementById('possibilities').style.display = 'none';  // hide possibilities div
   document.getElementById('words').style.display = 'none';          // hide words div
   document.getElementById('help-inner').style.display = 'block';    // show help div
-  document.querySelector('.content').style.opacity = '1';           // undo any out-of-guesses dimming
+  document.querySelectorAll('.flex-container-wordle').forEach((row) => { row.style.opacity = '1'; }); // undo any out-of-guesses dimming
 } // resetGrid()
 function inputKeydown(e) {                                          // handler for keydown event
   if (invalidGuessLock) {
@@ -710,9 +710,10 @@ function errorHandler(strError) {                                   // helper fu
   document.getElementById('words').style.display = 'block';         // 'unhide'
 } // errorHandler()
 function commiserate(message) {                                     // out of guesses, no win
-  const content = document.querySelector('.content');
-  content.style.transition = 'opacity 0.3s ease';
-  content.style.opacity = '0.4';                                    // dim the grid
+  document.querySelectorAll('.flex-container-wordle').forEach((row) => {  // dim just the letter grid rows
+    row.style.transition = 'opacity 0.3s ease';
+    row.style.opacity = '0.4';
+  });
   errorHandler(message);
 } // commiserate()
 function consoleLog(boolLogSwitch, strMessage, logType) {           // helper function to display console log messages
