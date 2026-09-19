@@ -818,12 +818,13 @@ function stopFireworks() {                                          // stop fire
     document.querySelectorAll('.fireworks-container canvas').forEach((canvas) => { canvas.remove(); });
   } // if else
 } // stopFireworks()
-function dismissIOSKeyboard() {                                     // force-dismiss the on-screen keyboard; plain blur() is unreliable on iOS
+function dismissIOSKeyboard() {                                     // force-dismiss the on-screen keyboard; blur()/readonly toggling alone are unreliable on iOS
   const activeInput = document.activeElement;
-  if (!activeInput || typeof activeInput.blur !== 'function' || !('readOnly' in activeInput)) { return; }
-  activeInput.readOnly = true;                                      // tell iOS this field can no longer be edited
-  activeInput.blur();
-  setTimeout(() => { activeInput.readOnly = false; }, 100);         // restore editability once the keyboard has dismissed
+  if (!activeInput || typeof activeInput.blur !== 'function') { return; }
+  document.body.setAttribute('tabindex', '-1');                     // make body a valid, non-editable focus target
+  document.body.focus();                                            // move focus fully off the text input
+  document.body.removeAttribute('tabindex');                        // body shouldn't linger in the normal tab order
+  activeInput.blur();                                                // belt-and-suspenders: release focus from the original input too
 } // dismissIOSKeyboard()
 function celebrate(guessPosition, message) {                        // Easter Egg graphics
   dismissIOSKeyboard();                                             // dismiss iOS keyboard so it doesn't cover the fireworks
