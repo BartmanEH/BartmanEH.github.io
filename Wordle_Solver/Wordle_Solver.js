@@ -818,13 +818,14 @@ function stopFireworks() {                                          // stop fire
     document.querySelectorAll('.fireworks-container canvas').forEach((canvas) => { canvas.remove(); });
   } // if else
 } // stopFireworks()
-function dismissIOSKeyboard() {                                     // force-dismiss the on-screen keyboard; blur()/readonly toggling alone are unreliable on iOS
+function dismissIOSKeyboard() {                                     // force-dismiss the on-screen keyboard; focus()/blur() tricks alone have no effect on iOS
   const activeInput = document.activeElement;
-  if (!activeInput || typeof activeInput.blur !== 'function') { return; }
-  document.body.setAttribute('tabindex', '-1');                     // make body a valid, non-editable focus target
-  document.body.focus();                                            // move focus fully off the text input
-  document.body.removeAttribute('tabindex');                        // body shouldn't linger in the normal tab order
-  activeInput.blur();                                                // belt-and-suspenders: release focus from the original input too
+  if (!activeInput || !document.body.contains(activeInput)) { return; }
+  const originalDisplay = activeInput.style.display;
+  activeInput.blur();
+  activeInput.style.display = 'none';                               // a non-rendered element cannot hold focus; forces iOS to drop the keyboard
+  void activeInput.offsetHeight;                                    // force layout/reflow so the display change actually takes effect
+  activeInput.style.display = originalDisplay;                      // restore visibility (it stays unfocused)
 } // dismissIOSKeyboard()
 function celebrate(guessPosition, message) {                        // Easter Egg graphics
   dismissIOSKeyboard();                                             // dismiss iOS keyboard so it doesn't cover the fireworks
