@@ -857,12 +857,13 @@ function celebrate(guessPosition, message) {                        // Easter Eg
     traceSpeed: fireworksMotionSpeed,
     traceLength: 3,
     autoresize: false,
-    intensity: 10,                                                  // fewer rockets launched (default: 18)
+    intensity: 10,                                                  // fewer rockets launched (default: 30)
     explosion: 4,                                                   // smaller bursts (default: 5)
     particles: 40,                                                  // fewer particles per burst (default: 50)
     acceleration: 1.02                                              // gentler post-launch acceleration (default: 1.05)
   });
   fireworks.start();                                                // launch fireworks effect
+  fireworks.launch(1);                                              // force an immediate first firework instead of waiting on the initial delay
   requestAnimationFrame(() => {
     const canvas = container.querySelector('canvas');
     if (!canvas) { return; }
