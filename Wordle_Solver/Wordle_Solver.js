@@ -819,6 +819,7 @@ function stopFireworks() {                                          // stop fire
   } // if else
 } // stopFireworks()
 function celebrate(guessPosition, message) {                        // Easter Egg graphics
+  document.activeElement?.blur();                                   // dismiss iOS keyboard so it doesn't cover the fireworks
   for (let guessLetterPosition = 1; guessLetterPosition <= 5; guessLetterPosition++) {
     const gridId = 'guess_' + guessPosition + '_' + guessLetterPosition;
     document.getElementById(gridId).style.backgroundColor = rgbGreen;         // make background Green
