@@ -847,10 +847,20 @@ function celebrate(guessPosition, message) {                        // Easter Eg
     consoleLog(true, 'Fireworks constructor unavailable (expected globalThis.Fireworks or globalThis.Fireworks.default)', 'warn');
     return;
   } // if
+  // previous config (too fast/aggressive - library defaults for intensity/explosion/particles/acceleration):
+  // fireworks = new FireworksCtor(container, {
+  //   traceSpeed: fireworksMotionSpeed,
+  //   traceLength: 3,
+  //   autoresize: false
+  // });
   fireworks = new FireworksCtor(container, {
     traceSpeed: fireworksMotionSpeed,
     traceLength: 3,
-    autoresize: false
+    autoresize: false,
+    intensity: 10,                                                  // fewer rockets launched (default: 18)
+    explosion: 4,                                                   // smaller bursts (default: 5)
+    particles: 40,                                                  // fewer particles per burst (default: 50)
+    acceleration: 1.02                                              // gentler post-launch acceleration (default: 1.05)
   });
   fireworks.start();                                                // launch fireworks effect
   requestAnimationFrame(() => {
