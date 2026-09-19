@@ -857,15 +857,15 @@ function celebrate(guessPosition, message) {                        // Easter Eg
     traceSpeed: fireworksMotionSpeed,
     traceLength: 3,
     autoresize: false,
-    intensity: 10,                                                  // fewer rockets launched (default: 30)
+    intensity: 16,                                                  // fast opening burst cadence (settles lower below)
     explosion: 4,                                                   // smaller bursts (default: 5)
     particles: 40,                                                  // fewer particles per burst (default: 50)
     acceleration: 1.02,                                             // gentler post-launch acceleration (default: 1.05)
-    delay: { min: 1, max: 5 }                                       // fast start: launch ~every 95ms (default: {min: 30, max: 60})
+    delay: { min: 1, max: 3 }                                       // near-instant burst launches (default: {min: 30, max: 60})
   });
   fireworks.start();                                                // launch fireworks effect
-  setTimeout(() => {                                                // after a handful of fast launches (~6-7 in 700ms), slow back down for the rest of the show
-    if (fireworks !== '') { fireworks.updateOptions({ delay: { min: 30, max: 60 } }); }
+  setTimeout(() => {                                                // after the fast opening burst, settle to a calmer-but-still-lively pace
+    if (fireworks !== '') { fireworks.updateOptions({ intensity: 12, delay: { min: 24, max: 48 } }); }
   }, 700);
   requestAnimationFrame(() => {
     const canvas = container.querySelector('canvas');
