@@ -818,14 +818,11 @@ function stopFireworks() {                                          // stop fire
     document.querySelectorAll('.fireworks-container canvas').forEach((canvas) => { canvas.remove(); });
   } // if else
 } // stopFireworks()
-function dismissIOSKeyboard() {                                     // force-dismiss the on-screen keyboard; focus()/blur() tricks alone have no effect on iOS
-  const activeInput = document.activeElement;
-  if (!activeInput || !document.body.contains(activeInput)) { return; }
-  const originalDisplay = activeInput.style.display;
-  activeInput.blur();
-  activeInput.style.display = 'none';                               // a non-rendered element cannot hold focus; forces iOS to drop the keyboard
-  void activeInput.offsetHeight;                                    // force layout/reflow so the display change actually takes effect
-  activeInput.style.display = originalDisplay;                      // restore visibility (it stays unfocused)
+function dismissIOSKeyboard() {                                     // iOS only honors a keyboard-dismissing blur() from within a real touch/click gesture,
+  document.activeElement?.blur();                                   // never from a keyup-originated call chain - try anyway, cheap and harmless
+  const blurOnNextRealTap = () => { document.activeElement?.blur(); };
+  document.addEventListener('touchstart', blurOnNextRealTap, { once: true, passive: true });
+  document.addEventListener('mousedown', blurOnNextRealTap, { once: true });
 } // dismissIOSKeyboard()
 function celebrate(guessPosition, message) {                        // Easter Egg graphics
   dismissIOSKeyboard();                                             // dismiss iOS keyboard so it doesn't cover the fireworks
