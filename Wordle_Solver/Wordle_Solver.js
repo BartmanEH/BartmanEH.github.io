@@ -397,6 +397,9 @@ function resultsModeClicked() {
   initialize();                                                     // initialize
 } // resultsModeClicked()
 function copyrightClicked() {
+  // disabled: conflicts with auto-scoring against today's real answer (the future-only pool excludes today's
+  // answer by construction, so possibilities can never include it) - logic kept intact in case this is revisited
+  return;
   boolAnswersOnly = !boolAnswersOnly;                               // toggle Answers only boolean switch
   boolPrevAnswers = !boolPrevAnswers;                               // toggle Previous Answers only boolean switch
   window.scroll(0, 0);                                              // scroll to top of page
