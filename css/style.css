@@ -32,6 +32,17 @@ a, a:visited {
 	padding: 5px;
 }
 
+.Wordle_Solver .fireworks-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	pointer-events: none;
+	z-index: 100;
+}
+
 .content {
 	padding-bottom: 50px;  /* Height of the footer element */ 
 }

@@ -174,7 +174,6 @@ let version = '';                         // global version
 let useCaseData = [];
 let invalidGuessLock = false;             // block new letter entry after invalid 5-letter guess
 let invalidGuessPosition = 0;             // guess row that currently contains invalid word
-let fireworksContainerBaseHeight = 0;     // lock fireworks container to original height
 // #endregion globals
 // #region init
 document.addEventListener('DOMContentLoaded', function () {         // fires when DOM loaded (ready)
@@ -830,14 +829,6 @@ function celebrate(guessPosition, message) {                        // Easter Eg
   stopFireworks();
   const container = document.querySelector('.fireworks-container');
   if (!container) { return; }
-  if (fireworksContainerBaseHeight === 0) {
-    const measuredHeight = Math.ceil(container.getBoundingClientRect().height);
-    fireworksContainerBaseHeight = Math.max(measuredHeight, boolIOS ? 440 : 520);
-  } // if
-  container.style.height = fireworksContainerBaseHeight + 'px';
-  container.style.maxHeight = fireworksContainerBaseHeight + 'px';
-  container.style.overflow = 'hidden';
-  container.style.position = 'relative';
   const fireworksMotionSpeed = 1.1;                                 // upward trace/ascent speed only (library default: 10) - explosion speed is separate (particles/friction/gravity/decay)
   const fireworksLibrary = globalThis.Fireworks;
   const FireworksCtor = (typeof fireworksLibrary === 'function')
@@ -870,9 +861,8 @@ function celebrate(guessPosition, message) {                        // Easter Eg
   requestAnimationFrame(() => {
     const canvas = container.querySelector('canvas');
     if (!canvas) { return; }
-    canvas.style.height = fireworksContainerBaseHeight + 'px';
-    canvas.style.maxHeight = fireworksContainerBaseHeight + 'px';
     canvas.style.width = '100%';
+    canvas.style.height = '100%';
   });
 } // celebrate()
 // #endregion helper functions
