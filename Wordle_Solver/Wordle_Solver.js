@@ -818,8 +818,15 @@ function stopFireworks() {                                          // stop fire
     document.querySelectorAll('.fireworks-container canvas').forEach((canvas) => { canvas.remove(); });
   } // if else
 } // stopFireworks()
+function dismissIOSKeyboard() {                                     // force-dismiss the on-screen keyboard; plain blur() is unreliable on iOS
+  const activeInput = document.activeElement;
+  if (!activeInput || typeof activeInput.blur !== 'function' || !('readOnly' in activeInput)) { return; }
+  activeInput.readOnly = true;                                      // tell iOS this field can no longer be edited
+  activeInput.blur();
+  setTimeout(() => { activeInput.readOnly = false; }, 100);         // restore editability once the keyboard has dismissed
+} // dismissIOSKeyboard()
 function celebrate(guessPosition, message) {                        // Easter Egg graphics
-  setTimeout(() => { document.activeElement?.blur(); }, 0);         // deferred: dismiss iOS keyboard (a same-tick blur loses to the auto-tab-forward focus() that just ran)
+  dismissIOSKeyboard();                                             // dismiss iOS keyboard so it doesn't cover the fireworks
   for (let guessLetterPosition = 1; guessLetterPosition <= 5; guessLetterPosition++) {
     const gridId = 'guess_' + guessPosition + '_' + guessLetterPosition;
     document.getElementById(gridId).style.backgroundColor = rgbGreen;         // make background Green
