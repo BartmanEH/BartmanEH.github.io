@@ -557,6 +557,7 @@ function resetGrid() {                                              // clear let
   document.getElementById('possibilities').style.display = 'none';  // hide possibilities div
   document.getElementById('words').style.display = 'none';          // hide words div
   document.getElementById('help-inner').style.display = 'block';    // show help div
+  document.querySelector('.content').style.opacity = '1';           // undo any out-of-guesses dimming
 } // resetGrid()
 function inputKeydown(e) {                                          // handler for keydown event
   if (invalidGuessLock) {
@@ -708,6 +709,12 @@ function errorHandler(strError) {                                   // helper fu
   document.getElementById('possibilities-text-span').innerHTML = strError;
   document.getElementById('words').style.display = 'block';         // 'unhide'
 } // errorHandler()
+function commiserate(message) {                                     // out of guesses, no win
+  const content = document.querySelector('.content');
+  content.style.transition = 'opacity 0.3s ease';
+  content.style.opacity = '0.4';                                    // dim the grid
+  errorHandler(message);
+} // commiserate()
 function consoleLog(boolLogSwitch, strMessage, logType) {           // helper function to display console log messages
   if (typeof boolLogSwitch === 'undefined') boolLogSwitch = true;   // default to true if no log switch provided in call
   if (typeof logType === 'undefined') logType = 'normal';           // default log type
@@ -818,8 +825,16 @@ function stopFireworks() {                                          // stop fire
     document.querySelectorAll('.fireworks-container canvas').forEach((canvas) => { canvas.remove(); });
   } // if else
 } // stopFireworks()
-function dismissIOSKeyboard() {                                     // iOS only honors a keyboard-dismissing blur() from within a real touch/click gesture,
-  document.activeElement?.blur();                                   // never from a keyup-originated call chain - try anyway, cheap and harmless
+// iOS Safari only honors a keyboard-dismissing blur() from within a real touch/click gesture, never from a
+// keyup-originated call chain (celebrate() is called from solveIt(), called from inputKeyup()) - a plain
+// synchronous blur(), a setTimeout-deferred blur(), toggling readOnly, moving focus to document.body, and even
+// forcing the input out of layout with display:none were all tried here and had zero effect on a real device.
+// The fix that actually works: a one-time touchstart/mousedown listener that blurs on the user's next real tap.
+// In testing this fires with no perceptible extra tap needed - most likely because the touch-release from the
+// on-screen keyboard key that typed the winning letter is itself still landing as a real touch around the same
+// moment, so this fallback catches the tail of that same gesture rather than requiring a separate deliberate tap.
+function dismissIOSKeyboard() {
+  document.activeElement?.blur();                                   // try anyway - cheap, and harmless if ignored
   const blurOnNextRealTap = () => { document.activeElement?.blur(); };
   document.addEventListener('touchstart', blurOnNextRealTap, { once: true, passive: true });
   document.addEventListener('mousedown', blurOnNextRealTap, { once: true });
@@ -1029,10 +1044,13 @@ function solveIt() {
             : ((typeof solution === 'string' && solution.length === 5) ? solution : (aryAllAnswersOrdered[diffDays] ?? ''));
           boolStreakSaver = streakSaver && guessWord === expectedAnswer;
           if (boolStreakSaver) {
-            celebrate(guessPosition, 'Streak Saver easter egg!');
+            celebrate(guessPosition, 'Solved in ' + guessPosition + '/6! 🎉');
             // aryPatternLetters[guessLetterPosition - 1] = document.getElementById(gridId).value.toUpperCase();
             // aryPatternLetters = ['H', 'U', 'O', 'M', 'O'];
             // aryExcludeLetters = aryIncludeLetters = [];
+            return;                                                 // terminate further processing
+          } else if (guessPosition === 6) {                         // last guess used up without a win
+            commiserate('Out of guesses! The word was ' + expectedAnswer + '.');
             return;                                                 // terminate further processing
           } // if
         } // if else
