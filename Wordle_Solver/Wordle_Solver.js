@@ -1286,6 +1286,14 @@ function solveIt() {
     consoleLog(true, 'include: ' + aryIncludeLetters);              // ║ FILTERING ║
     consoleLog(true, 'pattern: ' + aryPatternLetters);              // ╚═══════════╝
   } // if
+  const gridSnapshot = [];                                          // read all 30 grid cells once - the filtering loops below check
+  for (let guessPosition = 1; guessPosition <= 6; guessPosition++) { // grid state per *candidate word*, so this avoids re-querying the
+    gridSnapshot[guessPosition] = [];                                // DOM up to thousands of times per keystroke for cells that
+    for (let letterPosition = 1; letterPosition <= 5; letterPosition++) { // haven't changed since this solveIt() call started
+      const gridElement = document.getElementById('guess_' + guessPosition + '_' + letterPosition);
+      gridSnapshot[guessPosition][letterPosition] = { letter: gridElement.value.toUpperCase(), state: gridElement.dataset.state };
+    } // for letterPosition
+  } // for guessPosition
   const excludedGuessWords = new Set();                             // completed non-winning guesses cannot be the answer
   let numCompleteGuesses = 0;
   for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
@@ -1293,15 +1301,13 @@ function solveIt() {
     let isCompleteGuess = true;
     let isAllGreenGuess = true;
     for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
-      const gridId = 'guess_' + guessPosition + '_' + letterPosition;
-      const gridElement = document.getElementById(gridId);
-      const letter = gridElement.value.toUpperCase();
+      const { letter, state } = gridSnapshot[guessPosition][letterPosition];
       if (letter === ' ') {
         isCompleteGuess = false;
         break;
       } // if
       guessWord += letter;
-      if (gridElement.dataset.state !== stateCorrect) { isAllGreenGuess = false; }
+      if (state !== stateCorrect) { isAllGreenGuess = false; }
     } // for
     if (isCompleteGuess && guessWord.length === 5) { numCompleteGuesses++; }
     if (isCompleteGuess && guessWord.length === 5 && !isAllGreenGuess) {
@@ -1352,12 +1358,10 @@ function solveIt() {
     let boolG2G = Boolean(true);
     for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
       for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
-        const gridId = 'guess_' + guessPosition + '_' + letterPosition;
-        const gridElement = document.getElementById(gridId);
-        const letter = gridElement.value.toUpperCase();
+        const { letter, state } = gridSnapshot[guessPosition][letterPosition];
         if (letter === ' ') {
           continue;
-        } else if (gridElement.dataset.state === stateMisplaced) {  // stateMisplaced: AKA Yellow
+        } else if (state === stateMisplaced) {  // stateMisplaced: AKA Yellow
           for (let wordLetterPosition = 1; wordLetterPosition <= 5; wordLetterPosition++) {
             const wordLetter = word.substring(wordLetterPosition - 1, wordLetterPosition);
             if (wordLetter === letter) {
@@ -1387,20 +1391,18 @@ function solveIt() {
       let isAllGreenGuess = true;
       const perGuessCounts = {};
       for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
-        const gridId = 'guess_' + guessPosition + '_' + letterPosition;
-        const gridElement = document.getElementById(gridId);
-        const letter = gridElement.value.toUpperCase();
+        const { letter, state } = gridSnapshot[guessPosition][letterPosition];
         if (letter === ' ') { break; }                              // stop on incomplete guess row
         guessWord += letter;
         if (!(letter in perGuessCounts)) {
           perGuessCounts[letter] = { minCount: 0, grayCount: 0 };
         } // if
-        if (gridElement.dataset.state === stateIncorrect) {
+        if (state === stateIncorrect) {
           perGuessCounts[letter].grayCount++;
           isAllGreenGuess = false;
-        } else if (gridElement.dataset.state === stateMisplaced || gridElement.dataset.state === stateCorrect) {
+        } else if (state === stateMisplaced || state === stateCorrect) {
           perGuessCounts[letter].minCount++;
-          if (gridElement.dataset.state !== stateCorrect) { isAllGreenGuess = false; }
+          if (state !== stateCorrect) { isAllGreenGuess = false; }
         } // if else
       } // for letterPosition
       if (guessWord.length !== 5) { continue; }                     // skip incomplete rows
