@@ -174,6 +174,9 @@ let version = '';                         // global version
 let useCaseData = [];
 let invalidGuessLock = false;             // block new letter entry after invalid 5-letter guess
 let invalidGuessPosition = 0;             // guess row that currently contains invalid word
+let rankGeneration = 0;                   // bumped on every solveIt()/resetGrid() call; lets a background rank detect it's stale
+let rankCacheSignature = null;            // signature (candidate words + answer basis) of the last completed background rank
+let rankCacheResult = null;               // ranked word array for rankCacheSignature - reused when the candidate pool hasn't changed
 // #endregion globals
 // #region init
 document.addEventListener('DOMContentLoaded', function () {         // fires when DOM loaded (ready)
@@ -544,6 +547,9 @@ function normalizeDatePickerOverlay() {                             // fallback 
 function resetGrid() {                                              // clear letter grid
   invalidGuessLock = false;
   invalidGuessPosition = 0;
+  rankGeneration++;                                                 // invalidate any in-flight background rank
+  rankCacheSignature = null;
+  rankCacheResult = null;
   for (let guessPosition = 1; guessPosition <= 6; guessPosition++) {
     for (let letterPosition = 1; letterPosition <= 5; letterPosition++) {
       const gridId = 'guess_' + guessPosition + '_' + letterPosition;
@@ -755,70 +761,80 @@ function charCount(str, chr) {                                      // count occ
 } // charCount()
 function getWordlePattern(guessWord, answerWord) {                  // return 5-char pattern: 0 Gray, 1 Yellow, 2 Green
   const pattern = ['0', '0', '0', '0', '0'];
-  const remainingLetters = {};
+  const remainingLetters = new Array(26).fill(0);                   // fixed-size counter array - faster than an object map in a hot loop
   for (let i = 0; i < 5; i++) {
-    const guessLetter = guessWord[i];
-    const answerLetter = answerWord[i];
-    if (guessLetter === answerLetter) {
+    const guessCode = guessWord.charCodeAt(i);
+    const answerCode = answerWord.charCodeAt(i);
+    if (guessCode === answerCode) {
       pattern[i] = '2';
     } else {
-      remainingLetters[answerLetter] = (remainingLetters[answerLetter] ?? 0) + 1;
+      remainingLetters[answerCode - 65]++;
     } // if else
   } // for
   for (let i = 0; i < 5; i++) {
     if (pattern[i] !== '0') { continue; }
-    const guessLetter = guessWord[i];
-    if ((remainingLetters[guessLetter] ?? 0) > 0) {
+    const guessIndex = guessWord.charCodeAt(i) - 65;
+    if (remainingLetters[guessIndex] > 0) {
       pattern[i] = '1';
-      remainingLetters[guessLetter]--;
+      remainingLetters[guessIndex]--;
     } // if
   } // for
   return pattern.join('');
 } // getWordlePattern()
-function sortByExpectedRemaining(candidateWords, possibleAnswers) {
+function rankInBackground(candidateWords, canRankAgainstActualAnswer, capturedAnswer, signature, generation) {
+  // Ranks candidateWords by "best next guess" (same words/content as before, just computed off the input path):
+  //  - chunked across multiple ticks so a huge candidate pool (worst case: first guess, ~14.9k words) never blocks
+  //    the main thread long enough to freeze the page - each chunk yields via setTimeout so iOS/Safari can paint
+  //  - the very first chunk is deferred with requestAnimationFrame + setTimeout so the letter just typed gets a
+  //    chance to paint before any of this heavy work starts (previously it ran synchronously in the same tick as
+  //    the keystroke, so the letter never painted until the whole computation finished)
+  //  - guarded by a generation token: if a newer solveIt()/resetGrid() happened while this was still running,
+  //    every chunk (and the final DOM write) becomes a no-op instead of clobbering newer, correct state
+  const possibleAnswers = candidateWords;
   const answerCount = possibleAnswers.length;
-  if (answerCount === 0) { return candidateWords.slice().sort(); }
   const scoreByWord = new Map();
-  for (const candidateWord of candidateWords) {
-    const buckets = new Map();
-    for (const possibleAnswer of possibleAnswers) {
-      const pattern = getWordlePattern(candidateWord, possibleAnswer);
-      buckets.set(pattern, (buckets.get(pattern) ?? 0) + 1);
+  let index = 0;
+  const chunkPatternBudget = 50000;                                 // aim for roughly this many pattern computations per chunk
+  function processChunk() {
+    if (generation !== rankGeneration) { return; }                  // stale - a newer request has superseded this one
+    const chunkSize = Math.max(1, Math.floor(chunkPatternBudget / Math.max(1, answerCount)));
+    const end = Math.min(index + chunkSize, candidateWords.length);
+    for (; index < end; index++) {
+      const candidateWord = candidateWords[index];
+      if (canRankAgainstActualAnswer) {
+        const actualPattern = getWordlePattern(candidateWord, capturedAnswer);
+        let remainingCount = 0;
+        for (const possibleAnswer of possibleAnswers) {
+          if (getWordlePattern(candidateWord, possibleAnswer) === actualPattern) { remainingCount++; }
+        } // for
+        scoreByWord.set(candidateWord, remainingCount);
+      } else {
+        const buckets = new Map();
+        for (const possibleAnswer of possibleAnswers) {
+          const pattern = getWordlePattern(candidateWord, possibleAnswer);
+          buckets.set(pattern, (buckets.get(pattern) ?? 0) + 1);
+        } // for
+        let sumSquares = 0;
+        for (const bucketSize of buckets.values()) { sumSquares += bucketSize * bucketSize; }
+        scoreByWord.set(candidateWord, answerCount === 0 ? 0 : sumSquares / answerCount);
+      } // if else
     } // for
-    let sumSquares = 0;
-    for (const bucketSize of buckets.values()) {
-      sumSquares += bucketSize * bucketSize;
-    } // for
-    scoreByWord.set(candidateWord, sumSquares / answerCount);
-  } // for
-  const sortedWords = candidateWords.slice();
-  sortedWords.sort(function (a, b) {
-    const scoreDiff = (scoreByWord.get(a) ?? 0) - (scoreByWord.get(b) ?? 0);
-    if (scoreDiff !== 0) { return scoreDiff; }
-    return a.localeCompare(b);
-  });
-  return sortedWords;
-} // sortByExpectedRemaining()
-function sortByActualRemaining(candidateWords, possibleAnswers, actualAnswer) {
-  const scoreByWord = new Map();
-  for (const candidateWord of candidateWords) {
-    const actualPattern = getWordlePattern(candidateWord, actualAnswer);
-    let remainingCount = 0;
-    for (const possibleAnswer of possibleAnswers) {
-      if (getWordlePattern(candidateWord, possibleAnswer) === actualPattern) {
-        remainingCount++;
-      } // if
-    } // for
-    scoreByWord.set(candidateWord, remainingCount);
-  } // for
-  const sortedWords = candidateWords.slice();
-  sortedWords.sort(function (a, b) {
-    const scoreDiff = (scoreByWord.get(a) ?? 0) - (scoreByWord.get(b) ?? 0);
-    if (scoreDiff !== 0) { return scoreDiff; }
-    return a.localeCompare(b);
-  });
-  return sortedWords;
-} // sortByActualRemaining()
+    if (index < candidateWords.length) {
+      setTimeout(processChunk, 0);                                  // yield back to the browser, resume next chunk later
+      return;
+    } // if
+    const rankedWords = candidateWords.slice();
+    rankedWords.sort(function (a, b) {
+      const scoreDiff = (scoreByWord.get(a) ?? 0) - (scoreByWord.get(b) ?? 0);
+      if (scoreDiff !== 0) { return scoreDiff; }
+      return a.localeCompare(b);
+    });
+    rankCacheSignature = signature;
+    rankCacheResult = rankedWords;
+    document.getElementById('possibilities-text-span').innerHTML = buildStrFilteredFiveLetterWords(rankedWords);
+  } // processChunk()
+  requestAnimationFrame(() => { setTimeout(processChunk, 0); });     // let the just-typed letter paint before starting
+} // rankInBackground()
 function stopFireworks() {                                          // stop fireworks effect
   if (fireworks !== '') {                                           // fireworks are on
     fireworks.stop();                                               // stop fireworks
@@ -1415,27 +1431,30 @@ function solveIt() {
   } // for candidateWord
   const aryUniqueFullyScrutinizedFilteredFiveLetterWords = [...new Set(aryFullyScrutinizedFilteredFiveLetterWords)];
   numFiveLetterWords = aryUniqueFullyScrutinizedFilteredFiveLetterWords.length;
-  let strPossibilities = ' ';
-  if (numCompleteGuesses > 0) {                                     // rank only after at least one full guess entered
-    const canRankAgainstActualAnswer = boolAutoResults && typeof answer === 'string' && answer.length === 5;
-    const rankedWords = canRankAgainstActualAnswer
-      ? sortByActualRemaining(aryUniqueFullyScrutinizedFilteredFiveLetterWords, aryUniqueFullyScrutinizedFilteredFiveLetterWords, answer)
-      : sortByExpectedRemaining(aryUniqueFullyScrutinizedFilteredFiveLetterWords, aryUniqueFullyScrutinizedFilteredFiveLetterWords);
-    aryUniqueFullyScrutinizedFilteredFiveLetterWords.length = 0;
-    aryUniqueFullyScrutinizedFilteredFiveLetterWords.push(...rankedWords);
-  } else {
-    aryUniqueFullyScrutinizedFilteredFiveLetterWords.sort();        // before first full guess, keep alphabetical
-  } // if else
-  if (numFiveLetterWords !== 0) {
-    strPossibilities = buildStrFilteredFiveLetterWords(aryUniqueFullyScrutinizedFilteredFiveLetterWords);
-  } // if
-  consoleLog(logFiltered, 'strPossibilities: "' + strPossibilities + '"');
+  rankGeneration++;                                                 // a new solveIt() call supersedes any rank still running in the background
+  const thisRankGeneration = rankGeneration;
   consoleLog(logFiltered, 'possibilities (filtered): ' + aryFilteredFiveLetterWords.length.toLocaleString());
   consoleLog(logFiltered, 'possibilities (scrutinized): ' + numFiveLetterWords.toLocaleString());
   document.getElementById('possibilities-number-span').innerHTML = 'possibilities: ' + numFiveLetterWords.toLocaleString();
   document.getElementById('possibilities').style.display = 'block'; // 'unhide'
-  document.getElementById('possibilities-text-span').innerHTML = strPossibilities;
   document.getElementById('words').style.display = 'block';         // 'unhide'
-  return aryUniqueFullyScrutinizedFilteredFiveLetterWords;          // pass array to caller
+  if (numFiveLetterWords === 0) {
+    document.getElementById('possibilities-text-span').innerHTML = ' ';
+  } else if (numCompleteGuesses === 0) {                             // before first full guess, keep alphabetical (cheap - compute inline)
+    aryUniqueFullyScrutinizedFilteredFiveLetterWords.sort();
+    document.getElementById('possibilities-text-span').innerHTML = buildStrFilteredFiveLetterWords(aryUniqueFullyScrutinizedFilteredFiveLetterWords);
+  } else {                                                          // rank by best-next-guess after at least one full guess entered
+    const canRankAgainstActualAnswer = boolAutoResults && typeof answer === 'string' && answer.length === 5;
+    const signature = aryUniqueFullyScrutinizedFilteredFiveLetterWords.join(',') + '::' + (canRankAgainstActualAnswer ? answer : '');
+    if (signature === rankCacheSignature) {                         // candidate pool unchanged since the last completed rank - reuse it
+      document.getElementById('possibilities-text-span').innerHTML = buildStrFilteredFiveLetterWords(rankCacheResult);
+    } else {
+      const interimAlphabetical = aryUniqueFullyScrutinizedFilteredFiveLetterWords.slice().sort();  // show something immediately
+      document.getElementById('possibilities-text-span').innerHTML = buildStrFilteredFiveLetterWords(interimAlphabetical);
+      rankInBackground(aryUniqueFullyScrutinizedFilteredFiveLetterWords, canRankAgainstActualAnswer, answer, signature, thisRankGeneration);
+    } // if else
+  } // if else
+  consoleLog(logFiltered, 'strPossibilities: "' + document.getElementById('possibilities-text-span').innerHTML + '"');
+  return aryUniqueFullyScrutinizedFilteredFiveLetterWords;          // pass array to caller (unranked/interim order is fine - callers only check set membership)
 } // solveIt()
 // #endregion solveIt
