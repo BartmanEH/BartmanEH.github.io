@@ -857,7 +857,7 @@ function celebrate(guessPosition, message) {                        // Easter Eg
     traceSpeed: fireworksMotionSpeed,
     traceLength: 3,
     autoresize: false,
-    intensity: 22,                                                  // rapid opening burst cadence (settles lower below)
+    intensity: 16,                                                  // rapid opening burst cadence (settles lower below)
     explosion: 4,                                                   // smaller bursts (default: 5)
     particles: 40,                                                  // fewer particles per burst (default: 50)
     acceleration: 1.02,                                             // gentler post-launch acceleration (default: 1.05)
