@@ -838,7 +838,7 @@ function celebrate(guessPosition, message) {                        // Easter Eg
   container.style.maxHeight = fireworksContainerBaseHeight + 'px';
   container.style.overflow = 'hidden';
   container.style.position = 'relative';
-  const fireworksMotionSpeed = 0.7;                                 // 30% slower overall motion
+  const fireworksMotionSpeed = 1.1;                                 // upward trace/ascent speed only (library default: 10) - explosion speed is separate (particles/friction/gravity/decay)
   const fireworksLibrary = globalThis.Fireworks;
   const FireworksCtor = (typeof fireworksLibrary === 'function')
     ? fireworksLibrary
@@ -857,16 +857,16 @@ function celebrate(guessPosition, message) {                        // Easter Eg
     traceSpeed: fireworksMotionSpeed,
     traceLength: 3,
     autoresize: false,
-    intensity: 16,                                                  // fast opening burst cadence (settles lower below)
+    intensity: 22,                                                  // rapid opening burst cadence (settles lower below)
     explosion: 4,                                                   // smaller bursts (default: 5)
     particles: 40,                                                  // fewer particles per burst (default: 50)
     acceleration: 1.02,                                             // gentler post-launch acceleration (default: 1.05)
-    delay: { min: 1, max: 3 }                                       // near-instant burst launches (default: {min: 30, max: 60})
+    delay: { min: 1, max: 2 }                                       // near-continuous burst launches (default: {min: 30, max: 60})
   });
   fireworks.start();                                                // launch fireworks effect
-  setTimeout(() => {                                                // after the fast opening burst, settle to a calmer-but-still-lively pace
+  setTimeout(() => {                                                // after the rapid opening burst, settle down - but still faster than the original pace
     if (fireworks !== '') { fireworks.updateOptions({ intensity: 12, delay: { min: 24, max: 48 } }); }
-  }, 700);
+  }, 900);
   requestAnimationFrame(() => {
     const canvas = container.querySelector('canvas');
     if (!canvas) { return; }
