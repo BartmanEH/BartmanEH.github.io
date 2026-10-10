@@ -26,6 +26,9 @@
   </li>
 </ul>
 
+Files use Unix (LF) line endings; the last two with Windows ones (`DVB_Calc/index.html`, `DVB_Calc/main_form.js`)
+were converted on 2026-10-10, like the Pi site's (innoengserv) on 2026-10-09.
+
 # PoGO Link Pages
 
 https://bartmaneh.github.io/PoGo_Links/ lists Bart's Pokémon GO link pages (made by the coord-link-page skill and the
