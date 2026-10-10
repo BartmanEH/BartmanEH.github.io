@@ -97,7 +97,9 @@
      button showed its own outline. WHY: Bart: Done's 3D didn't match and looked shorter. NOW: one 30px height, flat
      Done, and each button's outline restored (these .controls-prefixed rules win). */
   .controls button, .controls a { height: 30px; }
-  .controls .done-btn { background: #5e5e5e; border-color: #9a9a9a; --edge: #2a2a2a; }
+  /* 2026-10-10 BEFORE: #5e5e5e with edge #2a2a2a, darker than the card (#33332f), so no lip showed. WHY: Bart.
+     NOW: option B of three he was shown: #787878, edge #525252, outline #b0b0b0. */
+  .controls .done-btn { background: #787878; border-color: #b0b0b0; --edge: #525252; }
   .controls .done-btn.done { background: #2e7d32; border-color: #81c784; --edge: #1f5a22; }
   .controls .ipogo-btn { border-color: #3f9f9a; } .controls .joystick-btn { border-color: #9bc2ff; }
   .controls .maps-btn { border-color: #8fd19e; } .controls .copy-btn { border-color: #b9a6f0; }
