@@ -24,6 +24,9 @@ import subprocess
 import sys
 import unicodedata
 
+# Shown just below the footer (Bart's standard). 2.0 = redesign + reorder (2026-10-10); bump when the list page changes.
+LIST_VERSION = "2.0"
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)                      # PoGo_Links/
 REPO = os.path.dirname(OUT)                      # BartmanEH.github.io/
@@ -117,8 +120,8 @@ PAGE = r"""<!DOCTYPE html>
      Everything spans the same width (header tiles, cards, footer): Bart's symmetry rule. */
   :root { --bg: #2b2b29; --card: #33332f; --line: #404040; --text: #d1d5db; --bold: #e5e5e5; --grey: #9ca3af;
           --blue: #74aeea; --purple: #bb7cd8; --green: #a1c281; --tan: #c99c6e; --red: #e06c75; }
-  html { background: var(--bg); }
-  body { max-width: 412px; box-sizing: border-box; margin: 0 auto; padding: 20px 16px 16px; color: var(--text);
+  html { background: var(--bg); height: 100%; }
+  body { max-width: 412px; box-sizing: border-box; margin: 0 auto; padding: 20px 16px 66px; min-height: 100%; position: relative; color: var(--text);
          font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent;
          background: radial-gradient(120% 220px at 50% 0, rgba(116,174,234,.16), rgba(187,124,216,.07) 55%, transparent 100%) var(--bg); }
   .hero { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; }
@@ -177,9 +180,15 @@ PAGE = r"""<!DOCTYPE html>
   .card.dragging .grip { color: var(--blue); cursor: grabbing; }
   .links { display: flex; justify-content: space-between; font-size: 12px; color: var(--grey); margin: 14px 0 0; }
   .links a { color: var(--blue); text-decoration: none; }
-  /* Footer: the standard site notice, as on innoengserv.com (© 2014–current year, Bart's picture, name). */
-  .footer { text-align: center; font-size: 14px; color: var(--grey); margin: 18px 0 4px; }
-  .footer img { height: 30px; vertical-align: middle; margin: 0 4px; }
+  /* Footer: Bart's standard, as on his GitHub Pages tools (css/style.css .footer, URL Converter): pinned to the bottom of
+     a page at least one screen tall, "© years [Bart] Stassen, P.Eng." centred at 14px, the picture grows on hover, and
+     the version in grey 12px just BELOW the footer, so it only shows when you scroll past the end.
+     2026-10-10 BEFORE: footer straight after the list, no version. WHY: Bart: not his standard. NOW: as described. */
+  .footer { position: absolute; left: 0; right: 0; bottom: 0; height: 50px; display: flex; align-items: center;
+            justify-content: center; font-size: 14px; color: var(--grey); white-space: nowrap; }
+  .footer img { height: 30px; vertical-align: middle; margin: 0 4px; transition: transform .5s ease-in-out; }
+  .footer img:hover { transform: scale(1.5); }
+  .footer #version { position: absolute; left: 0; right: 0; top: 50px; font-size: 12px; line-height: 1; color: #888; }
 </style>
 </head>
 <body>
@@ -204,7 +213,7 @@ PAGE = r"""<!DOCTYPE html>
 __ROWS__
 </div>
 <div class="links"><a href="../">&larr; Home</a><span>Published __STAMP__</span></div>
-<div class="footer">&copy; 2014&ndash;<span id="year">__YEAR__</span><a href="../"><img src="../img/BartmanEH.png" alt="Bart"></a>Stassen, P.Eng.</div>
+<div class="footer">&copy; 2014&ndash;<span id="year">__YEAR__</span><a href="../"><img src="../img/BartmanEH.png" alt="Bart"></a>Stassen, P.Eng.<span id="version">v__VERSION__</span></div>
 <script>
 // Progress: each page keeps its Done ticks in localStorage on this same site, so the list can read them.
 // A place counts as done when its key is in the page's saved state (the two LEGO pages share one key on purpose).
@@ -343,7 +352,7 @@ def build_index(pages):
     stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     places = sum(len(i["keys"]) for _, i, _ in pages)
     out = PAGE
-    for k, v in (("__STAMP__", stamp), ("__YEAR__", str(datetime.date.today().year)), ("__PAGES__", str(len(pages))),
+    for k, v in (("__STAMP__", stamp), ("__VERSION__", LIST_VERSION), ("__YEAR__", str(datetime.date.today().year)), ("__PAGES__", str(len(pages))),
                  ("__PLACES__", f"{places:,}"), ("__ROWS__", "\n".join(rows)),
                  ("__DATA__", json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c"))):
         out = out.replace(k, v)
