@@ -38,8 +38,9 @@ as web pages, so they are copied here.
 - Don't edit `PoGo_Links/*.html` here: the next publish overwrites them from Drive.
 - The list can be reordered by drag and drop (Reorder → drag a card's grip → Done; Reset = newest first). The order
   is saved per browser (localStorage `pogolinks.order.v1`); pages not in it (new ones) show on top, newest first.
-- A list-only icon can override a page's own: `PoGo_Links/icons/<page file stem>.png` (e.g. the PokéXciting
-  rainbow wig, made by `PoGo_Links/scripts/rainbow_wig.py` from the page's four wig icons).
+- A list-only icon can override a page's own: `PoGo_Links/icons/<page file stem>.png`. The Pikachu ones (ESA, Seoul
+  hanbok, the PokéXciting rainbow wig) are made by `PoGo_Links/scripts/pikachu_icons.py` with one shared crop, so
+  they're the same size, as in the game.
   The others come from PokeMiners/pogo_assets (official in-game art): stamp-rally collection icons
   (`Images/StampRally/CollectionIcon/`), Pokémon icons (`Images/Pokemon - 256x256/Addressable Assets/`) and location
   backgrounds (`Images/LocationCards/`), trimmed to a 132 px square. Sources per page: the coord-link-page skill's

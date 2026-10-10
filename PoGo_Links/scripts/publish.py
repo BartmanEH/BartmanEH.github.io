@@ -188,7 +188,8 @@ PAGE = r"""<!DOCTYPE html>
             justify-content: center; font-size: 14px; color: var(--grey); white-space: nowrap; }
   .footer img { height: 30px; vertical-align: middle; margin: 0 4px; transition: transform .5s ease-in-out; }
   .footer img:hover { transform: scale(1.5); }
-  .footer #version { position: absolute; left: 0; right: 0; top: 50px; font-size: 12px; line-height: 1; color: #888; }
+  .footer #version { position: absolute; left: 0; right: 0; top: 50px; display: block; text-align: center; font-size: 12px;
+                     line-height: 1; color: #888; }   /* centred: his sites centre all body text */
 </style>
 </head>
 <body>
