@@ -2,8 +2,9 @@
 """Publish Bart's Pokémon GO link pages from Google Drive to GitHub Pages.
 
 Copies every .html in Drive "Other/Pokémon GO/web pages w links/" (top level only, so "backup …/" folders are
-skipped) into PoGo_Links/, removes pages that are no longer in Drive, rebuilds PoGo_Links/index.html (the list,
-newest first), then commits and pushes. Pages are copied byte for byte: each one already embeds its GPX and keeps
+skipped) into PoGo_Links/, rebuilds PoGo_Links/index.html (the list, newest first), then commits and pushes. It never
+deletes pages (2026-10-10): Pokémap Exports also arrive straight from the userscript via BartmanEH/pogo-links-inbox,
+whose GitHub job runs this script with --index-only. Pages are copied byte for byte: each one already embeds its GPX and keeps
 its Done ticks under its own localStorage key.
 
 Usage (from anywhere):
@@ -403,12 +404,51 @@ def build_index(pages):
     return out
 
 
+def page_date(path):
+    """When a page was last published: its last commit, or now if it has uncommitted changes (about to be published).
+    2026-10-10 BEFORE: the Drive file's modified time. WHY: the list is now also rebuilt by a GitHub job, which has no
+    Drive; one source of dates wherever it runs. NOW: git."""
+    rel = os.path.relpath(path, REPO)
+    if git("status", "--porcelain", "--", rel, check=False):
+        return datetime.datetime.now().timestamp()
+    ts = git("log", "-1", "--format=%ct", "--", rel, check=False)
+    return float(ts) if ts else os.path.getmtime(path)
+
+
+def site_pages():
+    """The pages on the site (PoGo_Links/*.html except the list itself)."""
+    return sorted(unicodedata.normalize("NFC", f) for f in os.listdir(OUT) if f.endswith(".html") and f != "index.html")
+
+
+def write_index():
+    """Rebuild PoGo_Links/index.html from the pages on the site, newest first. Returns True if it changed."""
+    pages = sorted(((n, page_info(os.path.join(OUT, n)), page_date(os.path.join(OUT, n))) for n in site_pages()),
+                   key=lambda t: t[2], reverse=True)
+    index = os.path.join(OUT, "index.html")
+    old = open(index, encoding="utf-8").read() if os.path.exists(index) else ""
+    new_index = build_index(pages)
+    # Ignore the generated timestamp when deciding whether the list changed.
+    strip = lambda s: re.sub(r"(on|Published) \d{4}-\d\d-\d\d \d\d:\d\d", "", s)
+    if strip(old) == strip(new_index):
+        return False
+    with open(index, "w", encoding="utf-8") as f:
+        f.write(new_index)
+    return True
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("-n", "--dry-run", action="store_true")
     ap.add_argument("--no-push", action="store_true")
     ap.add_argument("--src")
+    ap.add_argument("--index-only", action="store_true",
+                    help="only rebuild the list from the pages already in PoGo_Links/ (no Drive, no commit): used by "
+                         "the GitHub job in BartmanEH/pogo-links-inbox, which commits itself")
     a = ap.parse_args()
+
+    if a.index_only:
+        print("List changed." if write_index() else "List unchanged.")
+        return
 
     src = find_source(a.src)
     # Several Macs, one repo: never publish onto a stale checkout (Bart's standing rule).
@@ -424,11 +464,10 @@ def main():
     for p in glob.glob(os.path.join(src, "*.html")):
         wanted[unicodedata.normalize("NFC", os.path.basename(p))] = p
     if not wanted:
-        sys.exit(f"No .html pages in {src}; refusing to empty the site.")
-    have = {unicodedata.normalize("NFC", f) for f in os.listdir(OUT) if f.endswith(".html") and f != "index.html"} \
-        if os.path.isdir(OUT) else set()
+        sys.exit(f"No .html pages in {src}; refusing to publish from an empty folder.")
+    have = set(site_pages()) if os.path.isdir(OUT) else set()
 
-    added, updated, removed = [], [], []
+    added, updated = [], []
     for name, p in sorted(wanted.items()):
         dst = os.path.join(OUT, name)
         new = open(p, "rb").read()
@@ -441,34 +480,26 @@ def main():
         if not a.dry_run:
             with open(dst, "wb") as f:
                 f.write(new)
-    for name in sorted(have - set(wanted)):
-        removed.append(name)
-        if not a.dry_run:
-            os.remove(os.path.join(OUT, name))
+    # 2026-10-10 BEFORE: pages on the site but not in Drive were deleted. WHY: Pokémap Exports now reach the site
+    # straight from the userscript (via the pogo-links-inbox repo), so a page needn't be in Drive; deleting would lose
+    # them. NOW: never delete; to take a page down, remove it from PoGo_Links/ by hand (and from Drive) and publish.
+    only_site = sorted(have - set(wanted))
 
-    for label, names in (("Added", added), ("Updated", updated), ("Removed", removed)):
+    for label, names in (("Added", added), ("Updated", updated)):
         for n in names:
             print(f"{label}: {n}")
+    if only_site:
+        print("On the site but not in Drive (kept): " + ", ".join(only_site))
     if a.dry_run:
-        print("Dry run: nothing written." if added or updated or removed else "Nothing to publish.")
+        print("Dry run: nothing written." if added or updated else "Nothing to publish.")
         return
 
-    pages = sorted(((n, page_info(wanted[n]), os.path.getmtime(wanted[n])) for n in wanted),
-                   key=lambda t: t[2], reverse=True)
-    index = os.path.join(OUT, "index.html")
-    old = open(index, encoding="utf-8").read() if os.path.exists(index) else ""
-    new_index = build_index(pages)
-    # Ignore the generated timestamp when deciding whether the list changed.
-    strip = lambda s: re.sub(r"(on|Published) \d{4}-\d\d-\d\d \d\d:\d\d", "", s)
-    if strip(old) != strip(new_index):
-        with open(index, "w", encoding="utf-8") as f:
-            f.write(new_index)
-
+    write_index()
     git("add", "-A", "PoGo_Links")
     if not git("status", "--porcelain", "PoGo_Links"):
         print("Nothing to publish: the site already matches Drive.")
         return
-    parts = [f"{len(x)} {w}" for x, w in ((added, "added"), (updated, "updated"), (removed, "removed")) if x]
+    parts = [f"{len(x)} {w}" for x, w in ((added, "added"), (updated, "updated")) if x]
     git("commit", "-q", "-m", f"PoGo Links: publish ({', '.join(parts) or 'list refreshed'})")
     if a.no_push:
         print("Committed, not pushed (--no-push).")
