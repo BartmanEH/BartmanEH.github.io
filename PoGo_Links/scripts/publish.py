@@ -27,7 +27,7 @@ import unicodedata
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
-LIST_VERSION = "2.3"
+LIST_VERSION = "2.4"   # 2.4 = progress bars actually fill (were 0px wide)
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -168,8 +168,12 @@ PAGE = r"""<!DOCTYPE html>
   .m .n { color: var(--tan); font-variant-numeric: tabular-nums; }
   .bar { grid-column: 2; display: flex; align-items: center; gap: 8px; margin-top: 3px; font-size: 11px; color: var(--grey);
          font-variant-numeric: tabular-nums; }
-  .track { flex: 1; height: 6px; border-radius: 3px; background: #2b2b29; overflow: hidden; box-shadow: inset 0 0 0 1px #3a3a36; }
-  .fill { height: 100%; width: 0; border-radius: 3px; background: linear-gradient(90deg, color-mix(in srgb, var(--c) 70%, #2b2b29), var(--c));
+  .track { flex: 1; height: 6px; border-radius: 3px; background: #232321; overflow: hidden; box-shadow: inset 0 0 0 1px #4a4a44; }
+  /* 2026-10-10 BEFORE (v2.3): track #2b2b29 edged #3a3a36, too faint to see on a #33332f card (Bart: no bar at all).
+     NOW (v2.4): darker track, lighter edge. */
+  /* display: block: the fill is a <span>, and an inline element ignores width, so before 2026-10-10 (v2.3) every bar drew
+     0px wide whatever the progress (Bart: "Complete" but not filled in). NOW (v2.4) block, so the width shows. */
+  .fill { display: block; height: 100%; width: 0; border-radius: 3px; background: linear-gradient(90deg, color-mix(in srgb, var(--c) 70%, #2b2b29), var(--c));
           transition: width 400ms ease; }
   .bar.complete { color: var(--green); font-weight: 700; }
   .bar.complete .fill { background: var(--green); }
