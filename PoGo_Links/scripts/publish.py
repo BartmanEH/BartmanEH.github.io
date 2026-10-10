@@ -87,7 +87,7 @@ def category(title, name):
     t = f"{title} {name}".lower()
     if "quest" in t:
         return "q", "Quests"
-    if "stamp" in t or "rally" in t:
+    if "stamp" in t or "rally" in t or "lego" in t:      # "LEGO — outstanding" is the rest of the LEGO rally
         return "s", "Stamp rally"
     return "e", "Event"
 
@@ -134,7 +134,7 @@ PAGE = r"""<!DOCTYPE html>
   .stat.done b { color: var(--green); }
   .card { --c: var(--purple); display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 4px 12px; align-items: center;
           background: linear-gradient(135deg, rgba(255,255,255,.035), transparent 60%) var(--card); border: 1px solid var(--line);
-          border-left: 3px solid var(--c); border-radius: 12px; padding: 12px 12px 10px; margin-bottom: 10px; text-decoration: none;
+          border-left: 3px solid var(--c); border-radius: 12px; padding: 12px 12px 10px 10px; margin-bottom: 10px; text-decoration: none;
           box-shadow: 0 2px 10px rgba(0,0,0,.25); transition: transform 90ms ease, box-shadow 90ms ease, background-color 90ms; }
   .card:active { transform: scale(.985); background-color: #3a3a36; }
   @media (hover: hover) { .card:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,.35); } }
@@ -193,7 +193,7 @@ function refresh() {
   document.querySelectorAll('.card').forEach(function (card) {
     var p = PAGES[card.dataset.file], st = {};
     try { st = JSON.parse(localStorage.getItem(p.storage) || '{}') || {}; } catch (e) {}
-    var done = p.keys.filter(function (k) { return st[k]; }).length;
+    var done = p.keys.filter(function (k) { return st[k] && st[k].done !== false; }).length;
     total += done;
     var bar = card.querySelector('.bar');
     bar.querySelector('.fill').style.width = (p.keys.length ? 100 * done / p.keys.length : 0) + '%';

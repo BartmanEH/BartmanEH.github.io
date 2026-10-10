@@ -26,7 +26,7 @@
   </li>
 </ul>
 
-# PoGo Link Pages
+# PoGO Link Pages
 
 https://bartmaneh.github.io/PoGo_Links/ lists Bart's Pokémon GO link pages (made by the coord-link-page skill and the
 Pokémap quest Export). The pages live in Google Drive, `Other/Pokémon GO/web pages w links/`; Drive can't serve them
