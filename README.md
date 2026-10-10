@@ -44,7 +44,8 @@ as web pages, so they are copied here.
 - Icon scripts need Pillow, which isn't installed system-wide: `python3 -m venv /tmp/v && /tmp/v/bin/pip install pillow`,
   then run them with `/tmp/v/bin/python -I PoGo_Links/scripts/<script>.py`.
 - Preview locally before pushing: `python3 -m http.server 8765` in the repo, open http://localhost:8765/PoGo_Links/
-  at 375 px wide (phone) and measure: header, tiles, cards and footer all span the same 16–359 px, no sideways scroll.
+  at 412 px wide (Bart's Pixel 6 Pro and OnePlus 8; no need to go narrower) and measure: header, tiles, cards and
+  footer all span the same 16–396 px, no sideways scroll.
 - Background (map links, icon sources, KML quirks, sizing rules): the coord-link-page skill's
   `references/sources.md` (BartmanEH/claude-skills, `~/.claude/skills`).
 
