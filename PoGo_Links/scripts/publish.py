@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 """Publish Bart's Pokémon GO link pages from Google Drive to GitHub Pages.
 
-Copies every .html in Drive "Other/Pokémon GO/web pages w links/" (top level only, so "backup …/" folders are
-skipped) into PoGo_Links/, rebuilds PoGo_Links/index.html (the list, newest first), then commits and pushes. It never
-deletes pages (2026-10-10): Pokémap Exports also arrive straight from the userscript via BartmanEH/pogo-links-inbox,
-whose GitHub job runs this script with --index-only. Pages are copied byte for byte: each one already embeds its GPX and keeps
+The pages live in PoGo_Links/ itself (2026-10-10: Google Drive is no longer used). Pokémap quest Exports arrive on
+their own via BartmanEH/pogo-links-inbox, whose GitHub job runs this script with --index-only; pages made by the
+coord-link-page skill are written into PoGo_Links/ and published with this script: it pulls, rebuilds
+PoGo_Links/index.html (the list, newest first), commits and pushes. It never deletes pages; to take one down, delete
+the file and publish. Pages are copied byte for byte: each one already embeds its GPX and keeps
 its Done ticks under its own localStorage key.
 
 Usage (from anywhere):
   python3 -I PoGo_Links/scripts/publish.py           # publish, commit and push
   python3 -I PoGo_Links/scripts/publish.py -n        # dry run: show what would change, touch nothing
   python3 -I PoGo_Links/scripts/publish.py --no-push # write and commit, don't push
-  python3 -I PoGo_Links/scripts/publish.py --src DIR # another source folder
+  python3 -I PoGo_Links/scripts/publish.py --src DIR # first import the .html pages in DIR
 Called by the coord-link-page skill after it writes a page (2026-10-10).
 """
 import argparse
@@ -34,7 +35,6 @@ FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", th
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)                      # PoGo_Links/
 REPO = os.path.dirname(OUT)                      # BartmanEH.github.io/
-DRIVE_GLOB = os.path.expanduser("~/Library/CloudStorage/GoogleDrive-*/My Drive/Other/Pokémon GO/web pages w links")
 
 
 def git(*args, check=True):
@@ -42,15 +42,6 @@ def git(*args, check=True):
     if check and r.returncode:
         sys.exit(f"git {' '.join(args)} failed:\n{r.stderr.strip()}")
     return r.stdout.strip()
-
-
-def find_source(arg):
-    if arg:
-        return arg
-    hits = [p for p in glob.glob(DRIVE_GLOB) if os.path.isdir(p)]
-    if len(hits) != 1:
-        sys.exit(f"Can't find the Drive folder (matches: {len(hits)}). Pass --src.")
-    return hits[0]
 
 
 def page_info(path):
@@ -440,67 +431,49 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("-n", "--dry-run", action="store_true")
     ap.add_argument("--no-push", action="store_true")
-    ap.add_argument("--src")
+    ap.add_argument("--src", help="also import every .html in this folder first (e.g. old pages from the Drive archive)")
     ap.add_argument("--index-only", action="store_true",
-                    help="only rebuild the list from the pages already in PoGo_Links/ (no Drive, no commit): used by "
-                         "the GitHub job in BartmanEH/pogo-links-inbox, which commits itself")
+                    help="only rebuild the list (no pull, no commit): used by the GitHub job in BartmanEH/pogo-links-inbox")
     a = ap.parse_args()
 
     if a.index_only:
         print("List changed." if write_index() else "List unchanged.")
         return
 
-    src = find_source(a.src)
-    # Several Macs, one repo: never publish onto a stale checkout (Bart's standing rule).
+    # Several Macs, one repo, and the inbox job pushes Exports: never publish onto a stale checkout.
     git("fetch", "-q")
     ahead_behind = git("rev-list", "--left-right", "--count", "HEAD...@{u}").split()
     if ahead_behind[1] != "0":
-        if git("status", "--porcelain") or a.dry_run:
+        if git("status", "--porcelain", "--untracked-files=no") or a.dry_run:
             sys.exit("This checkout is behind GitHub. Pull first (git pull --ff-only).")
         git("pull", "-q", "--ff-only")
 
-    # NFC names: macOS can hand out NFD, which git and the web would treat as a different file.
-    wanted = {}
-    for p in glob.glob(os.path.join(src, "*.html")):
-        wanted[unicodedata.normalize("NFC", os.path.basename(p))] = p
-    if not wanted:
-        sys.exit(f"No .html pages in {src}; refusing to publish from an empty folder.")
-    have = set(site_pages()) if os.path.isdir(OUT) else set()
+    # 2026-10-10 BEFORE: pages were copied from Google Drive "Other/Pokémon GO/web pages w links/" (the default source).
+    # WHY: Bart abandoned Drive: Exports publish themselves (pogo-links-inbox) and the coord-link-page skill writes its
+    # pages straight into PoGo_Links/. NOW: the pages in PoGo_Links/ are the source; --src imports from a folder if asked.
+    if a.src:
+        for p in sorted(glob.glob(os.path.join(a.src, "*.html"))):
+            name = unicodedata.normalize("NFC", os.path.basename(p))
+            dst = os.path.join(OUT, name)
+            new = open(p, "rb").read()
+            if os.path.exists(dst) and open(dst, "rb").read() == new:
+                continue
+            print(("Updated: " if os.path.exists(dst) else "Added: ") + name)
+            if not a.dry_run:
+                with open(dst, "wb") as f:
+                    f.write(new)
 
-    added, updated = [], []
-    for name, p in sorted(wanted.items()):
-        dst = os.path.join(OUT, name)
-        new = open(p, "rb").read()
-        if name not in have:
-            added.append(name)
-        elif open(dst, "rb").read() != new:
-            updated.append(name)
-        else:
-            continue
-        if not a.dry_run:
-            with open(dst, "wb") as f:
-                f.write(new)
-    # 2026-10-10 BEFORE: pages on the site but not in Drive were deleted. WHY: Pokémap Exports now reach the site
-    # straight from the userscript (via the pogo-links-inbox repo), so a page needn't be in Drive; deleting would lose
-    # them. NOW: never delete; to take a page down, remove it from PoGo_Links/ by hand (and from Drive) and publish.
-    only_site = sorted(have - set(wanted))
-
-    for label, names in (("Added", added), ("Updated", updated)):
-        for n in names:
-            print(f"{label}: {n}")
-    if only_site:
-        print("On the site but not in Drive (kept): " + ", ".join(only_site))
+    changed = [l[3:] for l in git("status", "--porcelain", "PoGo_Links").splitlines() if l[3:].endswith(".html")]
     if a.dry_run:
-        print("Dry run: nothing written." if added or updated else "Nothing to publish.")
+        print("Would publish: " + (", ".join(changed) if changed else "nothing (only the list may refresh)"))
         return
-
     write_index()
     git("add", "-A", "PoGo_Links")
     if not git("status", "--porcelain", "PoGo_Links"):
-        print("Nothing to publish: the site already matches Drive.")
+        print("Nothing to publish.")
         return
-    parts = [f"{len(x)} {w}" for x, w in ((added, "added"), (updated, "updated")) if x]
-    git("commit", "-q", "-m", f"PoGo Links: publish ({', '.join(parts) or 'list refreshed'})")
+    pages = [os.path.basename(c) for c in changed if not c.endswith("index.html")]
+    git("commit", "-q", "-m", "PoGo Links: publish (" + (", ".join(pages) if pages else "list refreshed") + ")")
     if a.no_push:
         print("Committed, not pushed (--no-push).")
         return
