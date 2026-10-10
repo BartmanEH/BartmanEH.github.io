@@ -1,0 +1,346 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Filtered Quests</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<style>
+  * { box-sizing: border-box; }
+  /* Colours: Bart's VS Code palette (the early Claude code-block look): page #2b2b29, cards #33332f, borders #404040,
+     text #d1d5db, bold #e5e5e5, grey #9ca3af. Keep the Pokémap quest Export page and the coord-link-page template in step. */
+  body { margin: 0; padding: 16px 16px 84px; background: #2b2b29; color: #d1d5db; font-family: -apple-system, system-ui, sans-serif; }
+  /* v7.25: title and sub line share the first line; the three header buttons get their own row (they don't fit beside
+     the title at phone width). */
+  .top { margin: 0 0 8px; }
+  h1 { display: inline; font-size: 18px; margin: 0 8px 0 0; color: #e5e5e5; }
+  .head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 12px; } /* spans the rows' width */
+  /* GPX (download the track) and Map (open it in the GPX viewer): raised pill buttons with an icon, the same
+     press-sinks-2px feel as the per-stop buttons. */
+  .head { flex-wrap: wrap; }
+  .hbtn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 13px 6px 10px; border-radius: 999px; font-size: 13px; font-weight: 800; letter-spacing: .3px; color: #fff; cursor: pointer; text-shadow: 0 1px 2px rgba(0,0,0,.45); transition: transform 90ms ease, box-shadow 90ms ease, filter 90ms ease; }
+  .hbtn svg { width: 16px; height: 16px; flex: 0 0 16px; }
+  .hbtn:hover { filter: brightness(1.08); }
+  .hbtn:active { transform: translateY(2px); filter: brightness(.95); }
+  #copyGpxBtn { background: linear-gradient(180deg, #9b7be8, #6f4fc4); border: 1px solid #cbb8ff; box-shadow: 0 3px 0 #3f2a80, 0 6px 14px rgba(111,79,196,.35); }
+  #copyGpxBtn:active { box-shadow: 0 1px 0 #3f2a80, 0 2px 6px rgba(111,79,196,.3); }
+  #gpxBtn { background: linear-gradient(180deg, #ffb547, #f08a12); border: 1px solid #ffd08a; box-shadow: 0 3px 0 #9a5506, 0 6px 14px rgba(240,138,18,.35); }
+  #gpxBtn:active { box-shadow: 0 1px 0 #9a5506, 0 2px 6px rgba(240,138,18,.3); }
+  #mapBtn { background: linear-gradient(180deg, #2fc4b2, #138f86); border: 1px solid #8ee8dd; box-shadow: 0 3px 0 #0b5d57, 0 6px 14px rgba(19,143,134,.35); }
+  #mapBtn:active { box-shadow: 0 1px 0 #0b5d57, 0 2px 6px rgba(19,143,134,.3); }
+  .sub { display: inline; color: #9ca3af; font-size: 12.5px; }
+  .toolbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; background: #242422; border-top: 1px solid #404040; padding: 7px 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .toolbar button, .toolbar label { background: #353533; color: #d1d5db; border: 1px solid #404040; border-radius: 6px; padding: 6px 14px; font-size: 13px; cursor: pointer; }
+  #status { order: -1; flex: 1 0 100%; display: flex; justify-content: space-between; gap: 8px; font-weight: 600; color: #9ca3af; font-size: 13px; opacity: .85; padding-bottom: 2px; }
+  /* Toggle switches (top of page): label | switch | label. The knob sits on the chosen side; the chosen label is
+     bright and bold, the other dimmed. Tapping the switch or either label selects. */
+  /* Each switch in its own card like the rows (Bart), both on one row at phone width: 13px labels, 40px switches. */
+  .switches { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 6px; margin-bottom: 12px; } /* spans the rows' width */
+  .toggle { display: inline-flex; align-items: center; gap: 5px; padding: 4px 6px; background: #33332f; border: 1px solid #404040; border-radius: 8px; user-select: none; -webkit-user-select: none; }
+  .toggle .opt { font-size: 13px; color: #7d7d78; cursor: pointer; font-weight: 400; }
+  .toggle .opt.on { color: #e5e5e5; font-weight: 700; }
+  .toggle .sw { position: relative; width: 40px; height: 24px; border: 2px solid #d1d5db; border-radius: 13px; background: #2b2b29; cursor: pointer; padding: 0; flex: 0 0 auto; }
+  .toggle .sw::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #d1d5db; transition: transform 140ms ease; }
+  .toggle .sw.right::after { transform: translateX(16px); }
+  /* Two lines per stop: icon | one scrollable info line, then the buttons. */
+  .row { background: #33332f; border: 1px solid #404040; border-radius: 8px; padding: 6px 8px; margin-bottom: 6px; display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: 8px; row-gap: 5px; align-items: center; }
+  .row.done { opacity: 0.45; }
+  .row .qicon { grid-row: 1 / span 2; width: 44px; height: 38px; object-fit: contain; }
+  .row .noicon { grid-row: 1 / span 2; }
+  /* Reward and task first so they are always visible; the rest (stop, distance, coordinates) scrolls sideways. */
+  .row .line { white-space: nowrap; overflow-x: auto; scrollbar-width: none; font-size: 14px; color: #d1d5db; }
+  .row .line::-webkit-scrollbar { display: none; }
+  .row .line b { color: #e5e5e5; font-size: 15px; }
+  .row .line .task { color: #e5e5e5; font-size: 15px; }
+  .row .line .dist { display: inline-block; background: #2b2b29; border: 1px solid #4a4a46; border-radius: 10px; padding: 0 7px; margin-right: 6px; font-size: 13px; font-weight: 700; color: #ffd166; }
+  .row .line .dim { color: #9ca3af; font-size: 12px; }
+  .controls { display: flex; flex-wrap: nowrap; gap: 8px; align-items: center; }
+  /* Raised buttons like the map popup's iPogo / GPS JoyStick buttons: colored bottom edge, press sinks 2px. */
+  .controls button, .controls a { display: inline-flex; align-items: center; justify-content: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 6px 8px; box-sizing: border-box; border-radius: 6px; border: 1px solid #444; text-decoration: none; text-align: center; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,.7); box-shadow: 0 3px 0 var(--edge, #000), 0 5px 10px rgba(0,0,0,.35); transition: transform 90ms ease, box-shadow 90ms ease, filter 90ms ease; }
+  .controls button:active, .controls a:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--edge, #000), 0 2px 4px rgba(0,0,0,.28); filter: brightness(.93); }
+  .controls .ico { display: inline-flex; width: 16px; height: 16px; flex: 0 0 16px; }
+  .controls .ico svg { width: 100%; height: 100%; display: block; }
+  /* v7.17: lighter face so the dark 3D edge shows against the dark page (it read as flat). */
+  .done-btn { background: linear-gradient(180deg, #5c5c5c, #444); color: #fff; border-color: #7a7a7a; width: 62px; --edge: #222; }
+  .done-btn.done { background: linear-gradient(180deg, #43a047, #2e7d32); border-color: #81c784; color: #fff; --edge: #1b4d1f; }
+  .ipogo-btn { background: #1f5856; color: #fff; border-color: #3f9f9a; --edge: #153f3d; }
+  .joystick-btn { background: #1a73e8; color: #fff; border-color: #9bc2ff; --edge: #0d47a1; }
+  .maps-btn { background: #2e6b3a; color: #fff; border-color: #8fd19e; --edge: #1b4425; }
+  .copy-btn { background: #5b4a8a; color: #fff; border-color: #b9a6f0; --edge: #3a2e5c; min-width: 74px; }
+  /* v7.25 (Bart): Export / Import progress always on their own second row. */
+  .toolbar .brk { flex-basis: 100%; height: 0; }
+  .toolbar { row-gap: 4px; } /* the break is an empty flex line, so the rows' gap counts twice around it */
+  #importInput { display: none; }
+</style>
+</head>
+<body>
+<div class="top"><h1>Filtered Quests</h1><div class="sub">41 markers &middot; spiralling from Default</div></div>
+<div class="head"><button id="copyGpxBtn" class="hbtn" title="Copy the route's GPX text (to paste into iPogo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy GPX</span></button><button id="gpxBtn" class="hbtn" title="Download the route as a GPX track"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>GPX</button><button id="mapBtn" class="hbtn" title="Open the route in the GPX viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Map</button></div>
+<div class="switches">
+  <div class="toggle" id="teleportToggle"><span class="opt" data-v="ipogo">iPogo</span><button class="sw" aria-label="iPogo or GPS JoyStick"></button><span class="opt" data-v="joystick">GPS JoyStick</span></div>
+  <div class="toggle" id="secondToggle"><span class="opt" data-v="maps">Maps</span><button class="sw" aria-label="Maps or Copy"></button><span class="opt" data-v="copy">Copy</span></div>
+</div>
+<div class="toolbar">
+  <button id="hideDoneBtn">Hide done</button>
+  <button id="undoBtn">Undo last</button>
+  <button id="resetAllBtn">Reset all</button>
+  <span class="brk"></span>
+  <button id="exportProgressBtn">Export progress</button>
+  <label for="importInput">Import progress</label>
+  <input type="file" id="importInput" accept="application/json">
+  <span id="status"><span id="doneCount"></span><span style="font-weight: 400; font-size: 12px;">generated 2026-10-09, 12:21:11 p.m.</span></span>
+</div>
+<div id="list"></div>
+<script>
+(function () {
+  var POINTS = [{"key":"40.790766,-73.954955","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Peter and Sophie Quinn","lat":40.790766,"lon":-73.954955,"distText":"3.31 km","distFrom":"Default","icon":0},{"key":"40.806690,-73.937019","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Harlem Islamic Cultural Center","lat":40.80669,"lon":-73.937019,"distText":"2.33 km","distFrom":"previous stop","icon":0},{"key":"40.811243,-73.947242","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"St Nicholas Playground (South)","lat":40.811243,"lon":-73.947242,"distText":"998 m","distFrom":"previous stop","icon":0},{"key":"40.807613,-73.959735","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"School of International and Public Affairs","lat":40.807613,"lon":-73.959735,"distText":"1.13 km","distFrom":"previous stop","icon":0},{"key":"40.753524,-74.001487","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Avant Gallery","lat":40.753524,"lon":-74.001487,"distText":"6.97 km","distFrom":"previous stop","icon":0},{"key":"40.727300,-74.030821","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Newport River Ct Garden East Entrance","lat":40.7273,"lon":-74.030821,"distText":"3.82 km","distFrom":"previous stop","icon":0},{"key":"40.721987,-74.033619","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Playground","lat":40.721987,"lon":-74.033619,"distText":"636 m","distFrom":"previous stop","icon":0},{"key":"40.716481,-74.047270","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Fish On Sewer Grate","lat":40.716481,"lon":-74.04727,"distText":"1.30 km","distFrom":"previous stop","icon":0},{"key":"40.688866,-73.982265","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Billie Holiday Mural","lat":40.688866,"lon":-73.982265,"distText":"6.28 km","distFrom":"previous stop","icon":0},{"key":"40.680759,-73.964443","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Rev. Benjamin J. Lowry Lowry Triangle","lat":40.680759,"lon":-73.964443,"distText":"1.75 km","distFrom":"previous stop","icon":0},{"key":"40.671996,-73.954447","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Mt. Carmel Church and Tower","lat":40.671996,"lon":-73.954447,"distText":"1.29 km","distFrom":"previous stop","icon":0},{"key":"40.687492,-73.954893","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Black Excellence Mural","lat":40.687492,"lon":-73.954893,"distText":"1.72 km","distFrom":"previous stop","icon":0},{"key":"40.695620,-73.917095","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Ismael","lat":40.69562,"lon":-73.917095,"distText":"3.31 km","distFrom":"previous stop","icon":0},{"key":"40.715816,-73.993292","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Water Tower Rockets Mural","lat":40.715816,"lon":-73.993292,"distText":"6.80 km","distFrom":"previous stop","icon":0},{"key":"40.723747,-73.993665","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Cellar Mural","lat":40.723747,"lon":-73.993665,"distText":"882 m","distFrom":"previous stop","icon":0},{"key":"40.730745,-73.986814","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Heckscher Courtyard","lat":40.730745,"lon":-73.986814,"distText":"969 m","distFrom":"previous stop","icon":0},{"key":"40.727153,-73.981191","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"General Slocum Memorial Fountain","lat":40.727153,"lon":-73.981191,"distText":"620 m","distFrom":"previous stop","icon":0},{"key":"40.728363,-73.975919","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Red Abstract Sculpture at The East","lat":40.728363,"lon":-73.975919,"distText":"464 m","distFrom":"previous stop","icon":0},{"key":"40.730715,-73.975073","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Playground 4 at Stuy Town","lat":40.730715,"lon":-73.975073,"distText":"271 m","distFrom":"previous stop","icon":0},{"key":"40.738294,-73.991107","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Devi","lat":40.738294,"lon":-73.991107,"distText":"1.59 km","distFrom":"previous stop","icon":0},{"key":"40.788557,-73.976752","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Hansom Carriage Tilework","lat":40.788557,"lon":-73.976752,"distText":"5.72 km","distFrom":"previous stop","icon":0},{"key":"40.836476,-73.936877","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Adventure Playground","lat":40.836476,"lon":-73.936877,"distText":"6.30 km","distFrom":"previous stop","icon":0},{"key":"40.847453,-73.936899","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Piramides De El Salvador","lat":40.847453,"lon":-73.936899,"distText":"1.22 km","distFrom":"previous stop","icon":0},{"key":"40.857699,-73.921939","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Cove Compass Rose","lat":40.857699,"lon":-73.921939,"distText":"1.70 km","distFrom":"previous stop","icon":0},{"key":"40.842917,-73.854672","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Children's Mural","lat":40.842917,"lon":-73.854672,"distText":"5.89 km","distFrom":"previous stop","icon":0},{"key":"40.819435,-73.874977","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Direction marker soundview Park","lat":40.819435,"lon":-73.874977,"distText":"3.12 km","distFrom":"previous stop","icon":0},{"key":"40.770499,-73.891996","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Local Bakery Cafe","lat":40.770499,"lon":-73.891996,"distText":"5.63 km","distFrom":"previous stop","icon":0},{"key":"40.765854,-73.922397","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Guardian Owl Statue","lat":40.765854,"lon":-73.922397,"distText":"2.61 km","distFrom":"previous stop","icon":0},{"key":"40.761579,-73.902169","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Pure Eats","lat":40.761579,"lon":-73.902169,"distText":"1.77 km","distFrom":"previous stop","icon":0},{"key":"40.751049,-73.896931","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Jackson-Heights Canine Recreation Wonderland Park","lat":40.751049,"lon":-73.896931,"distText":"1.25 km","distFrom":"previous stop","icon":0},{"key":"40.728125,-73.904968","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Frank Principe Park Athletic Field","lat":40.728125,"lon":-73.904968,"distText":"2.64 km","distFrom":"previous stop","icon":0},{"key":"40.704231,-73.923842","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Buffalo Gate","lat":40.704231,"lon":-73.923842,"distText":"3.10 km","distFrom":"previous stop","icon":0},{"key":"40.673082,-73.919453","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"The Cross","lat":40.673082,"lon":-73.919453,"distText":"3.48 km","distFrom":"previous stop","icon":0},{"key":"40.685441,-73.882534","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Highland Park","lat":40.685441,"lon":-73.882534,"distText":"3.40 km","distFrom":"previous stop","icon":0},{"key":"40.674255,-73.832435","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Resorts World Wall Art Installation","lat":40.674255,"lon":-73.832435,"distText":"4.40 km","distFrom":"previous stop","icon":0},{"key":"40.703374,-73.836483","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Old Police and Fire Call Box","lat":40.703374,"lon":-73.836483,"distText":"3.26 km","distFrom":"previous stop","icon":0},{"key":"40.723619,-73.851924","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Russel Sage Court","lat":40.723619,"lon":-73.851924,"distText":"2.60 km","distFrom":"previous stop","icon":0},{"key":"40.725555,-73.845886","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"NYC Barrier Art","lat":40.725555,"lon":-73.845886,"distText":"552 m","distFrom":"previous stop","icon":0},{"key":"40.764124,-73.826393","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Flushing YMCA","lat":40.764124,"lon":-73.826393,"distText":"4.59 km","distFrom":"previous stop","icon":0},{"key":"40.851580,-73.826302","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Pelham Bay Park","lat":40.85158,"lon":-73.826302,"distText":"9.72 km","distFrom":"previous stop","icon":0},{"key":"40.853825,-73.821972","reward":"Pokémon Encounter: Dunsparce","task":"Spin 5 PokéStops","stop":"Natural hiking trail of Pelham Bay Park","lat":40.853825,"lon":-73.821972,"distText":"442 m","distFrom":"previous stop","icon":0}];
+  var REWARD_ICONS = ["data:image/png;base64,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"];
+  var ICONS = {"ipogo":"\n    \u003csvg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"iPogo\" xmlns=\"http://www.w3.org/2000/svg\">\n        \u003cdefs>\n            \u003cclipPath id=\"ipogoButtonIconClip\">\u003ccircle cx=\"60\" cy=\"60\" r=\"57\"/>\u003c/clipPath>\n        \u003c/defs>\n        \u003cg clip-path=\"url(#ipogoButtonIconClip)\">\n            \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#00677a\"/>\n            \u003cpath d=\"M-2 57Q60 37 122 57V-2H-2Z\" fill=\"#008474\"/>\n            \u003cpath d=\"M-3 60Q60 40 123 60\" fill=\"none\" stroke=\"#fff\" stroke-width=\"8\"/>\n            \u003cpath d=\"M60 29C45 29 39 38 40 52c1 13 12 20 17 38 1 4 5 4 6 0 5-18 16-25 17-38 1-14-5-23-20-23Z\"\n                  fill=\"none\" stroke=\"#fff\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/>\n            \u003ccircle cx=\"60\" cy=\"51\" r=\"9\" fill=\"#00677a\" stroke=\"#fff\" stroke-width=\"3.5\"/>\n        \u003c/g>\n        \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/>\n    \u003c/svg>","joystick":"\n    \u003csvg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"GPS JoyStick\" xmlns=\"http://www.w3.org/2000/svg\">\n        \u003cdefs>\n            \u003cclipPath id=\"gpsJoystickButtonIconClip\">\u003ccircle cx=\"60\" cy=\"60\" r=\"57\"/>\u003c/clipPath>\n        \u003c/defs>\n        \u003cg clip-path=\"url(#gpsJoystickButtonIconClip)\">\n            \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#8BC34A\"/>\n            \u003cellipse cx=\"60\" cy=\"96\" rx=\"20\" ry=\"7\" fill=\"none\" stroke=\"#1976D2\" stroke-width=\"6\"/>\n            \u003cpath d=\"M60 26C48 26 39 35 39 46c0 12 10 20 19 39 1 3 2 3 3 0 9-19 19-27 19-39 0-11-9-20-20-20Z\"\n                  fill=\"#1976D2\"/>\n            \u003ccircle cx=\"60\" cy=\"47\" r=\"9\" fill=\"#2196F3\"/>\n        \u003c/g>\n        \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/>\n    \u003c/svg>","maps":"\n    \u003csvg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"Maps\" xmlns=\"http://www.w3.org/2000/svg\">\n        \u003cdefs>\n            \u003cclipPath id=\"mapsButtonIconClip\">\u003ccircle cx=\"60\" cy=\"60\" r=\"57\"/>\u003c/clipPath>\n        \u003c/defs>\n        \u003cg clip-path=\"url(#mapsButtonIconClip)\">\n            \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#f1f3f4\"/>\n            \u003cpath d=\"M-2 78 40 52l40 22 42-24v75H-2Z\" fill=\"#a5d6a7\"/>\n            \u003cpath d=\"M-2 92 38 68l42 22 42-24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"7\"/>\n            \u003cpath d=\"M60 18C47 18 38 28 38 40c0 15 14 24 20 44 1 3 3 3 4 0 6-20 20-29 20-44 0-12-9-22-22-22Z\" fill=\"#ea4335\"/>\n            \u003ccircle cx=\"60\" cy=\"40\" r=\"8.5\" fill=\"#fff\"/>\n        \u003c/g>\n        \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/>\n    \u003c/svg>"};
+  // Each row needs its own clipPath id (duplicate ids across rows would all point at the first one).
+  var iconSeq = 0;
+  function iconHtml(name) {
+    var n = ++iconSeq;
+    return '<span class="ico">' + ICONS[name].replace(/id="([^"]+)"/g, 'id="$1' + n + '"').replace(/url\(#([^)]+)\)/g, 'url(#$1' + n + ')') + '</span>';
+  }
+  var STORAGE_KEY = 'pokemap_quest_export_progress_v1';
+  // Which teleport app and which second button the entries show (defaults: GPS JoyStick, Copy), kept per device.
+  var PREFS_KEY = 'pokemap_quest_export_prefs_v1';
+  var prefs = { teleport: 'joystick', second: 'copy' };
+  try { var savedPrefs = JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') || {}; if (savedPrefs.teleport) prefs.teleport = savedPrefs.teleport; if (savedPrefs.second) prefs.second = savedPrefs.second; } catch (e) {}
+  function setupToggle(id, key) {
+    var toggle = document.getElementById(id);
+    var opts = toggle.querySelectorAll('.opt');
+    var sw = toggle.querySelector('.sw');
+    function paint() {
+      Array.prototype.forEach.call(opts, function (o) { o.classList.toggle('on', o.dataset.v === prefs[key]); });
+      sw.classList.toggle('right', opts[1].dataset.v === prefs[key]);
+    }
+    function choose(v) {
+      if (prefs[key] === v) return;
+      prefs[key] = v;
+      try { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); } catch (err) {}
+      paint(); render();
+    }
+    Array.prototype.forEach.call(opts, function (o) { o.addEventListener('click', function () { choose(o.dataset.v); }); });
+    sw.addEventListener('click', function () { choose(prefs[key] === opts[0].dataset.v ? opts[1].dataset.v : opts[0].dataset.v); });
+    paint();
+  }
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text).catch(function () { return legacyCopy(text); });
+    return Promise.resolve(legacyCopy(text));
+  }
+  function legacyCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    ta.remove();
+  }
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {}; } catch (e) {}
+  var hideDone = false;
+  var copiedKey = null; // stop whose Copy button shows "Copied" (the last one copied)
+  var list = document.getElementById('list');
+  var statusEl = document.getElementById('doneCount');
+  var hideDoneBtn = document.getElementById('hideDoneBtn');
+  var undoBtn = document.getElementById('undoBtn');
+  var resetAllBtn = document.getElementById('resetAllBtn');
+  function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
+  function markDone(key) {
+    if (state[key]) return;
+    state[key] = { done: true, ts: Date.now() };
+    save(); render();
+  }
+  function toggleDone(key) {
+    if (state[key]) {
+      delete state[key];
+    } else {
+      state[key] = { done: true, ts: Date.now() };
+    }
+    save(); render();
+  }
+  // Mirrors the reference page's Undo: no separate stack to keep in sync — the most recently
+  // marked entry is just whichever timestamp in state is largest, so it can't drift out of
+  // sync with manual toggles the way a push/pop history stack can.
+  function undoLast() {
+    var bestKey = null, bestTs = 0;
+    POINTS.forEach(function (p) {
+      var entry = state[p.key];
+      if (entry && entry.ts && entry.ts > bestTs) { bestTs = entry.ts; bestKey = p.key; }
+    });
+    if (!bestKey) { alert('Nothing to undo.'); return; }
+    var point = null;
+    for (var i = 0; i < POINTS.length; i++) { if (POINTS[i].key === bestKey) { point = POINTS[i]; break; } }
+    var name = point ? (point.reward + (point.stop ? ' at ' + point.stop : '')) : bestKey;
+    var elapsedSec = Math.round((Date.now() - bestTs) / 1000);
+    if (!confirm('Un-mark "' + name + '"? Marked ' + elapsedSec + 's ago.')) return;
+    delete state[bestKey];
+    save(); render();
+    var row = list.querySelector('[data-key="' + bestKey.replace(/"/g, '\\"') + '"]');
+    if (row) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function render() {
+    list.innerHTML = '';
+    var doneCount = 0;
+    POINTS.forEach(function (p) {
+      var isDone = !!state[p.key];
+      if (isDone) doneCount++;
+      if (hideDone && isDone) return;
+      var row = document.createElement('div');
+      row.className = 'row' + (isDone ? ' done' : '');
+      row.dataset.key = p.key;
+      // Column 1: reward icon (spans both lines). Line 1: leg distance, task, reward, then the less critical stop /
+      // coordinates, on one line that scrolls sideways. Line 2: Done, the chosen teleport app, Copy or Maps.
+      if (p.icon >= 0 && REWARD_ICONS[p.icon]) {
+        var icon = document.createElement('img');
+        icon.className = 'qicon';
+        icon.alt = '';
+        icon.src = REWARD_ICONS[p.icon];
+        row.appendChild(icon);
+      } else {
+        var noIcon = document.createElement('span');
+        noIcon.className = 'noicon';
+        row.appendChild(noIcon);
+      }
+      var line = document.createElement('div');
+      line.className = 'line';
+      // Leg distance first: the most useful number while working down the route.
+      if (p.distText) {
+        var dist = document.createElement('span');
+        dist.className = 'dist';
+        dist.textContent = p.distText;
+        dist.title = 'from ' + p.distFrom;
+        line.appendChild(dist);
+      }
+      // v7.19 (user): task first, then the reward (the icon already shows what it is). v7.23: the stop number (bold),
+      // matching the viewer's numbered pins and the GPX waypoint names. v7.24 (user): the task is not bold.
+      var num = document.createElement('b');
+      num.textContent = (POINTS.indexOf(p) + 1) + '. ';
+      line.appendChild(num);
+      var task = document.createElement('span');
+      task.className = 'task';
+      task.textContent = p.task || p.reward;
+      line.appendChild(task);
+      if (p.task) line.appendChild(document.createTextNode(' \u00b7 ' + p.reward));
+      var dim = document.createElement('span');
+      dim.className = 'dim';
+      var doneText = (isDone && state[p.key].ts) ? (' \u00b7 done ' + new Date(state[p.key].ts).toLocaleString()) : '';
+      dim.textContent = (p.stop ? ' \u00b7 \ud83d\udccd ' + p.stop : '') +
+        ' \u00b7 ' + p.lat.toFixed(5) + ', ' + p.lon.toFixed(5) + doneText;
+      line.appendChild(dim);
+      row.appendChild(line);
+      var controls = document.createElement('div');
+      controls.className = 'controls';
+      var doneBtn = document.createElement('button');
+      doneBtn.className = 'done-btn' + (isDone ? ' done' : '');
+      doneBtn.textContent = isDone ? '\u2713 Done' : 'Done';
+      doneBtn.addEventListener('click', function () { toggleDone(p.key); });
+      controls.appendChild(doneBtn);
+      var teleport = document.createElement('a');
+      if (prefs.teleport === 'ipogo') {
+        teleport.className = 'ipogo-btn';
+        teleport.href = 'pokemongo://?lat=' + p.lat + '&lng=' + p.lon;
+        teleport.innerHTML = iconHtml('ipogo') + '<span>iPogo</span>';
+      } else {
+        teleport.className = 'joystick-btn';
+        teleport.href = 'gpsjoystick://teleport?lat=' + p.lat + '&lng=' + p.lon;
+        teleport.innerHTML = iconHtml('joystick') + '<span>GPS JoyStick</span>';
+      }
+      teleport.addEventListener('click', function () { markDone(p.key); });
+      controls.appendChild(teleport);
+      if (prefs.second === 'maps') {
+        var mapsLink = document.createElement('a');
+        mapsLink.className = 'maps-btn';
+        mapsLink.href = 'https://maps.google.com/?q=' + p.lat + ',' + p.lon;
+        mapsLink.target = '_blank';
+        mapsLink.rel = 'noopener';
+        mapsLink.innerHTML = iconHtml('maps') + '<span>Maps</span>';
+        mapsLink.addEventListener('click', function () { markDone(p.key); });
+        controls.appendChild(mapsLink);
+      } else {
+        // Copy "lat,lon" (for pasting into a teleport/search box); counts as visiting, like the other buttons.
+        // The last-copied stop is remembered so its "Copied" label survives the re-render that marking it done does
+        // (v7.17 set the label on the old button, which the re-render then replaced with a fresh "Copy").
+        var copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = copiedKey === p.key ? '\u2713 Copied' : 'Copy';
+        copyBtn.addEventListener('click', function () {
+          copyText(p.lat.toFixed(6) + ',' + p.lon.toFixed(6)).then(function () {
+            copiedKey = p.key;
+            if (state[p.key]) render(); else markDone(p.key);
+          });
+        });
+        controls.appendChild(copyBtn);
+      }
+      row.appendChild(controls);
+      list.appendChild(row);
+    });
+    statusEl.textContent = doneCount + ' of ' + POINTS.length + ' done';
+    undoBtn.disabled = doneCount === 0;
+    resetAllBtn.disabled = doneCount === 0;
+  }
+  setupToggle('teleportToggle', 'teleport');
+  setupToggle('secondToggle', 'second');
+  hideDoneBtn.addEventListener('click', function () {
+    hideDone = !hideDone;
+    hideDoneBtn.textContent = hideDone ? 'Show done' : 'Hide done';
+    render();
+  });
+  undoBtn.addEventListener('click', undoLast);
+  resetAllBtn.addEventListener('click', function () {
+    var n = Object.keys(state).length;
+    if (!n) { alert('Nothing is marked done.'); return; }
+    if (!confirm('Clear all ' + n + ' done marks? This cannot be undone.')) return;
+    state = {};
+    save(); render();
+  });
+  function download(text, type, fileName) {
+    var blob = new Blob([text], { type: type });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = fileName;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+  document.getElementById('exportProgressBtn').addEventListener('click', function () {
+    download(JSON.stringify(state, null, 2), 'application/json', 'quests_progress.json');
+  });
+  // The route's GPX, the same text Export writes next to this page. GPX downloads it (when the file isn't at hand);
+  // Copy GPX (v7.25) puts it on the clipboard, only when tapped, because iPogo imports a route by pasting its text.
+  var GPX = "\u003c?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\u003cgpx version=\"1.1\" creator=\"Pokémap quest export\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n\t\u003cwpt lat=\"40.76570500\" lon=\"-73.97622600\">\u003cname>Default\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.79076600\" lon=\"-73.95495500\">\u003cname>1. Pokémon Encounter: Dunsparce · Peter and Sophie Quinn\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.80669000\" lon=\"-73.93701900\">\u003cname>2. Pokémon Encounter: Dunsparce · Harlem Islamic Cultural Center\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.81124300\" lon=\"-73.94724200\">\u003cname>3. Pokémon Encounter: Dunsparce · St Nicholas Playground (South)\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.80761300\" lon=\"-73.95973500\">\u003cname>4. Pokémon Encounter: Dunsparce · School of International and Public Affairs\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.75352400\" lon=\"-74.00148700\">\u003cname>5. Pokémon Encounter: Dunsparce · Avant Gallery\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.72730000\" lon=\"-74.03082100\">\u003cname>6. Pokémon Encounter: Dunsparce · Newport River Ct Garden East Entrance\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.72198700\" lon=\"-74.03361900\">\u003cname>7. Pokémon Encounter: Dunsparce · Playground\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.71648100\" lon=\"-74.04727000\">\u003cname>8. Pokémon Encounter: Dunsparce · Fish On Sewer Grate\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.68886600\" lon=\"-73.98226500\">\u003cname>9. Pokémon Encounter: Dunsparce · Billie Holiday Mural\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.68075900\" lon=\"-73.96444300\">\u003cname>10. Pokémon Encounter: Dunsparce · Rev. Benjamin J. Lowry Lowry Triangle\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.67199600\" lon=\"-73.95444700\">\u003cname>11. Pokémon Encounter: Dunsparce · Mt. Carmel Church and Tower\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.68749200\" lon=\"-73.95489300\">\u003cname>12. Pokémon Encounter: Dunsparce · Black Excellence Mural\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.69562000\" lon=\"-73.91709500\">\u003cname>13. Pokémon Encounter: Dunsparce · Ismael\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.71581600\" lon=\"-73.99329200\">\u003cname>14. Pokémon Encounter: Dunsparce · Water Tower Rockets Mural\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.72374700\" lon=\"-73.99366500\">\u003cname>15. Pokémon Encounter: Dunsparce · Cellar Mural\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.73074500\" lon=\"-73.98681400\">\u003cname>16. Pokémon Encounter: Dunsparce · Heckscher Courtyard\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.72715300\" lon=\"-73.98119100\">\u003cname>17. Pokémon Encounter: Dunsparce · General Slocum Memorial Fountain\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.72836300\" lon=\"-73.97591900\">\u003cname>18. Pokémon Encounter: Dunsparce · Red Abstract Sculpture at The East\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.73071500\" lon=\"-73.97507300\">\u003cname>19. Pokémon Encounter: Dunsparce · Playground 4 at Stuy Town\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.73829400\" lon=\"-73.99110700\">\u003cname>20. Pokémon Encounter: Dunsparce · Devi\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.78855700\" lon=\"-73.97675200\">\u003cname>21. Pokémon Encounter: Dunsparce · Hansom Carriage Tilework\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.83647600\" lon=\"-73.93687700\">\u003cname>22. Pokémon Encounter: Dunsparce · Adventure Playground\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.84745300\" lon=\"-73.93689900\">\u003cname>23. Pokémon Encounter: Dunsparce · Piramides De El Salvador\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.85769900\" lon=\"-73.92193900\">\u003cname>24. Pokémon Encounter: Dunsparce · Cove Compass Rose\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.84291700\" lon=\"-73.85467200\">\u003cname>25. Pokémon Encounter: Dunsparce · Children's Mural\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.81943500\" lon=\"-73.87497700\">\u003cname>26. Pokémon Encounter: Dunsparce · Direction marker soundview Park\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.77049900\" lon=\"-73.89199600\">\u003cname>27. Pokémon Encounter: Dunsparce · Local Bakery Cafe\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.76585400\" lon=\"-73.92239700\">\u003cname>28. Pokémon Encounter: Dunsparce · Guardian Owl Statue\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.76157900\" lon=\"-73.90216900\">\u003cname>29. Pokémon Encounter: Dunsparce · Pure Eats\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.75104900\" lon=\"-73.89693100\">\u003cname>30. Pokémon Encounter: Dunsparce · Jackson-Heights Canine Recreation Wonderland Park\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.72812500\" lon=\"-73.90496800\">\u003cname>31. Pokémon Encounter: Dunsparce · Frank Principe Park Athletic Field\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.70423100\" lon=\"-73.92384200\">\u003cname>32. Pokémon Encounter: Dunsparce · Buffalo Gate\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.67308200\" lon=\"-73.91945300\">\u003cname>33. Pokémon Encounter: Dunsparce · The Cross\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.68544100\" lon=\"-73.88253400\">\u003cname>34. Pokémon Encounter: Dunsparce · Highland Park\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.67425500\" lon=\"-73.83243500\">\u003cname>35. Pokémon Encounter: Dunsparce · Resorts World Wall Art Installation\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.70337400\" lon=\"-73.83648300\">\u003cname>36. Pokémon Encounter: Dunsparce · Old Police and Fire Call Box\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.72361900\" lon=\"-73.85192400\">\u003cname>37. Pokémon Encounter: Dunsparce · Russel Sage Court\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.72555500\" lon=\"-73.84588600\">\u003cname>38. Pokémon Encounter: Dunsparce · NYC Barrier Art\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.76412400\" lon=\"-73.82639300\">\u003cname>39. Pokémon Encounter: Dunsparce · Flushing YMCA\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.85158000\" lon=\"-73.82630200\">\u003cname>40. Pokémon Encounter: Dunsparce · Pelham Bay Park\u003c/name>\u003c/wpt>\n\t\u003cwpt lat=\"40.85382500\" lon=\"-73.82197200\">\u003cname>41. Pokémon Encounter: Dunsparce · Natural hiking trail of Pelham Bay Park\u003c/name>\u003c/wpt>\n\t\u003ctrk>\n\t\t\u003cname>Quests NYC 2026-10-09\u003c/name>\n\t\t\u003ctrkseg>\n\t\t\t\u003ctrkpt lat=\"40.76570500\" lon=\"-73.97622600\">\u003cname>Default\u003c/name>\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.79076600\" lon=\"-73.95495500\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.80669000\" lon=\"-73.93701900\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.81124300\" lon=\"-73.94724200\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.80761300\" lon=\"-73.95973500\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.75352400\" lon=\"-74.00148700\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.72730000\" lon=\"-74.03082100\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.72198700\" lon=\"-74.03361900\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.71648100\" lon=\"-74.04727000\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.68886600\" lon=\"-73.98226500\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.68075900\" lon=\"-73.96444300\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.67199600\" lon=\"-73.95444700\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.68749200\" lon=\"-73.95489300\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.69562000\" lon=\"-73.91709500\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.71581600\" lon=\"-73.99329200\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.72374700\" lon=\"-73.99366500\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.73074500\" lon=\"-73.98681400\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.72715300\" lon=\"-73.98119100\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.72836300\" lon=\"-73.97591900\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.73071500\" lon=\"-73.97507300\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.73829400\" lon=\"-73.99110700\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.78855700\" lon=\"-73.97675200\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.83647600\" lon=\"-73.93687700\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.84745300\" lon=\"-73.93689900\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.85769900\" lon=\"-73.92193900\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.84291700\" lon=\"-73.85467200\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.81943500\" lon=\"-73.87497700\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.77049900\" lon=\"-73.89199600\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.76585400\" lon=\"-73.92239700\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.76157900\" lon=\"-73.90216900\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.75104900\" lon=\"-73.89693100\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.72812500\" lon=\"-73.90496800\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.70423100\" lon=\"-73.92384200\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.67308200\" lon=\"-73.91945300\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.68544100\" lon=\"-73.88253400\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.67425500\" lon=\"-73.83243500\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.70337400\" lon=\"-73.83648300\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.72361900\" lon=\"-73.85192400\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.72555500\" lon=\"-73.84588600\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.76412400\" lon=\"-73.82639300\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.85158000\" lon=\"-73.82630200\">\u003c/trkpt>\n\t\t\t\u003ctrkpt lat=\"40.85382500\" lon=\"-73.82197200\">\u003c/trkpt>\n\t\t\u003c/trkseg>\n\t\u003c/trk>\n\u003c/gpx>\n";
+  document.getElementById('gpxBtn').addEventListener('click', function () {
+    download(GPX, 'application/gpx+xml', "quests_nyc.gpx");
+  });
+  var copyGpxBtn = document.getElementById('copyGpxBtn');
+  copyGpxBtn.addEventListener('click', function () {
+    var label = copyGpxBtn.querySelector('span');
+    copyText(GPX).then(function () {
+      label.textContent = '\u2713 Copied';
+      copyGpxBtn.title = 'GPX copied: paste it into iPogo';
+      setTimeout(function () { label.textContent = 'Copy GPX'; }, 2500);
+    });
+  });
+  // Map (v7.23): exactly the GPX above, carried in the URL fragment (never sent to the server), so the map shows what
+  // the GPX button downloads; the viewer labels the pins from the waypoint names and draws Default as a house.
+  document.getElementById('mapBtn').addEventListener('click', function () {
+    window.open("https://innoengserv.com/gpx-viewer.com/" + '#gpx=' + encodeURIComponent(GPX), '_blank');
+  });
+  document.getElementById('importInput').addEventListener('change', function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var imported = JSON.parse(reader.result);
+        Object.keys(imported).forEach(function (k) { state[k] = imported[k]; });
+        save(); render();
+      } catch (err) { alert('Invalid progress file'); }
+    };
+    reader.readAsText(file);
+  });
+  render();
+})();
+</script>
+</body>
+</html>

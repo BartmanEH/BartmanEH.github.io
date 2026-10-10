@@ -1,0 +1,463 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pokémon Center Stamp Rally</title>
+<style>
+  /* Same look as the Pokémap quest Export page (userscript), plus sections, notes and a start hint. */
+  * { box-sizing: border-box; }
+  /* Colours: Bart's VS Code palette (the early Claude code-block look): page #2b2b29, cards #33332f, borders #404040,
+     text #d1d5db, bold #e5e5e5, grey #9ca3af. Keep the Pokémap quest Export page and the coord-link-page template in step. */
+  /* Page width. BEFORE: full window width, so on a desktop the rows stretched and the pills sat far from the rest.
+     WHY: Bart wants desktops to show the phone view. NOW (2026-10-10): at most 412px wide (Pixel 6 Pro), centred; phones are
+     narrower, so nothing changes there. The bottom bar is capped to match. */
+  html { background: #2b2b29; }
+  body { max-width: 412px; box-sizing: border-box; margin: 0 auto; padding: 16px 16px 84px; background: #2b2b29; color: #d1d5db; font-family: -apple-system, system-ui, sans-serif; }
+  /* Title and sub line share the first line; the three header buttons get their own row (they don't fit beside the
+     title at phone width). */
+  .top { margin: 0 0 8px; }
+  h1 { display: inline; font-size: 18px; margin: 0 8px 0 0; color: #e5e5e5; }
+  .head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 12px; } /* spans the rows' width */
+  h1 .c { color: #9ca3af; font-weight: 400; font-size: 13px; }
+  .hbtn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 13px 6px 10px; border-radius: 999px; font-size: 13px; font-weight: 800; letter-spacing: .3px; color: #fff; cursor: pointer; text-shadow: 0 1px 2px rgba(0,0,0,.45); transition: transform 90ms ease, box-shadow 90ms ease, filter 90ms ease; }
+  .hbtn svg { width: 16px; height: 16px; flex: 0 0 16px; }
+  .hbtn:hover { filter: brightness(1.08); }
+  .hbtn:active { transform: translateY(2px); filter: brightness(.95); }
+  #copyGpxBtn { background: linear-gradient(180deg, #9b7be8, #6f4fc4); border: 1px solid #cbb8ff; box-shadow: 0 3px 0 #3f2a80, 0 6px 14px rgba(111,79,196,.35); }
+  #copyGpxBtn:active { box-shadow: 0 1px 0 #3f2a80, 0 2px 6px rgba(111,79,196,.3); }
+  #gpxBtn { background: linear-gradient(180deg, #ffb547, #f08a12); border: 1px solid #ffd08a; box-shadow: 0 3px 0 #9a5506, 0 6px 14px rgba(240,138,18,.35); }
+  #gpxBtn:active { box-shadow: 0 1px 0 #9a5506, 0 2px 6px rgba(240,138,18,.3); }
+  #mapBtn { background: linear-gradient(180deg, #2fc4b2, #138f86); border: 1px solid #8ee8dd; box-shadow: 0 3px 0 #0b5d57, 0 6px 14px rgba(19,143,134,.35); }
+  #mapBtn:active { box-shadow: 0 1px 0 #0b5d57, 0 2px 6px rgba(19,143,134,.3); }
+  .sub { display: inline; color: #9ca3af; font-size: 12.5px; }
+  .note { background: #3a3424; border-left: 3px solid #d29922; padding: 9px 11px; margin: 0 0 12px; font-size: 13px; line-height: 1.5; color: #d1d5db; border-radius: 0 6px 6px 0; }
+  .note.ok { background: #24382a; border-left-color: #3fb950; }
+  .hint { font-size: 12.5px; font-weight: 600; color: #ffd166; margin: 10px 0 4px; }
+  h2 { font-size: 15px; margin: 18px 0 8px; padding-bottom: 3px; border-bottom: 1px solid #404040; color: #e5e5e5; }
+  h2 .c { color: #9ca3af; font-weight: 400; font-size: 12px; }
+  h2.complete { opacity: .5; }
+  .toolbar { position: fixed; left: 0; right: 0; max-width: 412px; box-sizing: border-box; margin: 0 auto; bottom: 0; z-index: 10; background: #242422; border-top: 1px solid #404040; padding: 7px 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .toolbar button, .toolbar label { background: #353533; color: #d1d5db; border: 1px solid #404040; border-radius: 6px; padding: 6px 14px; font-size: 13px; cursor: pointer; }
+  #status { order: -1; flex: 1 0 100%; display: flex; justify-content: space-between; gap: 8px; font-weight: 600; color: #9ca3af; font-size: 13px; opacity: .85; padding-bottom: 2px; }
+  /* Each switch in its own card like the rows (Bart), both on one row at phone width: 13px labels, 40px switches. */
+  .switches { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 6px; margin-bottom: 12px; } /* spans the rows' width */
+  .toggle { display: inline-flex; align-items: center; gap: 5px; padding: 4px 6px; background: #33332f; border: 1px solid #404040; border-radius: 8px; user-select: none; -webkit-user-select: none; }
+  .toggle .opt { font-size: 13px; color: #7d7d78; cursor: pointer; font-weight: 400; }
+  .toggle .opt.on { color: #e5e5e5; font-weight: 700; }
+  .toggle .sw { position: relative; width: 40px; height: 24px; border: 2px solid #d1d5db; border-radius: 13px; background: #2b2b29; cursor: pointer; padding: 0; flex: 0 0 auto; }
+  .toggle .sw::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #d1d5db; transition: transform 140ms ease; }
+  .toggle .sw.right::after { transform: translateX(16px); }
+  /* Two lines per stop: one sideways-scrolling info line, then the buttons. The icon column only exists when
+     some stop has an icon (body.icons). */
+  .row { background: #33332f; border: 1px solid #404040; border-radius: 8px; padding: 6px 8px; margin-bottom: 6px; display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 5px; align-items: center; }
+  /* Picture column. BEFORE: 44px column, 38px tall, 8px left padding and gap. WHY: the distance pill moved onto the
+     button row and needs the room; Bart wanted bigger pictures. NOW (2026-10-09, same as Pokémap 7.34): 52x56, left
+     padding 3px, gap 5px, teleport labels kerned 1px tighter; fits from 412px wide (narrower phones scroll). */
+  body.icons .row { grid-template-columns: 52px minmax(0, 1fr); column-gap: 5px; padding-left: 3px; }
+  body.icons .ipogo-btn span, body.icons .joystick-btn span { letter-spacing: -1px; }
+  .row.done { opacity: 0.45; }
+  .row.tba { opacity: 0.55; border-style: dashed; }
+  .row.tba .controls > * { filter: grayscale(1); pointer-events: none; box-shadow: none; }
+  .row .qicon { grid-row: 1 / span 2; width: 52px; height: 56px; object-fit: contain; }
+  .row .noicon { grid-row: 1 / span 2; }
+  .row .line { white-space: nowrap; overflow-x: auto; scrollbar-width: none; font-size: 14px; color: #d1d5db; }
+  .row .line::-webkit-scrollbar { display: none; }
+  .row .line b { color: #e5e5e5; font-size: 15px; }
+  .row .line .task { color: #e5e5e5; font-size: 15px; }
+  /* Distance pill. BEFORE: at the start of line 1, as wide as its text, so names started at random positions. WHY: Bart
+     didn't like the uneven sizing. NOW (2026-10-09): at the right end of the button row, one fixed width; long text is
+     tightened and shrunk to fit (fitPills in the script). The location pill ("from here") is cyan like the Default badge. */
+  .row .controls .dist { flex: 0 0 68px; width: 68px; box-sizing: border-box; margin-left: auto; padding: 0 3px; text-align: center; white-space: nowrap; overflow: hidden; background: #2b2b29; border: 1px solid #4a4a46; border-radius: 10px; font-size: 12px; line-height: 20px; font-weight: 700; color: #ffd166; }
+  .row .controls .dist.here { border-color: #26c6da; color: #26c6da; }
+  .row .line .dim { color: #9ca3af; font-size: 12px; }
+  /* BEFORE gap 8px, Done 62px, Copy min 74px. WHY: room for the pill on this row at phone width. NOW (2026-10-09): 6px gap,
+     Done 56px (still fits "✓ Done"), Copy 60px, buttons don't shrink. Measured at 375px: exactly fits. */
+  .controls { display: flex; flex-wrap: nowrap; gap: 6px; align-items: center; }
+  .controls > a, .controls > button { flex: 0 0 auto; }
+  .controls button, .controls a { display: inline-flex; align-items: center; justify-content: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 6px 8px; box-sizing: border-box; border-radius: 6px; border: 1px solid #444; text-decoration: none; text-align: center; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,.7); box-shadow: 0 3px 0 var(--edge, #000), 0 5px 10px rgba(0,0,0,.35); transition: transform 90ms ease, box-shadow 90ms ease, filter 90ms ease; }
+  .controls button:active, .controls a:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--edge, #000), 0 2px 4px rgba(0,0,0,.28); filter: brightness(.93); }
+  .controls .ico { display: inline-flex; width: 16px; height: 16px; flex: 0 0 16px; }
+  .controls .ico svg { width: 100%; height: 100%; display: block; }
+  .done-btn { background: linear-gradient(180deg, #5c5c5c, #444); color: #fff; border-color: #7a7a7a; width: 56px; --edge: #222; }
+  .done-btn.done { background: linear-gradient(180deg, #43a047, #2e7d32); border-color: #81c784; color: #fff; --edge: #1b4d1f; }
+  .ipogo-btn { background: #1f5856; color: #fff; border-color: #3f9f9a; --edge: #153f3d; }
+  .joystick-btn { background: #1a73e8; color: #fff; border-color: #9bc2ff; --edge: #0d47a1; }
+  .maps-btn { background: #2e6b3a; color: #fff; border-color: #8fd19e; --edge: #1b4425; }
+  .copy-btn { background: #5b4a8a; color: #fff; border-color: #b9a6f0; --edge: #3a2e5c; min-width: 60px; }
+  /* Export / Import progress always on their own second row (Bart). */
+  .toolbar .brk { flex-basis: 100%; height: 0; }
+  .toolbar { row-gap: 4px; } /* the break is an empty flex line, so the rows' gap counts twice around it */
+  #importInput { display: none; }
+</style>
+</head>
+<body>
+<div class="top"><h1>Pokémon Center Stamp Rally — 18 centres</h1><div class="sub">1 Jul 2026 – 31 Aug 2027 · every Pokémon Center in Japan · each gives a Pikachu with that centre&rsquo;s exclusive background · 2836 km end to end</div></div>
+<div class="head"><button id="copyGpxBtn" class="hbtn" title="Copy the route's GPX text (to paste into iPogo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy GPX</span></button><button id="gpxBtn" class="hbtn" title="Download the route as a GPX file (iPogo, GPS JoyStick)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>GPX</button><button id="mapBtn" class="hbtn" title="Open the route in the GPX viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Map</button></div>
+<div class="note">Coordinates are the official ones from each centre&rsquo;s page on shop.pokemon.co.jp (taken from its embedded map), so these are the buildings — not confirmed PokéStop positions. Several centres sit inside large stations or malls.</div>
+<div class="switches">
+  <div class="toggle" id="teleportToggle"><span class="opt" data-v="ipogo">iPogo</span><button class="sw" aria-label="iPogo or GPS JoyStick"></button><span class="opt" data-v="joystick">GPS JoyStick</span></div>
+  <div class="toggle" id="secondToggle"><span class="opt" data-v="maps">Maps</span><button class="sw" aria-label="Maps or Copy"></button><span class="opt" data-v="copy">Copy</span></div>
+</div>
+<div class="toolbar">
+  <button id="hideDoneBtn">Hide done</button>
+  <button id="undoBtn">Undo last</button>
+  <button id="resetAllBtn">Reset all</button>
+  <span class="brk"></span>
+  <button id="exportProgressBtn">Export progress</button>
+  <label for="importInput">Import progress</label>
+  <input type="file" id="importInput" accept="application/json,.json,.txt">
+  <span id="status"><span id="doneCount"></span><span style="font-weight: 400; font-size: 12px;">generated 2026-10-10 08:58</span></span>
+</div>
+<div id="list"></div>
+<script>
+(function () {
+  var D = {"points": [{"key": "26.31409,127.79630", "n": 1, "name": "ポケモンセンターオキナワ", "sub": "Okinawa", "note": "〒901-2306沖縄県中頭郡北中城村字ライカム1イオンモール沖縄ライカム 1F", "lat": 26.314085, "lon": 127.7963, "section": 0, "icon": "", "distText": "", "distFrom": ""}, {"key": "33.58900,130.41926", "n": 2, "name": "ポケモンセンターフクオカ", "sub": "Fukuoka", "note": "〒812-0012福岡県福岡市博多区博多駅中央街9-1博多マルイ 2F", "lat": 33.589003, "lon": 130.419256, "section": 0, "icon": "", "distText": "847.38 km", "distFrom": "previous stop"}, {"key": "34.39862,132.47597", "n": 3, "name": "ポケモンセンターヒロシマ", "sub": "Hiroshima", "note": "〒732-0822広島県広島市南区松原町1-2ekie 2F", "lat": 34.398624, "lon": 132.475974, "section": 0, "icon": "", "distText": "209.89 km", "distFrom": "previous stop"}, {"key": "34.34228,134.05006", "n": 4, "name": "ポケモンセンターカガワ", "sub": "Kagawa", "note": "〒760-0029香川県高松市丸亀町8-23丸亀町グリーン 東館 1F", "lat": 34.342282, "lon": 134.050061, "section": 0, "icon": "", "distText": "144.61 km", "distFrom": "previous stop"}, {"key": "34.67317,135.50075", "n": 5, "name": "ポケモンセンターオーサカDX", "sub": "Osaka DX", "note": "〒542-8501大阪府大阪市中央区心斎橋筋1-7-1大丸心斎橋店 本館 9F", "lat": 34.673172, "lon": 135.500754, "section": 0, "icon": "", "distText": "137.92 km", "distFrom": "previous stop"}, {"key": "34.70185,135.49656", "n": 6, "name": "ポケモンセンターオーサカ", "sub": "Osaka", "note": "〒530-8373大阪府大阪市北区梅田3-1-1ルクア サウス 13F", "lat": 34.701853, "lon": 135.496559, "section": 0, "icon": "", "distText": "3.21 km", "distFrom": "previous stop"}, {"key": "35.00342,135.75838", "n": 7, "name": "ポケモンセンターキョウト", "sub": "Kyoto", "note": "〒600-8009京都府京都市下京区四条通室町東入函谷鉾町78京都経済センター SUINA室町 2F", "lat": 35.003417, "lon": 135.758384, "section": 0, "icon": "", "distText": "41.17 km", "distFrom": "previous stop"}, {"key": "35.16363,136.90803", "n": 8, "name": "ポケモンセンターナゴヤ", "sub": "Nagoya", "note": "〒460-0008愛知県名古屋市中区栄3-29-1名古屋PARCO 東館 2F", "lat": 35.163626, "lon": 136.90803, "section": 0, "icon": "", "distText": "106.11 km", "distFrom": "previous stop"}, {"key": "36.57915,136.64975", "n": 9, "name": "ポケモンセンターカナザワ", "sub": "Kanazawa", "note": "〒920-0849石川県金沢市堀川新町3-1金沢フォーラス 5F", "lat": 36.579148, "lon": 136.649754, "section": 0, "icon": "", "distText": "159.11 km", "distFrom": "previous stop"}, {"key": "35.46457,139.62449", "n": 10, "name": "ポケモンセンターヨコハマ", "sub": "Yokohama", "note": "main Yokohama centre; the satellite store is NOT part of the rally", "lat": 35.464572, "lon": 139.62449, "section": 0, "icon": "", "distText": "294.82 km", "distFrom": "previous stop"}, {"key": "35.66196,139.69844", "n": 11, "name": "ポケモンセンターシブヤ", "sub": "Shibuya", "note": "〒150-8377東京都渋谷区宇田川町15-1渋谷PARCO 6F", "lat": 35.661956, "lon": 139.698441, "section": 0, "icon": "", "distText": "22.94 km", "distFrom": "previous stop"}, {"key": "35.72907,139.71858", "n": 12, "name": "Pokémon GO Lab.", "sub": "Pokémon GO Lab (Ikebukuro)", "note": "inside Pokémon Center Mega Tokyo, 70 m from the centre&amp;rsquo;s own stop — confirmed in game", "lat": 35.72907, "lon": 139.71858, "section": 0, "icon": "", "distText": "7.68 km", "distFrom": "previous stop"}, {"key": "35.72891,139.71932", "n": 13, "name": "ポケモンセンターメガトウキョー", "sub": "Mega Tokyo (Ikebukuro)", "note": "Pokémon GO Lab is a separate stamp 70 m away, inside Sunshine City — do both", "lat": 35.728906, "lon": 139.719324, "section": 0, "icon": "", "distText": "70 m", "distFrom": "previous stop"}, {"key": "35.68029,139.77427", "n": 14, "name": "ポケモンセンタートウキョーDX", "sub": "Tokyo DX (Nihombashi)", "note": "〒103-0027東京都中央区日本橋2-11-2日本橋髙島屋S.C.東館 5F", "lat": 35.68029, "lon": 139.77427, "section": 0, "icon": "", "distText": "7.34 km", "distFrom": "previous stop"}, {"key": "35.71034,139.81261", "n": 15, "name": "ポケモンセンタースカイツリータウン", "sub": "Skytree Town", "note": "〒131-0045東京都墨田区押上1-1-2東京スカイツリータウン・ソラマチ イーストヤード 4F", "lat": 35.710345, "lon": 139.812612, "section": 0, "icon": "", "distText": "4.81 km", "distFrom": "previous stop"}, {"key": "35.68660,139.98904", "n": 16, "name": "ポケモンセンタートウキョーベイ", "sub": "Tokyo Bay", "note": "〒273-8530千葉県船橋市浜町2-1-1三井ショッピングパーク ららぽーとTOKYO-BAY 西館 2F", "lat": 35.686603, "lon": 139.989036, "section": 0, "icon": "", "distText": "16.15 km", "distFrom": "previous stop"}, {"key": "38.26216,140.88170", "n": 17, "name": "ポケモンセンタートウホク", "sub": "Tohoku (Sendai)", "note": "〒980-8484宮城県仙台市青葉区中央1-2-3仙台PARCO1 3F", "lat": 38.26216, "lon": 140.881702, "section": 0, "icon": "", "distText": "297.16 km", "distFrom": "previous stop"}, {"key": "43.06747,141.34927", "n": 18, "name": "ポケモンセンターサッポロ", "sub": "Sapporo", "note": "〒060-0005北海道札幌市中央区北5条西4-7大丸札幌店 8F", "lat": 43.067469, "lon": 141.349266, "section": 0, "icon": "", "distText": "535.78 km", "distFrom": "previous stop"}], "sections": [{"name": "", "count": 18}], "storageKey": "pokecenter.v1", "reset": true, "hint": "", "gpx": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<gpx version=\"1.1\" creator=\"coord-link-page\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n\t<wpt lat=\"26.31408500\" lon=\"127.79630000\"><name>1. ポケモンセンターオキナワ · Okinawa<\/name><\/wpt>\n\t<wpt lat=\"33.58900300\" lon=\"130.41925600\"><name>2. ポケモンセンターフクオカ · Fukuoka<\/name><\/wpt>\n\t<wpt lat=\"34.39862400\" lon=\"132.47597400\"><name>3. ポケモンセンターヒロシマ · Hiroshima<\/name><\/wpt>\n\t<wpt lat=\"34.34228200\" lon=\"134.05006100\"><name>4. ポケモンセンターカガワ · Kagawa<\/name><\/wpt>\n\t<wpt lat=\"34.67317200\" lon=\"135.50075400\"><name>5. ポケモンセンターオーサカDX · Osaka DX<\/name><\/wpt>\n\t<wpt lat=\"34.70185300\" lon=\"135.49655900\"><name>6. ポケモンセンターオーサカ · Osaka<\/name><\/wpt>\n\t<wpt lat=\"35.00341700\" lon=\"135.75838400\"><name>7. ポケモンセンターキョウト · Kyoto<\/name><\/wpt>\n\t<wpt lat=\"35.16362600\" lon=\"136.90803000\"><name>8. ポケモンセンターナゴヤ · Nagoya<\/name><\/wpt>\n\t<wpt lat=\"36.57914800\" lon=\"136.64975400\"><name>9. ポケモンセンターカナザワ · Kanazawa<\/name><\/wpt>\n\t<wpt lat=\"35.46457200\" lon=\"139.62449000\"><name>10. ポケモンセンターヨコハマ · Yokohama<\/name><\/wpt>\n\t<wpt lat=\"35.66195600\" lon=\"139.69844100\"><name>11. ポケモンセンターシブヤ · Shibuya<\/name><\/wpt>\n\t<wpt lat=\"35.72907000\" lon=\"139.71858000\"><name>12. Pokémon GO Lab. · Pokémon GO Lab (Ikebukuro)<\/name><\/wpt>\n\t<wpt lat=\"35.72890600\" lon=\"139.71932400\"><name>13. ポケモンセンターメガトウキョー · Mega Tokyo (Ikebukuro)<\/name><\/wpt>\n\t<wpt lat=\"35.68029000\" lon=\"139.77427000\"><name>14. ポケモンセンタートウキョーDX · Tokyo DX (Nihombashi)<\/name><\/wpt>\n\t<wpt lat=\"35.71034500\" lon=\"139.81261200\"><name>15. ポケモンセンタースカイツリータウン · Skytree Town<\/name><\/wpt>\n\t<wpt lat=\"35.68660300\" lon=\"139.98903600\"><name>16. ポケモンセンタートウキョーベイ · Tokyo Bay<\/name><\/wpt>\n\t<wpt lat=\"38.26216000\" lon=\"140.88170200\"><name>17. ポケモンセンタートウホク · Tohoku (Sendai)<\/name><\/wpt>\n\t<wpt lat=\"43.06746900\" lon=\"141.34926600\"><name>18. ポケモンセンターサッポロ · Sapporo<\/name><\/wpt>\n\t<trk>\n\t\t<name>Pokémon Center Stamp Rally<\/name>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"26.31408500\" lon=\"127.79630000\"><\/trkpt>\n\t\t\t<trkpt lat=\"33.58900300\" lon=\"130.41925600\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.39862400\" lon=\"132.47597400\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.34228200\" lon=\"134.05006100\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.67317200\" lon=\"135.50075400\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.70185300\" lon=\"135.49655900\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.00341700\" lon=\"135.75838400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.16362600\" lon=\"136.90803000\"><\/trkpt>\n\t\t\t<trkpt lat=\"36.57914800\" lon=\"136.64975400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.46457200\" lon=\"139.62449000\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.66195600\" lon=\"139.69844100\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.72907000\" lon=\"139.71858000\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.72890600\" lon=\"139.71932400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.68029000\" lon=\"139.77427000\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.71034500\" lon=\"139.81261200\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.68660300\" lon=\"139.98903600\"><\/trkpt>\n\t\t\t<trkpt lat=\"38.26216000\" lon=\"140.88170200\"><\/trkpt>\n\t\t\t<trkpt lat=\"43.06746900\" lon=\"141.34926600\"><\/trkpt>\n\t\t<\/trkseg>\n\t<\/trk>\n<\/gpx>\n", "fileStem": "pokecenter-links", "viewerUrl": "https://innoengserv.com/gpx-viewer.com/", "buttonIcons": {"ipogo": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"iPogo\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"ipogoButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#ipogoButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#00677a\"/> <path d=\"M-2 57Q60 37 122 57V-2H-2Z\" fill=\"#008474\"/> <path d=\"M-3 60Q60 40 123 60\" fill=\"none\" stroke=\"#fff\" stroke-width=\"8\"/> <path d=\"M60 29C45 29 39 38 40 52c1 13 12 20 17 38 1 4 5 4 6 0 5-18 16-25 17-38 1-14-5-23-20-23Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/> <circle cx=\"60\" cy=\"51\" r=\"9\" fill=\"#00677a\" stroke=\"#fff\" stroke-width=\"3.5\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>", "joystick": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"GPS JoyStick\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"gpsJoystickButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#gpsJoystickButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#8BC34A\"/> <ellipse cx=\"60\" cy=\"96\" rx=\"20\" ry=\"7\" fill=\"none\" stroke=\"#1976D2\" stroke-width=\"6\"/> <path d=\"M60 26C48 26 39 35 39 46c0 12 10 20 19 39 1 3 2 3 3 0 9-19 19-27 19-39 0-11-9-20-20-20Z\" fill=\"#1976D2\"/> <circle cx=\"60\" cy=\"47\" r=\"9\" fill=\"#2196F3\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>", "maps": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"Maps\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"mapsButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#mapsButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#f1f3f4\"/> <path d=\"M-2 78 40 52l40 22 42-24v75H-2Z\" fill=\"#a5d6a7\"/> <path d=\"M-2 92 38 68l42 22 42-24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"7\"/> <path d=\"M60 18C47 18 38 28 38 40c0 15 14 24 20 44 1 3 3 3 4 0 6-20 20-29 20-44 0-12-9-22-22-22Z\" fill=\"#ea4335\"/> <circle cx=\"60\" cy=\"40\" r=\"8.5\" fill=\"#fff\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>"}};
+  var POINTS = D.points;
+  // Long distances: tighten the letter spacing, then shrink the text in half-pixel steps until it fits the pill.
+  function fitPills() {
+    Array.prototype.forEach.call(document.querySelectorAll('.controls .dist'), function (p) {
+      var fs = 12;
+      p.style.fontSize = ''; p.style.letterSpacing = '';
+      if (p.scrollWidth <= p.clientWidth) return;
+      p.style.letterSpacing = '-0.3px';
+      while (p.scrollWidth > p.clientWidth && fs > 8) { fs -= 0.5; p.style.fontSize = fs + 'px'; }
+    });
+  }
+  // Where the browser says you are, for the "here" pill on first stops (see the pill code in render()).
+  var HERE = null;
+  function metres(a, b) {
+    var r = Math.PI / 180, dLat = (b.lat - a.lat) * r, dLon = (b.lon - a.lon) * r;
+    var h = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return 2 * 6371000 * Math.asin(Math.sqrt(h));
+  }
+  // Same format as the build's leg distances (build_page.py dist_text).
+  function distText(m) { return m < 1000 ? Math.round(m) + ' m' : (m / 1000).toFixed(2) + ' km'; }
+  function locate(asked) {
+    if (!navigator.geolocation) { if (asked) alert('This browser has no location.'); return; }
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      HERE = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+      render();
+    }, function (err) {
+      if (asked) alert('Location unavailable: ' + (err && err.message ? err.message : 'refused'));
+    }, { maximumAge: 30000, timeout: 15000 });
+  }
+  var ICONS = D.buttonIcons;
+  // Each row needs its own clipPath ids (duplicate ids across rows would all point at the first one).
+  var iconSeq = 0;
+  function iconHtml(name) {
+    var n = ++iconSeq;
+    return '<span class="ico">' + ICONS[name].replace(/id="([^"]+)"/g, 'id="$1' + n + '"').replace(/url\(#([^)]+)\)/g, 'url(#$1' + n + ')') + '</span>';
+  }
+  if (POINTS.some(function (p) { return p.icon; })) document.body.classList.add('icons');
+  // Teleport app and second button are a per-device preference, shared with the Pokémap quest Export pages.
+  var PREFS_KEY = 'pokemap_quest_export_prefs_v1';
+  var prefs = { teleport: 'joystick', second: 'copy' };
+  try { var savedPrefs = JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') || {}; if (savedPrefs.teleport) prefs.teleport = savedPrefs.teleport; if (savedPrefs.second) prefs.second = savedPrefs.second; } catch (e) {}
+  function setupToggle(id, key) {
+    var toggle = document.getElementById(id);
+    var opts = toggle.querySelectorAll('.opt');
+    var sw = toggle.querySelector('.sw');
+    function paint() {
+      Array.prototype.forEach.call(opts, function (o) { o.classList.toggle('on', o.dataset.v === prefs[key]); });
+      sw.classList.toggle('right', opts[1].dataset.v === prefs[key]);
+    }
+    function choose(v) {
+      if (prefs[key] === v) return;
+      prefs[key] = v;
+      try { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); } catch (err) {}
+      paint(); render();
+    }
+    Array.prototype.forEach.call(opts, function (o) { o.addEventListener('click', function () { choose(o.dataset.v); }); });
+    sw.addEventListener('click', function () { choose(prefs[key] === opts[0].dataset.v ? opts[1].dataset.v : opts[0].dataset.v); });
+    paint();
+  }
+  // Copy needs a fallback: navigator.clipboard needs a secure context and is missing on file:// in some browsers.
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text).catch(function () { return legacyCopy(text); });
+    return Promise.resolve(legacyCopy(text));
+  }
+  function legacyCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    ta.remove();
+    if (!ok) prompt('Copy the coordinates:', text);
+  }
+  // Progress is kept per page (D.storageKey), keyed by a stable id per stop (never list position). Older pages
+  // stored a bare timestamp per key; read both shapes, write { done, ts } like the Export pages.
+  function normalise(v) {
+    if (!v) return null;
+    if (typeof v === 'number') return { done: true, ts: v > 1 ? v : 0 };
+    if (typeof v === 'object') return { done: true, ts: +v.ts || 0 };
+    return { done: true, ts: 0 };
+  }
+  var state = {};
+  try {
+    var raw = JSON.parse(localStorage.getItem(D.storageKey) || '{}') || {};
+    Object.keys(raw).forEach(function (k) { var v = normalise(raw[k]); if (v) state[k] = v; });
+  } catch (e) {}
+  var hideDone = false;
+  var copiedKey = null; // stop whose Copy button shows "Copied" (the last one copied)
+  var list = document.getElementById('list');
+  var statusEl = document.getElementById('doneCount');
+  var hideDoneBtn = document.getElementById('hideDoneBtn');
+  var undoBtn = document.getElementById('undoBtn');
+  var resetAllBtn = document.getElementById('resetAllBtn');
+  if (!D.reset) resetAllBtn.remove();
+  function save() { try { localStorage.setItem(D.storageKey, JSON.stringify(state)); } catch (e) {} }
+  // Teleport, Maps and Copy mark the stop done (set, not toggled, so revisiting doesn't un-mark it).
+  // Placeholder stops (no location yet) can never be marked, whatever triggers the handler.
+  var TBA = {};
+  POINTS.forEach(function (p) { if (p.tba) TBA[p.key] = true; });
+  function markDone(key) {
+    if (TBA[key]) return;
+    if (state[key]) return;
+    state[key] = { done: true, ts: Date.now() };
+    save(); render();
+  }
+  function toggleDone(key) {
+    if (TBA[key]) return;
+    if (state[key]) delete state[key];
+    else state[key] = { done: true, ts: Date.now() };
+    save(); render();
+  }
+  function label(p) { return p.n + '. ' + p.name; }
+  // The most recently marked stop is whichever timestamp in state is largest: no separate stack to drift.
+  function undoLast() {
+    var bestKey = null, bestTs = 0;
+    POINTS.forEach(function (p) {
+      var entry = state[p.key];
+      if (entry && entry.ts > bestTs) { bestTs = entry.ts; bestKey = p.key; }
+    });
+    if (!bestKey) { alert('Nothing with a recorded time to undo.'); return; }
+    var point = POINTS.filter(function (p) { return p.key === bestKey; })[0];
+    var name = point ? label(point) : bestKey;
+    if (!confirm('Un-mark "' + name + '"? Marked ' + Math.round((Date.now() - bestTs) / 1000) + 's ago.')) return;
+    delete state[bestKey];
+    save(); render();
+    var row = list.querySelector('[data-key="' + bestKey.replace(/"/g, '\\"') + '"]');
+    if (row) {
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      row.style.outline = '2px solid #ffd166';
+      setTimeout(function () { row.style.outline = ''; }, 2500);
+    }
+  }
+  function render() {
+    list.innerHTML = '';
+    var doneCount = 0, hintShown = false;
+    var sectionDone = {};
+    POINTS.forEach(function (p) { if (state[p.key]) { doneCount++; sectionDone[p.section] = (sectionDone[p.section] || 0) + 1; } });
+    var lastSection = null;
+    POINTS.forEach(function (p) {
+      var isDone = !!state[p.key];
+      if (p.section !== lastSection) {
+        lastSection = p.section;
+        var sec = D.sections[p.section];
+        if (sec.name) {
+          var h2 = document.createElement('h2');
+          var sd = sectionDone[p.section] || 0;
+          h2.innerHTML = sec.name + ' <span class="c">' + (sd ? sd + ' / ' : '') + sec.count + '</span>';
+          if (sd === sec.count) h2.className = 'complete';
+          list.appendChild(h2);
+        }
+      }
+      if (hideDone && isDone) return;
+      if (!hintShown && D.hint) {
+        hintShown = true;
+        var hint = document.createElement('div');
+        hint.className = 'hint';
+        hint.innerHTML = D.hint;
+        list.appendChild(hint);
+      }
+      var row = document.createElement('div');
+      row.className = 'row' + (isDone ? ' done' : '');
+      row.dataset.key = p.key;
+      if (document.body.classList.contains('icons')) {
+        var ic = document.createElement(p.icon ? 'img' : 'span');
+        ic.className = p.icon ? 'qicon' : 'noicon';
+        if (p.icon) { ic.alt = ''; ic.src = p.icon; }
+        row.appendChild(ic);
+      }
+      // One line that scrolls sideways: leg distance, number + name (bold), details, then the less critical
+      // note / coordinates / done time in grey. Notes may hold small HTML (coloured confidence badges).
+      var line = document.createElement('div');
+      line.className = 'line';
+      // BEFORE: the pill was drawn only when there was a leg distance, so a route's (or section's) first stop had none
+      // when no --default was given. WHY: the missing pill broke the rows' alignment and drew the eye (Bart).
+      // NOW (2026-10-09, trial): such a stop shows "here <distance>" from the browser's location when location is
+      // allowed (under GPS JoyStick that is the spoofed position, i.e. the jump; under iPogo it is the real one), else
+      // "start", which asks for location when tapped. Never prompts on page load.
+      var dist = document.createElement('span');
+      dist.className = 'dist';
+      if (p.tba) {
+        dist.textContent = 'TBA';
+        dist.title = 'no location yet';
+      } else if (p.distText) {
+        dist.textContent = p.distText;
+        dist.title = 'from ' + p.distFrom;
+      } else if (HERE) {
+        dist.textContent = distText(metres(HERE, p));
+        dist.classList.add('here');
+        dist.title = 'from your current location';
+      } else {
+        dist.textContent = 'start';
+        dist.title = 'first stop' + (D.sections[p.section].name ? ' of this section' : '') + ': tap for the distance from where you are';
+        dist.style.cursor = 'pointer';
+        dist.addEventListener('click', function () { locate(true); });
+      }
+      // (the pill goes at the end of the button row, below)
+      // Stop number bold; the name in the same bright colour but normal weight (as on the Export page).
+      var b = document.createElement('b');
+      b.textContent = p.n + '. ';
+      line.appendChild(b);
+      var nm = document.createElement('span');
+      nm.className = 'task';
+      nm.textContent = p.name;
+      line.appendChild(nm);
+      if (p.sub) line.appendChild(document.createTextNode(' · ' + p.sub));
+      var dim = document.createElement('span');
+      dim.className = 'dim';
+      var doneText = (isDone && state[p.key].ts) ? ' · done ' + new Date(state[p.key].ts).toLocaleString() : '';
+      dim.innerHTML = (p.note ? ' · ' + p.note : '');
+      if (!p.tba) dim.appendChild(document.createTextNode(' · ' + p.lat.toFixed(5) + ', ' + p.lon.toFixed(5) + doneText));
+      line.appendChild(dim);
+      row.appendChild(line);
+      // A placeholder (no location yet): greyed and dashed; never counted or marked. Its buttons are drawn like the
+      // others but disabled below (Bart, 2026-10-09: BEFORE no buttons; WHY the row's shape should match; NOW greyed).
+      if (p.tba) row.classList.add('tba');
+      var controls = document.createElement('div');
+      controls.className = 'controls';
+      var doneBtn = document.createElement('button');
+      doneBtn.className = 'done-btn' + (isDone ? ' done' : '');
+      doneBtn.textContent = isDone ? '✓ Done' : 'Done';
+      doneBtn.addEventListener('click', function () { toggleDone(p.key); });
+      controls.appendChild(doneBtn);
+      var teleport = document.createElement('a');
+      if (prefs.teleport === 'ipogo') {
+        teleport.className = 'ipogo-btn';
+        teleport.href = 'pokemongo://?lat=' + p.lat + '&lng=' + p.lon;
+        teleport.innerHTML = iconHtml('ipogo') + '<span>iPogo</span>';
+      } else {
+        teleport.className = 'joystick-btn';
+        teleport.href = 'gpsjoystick://teleport?lat=' + p.lat + '&lng=' + p.lon;
+        teleport.innerHTML = iconHtml('joystick') + '<span>GPS JoyStick</span>';
+      }
+      teleport.addEventListener('click', function () { markDone(p.key); });
+      controls.appendChild(teleport);
+      if (prefs.second === 'maps') {
+        var mapsLink = document.createElement('a');
+        mapsLink.className = 'maps-btn';
+        mapsLink.href = 'https://maps.google.com/?q=' + p.lat + ',' + p.lon;
+        mapsLink.target = '_blank';
+        mapsLink.rel = 'noopener';
+        mapsLink.innerHTML = iconHtml('maps') + '<span>Maps</span>';
+        mapsLink.addEventListener('click', function () { markDone(p.key); });
+        controls.appendChild(mapsLink);
+      } else {
+        // The last-copied stop is remembered so its "Copied" label survives the re-render that marking it done does.
+        var copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = copiedKey === p.key ? '✓ Copied' : 'Copy';
+        copyBtn.addEventListener('click', function () {
+          copyText(p.lat.toFixed(6) + ',' + p.lon.toFixed(6)).then(function () {
+            copiedKey = p.key;
+            if (state[p.key]) render(); else markDone(p.key);
+          });
+        });
+        controls.appendChild(copyBtn);
+      }
+      if (p.tba) {
+        Array.prototype.forEach.call(controls.children, function (el) {
+          el.removeAttribute('href');
+          el.setAttribute('aria-disabled', 'true');
+          el.tabIndex = -1;
+          if (el.tagName === 'BUTTON') el.disabled = true;
+        });
+      }
+      controls.appendChild(dist);
+      row.appendChild(controls);
+      list.appendChild(row);
+    });
+    fitPills();
+    var tbaCount = POINTS.filter(function (p) { return p.tba; }).length;
+    statusEl.textContent = doneCount + ' of ' + (POINTS.length - tbaCount) + ' done' + (tbaCount ? ' \u00b7 ' + tbaCount + ' to come' : '');
+    undoBtn.disabled = doneCount === 0;
+    resetAllBtn.disabled = doneCount === 0;
+  }
+  setupToggle('teleportToggle', 'teleport');
+  setupToggle('secondToggle', 'second');
+  hideDoneBtn.addEventListener('click', function () {
+    hideDone = !hideDone;
+    hideDoneBtn.textContent = hideDone ? 'Show done' : 'Hide done';
+    render();
+  });
+  undoBtn.addEventListener('click', undoLast);
+  resetAllBtn.addEventListener('click', function () {
+    var n = Object.keys(state).length;
+    if (!n) { alert('Nothing is marked done.'); return; }
+    if (!confirm('Clear all ' + n + ' done marks on this page? This cannot be undone.')) return;
+    state = {};
+    save(); render();
+  });
+  function download(text, type, fileName) {
+    var blob = new Blob([text], { type: type });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = fileName;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+  // localStorage is per browser and per origin (file:// vs http://localhost differ): the exported file is the
+  // only durable copy of the progress.
+  document.getElementById('exportProgressBtn').addEventListener('click', function () {
+    download(JSON.stringify(state, null, 2), 'application/json', D.fileStem + '_progress.json');
+  });
+  document.getElementById('importInput').addEventListener('change', function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var imported = JSON.parse(reader.result), n = 0;
+        Object.keys(imported).forEach(function (k) { var v = normalise(imported[k]); if (v) { state[k] = v; n++; } });
+        save(); render();
+        alert('Imported ' + n + ' done marks.');
+      } catch (err) { alert('Invalid progress file'); }
+      e.target.value = '';
+    };
+    reader.readAsText(file);
+  });
+  // GPX: built with the page (layout in the skill's references/gpx-apps.md) and also written next to it as <page>.gpx.
+  // GPX downloads it (when the file isn't at hand); Copy GPX copies it, only when tapped, because iPogo imports a route
+  // by pasting its text; Map hands the viewer exactly this text, so file, clipboard and map never disagree.
+  document.getElementById('gpxBtn').addEventListener('click', function () {
+    download(D.gpx, 'application/gpx+xml', D.fileStem + '.gpx');
+  });
+  var copyGpxBtn = document.getElementById('copyGpxBtn');
+  copyGpxBtn.addEventListener('click', function () {
+    var lbl = copyGpxBtn.querySelector('span');
+    copyText(D.gpx).then(function () {
+      lbl.textContent = '\u2713 Copied';
+      copyGpxBtn.title = 'GPX copied: paste it into iPogo';
+      setTimeout(function () { lbl.textContent = 'Copy GPX'; }, 2500);
+    });
+  });
+  document.getElementById('mapBtn').addEventListener('click', function () {
+    window.open(D.viewerUrl + '#gpx=' + encodeURIComponent(D.gpx), '_blank');
+  });
+  render();
+  // Location only when already allowed (no prompt on load); "start" pills ask when tapped. Re-read it when you come
+  // back to the page (e.g. after a teleport), so "here" follows you.
+  try {
+    if (navigator.permissions && navigator.permissions.query) {
+      navigator.permissions.query({ name: 'geolocation' }).then(function (s) { if (s.state === 'granted') locate(false); }, function () {});
+    }
+  } catch (e) {}
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && HERE) locate(false); });
+})();
+</script>
+</body>
+</html>
