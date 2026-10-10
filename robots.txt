@@ -1,0 +1,3 @@
+# 2026-10-10: keep Bart's PoGo link pages out of search engines (they're public but not advertised).
+User-agent: *
+Disallow: /PoGo_Links/

@@ -25,3 +25,17 @@
     </ul>
   </li>
 </ul>
+
+# PoGo Link Pages
+
+https://bartmaneh.github.io/PoGo_Links/ lists Bart's Pokémon GO link pages (made by the coord-link-page skill and the
+Pokémap quest Export). The pages live in Google Drive, `Other/Pokémon GO/web pages w links/`; Drive can't serve them
+as web pages, so they are copied here.
+
+- Publish after adding, changing or deleting a page in Drive: `python3 -I PoGo_Links/scripts/publish.py`
+  (`-n` = dry run). It copies the pages unchanged, removes ones no longer in Drive, rebuilds the list, commits
+  and pushes. GitHub Pages is live a minute or two later.
+- Don't edit `PoGo_Links/*.html` here: the next publish overwrites them from Drive.
+- The pages are public but not advertised: `robots.txt` keeps search engines out of `/PoGo_Links/`.
+- Done ticks are saved per browser and per site, so ticks from copies opened elsewhere (e.g. Solid Explorer)
+  don't carry over; use a page's Export progress / Import progress buttons to move them.
