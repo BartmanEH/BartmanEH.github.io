@@ -38,6 +38,10 @@ as web pages, so they are copied here.
 - Don't edit `PoGo_Links/*.html` here: the next publish overwrites them from Drive.
 - A list-only icon can override a page's own: `PoGo_Links/icons/<page file stem>.png` (e.g. the PokéXciting
   rainbow wig, made by `PoGo_Links/scripts/rainbow_wig.py` from the page's four wig icons).
+  The others come from PokeMiners/pogo_assets (official in-game art): stamp-rally collection icons
+  (`Images/StampRally/CollectionIcon/`), Pokémon icons (`Images/Pokemon - 256x256/Addressable Assets/`) and location
+  backgrounds (`Images/LocationCards/`), trimmed to a 132 px square. Sources per page: the coord-link-page skill's
+  `references/sources.md`.
 - The pages are public but not advertised: `robots.txt` keeps search engines out of `/PoGo_Links/`.
 - Done ticks are saved per browser and per site, so ticks from copies opened elsewhere (e.g. Solid Explorer)
   don't carry over; use a page's Export progress / Import progress buttons to move them.
