@@ -36,6 +36,8 @@ as web pages, so they are copied here.
   (`-n` = dry run). It copies the pages unchanged, removes ones no longer in Drive, rebuilds the list, commits
   and pushes. GitHub Pages is live a minute or two later.
 - Don't edit `PoGo_Links/*.html` here: the next publish overwrites them from Drive.
+- The list can be reordered by drag and drop (Reorder → drag a card's grip → Done; Reset = newest first). The order
+  is saved per browser (localStorage `pogolinks.order.v1`); pages not in it (new ones) show on top, newest first.
 - A list-only icon can override a page's own: `PoGo_Links/icons/<page file stem>.png` (e.g. the PokéXciting
   rainbow wig, made by `PoGo_Links/scripts/rainbow_wig.py` from the page's four wig icons).
   The others come from PokeMiners/pogo_assets (official in-game art): stamp-rally collection icons

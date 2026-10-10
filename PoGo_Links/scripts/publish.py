@@ -159,6 +159,22 @@ PAGE = r"""<!DOCTYPE html>
   .bar.complete { color: var(--green); font-weight: 700; }
   .bar.complete .fill { background: var(--green); }
   .file { color: #6b7280; }
+  /* Reorder (2026-10-10, Bart): "Reorder" shows a grip on each card; drag it to move the card. The order is saved in this
+     browser (localStorage, like the Done ticks), so each device keeps its own. Pages not in the saved order (new ones)
+     go on top, newest first. */
+  .order { display: flex; justify-content: space-between; align-items: center; margin: 0 0 10px; font-size: 12px; color: var(--grey); }
+  .order button { font: inherit; font-size: 13px; font-weight: 700; color: var(--blue); background: var(--card); border: 1px solid var(--line);
+                  border-radius: 999px; padding: 5px 14px; cursor: pointer; }
+  .order button.on { color: var(--bg); background: var(--blue); border-color: var(--blue); }
+  .order #reset { color: var(--red); }
+  .grip { display: none; }
+  body.reorder .card { position: relative; padding-right: 44px; }
+  body.reorder .card:active { transform: none; }
+  body.reorder .grip { display: grid; place-items: center; position: absolute; top: 0; right: 0; bottom: 0; width: 40px;
+                       color: var(--grey); touch-action: none; cursor: grab; }
+  body.reorder .grip svg { width: 18px; height: 18px; }
+  .card.dragging { z-index: 2; box-shadow: 0 10px 28px rgba(0,0,0,.55); background-color: #3a3a36; transition: none; }
+  .card.dragging .grip { color: var(--blue); cursor: grabbing; }
   .links { display: flex; justify-content: space-between; font-size: 12px; color: var(--grey); margin: 14px 0 0; }
   .links a { color: var(--blue); text-decoration: none; }
   /* Footer: the standard site notice, as on innoengserv.com (© 2014–current year, Bart's picture, name). */
@@ -183,7 +199,10 @@ PAGE = r"""<!DOCTYPE html>
   <div class="stat"><b>__PLACES__</b><span>Places</span></div>
   <div class="stat done"><b id="done">&ndash;</b><span>Done</span></div>
 </div>
+<div class="order"><button id="reset" type="button" hidden>Reset</button><span id="ordlbl">Newest first</span><button id="reorder" type="button">Reorder</button></div>
+<div id="list">
 __ROWS__
+</div>
 <div class="links"><a href="../">&larr; Home</a><span>Published __STAMP__</span></div>
 <div class="footer">&copy; 2014&ndash;<span id="year">__YEAR__</span><a href="../"><img src="../img/BartmanEH.png" alt="Bart"></a>Stassen, P.Eng.</div>
 <script>
@@ -212,6 +231,83 @@ document.querySelectorAll('.when').forEach(function (el) {
 document.getElementById('year').textContent = new Date().getFullYear();
 refresh();
 window.addEventListener('pageshow', refresh);   // coming Back from a page (bfcache) shows the new ticks
+
+// Reorder: drag a card by its grip. Saved order = list of file names; files not in it go first, in the published order.
+var ORDER_KEY = 'pogolinks.order.v1', list = document.getElementById('list'), lbl = document.getElementById('ordlbl'),
+    btn = document.getElementById('reorder'), reset = document.getElementById('reset');
+function cards() { return Array.prototype.slice.call(list.querySelectorAll('.card')); }
+function saved() { try { return JSON.parse(localStorage.getItem(ORDER_KEY) || 'null'); } catch (e) { return null; } }
+function applyOrder() {
+  var o = saved(), pos = {};
+  (o || []).forEach(function (f, i) { pos[f] = i; });
+  cards().sort(function (a, b) {
+    var pa = a.dataset.file in pos ? pos[a.dataset.file] : -1e6 + +a.dataset.i,
+        pb = b.dataset.file in pos ? pos[b.dataset.file] : -1e6 + +b.dataset.i;
+    return pa - pb;
+  }).forEach(function (c) { list.appendChild(c); });
+  lbl.textContent = o ? 'Your order' : 'Newest first';
+}
+function saveOrder() {
+  try { localStorage.setItem(ORDER_KEY, JSON.stringify(cards().map(function (c) { return c.dataset.file; }))); } catch (e) {}
+  lbl.textContent = 'Your order';
+}
+cards().forEach(function (c) {
+  var g = document.createElement('span');
+  g.className = 'grip'; g.setAttribute('aria-hidden', 'true');
+  g.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.7"/><circle cx="15" cy="6" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="18" r="1.7"/><circle cx="15" cy="18" r="1.7"/></svg>';
+  c.appendChild(g);
+});
+function setMode(on) {
+  document.body.classList.toggle('reorder', on);
+  btn.textContent = on ? 'Done' : 'Reorder'; btn.classList.toggle('on', on);
+  reset.hidden = !on; lbl.hidden = on;
+}
+btn.addEventListener('click', function () { setMode(!document.body.classList.contains('reorder')); });
+reset.addEventListener('click', function () {
+  try { localStorage.removeItem(ORDER_KEY); } catch (e) {}
+  applyOrder();
+});
+// In reorder mode a tap must not open the page.
+list.addEventListener('click', function (e) { if (document.body.classList.contains('reorder')) e.preventDefault(); });
+
+var drag = null;
+function place() {   // move the dragged card in the list to where the finger is, then keep it under the finger
+  var c = drag.card, y = drag.y;
+  var others = cards().filter(function (o) { return o !== c; }), before = null;
+  for (var i = 0; i < others.length; i++) {
+    var r = others[i].getBoundingClientRect();
+    if (y < r.top + r.height / 2) { before = others[i]; break; }
+  }
+  if (c.nextElementSibling !== before || (before === null && list.lastElementChild !== c)) list.insertBefore(c, before);
+  c.style.transform = '';
+  var natural = c.getBoundingClientRect().top + window.scrollY;
+  c.style.transform = 'translateY(' + (drag.top + (y + window.scrollY - drag.startY) - natural) + 'px)';
+}
+function tick() {   // scroll when the finger is near the top or bottom edge
+  if (!drag) return;
+  var edge = 70, v = drag.y < edge ? -(edge - drag.y) / 5 : drag.y > innerHeight - edge ? (drag.y - innerHeight + edge) / 5 : 0;
+  if (v) { window.scrollBy(0, v); place(); }
+  requestAnimationFrame(tick);
+}
+list.addEventListener('pointerdown', function (e) {
+  var g = e.target.closest('.grip');
+  if (!g || !document.body.classList.contains('reorder')) return;
+  var c = g.closest('.card');
+  e.preventDefault();
+  g.setPointerCapture(e.pointerId);
+  drag = { card: c, y: e.clientY, startY: e.clientY + window.scrollY, top: c.getBoundingClientRect().top + window.scrollY };
+  c.classList.add('dragging');
+  requestAnimationFrame(tick);
+});
+list.addEventListener('pointermove', function (e) { if (drag) { drag.y = e.clientY; place(); } });
+function drop() {
+  if (!drag) return;
+  drag.card.classList.remove('dragging'); drag.card.style.transform = '';
+  drag = null; saveOrder();
+}
+list.addEventListener('pointerup', drop);
+list.addEventListener('pointercancel', drop);
+applyOrder();   // coming Back from a page (bfcache) shows the new ticks
 </script>
 </body>
 </html>
@@ -221,7 +317,7 @@ window.addEventListener('pageshow', refresh);   // coming Back from a page (bfca
 def build_index(pages):
     """pages: list of (file name, info, mtime), newest first."""
     rows, data = [], {}
-    for name, info, mtime in pages:
+    for i, (name, info, mtime) in enumerate(pages):
         cat, cat_label = category(info["title"], name)
         n = len(info["keys"])
         day = datetime.date.fromtimestamp(mtime).isoformat()
@@ -236,7 +332,7 @@ def build_index(pages):
             icon = GLYPHS[cat]
         stem = os.path.splitext(name)[0]
         rows.append(
-            f'<a class="card {cat}" href="./{html.escape(name, quote=True)}" data-file="{html.escape(name, quote=True)}">'
+            f'<a class="card {cat}" href="./{html.escape(name, quote=True)}" data-file="{html.escape(name, quote=True)}" data-i="{i}">'
             f'<span class="ic">{icon}</span>'
             f'<span class="t">{html.escape(info["title"])}</span>'
             f'<span class="m"><span class="chip">{cat_label}</span><span><span class="n">{n}</span> place{"s" if n != 1 else ""}</span>'
