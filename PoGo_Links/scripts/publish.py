@@ -27,7 +27,7 @@ import unicodedata
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
-LIST_VERSION = "2.4"   # 2.4 = progress bars actually fill (were 0px wide)
+LIST_VERSION = "2.5"   # 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -122,7 +122,7 @@ PAGE = r"""<!DOCTYPE html>
      Category colours: event purple, stamp rally tan, quests green. Width capped at 412px (Pixel 6 Pro) like the pages.
      Everything spans the same width (header tiles, cards, footer): Bart's symmetry rule. */
   :root { --bg: #2b2b29; --card: #33332f; --line: #404040; --text: #d1d5db; --bold: #e5e5e5; --grey: #9ca3af;
-          --blue: #74aeea; --purple: #bb7cd8; --green: #a1c281; --tan: #c99c6e; --red: #e06c75; }
+          --blue: #74aeea; --purple: #bb7cd8; --green: #a1c281; --tan: #c99c6e; --red: #e06c75; --yellow: #e5c07b; }
   html { background: var(--bg); height: 100%; }
   body { max-width: 412px; box-sizing: border-box; margin: 0 auto; padding: 20px 16px 0; min-height: calc(100vh + 22px); min-height: calc(100dvh + 22px);
          display: flex; flex-direction: column; color: var(--text);
@@ -173,8 +173,9 @@ PAGE = r"""<!DOCTYPE html>
      NOW (v2.4): darker track, lighter edge. */
   /* display: block: the fill is a <span>, and an inline element ignores width, so before 2026-10-10 (v2.3) every bar drew
      0px wide whatever the progress (Bart: "Complete" but not filled in). NOW (v2.4) block, so the width shows. */
-  .fill { display: block; height: 100%; width: 0; border-radius: 3px; background: linear-gradient(90deg, color-mix(in srgb, var(--c) 70%, #2b2b29), var(--c));
-          transition: width 400ms ease; }
+  .fill { display: block; height: 100%; width: 0; border-radius: 3px; background: var(--yellow); transition: width 400ms ease; }
+  /* 2026-10-10 BEFORE (v2.4): fill in the card's category colour. WHY: Bart: in progress yellow, completed green.
+     NOW (v2.5): yellow while in progress, green when complete. */
   .bar.complete { color: var(--green); font-weight: 700; }
   .bar.complete .fill { background: var(--green); }
   .file { color: #6b7280; }
