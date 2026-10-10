@@ -27,7 +27,7 @@ import unicodedata
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
-LIST_VERSION = "2.5"   # 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
+LIST_VERSION = "2.6"   # 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -58,6 +58,8 @@ def page_info(path):
     s = open(path, encoding="utf-8").read()
     m = re.search(r"<title>(.*?)</title>", s, re.S)
     title = html.unescape(m.group(1).strip()) if m else os.path.splitext(os.path.basename(path))[0]
+    # Em dashes closed up, no spaces (The Canadian Style; Bart, 2026-10-10). The pages themselves keep their titles.
+    title = re.sub(r"\s*\u2014\s*", "\u2014", title)
     info = {"title": title, "keys": [], "storage": None, "icon": None}
     dec = json.JSONDecoder()
     m = re.search(r"var D\s*=\s*", s)                 # coord-link-page pages
@@ -162,6 +164,9 @@ PAGE = r"""<!DOCTYPE html>
   .ic img { width: 66px; height: 66px; object-fit: contain; }
   .ic svg { width: 34px; height: 34px; }
   .t { color: var(--blue); font-weight: 700; font-size: 15px; line-height: 1.25; }
+  /* Long titles fit on one line (2026-10-10, Bart: the astronaut title was too long): fitTitles() below first tightens
+     the letter spacing (to -0.5px), then shrinks the text (to 12px at the least); a title that still doesn't fit wraps. */
+  .t.fit { white-space: nowrap; }
   .m { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 12px; color: var(--grey); }
   .chip { color: var(--c); border: 1px solid color-mix(in srgb, var(--c) 55%, transparent); border-radius: 999px;
           padding: 0 7px; font-size: 11px; font-weight: 700; line-height: 17px; }
@@ -256,6 +261,18 @@ function refresh() {
   });
   document.getElementById('done').textContent = total;
 }
+// Fit each title on one line: tighten the letter spacing first, then shrink the text, never below 12px.
+function fitTitles() {
+  document.querySelectorAll('.card .t').forEach(function (t) {
+    t.style.letterSpacing = ''; t.style.fontSize = ''; t.classList.add('fit');
+    var size = parseFloat(getComputedStyle(t).fontSize), ls = 0;
+    while (t.scrollWidth > t.clientWidth && ls > -0.5) { ls -= 0.1; t.style.letterSpacing = ls.toFixed(1) + 'px'; }
+    while (t.scrollWidth > t.clientWidth && size > 12) { size -= 0.25; t.style.fontSize = size + 'px'; }
+    if (t.scrollWidth > t.clientWidth) { t.classList.remove('fit'); t.style.letterSpacing = ''; t.style.fontSize = ''; }
+  });
+}
+fitTitles();
+window.addEventListener('resize', fitTitles);
 // "updated today / yesterday / 3 days ago" from the Drive file's date (the page shows the plain date without scripts).
 document.querySelectorAll('.when').forEach(function (el) {
   var d = Math.round((new Date().setHours(0, 0, 0, 0) - new Date(el.dataset.day + 'T00:00').getTime()) / 864e5);
