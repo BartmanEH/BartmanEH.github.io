@@ -24,8 +24,9 @@ import subprocess
 import sys
 import unicodedata
 
-# Shown just below the footer (Bart's standard). 2.0 = redesign + reorder (2026-10-10); bump when the list page changes.
-LIST_VERSION = "2.0"
+# Shown just below the footer (Bart's standard); bump when the list page changes.
+# 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right (both 2026-10-10).
+LIST_VERSION = "2.1"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)                      # PoGo_Links/
@@ -124,7 +125,12 @@ PAGE = r"""<!DOCTYPE html>
   body { max-width: 412px; box-sizing: border-box; margin: 0 auto; padding: 20px 16px 66px; min-height: 100%; position: relative; color: var(--text);
          font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent;
          background: radial-gradient(120% 220px at 50% 0, rgba(116,174,234,.16), rgba(187,124,216,.07) 55%, transparent 100%) var(--bg); }
-  .hero { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; }
+  .hero { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; position: relative; }
+  /* IES logo, top right, linking to the home page like on Bart's other pages (2026-10-10, Bart). Same light grey as
+     there (css/style.css .filter-white = invert 90%); lined up with the kicker line so the title keeps its room. */
+  .ies { position: absolute; top: 2px; right: 0; line-height: 0; }
+  .ies img { height: 18px; width: auto; filter: invert(90%); opacity: .85; transition: transform .5s ease-in-out; }
+  .ies img:hover { transform: scale(1.2); }
   .ball { width: 46px; height: 46px; flex: 0 0 auto; filter: drop-shadow(0 3px 8px rgba(0,0,0,.45)); }
   .kicker { color: var(--purple); font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
   h1 { margin: 2px 0 0; font-size: 26px; line-height: 1.1; font-weight: 800; letter-spacing: -.3px; color: var(--bold);
@@ -203,6 +209,7 @@ PAGE = r"""<!DOCTYPE html>
     <circle cx="24" cy="24" r="3" fill="#74aeea"/>
   </svg>
   <div><div class="kicker">BartmanEH's</div><h1>PoGO Link Pages</h1></div>
+  <a class="ies" href="../" aria-label="Home"><img src="../img/IES_logo.svg" alt="IES"></a>
 </div>
 <div class="stats">
   <div class="stat"><b>__PAGES__</b><span>Pages</span></div>
