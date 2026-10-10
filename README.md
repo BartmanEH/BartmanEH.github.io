@@ -32,15 +32,14 @@ were converted on 2026-10-10, like the Pi site's (innoengserv) on 2026-10-09.
 # PoGO Link Pages
 
 https://bartmaneh.github.io/PoGo_Links/ lists Bart's Pokémon GO link pages (made by the coord-link-page skill and the
-Pokémap quest Export). The pages live in Google Drive, `Other/Pokémon GO/web pages w links/`; Drive can't serve them
-as web pages, so they are copied here.
+Pokémap quest Export). The pages live here, in `PoGo_Links/` (since 2026-10-10; before that they were copied from
+Google Drive `Other/Pokémon GO/web pages w links/`, now an untouched archive).
 
 ## On any Mac
 
 - Clone this repo (Bart's Macs: `~/Documents/VS Code/BartmanEH.github.io`) and `git pull` before working; commit and
   push at the end, never force-push.
-- Publishing needs Google Drive for desktop signed in as bartman.eh@gmail.com: `publish.py` finds
-  `~/Library/CloudStorage/GoogleDrive-*/My Drive/Other/Pokémon GO/web pages w links` (or pass `--src DIR`).
+- Publishing needs only this repo (and `gh`/git logged in to GitHub). No Google Drive.
 - Icon scripts need Pillow, which isn't installed system-wide: `python3 -m venv /tmp/v && /tmp/v/bin/pip install pillow`,
   then run them with `/tmp/v/bin/python -I PoGo_Links/scripts/<script>.py`.
 - Preview locally before pushing: `python3 -m http.server 8765` in the repo, open http://localhost:8765/PoGo_Links/
@@ -55,13 +54,12 @@ as web pages, so they are copied here.
   repo BartmanEH/pogo-links-inbox, whose GitHub job copies it into `PoGo_Links/`, rebuilds the list
   (`publish.py --index-only`) and pushes. Event-driven, live in about 1 to 2 minutes, no Mac needed. Setup and tokens:
   that repo's README.
-- Link pages (made by the coord-link-page skill) after adding or changing one in Drive:
-  `python3 -I PoGo_Links/scripts/publish.py` (`-n` = dry run, `--no-push`). It copies the pages unchanged, rebuilds
-  `PoGo_Links/index.html`, commits and pushes. It never deletes pages (Exports may exist only on the site): to take one
-  down, delete it from `PoGo_Links/` (and Drive) and publish. List dates are each page's last commit. GitHub Pages is live a minute or two later (browsers may cache the list for up to 10 minutes).
-- Don't edit `PoGo_Links/*.html` here: the next publish overwrites them from Drive. To change a page, edit (or
-  rebuild) it in Drive, back it up first (`web pages w links/backup <date> …/`), then publish. Never change a place's
-  `key` in a page: Done ticks are stored by key.
+- Link pages (made by the coord-link-page skill): `git pull`, put the page's `.html` into `PoGo_Links/`, then
+  `python3 -I PoGo_Links/scripts/publish.py` (`-n` = dry run, `--no-push`, `--src DIR` to import pages from a folder).
+  It pulls, rebuilds `PoGo_Links/index.html`, commits and pushes. It never deletes pages: to take one down, delete the
+  file and publish. List dates are each page's last commit. GitHub Pages is live a minute or two later.
+- Always pull before editing pages here: the inbox job pushes Exports at any time. Git history is the backup. Never
+  change a place's `key` in a page: Done ticks are stored by key.
 - Don't edit `PoGo_Links/index.html` either: it is generated from the `PAGE` template in `publish.py`.
 
 ## The list page (`publish.py`)
@@ -69,7 +67,7 @@ as web pages, so they are copied here.
 - `LIST_VERSION` (shown in the footer; bump it and add a line to its comment whenever the list page changes) and
   `FIRST_YEAR` (the footer says "© 2026", widening by script to "© 2026–<this year>").
 - Cards: icon, title, category chip (guessed from the title: quests / stamp rally / event), place count, "updated …"
-  (the Drive file's date), file name, and a progress bar read from each page's own Done ticks in localStorage
+  (the page's last commit), file name, and a progress bar read from each page's own Done ticks in localStorage
   (yellow in progress, green "Complete").
 - Titles: em dashes closed up (The Canadian Style); long titles are condensed to one line by script (tighter letter
   spacing, then smaller text, never below 12 px).
