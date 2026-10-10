@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Make the Pikachu list icons from PokeMiners/pogo_assets originals, all with ONE crop so they match (2026-10-10).
 
-The game's 256 px Pokémon icons are all drawn at the same scale, so cutting every one with the same square (CROP)
-keeps them the same size on the list, as in the game (Bart: the hanbok looked small when sized on its own).
+Uses the SHINY variants (pm25.f<FORM>.s.icon.png). The game's 256 px Pokémon icons are all drawn at the same
+scale, so cutting every one with the same square (CROP) keeps them the same size on the list, as in the game
+(Bart: the hanbok looked small when sized on its own).
 Writes PoGo_Links/icons/:
   esa-astronaut-pikachu-links.png  pm25.fGLASS_HELMET_2026
   seoul-hanbok-links.png           pm25.fK_2026_A_01
@@ -23,12 +24,17 @@ from PIL import Image, ImageFilter
 HERE = os.path.dirname(os.path.abspath(__file__))
 ICONS = os.path.join(os.path.dirname(HERE), "icons")
 BASE = "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Pokemon - 256x256/Addressable Assets/"
-CROP = (73, 90, 217, 234)      # 144 px square around the Pikachu body; the tail runs off the right, as in the game
+# 112 px square around the visible sprite (alpha > 10 spans about x 89-201, y 124-232 in all three; the faint halo
+# above it is invisible); the tail runs off the right, as in the game.
+# 2026-10-10 BEFORE: (73, 90, 217, 234), 144 px, sized on the halo. WHY: Bart: Pikachus too small next to the badges
+# (they filled ~70% of the box). NOW: ~90%, like the badges.
+CROP = (89, 122, 201, 234)
 SIZE = 132                     # 2x the 66 px the list draws icons at
 
 
 def get(form):
-    url = urllib.parse.quote(BASE + f"pm25.f{form}.icon.png", safe=":/")
+    # Shiny variants (".s." before "icon"): Bart's pick, 2026-10-10 (BEFORE: the normal colours).
+    url = urllib.parse.quote(BASE + f"pm25.f{form}.s.icon.png", safe=":/")
     return Image.open(io.BytesIO(urllib.request.urlopen(url).read())).convert("RGBA")
 
 
