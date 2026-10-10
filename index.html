@@ -91,9 +91,18 @@
 					<br>
 				</div>
 			</div><!-- content -->
+			<!-- 2026-10-10 BEFORE: "©2016", no version. WHY: Bart's footer standard (as on the URL Converter): © first year
+			     widening to the current year by script, version just below the footer, off screen until scrolled to.
+			     NOW: "©2016–<year>" and v1.1 (1.0 = the page before 2026-10-10; 1.1 = PoGO Link Pages button first + this footer). -->
 			<div class="footer">
-				<p>&copy;2016 <input type="image" alt="Bart" src="./img/BartmanEH.png" class="footer_img" style="height:30px;">Stassen, P.Eng.</p>
+				<p>&copy;<span id="year">2016</span> <input type="image" alt="Bart" src="./img/BartmanEH.png" class="footer_img" style="height:30px;">Stassen, P.Eng.</p>
+				<span id="version" style="position: absolute; left: 0; right: 0; top: 50px; display: block; font-size: 12px; line-height: 1; margin: 0; color: #888;">v1.1</span>
 			</div><!-- footer -->
+			<script>
+				// © first year, widening to "2016–<this year>".
+				(function () { var first = 2016, now = new Date().getFullYear();
+					if (now > first) document.getElementById('year').textContent = first + '\u2013' + now; })();
+			</script>
 		</div><!-- wrapper -->
 	</body>
 </html> 
