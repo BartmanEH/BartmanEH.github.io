@@ -51,9 +51,14 @@ as web pages, so they are copied here.
 
 ## Publishing
 
-- After adding, changing or deleting a page in Drive: `python3 -I PoGo_Links/scripts/publish.py` (`-n` = dry run,
-  `--no-push`). It copies the pages unchanged, removes ones no longer in Drive, rebuilds `PoGo_Links/index.html`,
-  commits and pushes. GitHub Pages is live a minute or two later (browsers may cache the list for up to 10 minutes).
+- **Pokémap quest Exports publish themselves** (Pokémap 7.38+, 2026-10-10): each Export uploads its page to the private
+  repo BartmanEH/pogo-links-inbox, whose GitHub job copies it into `PoGo_Links/`, rebuilds the list
+  (`publish.py --index-only`) and pushes. Event-driven, live in about 1 to 2 minutes, no Mac needed. Setup and tokens:
+  that repo's README.
+- Link pages (made by the coord-link-page skill) after adding or changing one in Drive:
+  `python3 -I PoGo_Links/scripts/publish.py` (`-n` = dry run, `--no-push`). It copies the pages unchanged, rebuilds
+  `PoGo_Links/index.html`, commits and pushes. It never deletes pages (Exports may exist only on the site): to take one
+  down, delete it from `PoGo_Links/` (and Drive) and publish. List dates are each page's last commit. GitHub Pages is live a minute or two later (browsers may cache the list for up to 10 minutes).
 - Don't edit `PoGo_Links/*.html` here: the next publish overwrites them from Drive. To change a page, edit (or
   rebuild) it in Drive, back it up first (`web pages w links/backup <date> …/`), then publish. Never change a place's
   `key` in a page: Done ticks are stored by key.
