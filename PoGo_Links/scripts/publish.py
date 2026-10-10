@@ -26,8 +26,9 @@ import unicodedata
 
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
-# (all 2026-10-10).
-LIST_VERSION = "2.2"
+# (all 2026-10-10); 2.3 = version in the footer, sticky footer.
+LIST_VERSION = "2.3"
+FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)                      # PoGo_Links/
@@ -123,7 +124,7 @@ PAGE = r"""<!DOCTYPE html>
   :root { --bg: #2b2b29; --card: #33332f; --line: #404040; --text: #d1d5db; --bold: #e5e5e5; --grey: #9ca3af;
           --blue: #74aeea; --purple: #bb7cd8; --green: #a1c281; --tan: #c99c6e; --red: #e06c75; }
   html { background: var(--bg); height: 100%; }
-  body { max-width: 412px; box-sizing: border-box; margin: 0 auto; padding: 20px 16px 60px; min-height: calc(100vh + 82px); min-height: calc(100dvh + 82px);
+  body { max-width: 412px; box-sizing: border-box; margin: 0 auto; padding: 20px 16px 0; min-height: calc(100vh + 22px); min-height: calc(100dvh + 22px);
          display: flex; flex-direction: column; color: var(--text);
          font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent;
          background: radial-gradient(120% 220px at 50% 0, rgba(116,174,234,.16), rgba(187,124,216,.07) 55%, transparent 100%) var(--bg); }
@@ -189,21 +190,23 @@ PAGE = r"""<!DOCTYPE html>
   body.reorder .grip svg { width: 18px; height: 18px; }
   .card.dragging { z-index: 2; box-shadow: 0 10px 28px rgba(0,0,0,.55); background-color: #3a3a36; transition: none; }
   .card.dragging .grip { color: var(--blue); cursor: grabbing; }
-  .links { display: flex; justify-content: space-between; font-size: 12px; color: var(--grey); margin: 14px 0 0; }
+  .links { display: flex; justify-content: space-between; font-size: 12px; color: var(--grey); margin: 14px 0; }
   .links a { color: var(--blue); text-decoration: none; }
-  /* Footer: Bart's standard ("© years [Bart] Stassen, P.Eng." centred at 14px, the picture grows on hover, grey 12px
-     version just off screen), adapted to a list longer than a screen.
-     2026-10-10 BEFORE (v2.1): footer at the end of the page (pinned to the screen bottom only when the list is short),
-     version just below it. WHY: Bart chose "always on screen". NOW (v2.2): the footer floats at the bottom of the
-     screen over the list; the version is the last thing on the page (body is at least a screen + 82px tall, 60px bottom padding clears the footer, so on a
-     short page it starts just below the screen), seen only by scrolling past the last card. */
-  .footer { position: fixed; left: 0; right: 0; bottom: 0; height: 50px; display: flex; align-items: center; z-index: 3;
-            justify-content: center; font-size: 14px; color: var(--grey); white-space: nowrap;
+  /* Footer: Bart's standard ("© years [Bart] Stassen, P.Eng." centred at 14px, the picture grows on hover, version in
+     grey 12px just off screen), for a list longer than a screen.
+     2026-10-10 BEFORE (v2.2): fixed footer, version alone at the very end of the page. WHY: Bart: the version belongs in
+     the footer, out of view until the footer is scrolled. NOW (v2.3): the footer is the last thing on the page and
+     sticky with bottom -22px: its notice line stays at the bottom of the screen while the list scrolls, its version
+     line hangs just below the screen edge, and both come into view at the end of the page. The body is at least a
+     screen + 22px tall, so on a short page the version is also just off screen. */
+  .footer { position: sticky; bottom: -22px; margin: 18px -16px 0; margin-top: auto; z-index: 3; height: 72px;
+            display: flex; flex-direction: column; align-items: center; font-size: 14px; color: var(--grey); white-space: nowrap;
             background: rgba(43,43,41,.94); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-            border-top: 1px solid var(--line); }
+            border-top: 1px solid var(--line); box-sizing: border-box; }
+  .footer .note { height: 49px; display: flex; align-items: center; }
   .footer img { height: 30px; vertical-align: middle; margin: 0 4px; transition: transform .5s ease-in-out; }
   .footer img:hover { transform: scale(1.5); }
-  #version { margin-top: auto; padding-top: 10px; text-align: center; font-size: 12px; line-height: 1; color: #888; }
+  .footer #version { height: 22px; font-size: 12px; line-height: 1; color: #888; }
 </style>
 </head>
 <body>
@@ -229,8 +232,7 @@ PAGE = r"""<!DOCTYPE html>
 __ROWS__
 </div>
 <div class="links"><a href="../">&larr; Home</a><span>Published __STAMP__</span></div>
-<div class="footer">&copy; 2014&ndash;<span id="year">__YEAR__</span><a href="../"><img src="../img/BartmanEH.png" alt="Bart"></a>Stassen, P.Eng.</div>
-<div id="version">v__VERSION__</div>
+<div class="footer"><span class="note">&copy; <span id="year">__FIRST__</span><a href="../"><img src="../img/BartmanEH.png" alt="Bart"></a>Stassen, P.Eng.</span><span id="version">v__VERSION__</span></div>
 <script>
 // Progress: each page keeps its Done ticks in localStorage on this same site, so the list can read them.
 // A place counts as done when its key is in the page's saved state (the two LEGO pages share one key on purpose).
@@ -254,7 +256,10 @@ document.querySelectorAll('.when').forEach(function (el) {
   var d = Math.round((new Date().setHours(0, 0, 0, 0) - new Date(el.dataset.day + 'T00:00').getTime()) / 864e5);
   if (d >= 0 && d < 7) el.textContent = d === 0 ? 'updated today' : d === 1 ? 'updated yesterday' : 'updated ' + d + ' days ago';
 });
-document.getElementById('year').textContent = new Date().getFullYear();
+// © first year of this page, widening to "2026–2027" etc. as years pass (Bart, 2026-10-10;
+// BEFORE: "© 2014–current year", the IES site's span, which isn't this page's).
+var first = __FIRST__, now = new Date().getFullYear();
+if (now > first) document.getElementById('year').textContent = first + '\u2013' + now;
 refresh();
 window.addEventListener('pageshow', refresh);   // coming Back from a page (bfcache) shows the new ticks
 
@@ -369,7 +374,7 @@ def build_index(pages):
     stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     places = sum(len(i["keys"]) for _, i, _ in pages)
     out = PAGE
-    for k, v in (("__STAMP__", stamp), ("__VERSION__", LIST_VERSION), ("__YEAR__", str(datetime.date.today().year)), ("__PAGES__", str(len(pages))),
+    for k, v in (("__STAMP__", stamp), ("__VERSION__", LIST_VERSION), ("__FIRST__", FIRST_YEAR), ("__PAGES__", str(len(pages))),
                  ("__PLACES__", f"{places:,}"), ("__ROWS__", "\n".join(rows)),
                  ("__DATA__", json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c"))):
         out = out.replace(k, v)
