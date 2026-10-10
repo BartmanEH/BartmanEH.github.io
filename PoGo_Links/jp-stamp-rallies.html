@@ -92,6 +92,15 @@
   .joystick-btn { background: #1a73e8; color: #fff; border-color: #9bc2ff; --edge: #0d47a1; }
   .maps-btn { background: #2e6b3a; color: #fff; border-color: #8fd19e; --edge: #2a6b3b; }
   .copy-btn { background: #5b4a8a; color: #fff; border-color: #b9a6f0; --edge: #4f3d8a; min-width: 60px; }
+  /* 2026-10-10 BEFORE: buttons with an icon were 30px tall, text-only ones (Done, Copy) 28px; Done alone had a gradient
+     body; and every class's border-color lost to `.controls button { border: 1px solid #444 }` (more specific), so no
+     button showed its own outline. WHY: Bart: Done's 3D didn't match and looked shorter. NOW: one 30px height, flat
+     Done, and each button's outline restored (these .controls-prefixed rules win). */
+  .controls button, .controls a { height: 30px; }
+  .controls .done-btn { background: #5e5e5e; border-color: #9a9a9a; --edge: #2a2a2a; }
+  .controls .done-btn.done { background: #2e7d32; border-color: #81c784; --edge: #1f5a22; }
+  .controls .ipogo-btn { border-color: #3f9f9a; } .controls .joystick-btn { border-color: #9bc2ff; }
+  .controls .maps-btn { border-color: #8fd19e; } .controls .copy-btn { border-color: #b9a6f0; }
   /* Export / Import progress always on their own second row (Bart). */
   .toolbar .brk { flex-basis: 100%; height: 0; }
   /* 2026-10-10 BEFORE: toolbar buttons at their natural widths, rows ragged. WHY: Mark all and Home were added (Bart)
