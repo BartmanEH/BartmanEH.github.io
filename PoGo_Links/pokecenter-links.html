@@ -24,8 +24,8 @@
   .hbtn svg { width: 16px; height: 16px; flex: 0 0 16px; }
   .hbtn:hover { filter: brightness(1.08); }
   .hbtn:active { transform: translateY(2px); filter: brightness(.95); }
-  #copyGpxBtn { background: linear-gradient(180deg, #9b7be8, #6f4fc4); border: 1px solid #cbb8ff; box-shadow: 0 3px 0 #3f2a80, 0 6px 14px rgba(111,79,196,.35); }
-  #copyGpxBtn:active { box-shadow: 0 1px 0 #3f2a80, 0 2px 6px rgba(111,79,196,.3); }
+  #copyGpxBtn { background: linear-gradient(180deg, #9b7be8, #6f4fc4); border: 1px solid #cbb8ff; box-shadow: 0 3px 0 #6448c8, 0 6px 14px rgba(111,79,196,.35); }
+  #copyGpxBtn:active { box-shadow: 0 1px 0 #6448c8, 0 2px 6px rgba(111,79,196,.3); }
   #gpxBtn { background: linear-gradient(180deg, #ffb547, #f08a12); border: 1px solid #ffd08a; box-shadow: 0 3px 0 #9a5506, 0 6px 14px rgba(240,138,18,.35); }
   #gpxBtn:active { box-shadow: 0 1px 0 #9a5506, 0 2px 6px rgba(240,138,18,.3); }
   #mapBtn { background: linear-gradient(180deg, #2fc4b2, #138f86); border: 1px solid #8ee8dd; box-shadow: 0 3px 0 #0b5d57, 0 6px 14px rgba(19,143,134,.35); }
@@ -83,12 +83,14 @@
   .controls button:active, .controls a:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--edge, #000), 0 2px 4px rgba(0,0,0,.28); filter: brightness(.93); }
   .controls .ico { display: inline-flex; width: 16px; height: 16px; flex: 0 0 16px; }
   .controls .ico svg { width: 100%; height: 100%; display: block; }
-  .done-btn { background: linear-gradient(180deg, #5c5c5c, #444); color: #fff; border-color: #7a7a7a; width: 56px; --edge: #222; }
-  .done-btn.done { background: linear-gradient(180deg, #43a047, #2e7d32); border-color: #81c784; color: #fff; --edge: #1b4d1f; }
-  .ipogo-btn { background: #1f5856; color: #fff; border-color: #3f9f9a; --edge: #153f3d; }
+  /* 2026-10-10 BEFORE: edges #222/#1b4d1f/#3a2e5c/#1b4425/#153f3d (and Copy GPX #3f2a80), nearly the card's colour, so
+     no 3D lip showed. WHY: Bart. NOW: mid-tone edges of each button's own colour; grey Done a touch lighter, near-black edge. */
+  .done-btn { background: linear-gradient(180deg, #6a6a6a, #4e4e4e); color: #fff; border-color: #7a7a7a; width: 56px; --edge: #141414; }
+  .done-btn.done { background: linear-gradient(180deg, #43a047, #2e7d32); border-color: #81c784; color: #fff; --edge: #2b7330; }
+  .ipogo-btn { background: #1f5856; color: #fff; border-color: #3f9f9a; --edge: #226d68; }
   .joystick-btn { background: #1a73e8; color: #fff; border-color: #9bc2ff; --edge: #0d47a1; }
-  .maps-btn { background: #2e6b3a; color: #fff; border-color: #8fd19e; --edge: #1b4425; }
-  .copy-btn { background: #5b4a8a; color: #fff; border-color: #b9a6f0; --edge: #3a2e5c; min-width: 60px; }
+  .maps-btn { background: #2e6b3a; color: #fff; border-color: #8fd19e; --edge: #2a6b3b; }
+  .copy-btn { background: #5b4a8a; color: #fff; border-color: #b9a6f0; --edge: #4f3d8a; min-width: 60px; }
   /* Export / Import progress always on their own second row (Bart). */
   .toolbar .brk { flex-basis: 100%; height: 0; }
   /* 2026-10-10 BEFORE: toolbar buttons at their natural widths, rows ragged. WHY: Mark all and Home were added (Bart)
