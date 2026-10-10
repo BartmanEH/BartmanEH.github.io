@@ -132,24 +132,26 @@ PAGE = r"""<!DOCTYPE html>
   .stat b { display: block; font-size: 20px; font-weight: 800; color: var(--tan); font-variant-numeric: tabular-nums; }
   .stat span { font-size: 11px; color: var(--grey); text-transform: uppercase; letter-spacing: .8px; }
   .stat.done b { color: var(--green); }
-  .card { --c: var(--purple); display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 4px 12px; align-items: center;
+  .card { --c: var(--purple); display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 3px 12px; align-items: center;
           background: linear-gradient(135deg, rgba(255,255,255,.035), transparent 60%) var(--card); border: 1px solid var(--line);
           border-left: 3px solid var(--c); border-radius: 12px; padding: 12px 12px 10px 10px; margin-bottom: 10px; text-decoration: none;
           box-shadow: 0 2px 10px rgba(0,0,0,.25); transition: transform 90ms ease, box-shadow 90ms ease, background-color 90ms; }
   .card:active { transform: scale(.985); background-color: #3a3a36; }
   @media (hover: hover) { .card:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,.35); } }
   .card.s { --c: var(--tan); } .card.q { --c: var(--green); }
-  .ic { grid-row: 1 / span 2; width: 52px; height: 52px; border-radius: 12px; display: grid; place-items: center; overflow: hidden;
+  /* 2026-10-10 BEFORE: 52px icon beside title + meta, progress bar on its own full-width row below.
+     WHY: Bart wanted bigger icons; the bar moved up beside the icon to make room. NOW: 72px icon spanning all three rows. */
+  .ic { grid-row: 1 / span 3; width: 72px; height: 72px; border-radius: 12px; display: grid; place-items: center; overflow: hidden;
         background: radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--c) 28%, transparent), transparent 70%) #2b2b29;
         border: 1px solid color-mix(in srgb, var(--c) 45%, var(--line)); color: var(--c); }
-  .ic img { width: 44px; height: 44px; object-fit: contain; }
-  .ic svg { width: 26px; height: 26px; }
+  .ic img { width: 66px; height: 66px; object-fit: contain; }
+  .ic svg { width: 34px; height: 34px; }
   .t { color: var(--blue); font-weight: 700; font-size: 15px; line-height: 1.25; }
   .m { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 12px; color: var(--grey); }
   .chip { color: var(--c); border: 1px solid color-mix(in srgb, var(--c) 55%, transparent); border-radius: 999px;
           padding: 0 7px; font-size: 11px; font-weight: 700; line-height: 17px; }
   .m .n { color: var(--tan); font-variant-numeric: tabular-nums; }
-  .bar { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 11px; color: var(--grey);
+  .bar { grid-column: 2; display: flex; align-items: center; gap: 8px; margin-top: 3px; font-size: 11px; color: var(--grey);
          font-variant-numeric: tabular-nums; }
   .track { flex: 1; height: 6px; border-radius: 3px; background: #2b2b29; overflow: hidden; box-shadow: inset 0 0 0 1px #3a3a36; }
   .fill { height: 100%; width: 0; border-radius: 3px; background: linear-gradient(90deg, color-mix(in srgb, var(--c) 70%, #2b2b29), var(--c));
@@ -223,8 +225,15 @@ def build_index(pages):
         cat, cat_label = category(info["title"], name)
         n = len(info["keys"])
         day = datetime.date.fromtimestamp(mtime).isoformat()
-        icon = (f'<img src="{html.escape(info["icon"], quote=True)}" alt="">'
-                if info["icon"] and info["icon"].startswith("data:image/") else GLYPHS[cat])
+        # A list-only icon in PoGo_Links/icons/<page stem>.png wins over the page's own first icon (e.g. the
+        # PokéXciting rainbow wig standing for all the wig colours, made by scripts/rainbow_wig.py).
+        override = f"icons/{os.path.splitext(name)[0]}.png"
+        if os.path.exists(os.path.join(OUT, override)):
+            icon = f'<img src="./{html.escape(override, quote=True)}" alt="">'
+        elif info["icon"] and info["icon"].startswith("data:image/"):
+            icon = f'<img src="{html.escape(info["icon"], quote=True)}" alt="">'
+        else:
+            icon = GLYPHS[cat]
         stem = os.path.splitext(name)[0]
         rows.append(
             f'<a class="card {cat}" href="./{html.escape(name, quote=True)}" data-file="{html.escape(name, quote=True)}">'

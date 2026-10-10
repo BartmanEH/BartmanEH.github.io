@@ -36,6 +36,8 @@ as web pages, so they are copied here.
   (`-n` = dry run). It copies the pages unchanged, removes ones no longer in Drive, rebuilds the list, commits
   and pushes. GitHub Pages is live a minute or two later.
 - Don't edit `PoGo_Links/*.html` here: the next publish overwrites them from Drive.
+- A list-only icon can override a page's own: `PoGo_Links/icons/<page file stem>.png` (e.g. the PokéXciting
+  rainbow wig, made by `PoGo_Links/scripts/rainbow_wig.py` from the page's four wig icons).
 - The pages are public but not advertised: `robots.txt` keeps search engines out of `/PoGo_Links/`.
 - Done ticks are saved per browser and per site, so ticks from copies opened elsewhere (e.g. Solid Explorer)
   don't carry over; use a page's Export progress / Import progress buttons to move them.
