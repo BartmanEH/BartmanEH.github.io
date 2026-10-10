@@ -30,6 +30,10 @@
   #gpxBtn:active { box-shadow: 0 1px 0 #9a5506, 0 2px 6px rgba(240,138,18,.3); }
   #mapBtn { background: linear-gradient(180deg, #2fc4b2, #138f86); border: 1px solid #8ee8dd; box-shadow: 0 3px 0 #0b5d57, 0 6px 14px rgba(19,143,134,.35); }
   #mapBtn:active { box-shadow: 0 1px 0 #0b5d57, 0 2px 6px rgba(19,143,134,.3); }
+  /* Home: back to the published list (absolute URL, so it also works from Drive/Solid Explorer copies). 2026-10-10. */
+  #homeBtn { text-decoration: none; background: linear-gradient(180deg, #3b4b53, #263238); border: 1px solid #26c6da; box-shadow: 0 3px 0 #0e5f69, 0 6px 14px rgba(38,198,218,.35); }
+  #homeBtn:active { box-shadow: 0 1px 0 #0e5f69, 0 2px 6px rgba(38,198,218,.3); }
+  /* the Pokémap Home marker's look: dark slate #263238 with its cyan #26c6da ring, its house badge as the icon */
   .sub { display: inline; color: #9ca3af; font-size: 12.5px; }
   .note { background: #3a3424; border-left: 3px solid #d29922; padding: 9px 11px; margin: 0 0 12px; font-size: 13px; line-height: 1.5; color: #d1d5db; border-radius: 0 6px 6px 0; }
   .note.ok { background: #24382a; border-left-color: #3fb950; }
@@ -87,13 +91,18 @@
   .copy-btn { background: #5b4a8a; color: #fff; border-color: #b9a6f0; --edge: #3a2e5c; min-width: 60px; }
   /* Export / Import progress always on their own second row (Bart). */
   .toolbar .brk { flex-basis: 100%; height: 0; }
+  /* 2026-10-10 BEFORE: toolbar buttons at their natural widths, rows ragged. WHY: Mark all and Home were added (Bart)
+     and his symmetry rule. NOW: toolbar buttons share each row equally (Hide done · Undo last · Mark all · Reset all,
+     then Export · Import); header labels never wrap (Home · Copy GPX · GPX · Map fit one line at 412 px). */
+  .hbtn { white-space: nowrap; }
+  .toolbar button, .toolbar label { flex: 1 1 0; min-width: 0; padding: 6px 4px; text-align: center; white-space: nowrap; }
   .toolbar { row-gap: 4px; } /* the break is an empty flex line, so the rows' gap counts twice around it */
   #importInput { display: none; }
 </style>
 </head>
 <body>
 <div class="top"><h1>LEGO rally—outstanding</h1><div class="sub">210 collected · 219 markers · 9 outstanding: the 8 added after 29 Aug, plus Bristol whose marker was mis-placed</div></div>
-<div class="head"><button id="copyGpxBtn" class="hbtn" title="Copy the route's GPX text (to paste into iPogo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy GPX</span></button><button id="gpxBtn" class="hbtn" title="Download the route as a GPX file (iPogo, GPS JoyStick)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>GPX</button><button id="mapBtn" class="hbtn" title="Open the route in the GPX viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Map</button></div>
+<div class="head"><a id="homeBtn" class="hbtn" href="https://bartmaneh.github.io/PoGo_Links/" title="Back to the PoGO Link Pages list"><svg viewBox="8 8 48 48" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#263238" stroke="#26c6da" stroke-width="5"/><path d="M19 32.5 32 21l13 11.5-3.4 3L40 34.1V45H34v-8h-4v8h-6V34.1l-1.6 1.4z" fill="#fff" stroke="#fff" stroke-linejoin="round"/></svg>Home</a><button id="copyGpxBtn" class="hbtn" title="Copy the route's GPX text (to paste into iPogo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy GPX</span></button><button id="gpxBtn" class="hbtn" title="Download the route as a GPX file (iPogo, GPS JoyStick)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>GPX</button><button id="mapBtn" class="hbtn" title="Open the route in the GPX viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Map</button></div>
 <div class="note"><b>219 markers − 211 collected = 8, and the map has exactly 8 markers added after 29 Aug.</b> Two of those 8 have now been tested—Legacy Place and Sunshine Plaza—and neither has a stamp. If the remaining 6 behave the same way, 211 is the ceiling and 219 is unreachable.</div>
 <div class="note">Earlier I called Penrith dead and concluded the map&rsquo;s ACTIVE flag was meaningless. You have it collected, so both of those were wrong and are withdrawn.</div>
 <div class="switches">
@@ -103,6 +112,7 @@
 <div class="toolbar">
   <button id="hideDoneBtn">Hide done</button>
   <button id="undoBtn">Undo last</button>
+  <button id="markAllBtn" title="Mark every stop done">Mark all</button>
   <button id="resetAllBtn">Reset all</button>
   <span class="brk"></span>
   <button id="exportProgressBtn">Export progress</button>
@@ -207,6 +217,7 @@
   var hideDoneBtn = document.getElementById('hideDoneBtn');
   var undoBtn = document.getElementById('undoBtn');
   var resetAllBtn = document.getElementById('resetAllBtn');
+  var markAllBtn = document.getElementById('markAllBtn');
   if (!D.reset) resetAllBtn.remove();
   function save() { try { localStorage.setItem(D.storageKey, JSON.stringify(state)); } catch (e) {} }
   // Teleport, Maps and Copy mark the stop done (set, not toggled, so revisiting doesn't un-mark it).
@@ -234,6 +245,13 @@
       if (entry && entry.ts > bestTs) { bestTs = entry.ts; bestKey = p.key; }
     });
     if (!bestKey) { alert('Nothing with a recorded time to undo.'); return; }
+    // Stops marked together (Mark all done gives them one timestamp) are un-marked together (2026-10-10).
+    var together = POINTS.filter(function (p) { return state[p.key] && state[p.key].ts === bestTs; }).map(function (p) { return p.key; });
+    if (together.length > 1) {
+      if (!confirm('Un-mark the ' + together.length + ' stops marked together by Mark all done? Marked ' + Math.round((Date.now() - bestTs) / 1000) + 's ago.')) return;
+      together.forEach(function (k) { delete state[k]; });
+      save(); render(); return;
+    }
     var point = POINTS.filter(function (p) { return p.key === bestKey; })[0];
     var name = point ? label(point) : bestKey;
     if (!confirm('Un-mark "' + name + '"? Marked ' + Math.round((Date.now() - bestTs) / 1000) + 's ago.')) return;
@@ -387,6 +405,7 @@
     statusEl.textContent = doneCount + ' of ' + (POINTS.length - tbaCount) + ' done' + (tbaCount ? ' \u00b7 ' + tbaCount + ' to come' : '');
     undoBtn.disabled = doneCount === 0;
     resetAllBtn.disabled = doneCount === 0;
+    markAllBtn.disabled = doneCount >= POINTS.length - tbaCount;
   }
   setupToggle('teleportToggle', 'teleport');
   setupToggle('secondToggle', 'second');
@@ -396,6 +415,15 @@
     render();
   });
   undoBtn.addEventListener('click', undoLast);
+  // Mark all done (Bart, 2026-10-10): every stop with a location, one shared timestamp so Undo last can take it back.
+  markAllBtn.addEventListener('click', function () {
+    var todo = POINTS.filter(function (p) { return !p.tba && !state[p.key]; });
+    if (!todo.length) { alert('Everything is already marked done.'); return; }
+    if (!confirm('Mark all ' + todo.length + ' remaining stops on this page done? Undo last takes it back.')) return;
+    var now = Date.now();
+    todo.forEach(function (p) { state[p.key] = { done: true, ts: now }; });
+    save(); render();
+  });
   resetAllBtn.addEventListener('click', function () {
     var n = Object.keys(state).length;
     if (!n) { alert('Nothing is marked done.'); return; }
