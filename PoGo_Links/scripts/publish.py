@@ -332,7 +332,7 @@ def build_index(pages):
         n = len(info["keys"])
         day = datetime.date.fromtimestamp(mtime).isoformat()
         # A list-only icon in PoGo_Links/icons/<page stem>.png wins over the page's own first icon (e.g. the
-        # PokéXciting rainbow wig standing for all the wig colours, made by scripts/rainbow_wig.py).
+        # PokéXciting rainbow wig standing for all the wig colours, made by scripts/pikachu_icons.py).
         override = f"icons/{os.path.splitext(name)[0]}.png"
         if os.path.exists(os.path.join(OUT, override)):
             icon = f'<img src="./{html.escape(override, quote=True)}" alt="">'
