@@ -140,8 +140,8 @@
 <div id="list"></div>
 <script>
 (function () {
-  // JoyRoute links (2026-10-11): this browser's setting, switched on bartmaneh.github.io/PoGo_Links/joyroute.html
-  // (opened from JoyRoute's Settings). Read once; GPS JoyStick buttons use it below.
+  // JoyRoute links (2026-10-11): this browser's setting, switched by opening bartmaneh.github.io/PoGo_Links/?joyroute=on
+  // or =off (JoyRoute's Settings, "Link pages"). Read once; GPS JoyStick buttons use it below.
   var USE_JOYROUTE = false;
   try { USE_JOYROUTE = localStorage.getItem('joyroute') === 'on'; } catch (e) {}
   var D = {"points": [{"key": "26.31409,127.79630", "n": 1, "name": "ポケモンセンターオキナワ", "sub": "Okinawa", "note": "〒901-2306沖縄県中頭郡北中城村字ライカム1イオンモール沖縄ライカム 1F", "lat": 26.314085, "lon": 127.7963, "section": 0, "icon": "", "distText": "", "distFrom": ""}, {"key": "33.58900,130.41926", "n": 2, "name": "ポケモンセンターフクオカ", "sub": "Fukuoka", "note": "〒812-0012福岡県福岡市博多区博多駅中央街9-1博多マルイ 2F", "lat": 33.589003, "lon": 130.419256, "section": 0, "icon": "", "distText": "847 km", "distFrom": "previous stop"}, {"key": "34.39862,132.47597", "n": 3, "name": "ポケモンセンターヒロシマ", "sub": "Hiroshima", "note": "〒732-0822広島県広島市南区松原町1-2ekie 2F", "lat": 34.398624, "lon": 132.475974, "section": 0, "icon": "", "distText": "210 km", "distFrom": "previous stop"}, {"key": "34.34228,134.05006", "n": 4, "name": "ポケモンセンターカガワ", "sub": "Kagawa", "note": "〒760-0029香川県高松市丸亀町8-23丸亀町グリーン 東館 1F", "lat": 34.342282, "lon": 134.050061, "section": 0, "icon": "", "distText": "145 km", "distFrom": "previous stop"}, {"key": "34.67317,135.50075", "n": 5, "name": "ポケモンセンターオーサカDX", "sub": "Osaka DX", "note": "〒542-8501大阪府大阪市中央区心斎橋筋1-7-1大丸心斎橋店 本館 9F", "lat": 34.673172, "lon": 135.500754, "section": 0, "icon": "", "distText": "138 km", "distFrom": "previous stop"}, {"key": "34.70185,135.49656", "n": 6, "name": "ポケモンセンターオーサカ", "sub": "Osaka", "note": "〒530-8373大阪府大阪市北区梅田3-1-1ルクア サウス 13F", "lat": 34.701853, "lon": 135.496559, "section": 0, "icon": "", "distText": "3.2 km", "distFrom": "previous stop"}, {"key": "35.00342,135.75838", "n": 7, "name": "ポケモンセンターキョウト", "sub": "Kyoto", "note": "〒600-8009京都府京都市下京区四条通室町東入函谷鉾町78京都経済センター SUINA室町 2F", "lat": 35.003417, "lon": 135.758384, "section": 0, "icon": "", "distText": "41.2 km", "distFrom": "previous stop"}, {"key": "35.16363,136.90803", "n": 8, "name": "ポケモンセンターナゴヤ", "sub": "Nagoya", "note": "〒460-0008愛知県名古屋市中区栄3-29-1名古屋PARCO 東館 2F", "lat": 35.163626, "lon": 136.90803, "section": 0, "icon": "", "distText": "106 km", "distFrom": "previous stop"}, {"key": "36.57915,136.64975", "n": 9, "name": "ポケモンセンターカナザワ", "sub": "Kanazawa", "note": "〒920-0849石川県金沢市堀川新町3-1金沢フォーラス 5F", "lat": 36.579148, "lon": 136.649754, "section": 0, "icon": "", "distText": "159 km", "distFrom": "previous stop"}, {"key": "35.46457,139.62449", "n": 10, "name": "ポケモンセンターヨコハマ", "sub": "Yokohama", "note": "main Yokohama centre; the satellite store is NOT part of the rally", "lat": 35.464572, "lon": 139.62449, "section": 0, "icon": "", "distText": "295 km", "distFrom": "previous stop"}, {"key": "35.66196,139.69844", "n": 11, "name": "ポケモンセンターシブヤ", "sub": "Shibuya", "note": "〒150-8377東京都渋谷区宇田川町15-1渋谷PARCO 6F", "lat": 35.661956, "lon": 139.698441, "section": 0, "icon": "", "distText": "22.9 km", "distFrom": "previous stop"}, {"key": "35.72907,139.71858", "n": 12, "name": "Pokémon GO Lab.", "sub": "Pokémon GO Lab (Ikebukuro)", "note": "inside Pokémon Center Mega Tokyo, 70 m from the centre&amp;rsquo;s own stop—confirmed in game", "lat": 35.72907, "lon": 139.71858, "section": 0, "icon": "", "distText": "7.7 km", "distFrom": "previous stop"}, {"key": "35.72891,139.71932", "n": 13, "name": "ポケモンセンターメガトウキョー", "sub": "Mega Tokyo (Ikebukuro)", "note": "Pokémon GO Lab is a separate stamp 70 m away, inside Sunshine City—do both", "lat": 35.728906, "lon": 139.719324, "section": 0, "icon": "", "distText": "70 m", "distFrom": "previous stop"}, {"key": "35.68029,139.77427", "n": 14, "name": "ポケモンセンタートウキョーDX", "sub": "Tokyo DX (Nihombashi)", "note": "〒103-0027東京都中央区日本橋2-11-2日本橋髙島屋S.C.東館 5F", "lat": 35.68029, "lon": 139.77427, "section": 0, "icon": "", "distText": "7.3 km", "distFrom": "previous stop"}, {"key": "35.71034,139.81261", "n": 15, "name": "ポケモンセンタースカイツリータウン", "sub": "Skytree Town", "note": "〒131-0045東京都墨田区押上1-1-2東京スカイツリータウン・ソラマチ イーストヤード 4F", "lat": 35.710345, "lon": 139.812612, "section": 0, "icon": "", "distText": "4.8 km", "distFrom": "previous stop"}, {"key": "35.68660,139.98904", "n": 16, "name": "ポケモンセンタートウキョーベイ", "sub": "Tokyo Bay", "note": "〒273-8530千葉県船橋市浜町2-1-1三井ショッピングパーク ららぽーとTOKYO-BAY 西館 2F", "lat": 35.686603, "lon": 139.989036, "section": 0, "icon": "", "distText": "16.1 km", "distFrom": "previous stop"}, {"key": "38.26216,140.88170", "n": 17, "name": "ポケモンセンタートウホク", "sub": "Tohoku (Sendai)", "note": "〒980-8484宮城県仙台市青葉区中央1-2-3仙台PARCO1 3F", "lat": 38.26216, "lon": 140.881702, "section": 0, "icon": "", "distText": "297 km", "distFrom": "previous stop"}, {"key": "43.06747,141.34927", "n": 18, "name": "ポケモンセンターサッポロ", "sub": "Sapporo", "note": "〒060-0005北海道札幌市中央区北5条西4-7大丸札幌店 8F", "lat": 43.067469, "lon": 141.349266, "section": 0, "icon": "", "distText": "536 km", "distFrom": "previous stop"}], "sections": [{"name": "", "count": 18}], "storageKey": "pokecenter.v1", "reset": true, "hint": "", "gpx": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<gpx version=\"1.1\" creator=\"coord-link-page\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n\t<wpt lat=\"26.31408500\" lon=\"127.79630000\"><name>1. ポケモンセンターオキナワ · Okinawa<\/name><\/wpt>\n\t<wpt lat=\"33.58900300\" lon=\"130.41925600\"><name>2. ポケモンセンターフクオカ · Fukuoka<\/name><\/wpt>\n\t<wpt lat=\"34.39862400\" lon=\"132.47597400\"><name>3. ポケモンセンターヒロシマ · Hiroshima<\/name><\/wpt>\n\t<wpt lat=\"34.34228200\" lon=\"134.05006100\"><name>4. ポケモンセンターカガワ · Kagawa<\/name><\/wpt>\n\t<wpt lat=\"34.67317200\" lon=\"135.50075400\"><name>5. ポケモンセンターオーサカDX · Osaka DX<\/name><\/wpt>\n\t<wpt lat=\"34.70185300\" lon=\"135.49655900\"><name>6. ポケモンセンターオーサカ · Osaka<\/name><\/wpt>\n\t<wpt lat=\"35.00341700\" lon=\"135.75838400\"><name>7. ポケモンセンターキョウト · Kyoto<\/name><\/wpt>\n\t<wpt lat=\"35.16362600\" lon=\"136.90803000\"><name>8. ポケモンセンターナゴヤ · Nagoya<\/name><\/wpt>\n\t<wpt lat=\"36.57914800\" lon=\"136.64975400\"><name>9. ポケモンセンターカナザワ · Kanazawa<\/name><\/wpt>\n\t<wpt lat=\"35.46457200\" lon=\"139.62449000\"><name>10. ポケモンセンターヨコハマ · Yokohama<\/name><\/wpt>\n\t<wpt lat=\"35.66195600\" lon=\"139.69844100\"><name>11. ポケモンセンターシブヤ · Shibuya<\/name><\/wpt>\n\t<wpt lat=\"35.72907000\" lon=\"139.71858000\"><name>12. Pokémon GO Lab. · Pokémon GO Lab (Ikebukuro)<\/name><\/wpt>\n\t<wpt lat=\"35.72890600\" lon=\"139.71932400\"><name>13. ポケモンセンターメガトウキョー · Mega Tokyo (Ikebukuro)<\/name><\/wpt>\n\t<wpt lat=\"35.68029000\" lon=\"139.77427000\"><name>14. ポケモンセンタートウキョーDX · Tokyo DX (Nihombashi)<\/name><\/wpt>\n\t<wpt lat=\"35.71034500\" lon=\"139.81261200\"><name>15. ポケモンセンタースカイツリータウン · Skytree Town<\/name><\/wpt>\n\t<wpt lat=\"35.68660300\" lon=\"139.98903600\"><name>16. ポケモンセンタートウキョーベイ · Tokyo Bay<\/name><\/wpt>\n\t<wpt lat=\"38.26216000\" lon=\"140.88170200\"><name>17. ポケモンセンタートウホク · Tohoku (Sendai)<\/name><\/wpt>\n\t<wpt lat=\"43.06746900\" lon=\"141.34926600\"><name>18. ポケモンセンターサッポロ · Sapporo<\/name><\/wpt>\n\t<trk>\n\t\t<name>Pokémon Center Stamp Rally<\/name>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"26.31408500\" lon=\"127.79630000\"><\/trkpt>\n\t\t\t<trkpt lat=\"33.58900300\" lon=\"130.41925600\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.39862400\" lon=\"132.47597400\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.34228200\" lon=\"134.05006100\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.67317200\" lon=\"135.50075400\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.70185300\" lon=\"135.49655900\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.00341700\" lon=\"135.75838400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.16362600\" lon=\"136.90803000\"><\/trkpt>\n\t\t\t<trkpt lat=\"36.57914800\" lon=\"136.64975400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.46457200\" lon=\"139.62449000\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.66195600\" lon=\"139.69844100\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.72907000\" lon=\"139.71858000\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.72890600\" lon=\"139.71932400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.68029000\" lon=\"139.77427000\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.71034500\" lon=\"139.81261200\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.68660300\" lon=\"139.98903600\"><\/trkpt>\n\t\t\t<trkpt lat=\"38.26216000\" lon=\"140.88170200\"><\/trkpt>\n\t\t\t<trkpt lat=\"43.06746900\" lon=\"141.34926600\"><\/trkpt>\n\t\t<\/trkseg>\n\t<\/trk>\n<\/gpx>\n", "fileStem": "pokecenter-links", "viewerUrl": "https://innoengserv.com/gpx-viewer.com/", "buttonIcons": {"ipogo": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"iPogo\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"ipogoButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#ipogoButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#00677a\"/> <path d=\"M-2 57Q60 37 122 57V-2H-2Z\" fill=\"#008474\"/> <path d=\"M-3 60Q60 40 123 60\" fill=\"none\" stroke=\"#fff\" stroke-width=\"8\"/> <path d=\"M60 29C45 29 39 38 40 52c1 13 12 20 17 38 1 4 5 4 6 0 5-18 16-25 17-38 1-14-5-23-20-23Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/> <circle cx=\"60\" cy=\"51\" r=\"9\" fill=\"#00677a\" stroke=\"#fff\" stroke-width=\"3.5\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>", "joystick": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"GPS JoyStick\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"gpsJoystickButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#gpsJoystickButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#8BC34A\"/> <ellipse cx=\"60\" cy=\"96\" rx=\"20\" ry=\"7\" fill=\"none\" stroke=\"#1976D2\" stroke-width=\"6\"/> <path d=\"M60 26C48 26 39 35 39 46c0 12 10 20 19 39 1 3 2 3 3 0 9-19 19-27 19-39 0-11-9-20-20-20Z\" fill=\"#1976D2\"/> <circle cx=\"60\" cy=\"47\" r=\"9\" fill=\"#2196F3\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>", "maps": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"Maps\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"mapsButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#mapsButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#f1f3f4\"/> <path d=\"M-2 78 40 52l40 22 42-24v75H-2Z\" fill=\"#a5d6a7\"/> <path d=\"M-2 92 38 68l42 22 42-24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"7\"/> <path d=\"M60 18C47 18 38 28 38 40c0 15 14 24 20 44 1 3 3 3 4 0 6-20 20-29 20-44 0-12-9-22-22-22Z\" fill=\"#ea4335\"/> <circle cx=\"60\" cy=\"40\" r=\"8.5\" fill=\"#fff\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>"}};
@@ -150,21 +150,30 @@
   // 2026-10-10 BEFORE: every pill 68px wide (the CSS). WHY: Bart: wasted room now that distances are shorter (no decimals
   // over 100 km). NOW: all pills on the page as wide as its longest label (still equal, for symmetry), never over 68px;
   // a label that still doesn't fit is tightened and shrunk as before.
+  // 2026-10-11 BEFORE: each pill reset, measured, then checked one by one. WHY: every measurement after a style change
+  // forced the browser to lay out the whole page again, hundreds of times per tap on big pages (~1 s per tap on the
+  // 482-stop Poké Lid page, Bart). NOW: reset all, measure all, size all, then shrink only the ones that overflow.
+  var pillWidth = 68;
   function fitPills() {
     var pills = Array.prototype.slice.call(document.querySelectorAll('.controls .dist')), w = 0;
     pills.forEach(function (p) {
       p.style.fontSize = ''; p.style.letterSpacing = '';
       p.style.width = 'auto'; p.style.flexBasis = 'auto';
-      w = Math.max(w, Math.ceil(p.getBoundingClientRect().width));
     });
-    w = Math.min(68, Math.max(40, w));
+    pills.forEach(function (p) { w = Math.max(w, Math.ceil(p.getBoundingClientRect().width)); });
+    pillWidth = w = Math.min(68, Math.max(40, w));
     pills.forEach(function (p) { p.style.width = w + 'px'; p.style.flexBasis = w + 'px'; });
-    pills.forEach(function (p) {
-      var fs = 12;
-      if (p.scrollWidth <= p.clientWidth) return;
-      p.style.letterSpacing = '-0.3px';
-      while (p.scrollWidth > p.clientWidth && fs > 8) { fs -= 0.5; p.style.fontSize = fs + 'px'; }
-    });
+    pills.filter(function (p) { return p.scrollWidth > p.clientWidth; }).forEach(shrinkPill);
+  }
+  function shrinkPill(p) {
+    var fs = 12;
+    p.style.letterSpacing = '-0.3px';
+    while (p.scrollWidth > p.clientWidth && fs > 8) { fs -= 0.5; p.style.fontSize = fs + 'px'; }
+  }
+  // A redrawn row's pill takes the page's current width (a stop's distance text never changes when it's marked).
+  function fitPill(p) {
+    p.style.width = pillWidth + 'px'; p.style.flexBasis = pillWidth + 'px';
+    if (p.scrollWidth > p.clientWidth) shrinkPill(p);
   }
   // Where the browser says you are, for the "here" pill on first stops (see the pill code in render()).
   var HERE = null;
@@ -259,13 +268,13 @@
     if (TBA[key]) return;
     if (state[key]) return;
     state[key] = { done: true, ts: Date.now() };
-    save(); render();
+    save(); updateRow(key);
   }
   function toggleDone(key) {
     if (TBA[key]) return;
     if (state[key]) delete state[key];
     else state[key] = { done: true, ts: Date.now() };
-    save(); render();
+    save(); updateRow(key);
   }
   function label(p) { return p.n + '. ' + p.name; }
   // The most recently marked stop is whichever timestamp in state is largest: no separate stack to drift.
@@ -287,7 +296,7 @@
     var name = point ? label(point) : bestKey;
     if (!confirm('Un-mark "' + name + '"? Marked ' + Math.round((Date.now() - bestTs) / 1000) + 's ago.')) return;
     delete state[bestKey];
-    save(); render();
+    save(); updateRow(bestKey);
     var row = list.querySelector('[data-key="' + bestKey.replace(/"/g, '\\"') + '"]');
     if (row) {
       row.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -295,11 +304,15 @@
       setTimeout(function () { row.style.outline = ''; }, 2500);
     }
   }
+  // 2026-10-11 BEFORE: every Done, link or Copy tap rebuilt the whole list. WHY: slow on big pages (482 stops: ~1 s per
+  // tap on Bart's phone, and a link only opened after it). NOW: render() for whole-page changes; a single stop's change
+  // redraws its row and the counts (updateRow). Rows come from the same buildRow either way, so they look the same.
+  var rowEls = {}, sectionEls = {}, BY_KEY = {};
+  POINTS.forEach(function (p) { BY_KEY[p.key] = p; });
   function render() {
     list.innerHTML = '';
-    var doneCount = 0, hintShown = false;
-    var sectionDone = {};
-    POINTS.forEach(function (p) { if (state[p.key]) { doneCount++; sectionDone[p.section] = (sectionDone[p.section] || 0) + 1; } });
+    rowEls = {}; sectionEls = {};
+    var hintShown = false;
     var lastSection = null;
     POINTS.forEach(function (p) {
       var isDone = !!state[p.key];
@@ -308,9 +321,7 @@
         var sec = D.sections[p.section];
         if (sec.name) {
           var h2 = document.createElement('h2');
-          var sd = sectionDone[p.section] || 0;
-          h2.innerHTML = sec.name + ' <span class="c">' + (sd ? sd + ' / ' : '') + sec.count + '</span>';
-          if (sd === sec.count) h2.className = 'complete';
+          sectionEls[p.section] = h2;
           list.appendChild(h2);
         }
       }
@@ -322,124 +333,157 @@
         hint.innerHTML = D.hint;
         list.appendChild(hint);
       }
-      var row = document.createElement('div');
-      row.className = 'row' + (isDone ? ' done' : '');
-      row.dataset.key = p.key;
-      if (document.body.classList.contains('icons')) {
-        var ic = document.createElement(p.icon ? 'img' : 'span');
-        ic.className = p.icon ? 'qicon' : 'noicon';
-        if (p.icon) { ic.alt = ''; ic.src = p.icon; }
-        row.appendChild(ic);
-      }
-      // One line that scrolls sideways: leg distance, number + name (bold), details, then the less critical
-      // note / coordinates / done time in grey. Notes may hold small HTML (coloured confidence badges).
-      var line = document.createElement('div');
-      line.className = 'line';
-      // BEFORE: the pill was drawn only when there was a leg distance, so a route's (or section's) first stop had none
-      // when no --default was given. WHY: the missing pill broke the rows' alignment and drew the eye (Bart).
-      // NOW (2026-10-09, trial): such a stop shows "here <distance>" from the browser's location when location is
-      // allowed (under GPS JoyStick that is the spoofed position, i.e. the jump; under iPogo it is the real one), else
-      // "start", which asks for location when tapped. Never prompts on page load.
-      var dist = document.createElement('span');
-      dist.className = 'dist';
-      if (p.tba) {
-        dist.textContent = 'TBA';
-        dist.title = 'no location yet';
-      } else if (p.distText) {
-        dist.textContent = p.distText;
-        dist.title = 'from ' + p.distFrom;
-      } else if (HERE) {
-        dist.textContent = distText(metres(HERE, p));
-        dist.classList.add('here');
-        dist.title = 'from your current location';
-      } else {
-        dist.textContent = 'start';
-        dist.title = 'first stop' + (D.sections[p.section].name ? ' of this section' : '') + ': tap for the distance from where you are';
-        dist.style.cursor = 'pointer';
-        dist.addEventListener('click', function () { locate(true); });
-      }
-      // (the pill goes at the end of the button row, below)
-      // Stop number bold; the name in the same bright colour but normal weight (as on the Export page).
-      var b = document.createElement('b');
-      b.textContent = p.n + '. ';
-      line.appendChild(b);
-      var nm = document.createElement('span');
-      nm.className = 'task';
-      nm.textContent = p.name;
-      line.appendChild(nm);
-      if (p.sub) line.appendChild(document.createTextNode(' · ' + p.sub));
-      var dim = document.createElement('span');
-      dim.className = 'dim';
-      var doneText = (isDone && state[p.key].ts) ? ' · done ' + new Date(state[p.key].ts).toLocaleString() : '';
-      dim.innerHTML = (p.note ? ' · ' + p.note : '');
-      if (!p.tba) dim.appendChild(document.createTextNode(' · ' + p.lat.toFixed(5) + ', ' + p.lon.toFixed(5) + doneText));
-      line.appendChild(dim);
-      row.appendChild(line);
-      // A placeholder (no location yet): greyed and dashed; never counted or marked. Its buttons are drawn like the
-      // others but disabled below (Bart, 2026-10-09: BEFORE no buttons; WHY the row's shape should match; NOW greyed).
-      if (p.tba) row.classList.add('tba');
-      var controls = document.createElement('div');
-      controls.className = 'controls';
-      var doneBtn = document.createElement('button');
-      doneBtn.className = 'done-btn' + (isDone ? ' done' : '');
-      doneBtn.textContent = isDone ? '✓ Done' : 'Done';
-      doneBtn.addEventListener('click', function () { toggleDone(p.key); });
-      controls.appendChild(doneBtn);
-      var teleport = document.createElement('a');
-      if (prefs.teleport === 'ipogo') {
-        teleport.className = 'ipogo-btn';
-        teleport.href = 'pokemongo://?lat=' + p.lat + '&lng=' + p.lon;
-        teleport.innerHTML = iconHtml('ipogo') + '<span>iPogo</span>';
-      } else {
-        teleport.className = 'joystick-btn';
-        // 2026-10-11 BEFORE: always gpsjoystick://, which brings GPS JoyStick to the front. WHY: Bart wanted to stay in
-        // the background and land in Pokémon GO. NOW: joyroute:// (JoyRoute teleports out of sight, then opens Pokémon GO)
-        // when this browser's JoyRoute links setting is on; otherwise unchanged.
-        teleport.href = (USE_JOYROUTE ? 'joyroute' : 'gpsjoystick') + '://teleport?lat=' + p.lat + '&lng=' + p.lon;
-        teleport.innerHTML = iconHtml('joystick') + '<span>GPS JoyStick</span>';
-      }
-      teleport.addEventListener('click', function () { markDone(p.key); });
-      controls.appendChild(teleport);
-      if (prefs.second === 'maps') {
-        var mapsLink = document.createElement('a');
-        mapsLink.className = 'maps-btn';
-        mapsLink.href = 'https://maps.google.com/?q=' + p.lat + ',' + p.lon;
-        mapsLink.target = '_blank';
-        mapsLink.rel = 'noopener';
-        mapsLink.innerHTML = iconHtml('maps') + '<span>Maps</span>';
-        mapsLink.addEventListener('click', function () { markDone(p.key); });
-        controls.appendChild(mapsLink);
-      } else {
-        // The last-copied stop is remembered so its "Copied" label survives the re-render that marking it done does.
-        var copyBtn = document.createElement('button');
-        copyBtn.className = 'copy-btn';
-        copyBtn.textContent = copiedKey === p.key ? '✓ Copied' : 'Copy';
-        copyBtn.addEventListener('click', function () {
-          copyText(p.lat.toFixed(6) + ',' + p.lon.toFixed(6)).then(function () {
-            copiedKey = p.key;
-            if (state[p.key]) render(); else markDone(p.key);
-          });
-        });
-        controls.appendChild(copyBtn);
-      }
-      if (p.tba) {
-        Array.prototype.forEach.call(controls.children, function (el) {
-          el.removeAttribute('href');
-          el.setAttribute('aria-disabled', 'true');
-          el.tabIndex = -1;
-          if (el.tagName === 'BUTTON') el.disabled = true;
-        });
-      }
-      controls.appendChild(dist);
-      row.appendChild(controls);
-      list.appendChild(row);
+      list.appendChild(buildRow(p));
     });
     fitPills();
+    updateCounts();
+  }
+  function buildRow(p) {
+    var isDone = !!state[p.key];
+    var row = document.createElement('div');
+    row.className = 'row' + (isDone ? ' done' : '');
+    row.dataset.key = p.key;
+    if (document.body.classList.contains('icons')) {
+      var ic = document.createElement(p.icon ? 'img' : 'span');
+      ic.className = p.icon ? 'qicon' : 'noicon';
+      if (p.icon) { ic.alt = ''; ic.src = p.icon; }
+      row.appendChild(ic);
+    }
+    // One line that scrolls sideways: leg distance, number + name (bold), details, then the less critical
+    // note / coordinates / done time in grey. Notes may hold small HTML (coloured confidence badges).
+    var line = document.createElement('div');
+    line.className = 'line';
+    // BEFORE: the pill was drawn only when there was a leg distance, so a route's (or section's) first stop had none
+    // when no --default was given. WHY: the missing pill broke the rows' alignment and drew the eye (Bart).
+    // NOW (2026-10-09, trial): such a stop shows "here <distance>" from the browser's location when location is
+    // allowed (under GPS JoyStick that is the spoofed position, i.e. the jump; under iPogo it is the real one), else
+    // "start", which asks for location when tapped. Never prompts on page load.
+    var dist = document.createElement('span');
+    dist.className = 'dist';
+    if (p.tba) {
+      dist.textContent = 'TBA';
+      dist.title = 'no location yet';
+    } else if (p.distText) {
+      dist.textContent = p.distText;
+      dist.title = 'from ' + p.distFrom;
+    } else if (HERE) {
+      dist.textContent = distText(metres(HERE, p));
+      dist.classList.add('here');
+      dist.title = 'from your current location';
+    } else {
+      dist.textContent = 'start';
+      dist.title = 'first stop' + (D.sections[p.section].name ? ' of this section' : '') + ': tap for the distance from where you are';
+      dist.style.cursor = 'pointer';
+      dist.addEventListener('click', function () { locate(true); });
+    }
+    // (the pill goes at the end of the button row, below)
+    // Stop number bold; the name in the same bright colour but normal weight (as on the Export page).
+    var b = document.createElement('b');
+    b.textContent = p.n + '. ';
+    line.appendChild(b);
+    var nm = document.createElement('span');
+    nm.className = 'task';
+    nm.textContent = p.name;
+    line.appendChild(nm);
+    if (p.sub) line.appendChild(document.createTextNode(' · ' + p.sub));
+    var dim = document.createElement('span');
+    dim.className = 'dim';
+    var doneText = (isDone && state[p.key].ts) ? ' · done ' + new Date(state[p.key].ts).toLocaleString() : '';
+    dim.innerHTML = (p.note ? ' · ' + p.note : '');
+    if (!p.tba) dim.appendChild(document.createTextNode(' · ' + p.lat.toFixed(5) + ', ' + p.lon.toFixed(5) + doneText));
+    line.appendChild(dim);
+    row.appendChild(line);
+    // A placeholder (no location yet): greyed and dashed; never counted or marked. Its buttons are drawn like the
+    // others but disabled below (Bart, 2026-10-09: BEFORE no buttons; WHY the row's shape should match; NOW greyed).
+    if (p.tba) row.classList.add('tba');
+    var controls = document.createElement('div');
+    controls.className = 'controls';
+    var doneBtn = document.createElement('button');
+    doneBtn.className = 'done-btn' + (isDone ? ' done' : '');
+    doneBtn.textContent = isDone ? '✓ Done' : 'Done';
+    doneBtn.addEventListener('click', function () { toggleDone(p.key); });
+    controls.appendChild(doneBtn);
+    var teleport = document.createElement('a');
+    if (prefs.teleport === 'ipogo') {
+      teleport.className = 'ipogo-btn';
+      teleport.href = 'pokemongo://?lat=' + p.lat + '&lng=' + p.lon;
+      teleport.innerHTML = iconHtml('ipogo') + '<span>iPogo</span>';
+    } else {
+      teleport.className = 'joystick-btn';
+      // 2026-10-11 BEFORE: always gpsjoystick://, which brings GPS JoyStick to the front. WHY: Bart wanted to stay in
+      // the background and land in Pokémon GO. NOW: joyroute:// (JoyRoute teleports out of sight, then opens Pokémon GO)
+      // when this browser's JoyRoute links setting is on; otherwise unchanged.
+      teleport.href = (USE_JOYROUTE ? 'joyroute' : 'gpsjoystick') + '://teleport?lat=' + p.lat + '&lng=' + p.lon;
+      teleport.innerHTML = iconHtml('joystick') + '<span>GPS JoyStick</span>';
+    }
+    teleport.addEventListener('click', function () { markDone(p.key); });
+    controls.appendChild(teleport);
+    if (prefs.second === 'maps') {
+      var mapsLink = document.createElement('a');
+      mapsLink.className = 'maps-btn';
+      mapsLink.href = 'https://maps.google.com/?q=' + p.lat + ',' + p.lon;
+      mapsLink.target = '_blank';
+      mapsLink.rel = 'noopener';
+      mapsLink.innerHTML = iconHtml('maps') + '<span>Maps</span>';
+      mapsLink.addEventListener('click', function () { markDone(p.key); });
+      controls.appendChild(mapsLink);
+    } else {
+      // The last-copied stop is remembered so its "Copied" label survives the re-render that marking it done does.
+      var copyBtn = document.createElement('button');
+      copyBtn.className = 'copy-btn';
+      copyBtn.textContent = copiedKey === p.key ? '✓ Copied' : 'Copy';
+      copyBtn.addEventListener('click', function () {
+        copyText(p.lat.toFixed(6) + ',' + p.lon.toFixed(6)).then(function () {
+          var prevKey = copiedKey;
+          copiedKey = p.key;
+          if (prevKey && prevKey !== p.key && rowEls[prevKey]) updateRow(prevKey);
+          if (state[p.key]) updateRow(p.key); else markDone(p.key);
+        });
+      });
+      controls.appendChild(copyBtn);
+    }
+    if (p.tba) {
+      Array.prototype.forEach.call(controls.children, function (el) {
+        el.removeAttribute('href');
+        el.setAttribute('aria-disabled', 'true');
+        el.tabIndex = -1;
+        if (el.tagName === 'BUTTON') el.disabled = true;
+      });
+    }
+    controls.appendChild(dist);
+    row.appendChild(controls);
+    rowEls[p.key] = row;
+    return row;
+  }
+  function updateCounts() {
+    var doneCount = 0, sectionDone = {};
+    POINTS.forEach(function (p) { if (state[p.key]) { doneCount++; sectionDone[p.section] = (sectionDone[p.section] || 0) + 1; } });
+    Object.keys(sectionEls).forEach(function (si) {
+      var sec = D.sections[si], sd = sectionDone[si] || 0, h2 = sectionEls[si];
+      h2.innerHTML = sec.name + ' <span class="c">' + (sd ? sd + ' / ' : '') + sec.count + '</span>';
+      h2.className = sd === sec.count ? 'complete' : '';
+    });
     var tbaCount = POINTS.filter(function (p) { return p.tba; }).length;
     statusEl.textContent = doneCount + ' of ' + (POINTS.length - tbaCount) + ' done' + (tbaCount ? ' \u00b7 ' + tbaCount + ' to come' : '');
     undoBtn.disabled = doneCount === 0;
     resetAllBtn.disabled = doneCount === 0;
     markAllBtn.disabled = doneCount >= POINTS.length - tbaCount;
+  }
+  // One stop changed: swap in a freshly built row. With Hide done on, a stop just marked done is removed; anything
+  // else there (a row that must reappear, or a page with a hint box above the first visible row) redraws everything.
+  function updateRow(key) {
+    var p = BY_KEY[key], old = rowEls[key];
+    if (!p) return;
+    if (hideDone) {
+      if (old && state[key] && !D.hint) { old.remove(); delete rowEls[key]; updateCounts(); }
+      else render();
+      return;
+    }
+    if (!old) { render(); return; }
+    var row = buildRow(p);
+    list.replaceChild(row, old);
+    fitPill(row.querySelector('.controls .dist'));
+    updateCounts();
   }
   setupToggle('teleportToggle', 'teleport');
   setupToggle('secondToggle', 'second');
