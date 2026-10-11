@@ -124,6 +124,11 @@
   .box ol { margin: 8px 0 0; padding-left: 20px; font-size: 13.5px; line-height: 1.45; }
   .box ol li { margin: 2px 0; }
   /* The switch: same as the link pages' GPS JoyStick | iPogo switch (coord-link-page template), green when on. */
+  /* Close page (v1.2, Bart): the page is opened from JoyRoute, so closing the tab returns there. Full width like the cards. */
+  .close { display: block; width: 100%; box-sizing: border-box; margin: 0 0 12px; padding: 11px; font: inherit; font-size: 15px;
+           font-weight: 700; color: var(--blue); background: var(--card); border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
+  .close:active { background-color: #3a3a36; }
+  .closehint { display: none; margin: -4px 0 12px; font-size: 12px; color: var(--grey); text-align: center; }
   .toggle { display: inline-flex; align-items: center; gap: 5px; padding: 4px 6px; background: var(--bg); border: 1px solid var(--line);
             border-radius: 8px; user-select: none; -webkit-user-select: none; }
   .toggle .opt { font-size: 13px; color: #7d7d78; cursor: pointer; }
@@ -164,8 +169,10 @@
   </ol>
   <p class="fine">Needs JoyRoute on this phone. JoyRoute's Settings (gear) brings you back here.</p>
 </div>
+<button class="close" id="close" type="button">Close page</button>
+<div class="closehint" id="closehint">Edge kept this tab open: close it from the tab switcher.</div>
 <div class="links"><a href="./">&larr; PoGO Link Pages</a><span>Saved in this browser</span></div>
-<div class="footer"><span class="note">&copy; <span id="year">2026</span><a href="../"><img src="../img/BartmanEH.png" alt="Bart"></a>Stassen, P.Eng.</span><span id="version">v1.1</span></div>
+<div class="footer"><span class="note">&copy; <span id="year">2026</span><a href="../"><img src="../img/BartmanEH.png" alt="Bart"></a>Stassen, P.Eng.</span><span id="version">v1.2</span></div>
 <script>
 // The setting: localStorage "joyroute" = "on" (shared by every page on this site). Link pages read it to pick the
 // GPS JoyStick button's link: joyroute://teleport when on, gpsjoystick://teleport when off.
@@ -185,6 +192,12 @@ sw.addEventListener('click', function () { setOn(!isOn()); });
 document.getElementById('optOff').addEventListener('click', function () { setOn(false); });
 document.getElementById('optOn').addEventListener('click', function () { setOn(true); });
 paint();
+// Close page: a tab that an app opened (JoyRoute's Settings) may close itself, which returns to JoyRoute. If the browser
+// refuses (tab opened another way), say how to close it instead.
+document.getElementById('close').addEventListener('click', function () {
+  window.close();
+  setTimeout(function () { document.getElementById('closehint').style.display = 'block'; }, 400);
+});
 var first = 2026, now = new Date().getFullYear();
 if (now > first) document.getElementById('year').textContent = first + '–' + now;
 </script>

@@ -30,7 +30,7 @@ import unicodedata
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
 LIST_VERSION = "2.8"   # 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
-SETTINGS_VERSION = "1.1"   # joyroute.html (the JoyRoute links switch), 2026-10-11; 1.1 = no "JoyRoute isn't on this phone" card
+SETTINGS_VERSION = "1.2"   # joyroute.html (the JoyRoute links switch), 2026-10-11; 1.1 = no "JoyRoute isn't on this phone" card; 1.2 = Close page button
 SETTINGS_FILE = "joyroute.html"   # unlisted: opened from JoyRoute's Settings (gear)
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
@@ -436,6 +436,11 @@ __CSS__
   .box ol { margin: 8px 0 0; padding-left: 20px; font-size: 13.5px; line-height: 1.45; }
   .box ol li { margin: 2px 0; }
   /* The switch: same as the link pages' GPS JoyStick | iPogo switch (coord-link-page template), green when on. */
+  /* Close page (v1.2, Bart): the page is opened from JoyRoute, so closing the tab returns there. Full width like the cards. */
+  .close { display: block; width: 100%; box-sizing: border-box; margin: 0 0 12px; padding: 11px; font: inherit; font-size: 15px;
+           font-weight: 700; color: var(--blue); background: var(--card); border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
+  .close:active { background-color: #3a3a36; }
+  .closehint { display: none; margin: -4px 0 12px; font-size: 12px; color: var(--grey); text-align: center; }
   .toggle { display: inline-flex; align-items: center; gap: 5px; padding: 4px 6px; background: var(--bg); border: 1px solid var(--line);
             border-radius: 8px; user-select: none; -webkit-user-select: none; }
   .toggle .opt { font-size: 13px; color: #7d7d78; cursor: pointer; }
@@ -476,6 +481,8 @@ __CSS__
   </ol>
   <p class="fine">Needs JoyRoute on this phone. JoyRoute's Settings (gear) brings you back here.</p>
 </div>
+<button class="close" id="close" type="button">Close page</button>
+<div class="closehint" id="closehint">Edge kept this tab open: close it from the tab switcher.</div>
 <div class="links"><a href="./">&larr; PoGO Link Pages</a><span>Saved in this browser</span></div>
 <div class="footer"><span class="note">&copy; <span id="year">__FIRST__</span><a href="../"><img src="../img/BartmanEH.png" alt="Bart"></a>Stassen, P.Eng.</span><span id="version">v__VERSION__</span></div>
 <script>
@@ -497,6 +504,12 @@ sw.addEventListener('click', function () { setOn(!isOn()); });
 document.getElementById('optOff').addEventListener('click', function () { setOn(false); });
 document.getElementById('optOn').addEventListener('click', function () { setOn(true); });
 paint();
+// Close page: a tab that an app opened (JoyRoute's Settings) may close itself, which returns to JoyRoute. If the browser
+// refuses (tab opened another way), say how to close it instead.
+document.getElementById('close').addEventListener('click', function () {
+  window.close();
+  setTimeout(function () { document.getElementById('closehint').style.display = 'block'; }, 400);
+});
 var first = __FIRST__, now = new Date().getFullYear();
 if (now > first) document.getElementById('year').textContent = first + '–' + now;
 </script>
