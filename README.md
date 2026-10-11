@@ -84,7 +84,8 @@ Google Drive `Other/Pokémon GO/web pages w links/`, now an untouched archive).
 - A list-only icon in `PoGo_Links/icons/<page file stem>.png` replaces a page's own first icon (pages without either
   get a category glyph). All are official in-game art from PokeMiners/pogo_assets, made by two scripts that reproduce
   the committed files exactly:
-  - `scripts/pikachu_icons.py`: ESA astronaut, Seoul hanbok and the PokéXciting rainbow wig (shiny variants, one shared
+  - `scripts/pikachu_icons.py`: ESA astronaut, Seoul hanbok and the PokéXciting rainbow wig (shiny variants;
+    the Asia-Pacific rally page keeps it on purpose instead of its rally badge, Bart's exception 2026-10-11; one shared
     crop so they're the same size, as in the game).
   - `scripts/badge_icons.py`: Poké Lid, Pokémon Center, Japan rallies (generic stamp), PokéXciting Malaysia (its
     regional badge) and the LEGO page (the rally's green Pikachu stamp), every circle the same size.
