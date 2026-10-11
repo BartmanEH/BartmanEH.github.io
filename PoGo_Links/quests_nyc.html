@@ -416,6 +416,11 @@
   });
   render();
 })();
+// 2026-10-11 BEFORE: body padding-bottom fixed at 84px. WHY: the toolbar grew to three lines (~102px, Export/Import row)
+// and hid the last stop behind it (Bart, PokéXciting page). NOW: the padding follows the toolbar's real height.
+(function () { var t = document.querySelector('.toolbar'); if (!t) return;
+  function fit() { document.body.style.paddingBottom = (t.offsetHeight + 12) + 'px'; }
+  fit(); window.addEventListener('resize', fit); if (window.ResizeObserver) new ResizeObserver(fit).observe(t); })();
 </script>
 </body>
 </html>
