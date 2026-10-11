@@ -30,8 +30,8 @@ import unicodedata
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
 LIST_VERSION = "2.8"   # 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
-SETTINGS_VERSION = "1.0"   # joyroute.html (the JoyRoute links switch), 2026-10-11
-SETTINGS_FILE = "joyroute.html"   # unlisted: opened from JoyRoute's Settings, or by a link page when JoyRoute is missing
+SETTINGS_VERSION = "1.1"   # joyroute.html (the JoyRoute links switch), 2026-10-11; 1.1 = no "JoyRoute isn't on this phone" card
+SETTINGS_FILE = "joyroute.html"   # unlisted: opened from JoyRoute's Settings (gear)
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -421,10 +421,12 @@ SETTINGS = r"""<!DOCTYPE html>
 <style>
 __CSS__
   /* JoyRoute links page (unlisted, 2026-10-11). The list page's look (styles above are the list's own, shared by
-     build_settings) with this page's cards: the switch, the "JoyRoute isn't here" fallback and how it works. */
+     build_settings) with this page's cards: the switch and how it works.
+     2026-10-11 BEFORE (v1.0): also a red "JoyRoute isn't on this phone" card with a GPS JoyStick button, shown when an
+     intent:// link fell back to this page. WHY: Edge Canary sends every intent:// link to its fallback, so the link
+     pages use plain joyroute:// links (no fallback; the setting is opt-in, so JoyRoute is there). NOW: card removed. */
   .box { background: linear-gradient(135deg, rgba(255,255,255,.035), transparent 60%) var(--card); border: 1px solid var(--line);
          border-left: 3px solid var(--blue); border-radius: 12px; padding: 12px; margin: 0 0 12px; }
-  .box.miss { border-left-color: var(--red); }
   .box .head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .box h2 { margin: 0; font-size: 16px; line-height: 1.3; font-weight: 700; color: var(--bold); }
   .box p { margin: 8px 0 0; font-size: 13.5px; line-height: 1.45; }
@@ -433,9 +435,6 @@ __CSS__
   .on-txt { color: var(--green); } .off-txt { color: var(--tan); }
   .box ol { margin: 8px 0 0; padding-left: 20px; font-size: 13.5px; line-height: 1.45; }
   .box ol li { margin: 2px 0; }
-  .box .act { display: flex; justify-content: space-between; gap: 8px; margin-top: 10px; }
-  .box .act a { flex: 1; text-align: center; font-size: 13px; font-weight: 700; color: var(--blue); background: var(--bg);
-                border: 1px solid var(--line); border-radius: 8px; padding: 8px 6px; text-decoration: none; }
   /* The switch: same as the link pages' GPS JoyStick | iPogo switch (coord-link-page template), green when on. */
   .toggle { display: inline-flex; align-items: center; gap: 5px; padding: 4px 6px; background: var(--bg); border: 1px solid var(--line);
             border-radius: 8px; user-select: none; -webkit-user-select: none; }
@@ -462,12 +461,6 @@ __CSS__
   <div><div class="kicker">PoGO Link Pages</div><h1>JoyRoute links</h1></div>
   <a class="ies" href="../" aria-label="Home"><img src="../img/IES_logo.svg" alt="IES"></a>
 </div>
-<div class="box miss" id="miss" hidden>
-  <h2>JoyRoute isn't on this phone</h2>
-  <p>A link page asked JoyRoute to teleport you, but JoyRoute isn't installed here. Teleport with GPS JoyStick instead,
-     or turn JoyRoute links off below.</p>
-  <div class="act"><a id="gj" href="#">Teleport with GPS JoyStick</a></div>
-</div>
 <div class="box">
   <div class="head"><h2>Use JoyRoute for GPS JoyStick button links</h2>
     <div class="toggle"><span class="opt" id="optOff">Off</span><button class="sw" id="sw" aria-label="JoyRoute links off or on"></button><span class="opt" id="optOn">On</span></div></div>
@@ -487,7 +480,7 @@ __CSS__
 <div class="footer"><span class="note">&copy; <span id="year">__FIRST__</span><a href="../"><img src="../img/BartmanEH.png" alt="Bart"></a>Stassen, P.Eng.</span><span id="version">v__VERSION__</span></div>
 <script>
 // The setting: localStorage "joyroute" = "on" (shared by every page on this site). Link pages read it to pick the
-// GPS JoyStick button's link: JoyRoute's intent:// link when on, gpsjoystick:// when off.
+// GPS JoyStick button's link: joyroute://teleport when on, gpsjoystick://teleport when off.
 var KEY = 'joyroute', sw = document.getElementById('sw');
 function isOn() { try { return localStorage.getItem(KEY) === 'on'; } catch (e) { return false; } }
 function setOn(on) { try { if (on) localStorage.setItem(KEY, 'on'); else localStorage.removeItem(KEY); } catch (e) {} paint(); }
@@ -504,12 +497,6 @@ sw.addEventListener('click', function () { setOn(!isOn()); });
 document.getElementById('optOff').addEventListener('click', function () { setOn(false); });
 document.getElementById('optOn').addEventListener('click', function () { setOn(true); });
 paint();
-// Opened as the fallback of a JoyRoute link (JoyRoute missing): ?lat=…&lng=… from the link page.
-var q = new URLSearchParams(location.search), lat = parseFloat(q.get('lat')), lng = parseFloat(q.get('lng'));
-if (isFinite(lat) && isFinite(lng)) {
-  document.getElementById('gj').href = 'gpsjoystick://teleport?lat=' + lat + '&lng=' + lng;
-  document.getElementById('miss').hidden = false;
-}
 var first = __FIRST__, now = new Date().getFullYear();
 if (now > first) document.getElementById('year').textContent = first + '–' + now;
 </script>
