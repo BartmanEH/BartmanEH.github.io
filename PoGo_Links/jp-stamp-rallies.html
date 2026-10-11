@@ -16,7 +16,11 @@
   body { max-width: 412px; box-sizing: border-box; margin: 0 auto; padding: 16px 16px 84px; background: #2b2b29; color: #d1d5db; font-family: -apple-system, system-ui, sans-serif; }
   /* Title and sub line share the first line; the three header buttons get their own row (they don't fit beside the
      title at phone width). */
-  .top { margin: 0 0 8px; }
+  /* 2026-10-11 BEFORE: h1 and .sub display:inline, so a long sub started on the title row and wrapped from there.
+     WHY: Bart, "Five starts on title row, that's wrong". NOW: flex row; a sub that fits stays beside the title,
+     one that doesn't moves whole to its own line (flex items don't split across lines). */
+  .top { margin: 0 0 8px; display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; row-gap: 2px; }
+  .top h1 { margin: 0; } .top .sub { min-width: 0; }
   h1 { display: inline; font-size: 18px; margin: 0 8px 0 0; color: #e5e5e5; }
   .head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 12px; } /* spans the rows' width */
   h1 .c { color: #9ca3af; font-weight: 400; font-size: 13px; }

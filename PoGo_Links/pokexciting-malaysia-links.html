@@ -16,7 +16,11 @@
   body { max-width: 412px; box-sizing: border-box; margin: 0 auto; padding: 16px 16px 84px; background: #2b2b29; color: #d1d5db; font-family: -apple-system, system-ui, sans-serif; }
   /* Title and sub line share the first line; the three header buttons get their own row (they don't fit beside the
      title at phone width). */
-  .top { margin: 0 0 8px; }
+  /* 2026-10-11 BEFORE: h1 and .sub display:inline, so a long sub started on the title row and wrapped from there.
+     WHY: Bart, "Five starts on title row, that's wrong". NOW: flex row; a sub that fits stays beside the title,
+     one that doesn't moves whole to its own line (flex items don't split across lines). */
+  .top { margin: 0 0 8px; display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; row-gap: 2px; }
+  .top h1 { margin: 0; } .top .sub { min-width: 0; }
   h1 { display: inline; font-size: 18px; margin: 0 8px 0 0; color: #e5e5e5; }
   .head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 12px; } /* spans the rows' width */
   h1 .c { color: #9ca3af; font-weight: 400; font-size: 13px; }
@@ -115,7 +119,7 @@
 </style>
 </head>
 <body>
-<div class="top"><h1>PokéXciting! Stamp Rally—Malaysia</h1><div class="sub">Five regional stamps around KLCC Park, Kuala Lumpur · ends 13 Oct 2026 · stamps: Bulbasaur, Charmander, Squirtle, Pikachu, Vileplume</div></div>
+<div class="top"><h1>PokéXciting! Stamp Rally—Malaysia</h1><div class="sub">5 stamps around KLCC Park, Kuala Lumpur · ends 13 Oct 2026 · Bulbasaur, Charmander, Squirtle, Pikachu, Vileplume</div></div>
 <div class="head"><a id="homeBtn" class="hbtn" href="https://bartmaneh.github.io/PoGo_Links/" title="Back to the PoGO Link Pages list"><svg viewBox="8 8 48 48" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#263238" stroke="#26c6da" stroke-width="5"/><path d="M19 32.5 32 21l13 11.5-3.4 3L40 34.1V45H34v-8h-4v8h-6V34.1l-1.6 1.4z" fill="#fff" stroke="#fff" stroke-linejoin="round"/></svg>Home</a><button id="copyGpxBtn" class="hbtn" title="Copy the route's GPX text (to paste into iPogo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy GPX</span></button><button id="gpxBtn" class="hbtn" title="Download the route as a GPX file (iPogo, GPS JoyStick)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>GPX</button><button id="mapBtn" class="hbtn" title="Open the route in the GPX viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Map</button></div>
 <div class="note">Stop positions come from local players (Pokémon GO Malaysia Facebook group); the game doesn&rsquo;t publish them.</div>
 <div class="switches">
