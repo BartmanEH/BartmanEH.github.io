@@ -29,7 +29,7 @@ import unicodedata
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
-LIST_VERSION = "2.9"   # 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
+LIST_VERSION = "2.10"   # 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -252,6 +252,9 @@ __ROWS__
 // JoyRoute links (v2.9, 2026-10-11): JoyRoute's Settings opens this list with ?joyroute=on|off. It switches this
 // browser's localStorage "joyroute", which every link page reads (USE_JOYROUTE): on, their GPS JoyStick buttons use
 // joyroute://teleport (JoyRoute teleports in the background, then opens Pokémon GO); off, gpsjoystick:// as before.
+// v2.10 BEFORE: the note said on = "then open Pokémon GO", off = "open GPS JoyStick". WHY: JoyRoute now only brings
+// an already-running Pokémon GO forward (Bart starts it through Pokemod), and GPS JoyStick's own link often stays in
+// the browser. NOW: wording below.
 (function () {
   var q = new URLSearchParams(location.search), v = String(q.get('joyroute') || '').toLowerCase();
   if (v !== 'on' && v !== 'off') return;
@@ -261,7 +264,7 @@ __ROWS__
   var n = document.getElementById('jrnote');
   n.className = 'jrnote ' + v;
   n.innerHTML = 'JoyRoute links: <b>' + v + '</b>. GPS JoyStick buttons on these pages ' +
-    (v === 'on' ? 'teleport through JoyRoute, then open Pokémon GO.' : 'open GPS JoyStick, as before.') + ' This browser only.';
+    (v === 'on' ? 'teleport through JoyRoute, out of sight; Pokémon GO comes to the front if it’s running.' : 'use GPS JoyStick’s own link, as before.') + ' This browser only.';
   n.hidden = false;
 })();
 // Progress: each page keeps its Done ticks in localStorage on this same site, so the list can read them.
