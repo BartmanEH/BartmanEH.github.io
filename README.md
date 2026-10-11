@@ -86,9 +86,10 @@ Google Drive `Other/Pokémon GO/web pages w links/`, now an untouched archive).
   the committed files exactly:
   - `scripts/pikachu_icons.py`: ESA astronaut, Seoul hanbok and the PokéXciting rainbow wig (shiny variants, one shared
     crop so they're the same size, as in the game).
-  - `scripts/badge_icons.py`: Poké Lid, Pokémon Center, Japan rallies (generic stamp) and the LEGO page (the rally's
-    green Pikachu stamp), every circle the same size.
-- New page? Look in PokeMiners/pogo_assets first (it's canonical); add it to one of the scripts, run it, commit.
+  - `scripts/badge_icons.py`: Poké Lid, Pokémon Center, Japan rallies (generic stamp), PokéXciting Malaysia (its
+    regional badge) and the LEGO page (the rally's green Pikachu stamp), every circle the same size.
+- Every new page gets one, as a normal step before publishing (Bart, 2026-10-11): look in PokeMiners/pogo_assets first
+  (it's canonical), add it to one of the scripts, run it (the other icons must come out unchanged), commit.
 
 ## Other
 
