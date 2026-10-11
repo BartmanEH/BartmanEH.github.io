@@ -8,7 +8,7 @@ Writes PoGo_Links/icons/:
   pokelid-links.png                          StampRally/CollectionIcon/stamp_pokelid_icon.png (English badge)
   pokecenter-links.png                       StampRally/CollectionIcon/stamp_pokecenter_icon.png
   jp-stamp-rallies.png                       StampRally/StampUiIcon/stamp_generic_icon.png (mixed rallies, no badge)
-  lego-stamp-rally-links.png, lego-outstanding.png
+  lego-stamp-rally-links.png
                                              StampRally/stamp_pikachu_11.png, the LEGO rally's stamp: a mask
                                              (white = ink), tinted green on white as the game shows it
 The Pikachu icons are made by pikachu_icons.py. Needs Pillow and network access (e.g. in a scratch venv):
@@ -60,5 +60,5 @@ ink = Image.composite(Image.new("RGBA", p.size, GREEN), Image.new("RGBA", p.size
 ink.putalpha(p.getchannel("A"))
 lego = badge(ink, ink.width)
 save(lego, "lego-stamp-rally-links")
-save(lego, "lego-outstanding")
-print(f"Wrote 5 badge icons to {ICONS}")
+# 2026-10-11 BEFORE: also lego-outstanding.png. WHY: Bart deleted that page (rally complete, 219/219). NOW: one LEGO icon.
+print(f"Wrote 4 badge icons to {ICONS}")
