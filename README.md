@@ -70,6 +70,8 @@ Google Drive `Other/Pokémon GO/web pages w links/`, now an untouched archive).
   (the page's last commit), file name, and a progress bar read from each page's own Done ticks in localStorage
   (yellow in progress, green "Complete"). Stops still to be announced (no location yet, e.g. PokéXciting's
   Bangkok) count in a page's total, so it can't show "Complete" before they're done (v2.7).
+  A page with `<meta name="pogolinks-open" content="why">` never shows "Complete" (v2.8): used by the LEGO page while
+  the game doesn't list that rally as completed; remove the meta when it does.
 - Titles: em dashes closed up (The Canadian Style); long titles are condensed to one line by script (tighter letter
   spacing, then smaller text, never below 12 px).
 - Reorder: Reorder → drag a card's grip → Done; Reset = newest first. Saved per browser (localStorage
