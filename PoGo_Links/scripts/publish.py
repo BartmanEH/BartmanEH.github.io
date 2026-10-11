@@ -29,7 +29,7 @@ import unicodedata
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
-LIST_VERSION = "2.6"   # 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
+LIST_VERSION = "2.7"   # 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -52,14 +52,17 @@ def page_info(path):
     title = html.unescape(m.group(1).strip()) if m else os.path.splitext(os.path.basename(path))[0]
     # Em dashes closed up, no spaces (The Canadian Style; Bart, 2026-10-10). The pages themselves keep their titles.
     title = re.sub(r"\s*\u2014\s*", "\u2014", title)
-    info = {"title": title, "keys": [], "storage": None, "icon": None}
+    info = {"title": title, "keys": [], "tba": 0, "storage": None, "icon": None}
     dec = json.JSONDecoder()
     m = re.search(r"var D\s*=\s*", s)                 # coord-link-page pages
     if m:
         try:
             d = dec.raw_decode(s[m.end():])[0]
-            # Places without coordinates are "to be announced" placeholders: no Done button, so not counted.
+            # Places without coordinates are "to be announced" placeholders: no Done button, so they can't be ticked,
+            # but they count towards the total. 2026-10-11 BEFORE: not counted, so PokéXciting (4 stops + Bangkok to
+            # come) showed "Complete" at 4/4. WHY: Bart: it's 4/5 in the game. NOW: total = located + TBA (v2.7).
             info["keys"] = [p["key"] for p in d.get("points", []) if p.get("lat") is not None]
+            info["tba"] = sum(1 for p in d.get("points", []) if p.get("lat") is None)
             info["storage"] = d.get("storageKey")
             info["icon"] = (d.get("icons") or [None])[0]
         except (ValueError, KeyError):
@@ -247,9 +250,10 @@ function refresh() {
     var done = p.keys.filter(function (k) { return st[k] && st[k].done !== false; }).length;
     total += done;
     var bar = card.querySelector('.bar');
-    bar.querySelector('.fill').style.width = (p.keys.length ? 100 * done / p.keys.length : 0) + '%';
-    bar.querySelector('.lbl').textContent = done && done === p.keys.length ? 'Complete' : done + ' / ' + p.keys.length;
-    bar.classList.toggle('complete', done > 0 && done === p.keys.length);
+    var total = p.keys.length + (p.tba || 0);   // stops still to be announced count too (v2.7)
+    bar.querySelector('.fill').style.width = (total ? 100 * done / total : 0) + '%';
+    bar.querySelector('.lbl').textContent = done && done === total ? 'Complete' : done + ' / ' + total;
+    bar.classList.toggle('complete', done > 0 && done === total);
   });
   document.getElementById('done').textContent = total;
 }
@@ -364,7 +368,7 @@ def build_index(pages):
     rows, data = [], {}
     for i, (name, info, mtime) in enumerate(pages):
         cat, cat_label = category(info["title"], name)
-        n = len(info["keys"])
+        n = len(info["keys"]) + info["tba"]
         day = datetime.date.fromtimestamp(mtime).isoformat()
         # A list-only icon in PoGo_Links/icons/<page stem>.png wins over the page's own first icon (e.g. the
         # PokéXciting rainbow wig standing for all the wig colours, made by scripts/pikachu_icons.py).
@@ -384,9 +388,9 @@ def build_index(pages):
             f'<span class="when" data-day="{day}">updated {day}</span><span class="file">{html.escape(stem)}</span></span>'
             f'<span class="bar"><span class="track"><span class="fill"></span></span><span class="lbl">{n} places</span></span></a>'
         )
-        data[name] = {"storage": info["storage"] or "", "keys": info["keys"]}
+        data[name] = {"storage": info["storage"] or "", "keys": info["keys"], "tba": info["tba"]}
     stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    places = sum(len(i["keys"]) for _, i, _ in pages)
+    places = sum(len(i["keys"]) + i["tba"] for _, i, _ in pages)
     out = PAGE
     for k, v in (("__STAMP__", stamp), ("__VERSION__", LIST_VERSION), ("__FIRST__", FIRST_YEAR), ("__PAGES__", str(len(pages))),
                  ("__PLACES__", f"{places:,}"), ("__ROWS__", "\n".join(rows)),
