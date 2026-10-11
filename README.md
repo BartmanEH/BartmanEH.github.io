@@ -68,7 +68,8 @@ Google Drive `Other/Pokémon GO/web pages w links/`, now an untouched archive).
   `FIRST_YEAR` (the footer says "© 2026", widening by script to "© 2026–<this year>").
 - Cards: icon, title, category chip (guessed from the title: quests / stamp rally / event), place count, "updated …"
   (the page's last commit), file name, and a progress bar read from each page's own Done ticks in localStorage
-  (yellow in progress, green "Complete").
+  (yellow in progress, green "Complete"). Stops still to be announced (no location yet, e.g. PokéXciting's
+  Bangkok) count in a page's total, so it can't show "Complete" before they're done (v2.7).
 - Titles: em dashes closed up (The Canadian Style); long titles are condensed to one line by script (tighter letter
   spacing, then smaller text, never below 12 px).
 - Reorder: Reorder → drag a card's grip → Done; Reset = newest first. Saved per browser (localStorage
@@ -83,7 +84,7 @@ Google Drive `Other/Pokémon GO/web pages w links/`, now an untouched archive).
   the committed files exactly:
   - `scripts/pikachu_icons.py`: ESA astronaut, Seoul hanbok and the PokéXciting rainbow wig (shiny variants, one shared
     crop so they're the same size, as in the game).
-  - `scripts/badge_icons.py`: Poké Lid, Pokémon Center, Japan rallies (generic stamp) and both LEGO pages (the rally's
+  - `scripts/badge_icons.py`: Poké Lid, Pokémon Center, Japan rallies (generic stamp) and the LEGO page (the rally's
     green Pikachu stamp), every circle the same size.
 - New page? Look in PokeMiners/pogo_assets first (it's canonical); add it to one of the scripts, run it, commit.
 
