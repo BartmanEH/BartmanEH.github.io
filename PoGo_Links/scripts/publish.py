@@ -29,7 +29,7 @@ import unicodedata
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
-LIST_VERSION = "2.7"   # 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
+LIST_VERSION = "2.8"   # 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -53,6 +53,10 @@ def page_info(path):
     # Em dashes closed up, no spaces (The Canadian Style; Bart, 2026-10-10). The pages themselves keep their titles.
     title = re.sub(r"\s*\u2014\s*", "\u2014", title)
     info = {"title": title, "keys": [], "tba": 0, "storage": None, "icon": None}
+    # <meta name="pogolinks-open" content="why">: the game doesn't call this rally completed, so the list never shows
+    # "Complete" for it, however many stops are ticked (Bart, 2026-10-11, LEGO at 219/219; v2.8).
+    m = re.search(r'<meta name="pogolinks-open" content="([^"]*)"', s)
+    info["open"] = html.unescape(m.group(1)) if m else ""
     dec = json.JSONDecoder()
     m = re.search(r"var D\s*=\s*", s)                 # coord-link-page pages
     if m:
@@ -252,8 +256,10 @@ function refresh() {
     var bar = card.querySelector('.bar');
     var total = p.keys.length + (p.tba || 0);   // stops still to be announced count too (v2.7)
     bar.querySelector('.fill').style.width = (total ? 100 * done / total : 0) + '%';
-    bar.querySelector('.lbl').textContent = done && done === total ? 'Complete' : done + ' / ' + total;
-    bar.classList.toggle('complete', done > 0 && done === total);
+    var complete = done > 0 && done === total && !p.open;   // "open": the game doesn't call it completed yet (v2.8)
+    bar.querySelector('.lbl').textContent = complete ? 'Complete' : done + ' / ' + total;
+    bar.querySelector('.lbl').title = p.open || '';
+    bar.classList.toggle('complete', complete);
   });
   document.getElementById('done').textContent = total;
 }
@@ -388,7 +394,7 @@ def build_index(pages):
             f'<span class="when" data-day="{day}">updated {day}</span><span class="file">{html.escape(stem)}</span></span>'
             f'<span class="bar"><span class="track"><span class="fill"></span></span><span class="lbl">{n} places</span></span></a>'
         )
-        data[name] = {"storage": info["storage"] or "", "keys": info["keys"], "tba": info["tba"]}
+        data[name] = {"storage": info["storage"] or "", "keys": info["keys"], "tba": info["tba"], "open": info["open"]}
     stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     places = sum(len(i["keys"]) + i["tba"] for _, i, _ in pages)
     out = PAGE
