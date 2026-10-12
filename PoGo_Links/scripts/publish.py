@@ -29,7 +29,7 @@ import unicodedata
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
-LIST_VERSION = "2.13"   # 2.13 = iOS: reordering no longer cancelled by the long-press link menu; 2.12 = a Remaining tile (places − done); 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
+LIST_VERSION = "2.14"   # 2.14 = floating footer less tall (notice line 49 → 38px); 2.13 = iOS: reordering no longer cancelled by the long-press link menu; 2.12 = a Remaining tile (places − done); 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -218,11 +218,13 @@ PAGE = r"""<!DOCTYPE html>
      sticky with bottom -22px: its notice line stays at the bottom of the screen while the list scrolls, its version
      line hangs just below the screen edge, and both come into view at the end of the page. The body is at least a
      screen + 22px tall, so on a short page the version is also just off screen. */
-  .footer { position: sticky; bottom: -22px; margin: 18px -16px 0; margin-top: auto; z-index: 3; height: 72px;
+  /* v2.14 BEFORE: notice line 49px (footer 72px). WHY: Bart: the floating footer was too tall. NOW: 38px (footer 61px),
+     4px above and below the 30px picture. */
+  .footer { position: sticky; bottom: -22px; margin: 18px -16px 0; margin-top: auto; z-index: 3; height: 61px;
             display: flex; flex-direction: column; align-items: center; font-size: 14px; color: var(--grey); white-space: nowrap;
             background: rgba(43,43,41,.94); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
             border-top: 1px solid var(--line); box-sizing: border-box; }
-  .footer .note { height: 49px; display: flex; align-items: center; }
+  .footer .note { height: 38px; display: flex; align-items: center; }
   .footer img { height: 30px; vertical-align: middle; margin: 0 4px; transition: transform .5s ease-in-out; }
   .footer img:hover { transform: scale(1.5); }
   .footer #version { height: 22px; font-size: 12px; line-height: 1; color: #888; }
