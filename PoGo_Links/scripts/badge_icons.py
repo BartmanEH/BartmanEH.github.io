@@ -9,6 +9,7 @@ Writes PoGo_Links/icons/:
   pokecenter-links.png                       StampRally/CollectionIcon/stamp_pokecenter_icon.png
   jp-stamp-rallies.png                       StampRally/StampUiIcon/stamp_generic_icon.png (mixed rallies, no badge)
   pokexciting-malaysia-links.png             StampRally/CollectionIcon/stamp_regional_malaysia_icon.png (circle 250 px)
+  pokexciting-taiwan-links.png               StampRally/CollectionIcon/stamp_regional_taiwan_icon.png (circle 250 px)
   lego-stamp-rally-links.png
                                              StampRally/stamp_pikachu_11.png, the LEGO rally's stamp: a mask
                                              (white = ink), tinted green on white as the game shows it
@@ -57,6 +58,8 @@ save(badge(g, bb[2] - bb[0]), "jp-stamp-rallies")
 # 2026-10-11 BEFORE: no Malaysia badge. WHY: new page pokexciting-malaysia-links (Bart: every new page gets its
 # PokeMiners badge). NOW: the rally's own badge, as on the in-game stamp sheet; its circle is 250 of 256 px.
 save(badge(get("CollectionIcon/stamp_regional_malaysia_icon.png"), 250), "pokexciting-malaysia-links")
+# 2026-10-12: new page pokexciting-taiwan-links; the Taiwan rally's own badge, circle 250 of 256 px like Malaysia's.
+save(badge(get("CollectionIcon/stamp_regional_taiwan_icon.png"), 250), "pokexciting-taiwan-links")
 
 p = get("stamp_pikachu_11.png")
 p = p.crop(p.getchannel("A").getbbox())
