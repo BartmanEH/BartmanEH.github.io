@@ -50,9 +50,32 @@
   .toolbar button, .toolbar label { background: #353533; color: #d1d5db; border: 1px solid #404040; border-radius: 6px; padding: 6px 14px; font-size: 13px; cursor: pointer; }
   #status { order: -1; flex: 1 0 100%; display: flex; justify-content: space-between; gap: 8px; font-weight: 600; color: #9ca3af; font-size: 13px; opacity: .85; padding-bottom: 2px; }
   /* Each switch in its own card like the rows (Bart), both on one row at phone width: 13px labels, 40px switches. */
-  .switches { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 6px; margin-bottom: 12px; } /* spans the rows' width */
-  .toggle { display: inline-flex; align-items: center; gap: 5px; padding: 4px 6px; background: #33332f; border: 1px solid #404040; border-radius: 8px; user-select: none; -webkit-user-select: none; }
-  .toggle .opt { font-size: 13px; color: #7d7d78; cursor: pointer; font-weight: 400; }
+  /* 2026-10-12 BEFORE: space-between (each box its natural width, an uneven gap between them) and unselected labels
+     #7d7d78. WHY: Bart: the gap was awkward and the unselected text too dark. NOW: two equal halves with the toolbar's
+     8px gap, contents centred, so the boxes line up edge to edge with the rows; unselected labels #d1d5db (the
+     palette's text colour; #9ca3af was still too dark, Bart), the selected one bold #e5e5e5. */
+  /* Each box = its contents + an equal share of the spare width (Bart: "a more equal split ... whatever matches contents"),
+     BEFORE two fixed halves, which left the narrower Maps / Copy box mostly empty. */
+  .switches { display: flex; gap: 8px; margin-bottom: 12px; }
+  .switches .toggle { flex: 1 1 auto; }
+  .toggle { display: flex; justify-content: center; align-items: center; gap: 5px; padding: 4px 6px; background: #33332f; border: 1px solid #404040; border-radius: 8px; user-select: none; -webkit-user-select: none; }
+  /* Mirrored (Bart): the left box's contents hug its left edge, the right box's its right edge, same inset. */
+  .switches .toggle:first-child { justify-content: flex-start; }
+  .switches .toggle:last-child { justify-content: flex-end; }
+  /* The two outer labels (iPogo, Copy) get the same fixed slot, wider than either in bold, so both switches sit exactly
+     the same distance from their edges and never shift when a label turns bold (Bart: equidistant by design, not luck). */
+  .switches .toggle:first-child .opt:first-child, .switches .toggle:last-child .opt:last-child { flex: 0 0 40px; }
+  /* Each outer label hugs its switch inside the slot (iPogo right-aligned, Copy left-aligned), so every label is the same
+     5px from its switch on both sides (Bart); BEFORE they sat at the slot's outer end, leaving a wider gap by the switch. */
+  .switches .toggle:first-child .opt:first-child { text-align: right; }
+  .switches .toggle:last-child .opt:last-child { text-align: left; }
+  /* The inner labels (GPS JoyStick, Maps) always reserve their bold width (a hidden bold copy from data-t under the
+     text), so neither box changes size when the selection changes; BEFORE the boxes' boundary moved 4px (Bart). */
+  .switches .toggle:first-child .opt:last-child, .switches .toggle:last-child .opt:first-child { display: inline-grid; }
+  .switches .toggle:first-child .opt:last-child::after, .switches .toggle:last-child .opt:first-child::after {
+    content: attr(data-t); font-weight: 700; height: 0; visibility: hidden; overflow: hidden; }
+  .switches .toggle:last-child .opt:first-child { text-align: right; }
+  .toggle .opt { font-size: 13px; color: #d1d5db; cursor: pointer; font-weight: 400; }
   .toggle .opt.on { color: #e5e5e5; font-weight: 700; }
   .toggle .sw { position: relative; width: 40px; height: 24px; border: 2px solid #d1d5db; border-radius: 13px; background: #2b2b29; cursor: pointer; padding: 0; flex: 0 0 auto; }
   .toggle .sw::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #d1d5db; transition: transform 140ms ease; }
@@ -123,8 +146,8 @@
 <div class="head"><a id="homeBtn" class="hbtn" href="https://bartmaneh.github.io/PoGo_Links/" title="Back to the PoGO Link Pages list"><svg viewBox="8 8 48 48" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#263238" stroke="#26c6da" stroke-width="5"/><path d="M19 32.5 32 21l13 11.5-3.4 3L40 34.1V45H34v-8h-4v8h-6V34.1l-1.6 1.4z" fill="#fff" stroke="#fff" stroke-linejoin="round"/></svg>Home</a><button id="copyGpxBtn" class="hbtn" title="Copy the route's GPX text (to paste into iPogo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy GPX</span></button><button id="gpxBtn" class="hbtn" title="Download the route as a GPX file (iPogo, GPS JoyStick)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>GPX</button><button id="mapBtn" class="hbtn" title="Open the route in the GPX viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Map</button></div>
 <div class="note">Stop positions come from local players (Pokémon GO Malaysia Facebook group); the game doesn&rsquo;t publish them.</div>
 <div class="switches">
-  <div class="toggle" id="teleportToggle"><span class="opt" data-v="ipogo">iPogo</span><button class="sw" aria-label="iPogo or GPS JoyStick"></button><span class="opt" data-v="joystick">GPS JoyStick</span></div>
-  <div class="toggle" id="secondToggle"><span class="opt" data-v="maps">Maps</span><button class="sw" aria-label="Maps or Copy"></button><span class="opt" data-v="copy">Copy</span></div>
+  <div class="toggle" id="teleportToggle"><span class="opt" data-v="ipogo">iPogo</span><button class="sw" aria-label="iPogo or GPS JoyStick"></button><span class="opt" data-v="joystick" data-t="GPS JoyStick">GPS JoyStick</span></div>
+  <div class="toggle" id="secondToggle"><span class="opt" data-v="maps" data-t="Maps">Maps</span><button class="sw" aria-label="Maps or Copy"></button><span class="opt" data-v="copy">Copy</span></div>
 </div>
 <div class="toolbar">
   <button id="hideDoneBtn">Hide done</button>

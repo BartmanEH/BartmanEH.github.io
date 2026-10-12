@@ -29,7 +29,7 @@ import unicodedata
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
-LIST_VERSION = "2.11"   # 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
+LIST_VERSION = "2.13"   # 2.13 = iOS: reordering no longer cancelled by the long-press link menu; 2.12 = a Remaining tile (places − done); 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -143,7 +143,8 @@ PAGE = r"""<!DOCTYPE html>
   h1 { margin: 2px 0 0; font-size: 22px; line-height: 1.1; font-weight: 800; letter-spacing: -.3px; color: var(--bold);
        background: linear-gradient(90deg, var(--blue), var(--purple)); -webkit-background-clip: text; background-clip: text;
        -webkit-text-fill-color: transparent; }
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 16px; }
+  /* v2.12 BEFORE: three tiles (Pages, Places, Done). WHY: Bart wanted what's left at a glance. NOW: + Remaining. */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 0 16px; }
   .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 6px; text-align: center; }
   .stat b { display: block; font-size: 20px; font-weight: 800; color: var(--tan); font-variant-numeric: tabular-nums; }
   .stat span { font-size: 11px; color: var(--grey); text-transform: uppercase; letter-spacing: .8px; }
@@ -193,6 +194,10 @@ PAGE = r"""<!DOCTYPE html>
   .order #reset { color: var(--red); }
   .grip { display: none; }
   body.reorder .card { position: relative; padding-right: 44px; }
+  /* v2.13 (Bart, iOS): holding a card a moment too long opened iOS's link menu (a haptic buzz) and cancelled the drag;
+     Android doesn't do this. While reordering, cards offer no link menu, no text selection and no image dragging. */
+  body.reorder .card { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  body.reorder .card img { -webkit-user-drag: none; pointer-events: none; }
   body.reorder .card:active { transform: none; }
   body.reorder .grip { display: grid; place-items: center; position: absolute; top: 0; right: 0; bottom: 0; width: 40px;
                        color: var(--grey); touch-action: none; cursor: grab; }
@@ -240,6 +245,7 @@ PAGE = r"""<!DOCTYPE html>
   <div class="stat"><b>__PAGES__</b><span>Pages</span></div>
   <div class="stat"><b>__PLACES__</b><span>Places</span></div>
   <div class="stat done"><b id="done">&ndash;</b><span>Done</span></div>
+  <div class="stat"><b id="left">&ndash;</b><span>Remaining</span></div>
 </div>
 <div class="jrnote" id="jrnote" hidden></div>
 <div class="order"><button id="reset" type="button" hidden>Reset</button><span id="ordlbl">Newest first</span><button id="reorder" type="button">Reorder</button></div>
@@ -271,7 +277,7 @@ __ROWS__
 // A place counts as done when its key is in the page's saved state (the two LEGO pages share one key on purpose).
 var PAGES = __DATA__;
 function refresh() {
-  var total = 0;
+  var total = 0, left = 0;
   document.querySelectorAll('.card').forEach(function (card) {
     var p = PAGES[card.dataset.file], st = {};
     try { st = JSON.parse(localStorage.getItem(p.storage) || '{}') || {}; } catch (e) {}
@@ -281,13 +287,15 @@ function refresh() {
     // v2.11 BEFORE: this was "var total", which shadowed the outer total (JS var scoping), so the ticks above were added
     // to it and the Done tile always showed 0 (since v2.7). WHY: Bart, 2026-10-12. NOW: its own name, places.
     var places = p.keys.length + (p.tba || 0);   // stops still to be announced count too (v2.7)
+    left += places - done;
     bar.querySelector('.fill').style.width = (places ? 100 * done / places : 0) + '%';
     var complete = done > 0 && done === places && !p.open;   // "open": the game doesn't call it completed yet (v2.8)
     bar.querySelector('.lbl').textContent = complete ? 'Complete' : done + ' / ' + places;
     bar.querySelector('.lbl').title = p.open || '';
     bar.classList.toggle('complete', complete);
   });
-  document.getElementById('done').textContent = total;
+  document.getElementById('done').textContent = total.toLocaleString('en-US');
+  document.getElementById('left').textContent = left.toLocaleString('en-US');
 }
 // Fit each title on one line: tighten the letter spacing first, then shrink the text, never below 12px.
 function fitTitles() {
@@ -381,6 +389,10 @@ list.addEventListener('pointerdown', function (e) {
   requestAnimationFrame(tick);
 });
 list.addEventListener('pointermove', function (e) { if (drag) { drag.y = e.clientY; place(); } });
+// iOS: claim a touch on the grip at once, so Safari never starts its long-press (link menu) and cancels the drag (v2.13).
+list.addEventListener('touchstart', function (e) {
+  if (document.body.classList.contains('reorder') && e.target.closest('.grip')) e.preventDefault();
+}, { passive: false });
 function drop() {
   if (!drag) return;
   drag.card.classList.remove('dragging'); drag.card.style.transform = '';
