@@ -267,11 +267,16 @@ if(n){localStorage.setItem(K,JSON.stringify(out));location.reload();}
     var raw = JSON.parse(localStorage.getItem(D.storageKey) || '{}') || {};
     Object.keys(raw).forEach(function (k) { var v = normalise(raw[k]); if (v) state[k] = v; });
   } catch (e) {}
+  // 2026-10-12 BEFORE: Hide done reset to off on every page load, so done stops came back after a reload (e.g.
+  // returning from a teleport). WHY: Bart. NOW: remembered per page in this browser, next to the ticks.
+  var HIDE_KEY = D.storageKey + ':hideDone';
   var hideDone = false;
+  try { hideDone = localStorage.getItem(HIDE_KEY) === '1'; } catch (e) {}
   var copiedKey = null; // stop whose Copy button shows "Copied" (the last one copied)
   var list = document.getElementById('list');
   var statusEl = document.getElementById('doneCount');
   var hideDoneBtn = document.getElementById('hideDoneBtn');
+  if (hideDone) hideDoneBtn.textContent = 'Show done';
   var undoBtn = document.getElementById('undoBtn');
   var resetAllBtn = document.getElementById('resetAllBtn');
   var markAllBtn = document.getElementById('markAllBtn');
@@ -523,6 +528,7 @@ if(n){localStorage.setItem(K,JSON.stringify(out));location.reload();}
   hideDoneBtn.addEventListener('click', function () {
     hideDone = !hideDone;
     hideDoneBtn.textContent = hideDone ? 'Show done' : 'Hide done';
+    try { if (hideDone) localStorage.setItem(HIDE_KEY, '1'); else localStorage.removeItem(HIDE_KEY); } catch (e) {}
     render();
   });
   undoBtn.addEventListener('click', undoLast);
