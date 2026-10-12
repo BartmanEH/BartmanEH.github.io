@@ -29,7 +29,7 @@ import unicodedata
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
-LIST_VERSION = "2.10"   # 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
+LIST_VERSION = "2.11"   # 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -278,10 +278,12 @@ function refresh() {
     var done = p.keys.filter(function (k) { return st[k] && st[k].done !== false; }).length;
     total += done;
     var bar = card.querySelector('.bar');
-    var total = p.keys.length + (p.tba || 0);   // stops still to be announced count too (v2.7)
-    bar.querySelector('.fill').style.width = (total ? 100 * done / total : 0) + '%';
-    var complete = done > 0 && done === total && !p.open;   // "open": the game doesn't call it completed yet (v2.8)
-    bar.querySelector('.lbl').textContent = complete ? 'Complete' : done + ' / ' + total;
+    // v2.11 BEFORE: this was "var total", which shadowed the outer total (JS var scoping), so the ticks above were added
+    // to it and the Done tile always showed 0 (since v2.7). WHY: Bart, 2026-10-12. NOW: its own name, places.
+    var places = p.keys.length + (p.tba || 0);   // stops still to be announced count too (v2.7)
+    bar.querySelector('.fill').style.width = (places ? 100 * done / places : 0) + '%';
+    var complete = done > 0 && done === places && !p.open;   // "open": the game doesn't call it completed yet (v2.8)
+    bar.querySelector('.lbl').textContent = complete ? 'Complete' : done + ' / ' + places;
     bar.querySelector('.lbl').title = p.open || '';
     bar.classList.toggle('complete', complete);
   });
