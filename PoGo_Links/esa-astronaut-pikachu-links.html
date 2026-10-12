@@ -315,12 +315,15 @@
     rowEls = {}; sectionEls = {};
     var hintShown = false;
     var lastSection = null;
+    // 2026-10-12 BEFORE: Hide done hid done rows only, so a finished section stayed as a bare heading (Bart). NOW: with
+    // Hide done on, a finished section's heading is left out too.
+    var finished = hideDone ? finishedHeadings() : {};
     POINTS.forEach(function (p) {
       var isDone = !!state[p.key];
       if (p.section !== lastSection) {
         lastSection = p.section;
         var sec = D.sections[p.section];
-        if (sec.name) {
+        if (sec.name && !finished[p.section]) {
           var h2 = document.createElement('h2');
           sectionEls[p.section] = h2;
           list.appendChild(h2);
@@ -473,11 +476,24 @@
   }
   // One stop changed: swap in a freshly built row. With Hide done on, a stop just marked done is removed; anything
   // else there (a row that must reappear, or a page with a hint box above the first visible row) redraws everything.
+  // Section index → true when all its stops are done.
+  function finishedHeadings() {
+    var total = {}, done = {}, out = {};
+    POINTS.forEach(function (p) {
+      if (p.tba) return;
+      total[p.section] = (total[p.section] || 0) + 1;
+      if (state[p.key]) done[p.section] = (done[p.section] || 0) + 1;
+    });
+    D.sections.forEach(function (sec, si) { if (sec.count && done[si] === total[si]) out[si] = true; });
+    return out;
+  }
   function updateRow(key) {
     var p = BY_KEY[key], old = rowEls[key];
     if (!p) return;
     if (hideDone) {
-      if (old && state[key] && !D.hint) { old.remove(); delete rowEls[key]; updateCounts(); }
+      // A stop that finishes its section takes the heading with it: redraw (see render).
+      var closes = state[key] && finishedHeadings()[p.section];
+      if (old && state[key] && !D.hint && !closes) { old.remove(); delete rowEls[key]; updateCounts(); }
       else render();
       return;
     }

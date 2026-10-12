@@ -140,7 +140,7 @@
   <button id="exportProgressBtn">Export progress</button>
   <label for="importInput">Import progress</label>
   <input type="file" id="importInput" accept="application/json,.json,.txt">
-  <span id="status"><span id="doneCount"></span><span style="font-weight: 400; font-size: 12px;">generated 2026-10-12 11:06</span></span>
+  <span id="status"><span id="doneCount"></span><span style="font-weight: 400; font-size: 12px;">generated 2026-10-12 11:13</span></span>
 </div>
 <div id="list"></div>
 <script>
@@ -320,11 +320,16 @@
     rowEls = {}; sectionEls = {}; subEls = {};
     var hintShown = false;
     var lastSection = null, subNext = 0;
+    // 2026-10-12 BEFORE: Hide done hid done rows only, so finished prefectures and collections stayed as bare headings
+    // (Bart, Poké Lid page). NOW: with Hide done on, a finished or empty (0 / 0) subsection's heading and a finished
+    // section's heading are left out too, so only what's left to do shows.
+    var finished = hideDone ? finishedHeadings() : {};
     // Subsection headings of section si up to index upto (empty subsections included), each once, in order.
     function emitSubs(si, upto) {
       var subs = D.sections[si].subs;
       if (!subs) return;
       for (; subNext <= upto && subNext < subs.length; subNext++) {
+        if (finished[si + '.' + subNext]) continue;
         var h3 = document.createElement('h3');
         subEls[si + '.' + subNext] = h3;
         list.appendChild(h3);
@@ -337,7 +342,7 @@
         subNext = 0;
         lastSection = p.section;
         var sec = D.sections[p.section];
-        if (sec.name) {
+        if (sec.name && !finished[p.section]) {
           var h2 = document.createElement('h2');
           sectionEls[p.section] = h2;
           list.appendChild(h2);
@@ -501,11 +506,28 @@
   }
   // One stop changed: swap in a freshly built row. With Hide done on, a stop just marked done is removed; anything
   // else there (a row that must reappear, or a page with a hint box above the first visible row) redraws everything.
+  // Section index → true when all its stops are done; "si.k" → true when subsection k is done or empty.
+  function finishedHeadings() {
+    var total = {}, done = {}, out = {};
+    POINTS.forEach(function (p) {
+      if (p.tba) return;
+      var ks = [String(p.section)].concat(p.subsection != null ? [p.section + '.' + p.subsection] : []);
+      ks.forEach(function (k) { total[k] = (total[k] || 0) + 1; if (state[p.key]) done[k] = (done[k] || 0) + 1; });
+    });
+    D.sections.forEach(function (sec, si) {
+      if (sec.count && done[si] === total[si]) out[si] = true;
+      (sec.subs || []).forEach(function (sub, k) { if (!sub.count || done[si + '.' + k] === total[si + '.' + k]) out[si + '.' + k] = true; });
+    });
+    return out;
+  }
   function updateRow(key) {
     var p = BY_KEY[key], old = rowEls[key];
     if (!p) return;
     if (hideDone) {
-      if (old && state[key] && !D.hint) { old.remove(); delete rowEls[key]; updateCounts(); }
+      // A stop that finishes its subsection or section takes the heading with it: redraw (see render).
+      var f = finishedHeadings();
+      var closes = state[key] && (f[p.section] || (p.subsection != null && f[p.section + '.' + p.subsection]));
+      if (old && state[key] && !D.hint && !closes) { old.remove(); delete rowEls[key]; updateCounts(); }
       else render();
       return;
     }
