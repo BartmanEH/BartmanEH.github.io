@@ -32,6 +32,14 @@
   #copyGpxBtn:active { box-shadow: 0 1px 0 #6448c8, 0 2px 6px rgba(111,79,196,.3); }
   #gpxBtn { background: linear-gradient(180deg, #ffb547, #f08a12); border: 1px solid #ffd08a; box-shadow: 0 3px 0 #9a5506, 0 6px 14px rgba(240,138,18,.35); }
   #gpxBtn:active { box-shadow: 0 1px 0 #9a5506, 0 2px 6px rgba(240,138,18,.3); }
+  /* 2026-10-13: a long-press downloads; without this it selected the label text instead (seen on the phone). */
+  #gpxBtn { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  /* Route-button message (2026-10-13): says whether Copy/GPX/JoyRoute/Map used the stops left or the whole route. */
+  .route-hint { position: fixed; left: 0; right: 0; margin: 0 auto; width: fit-content; bottom: 130px; max-width: calc(100vw - 32px); box-sizing: border-box;
+                padding: 9px 14px; border-radius: 12px; background: rgba(40,40,38,.96); border: 1px solid #555; color: #e5e5e5;
+                font-size: 13px; line-height: 1.35; text-align: center; box-shadow: 0 6px 18px rgba(0,0,0,.5); z-index: 50;
+                opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .route-hint.show { opacity: 1; }
   #mapBtn { background: linear-gradient(180deg, #2fc4b2, #138f86); border: 1px solid #8ee8dd; box-shadow: 0 3px 0 #0b5d57, 0 6px 14px rgba(19,143,134,.35); }
   #mapBtn:active { box-shadow: 0 1px 0 #0b5d57, 0 2px 6px rgba(19,143,134,.3); }
   /* Home: back to the published list (absolute URL, so it also works from Drive/Solid Explorer copies). 2026-10-10. */
@@ -46,6 +54,11 @@
   h2 { font-size: 15px; margin: 18px 0 8px; padding-bottom: 3px; border-bottom: 1px solid #404040; color: #e5e5e5; }
   h2 .c { color: #9ca3af; font-weight: 400; font-size: 12px; }
   h2.complete { opacity: .5; }
+  /* Subsections (2026-10-11, the Poké Lid page's prefectures): indented 12px, a step smaller and lighter than h2, with a
+     fainter rule; the rows below stay full width so their buttons keep their size. "x / N" like the game's counts. */
+  h3 { font-size: 13.5px; font-weight: 600; margin: 12px 0 6px 12px; padding-bottom: 2px; border-bottom: 1px solid #383836; color: #d1d5db; }
+  h3 .c { color: #9ca3af; font-weight: 400; font-size: 12px; }
+  h3.complete, h3.empty { opacity: .5; }
   .toolbar { position: fixed; left: 0; right: 0; max-width: 412px; box-sizing: border-box; margin: 0 auto; bottom: 0; z-index: 10; background: #242422; border-top: 1px solid #404040; padding: 7px 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .toolbar button, .toolbar label { background: #353533; color: #d1d5db; border: 1px solid #404040; border-radius: 6px; padding: 6px 14px; font-size: 13px; cursor: pointer; }
   #status { order: -1; flex: 1 0 100%; display: flex; justify-content: space-between; gap: 8px; font-weight: 600; color: #9ca3af; font-size: 13px; opacity: .85; padding-bottom: 2px; }
@@ -134,7 +147,7 @@
   .toolbar .brk { flex-basis: 100%; height: 0; }
   /* 2026-10-10 BEFORE: toolbar buttons at their natural widths, rows ragged. WHY: Mark all and Home were added (Bart)
      and his symmetry rule. NOW: toolbar buttons share each row equally (Hide done · Undo last · Mark all · Reset all,
-     then Export · Import); header labels never wrap (Home · Copy GPX · GPX · Map fit one line at 412 px). */
+     then Export · Import); header labels never wrap (Home · Copy GPX · GPX · Map fit one line at 412 px; 2026-10-13: Home · Copy · JoyRoute · Map, 10 px gaps). */
   .hbtn { white-space: nowrap; }
   .toolbar button, .toolbar label { flex: 1 1 0; min-width: 0; padding: 6px 4px; text-align: center; white-space: nowrap; }
   .toolbar { row-gap: 4px; } /* the break is an empty flex line, so the rows' gap counts twice around it */
@@ -148,7 +161,7 @@
 </head>
 <body>
 <div class="top"><h1>Japan Stamp Rallies—complete, 26 of 26</h1><div class="sub">Minato / Koto / Shinagawa from 25 May 2026 · Suita from 9 May 2025 · Nagasaki from 10 Nov 2025 · none have an end date</div></div>
-<div class="head"><a id="homeBtn" class="hbtn" href="https://bartmaneh.github.io/PoGo_Links/" title="Back to the PoGO Link Pages list"><svg viewBox="8 8 48 48" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#263238" stroke="#26c6da" stroke-width="5"/><path d="M19 32.5 32 21l13 11.5-3.4 3L40 34.1V45H34v-8h-4v8h-6V34.1l-1.6 1.4z" fill="#fff" stroke="#fff" stroke-linejoin="round"/></svg>Home</a><button id="copyGpxBtn" class="hbtn" title="Copy the route's GPX text (to paste into iPogo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy GPX</span></button><button id="gpxBtn" class="hbtn" title="Download the route as a GPX file (iPogo, GPS JoyStick)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>GPX</button><button id="mapBtn" class="hbtn" title="Open the route in the GPX viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Map</button></div>
+<div class="head"><a id="homeBtn" class="hbtn" href="https://bartmaneh.github.io/PoGo_Links/" title="Back to the PoGO Link Pages list"><svg viewBox="8 8 48 48" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#263238" stroke="#26c6da" stroke-width="5"/><path d="M19 32.5 32 21l13 11.5-3.4 3L40 34.1V45H34v-8h-4v8h-6V34.1l-1.6 1.4z" fill="#fff" stroke="#fff" stroke-linejoin="round"/></svg>Home</a><button id="copyGpxBtn" class="hbtn" title="Copy the route's GPX text (to paste into iPogo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span></button><button id="gpxBtn" class="hbtn" title="Download the route as a GPX file (iPogo, GPS JoyStick)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>GPX</button><button id="mapBtn" class="hbtn" title="Open the route in the GPX viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Map</button></div>
 <div class="note"><b>Geocoded from stop names, not official coordinates.</b> HIGH matched a uniquely named OSM feature; MED matched the right building or park; LOW is a district or large-park centroid and may be hundreds of metres out (8 of 26 are LOW).</div>
 <div class="switches">
   <div class="toggle" id="teleportToggle"><span class="opt" data-v="ipogo">iPogo</span><button class="sw" aria-label="iPogo or GPS JoyStick"></button><span class="opt" data-v="joystick" data-t="GPS JoyStick">GPS JoyStick</span></div>
@@ -173,7 +186,7 @@
   // or =off (JoyRoute's Settings, "Link pages"). Read once; GPS JoyStick buttons use it below.
   var USE_JOYROUTE = false;
   try { USE_JOYROUTE = localStorage.getItem('joyroute') === 'on'; } catch (e) {}
-  var D = {"points": [{"key": "35.66710,139.75785", "n": 1, "name": "SL広場 C11 292号", "sub": "SL Plaza, C11 292", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—Shimbashi Hibiya-guchi plaza", "lat": 35.667099, "lon": 139.757846, "section": 0, "icon": "", "distText": "", "distFrom": ""}, {"key": "35.66329,139.75149", "n": 2, "name": "港区立鞆絵小学校校舎跡碑", "sub": "Tomoe Elementary site monument", "note": "<b style=\"color:#cf222e\">LOW<\/b>—not in OSM—Nishi-Shimbashi 3-chome centroid", "lat": 35.663287, "lon": 139.751485, "section": 0, "icon": "", "distText": "714 m", "distFrom": "previous stop"}, {"key": "35.66661,139.74503", "n": 3, "name": "江戸見坂", "sub": "Edomizaka", "note": "<b style=\"color:#9a6700\">MED<\/b>—a slope/road—stop sits somewhere along it", "lat": 35.666614, "lon": 139.745033, "section": 0, "icon": "", "distText": "690 m", "distFrom": "previous stop"}, {"key": "35.65845,139.74554", "n": 4, "name": "東京タワー", "sub": "Tokyo Tower", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact landmark", "lat": 35.658449, "lon": 139.745536, "section": 0, "icon": "", "distText": "909 m", "distFrom": "previous stop"}, {"key": "35.65826,139.74667", "n": 5, "name": "芝公園 Gym Statue", "sub": "Shiba Park gym statue", "note": "<b style=\"color:#cf222e\">LOW<\/b>—large park, statue position unknown", "lat": 35.658256, "lon": 139.746673, "section": 0, "icon": "", "distText": "105 m", "distFrom": "previous stop"}, {"key": "35.67496,139.82936", "n": 1, "name": "仙台堀川公園 赤ちゃん噴水池", "sub": "Sendaiborikawa baby fountain", "note": "<b style=\"color:#cf222e\">LOW<\/b>—park is a ~3.7 km linear greenway; also a Gym, not a stop", "lat": 35.674957, "lon": 139.829362, "section": 1, "icon": "", "distText": "", "distFrom": ""}, {"key": "35.67265,139.81730", "n": 2, "name": "江東区役所", "sub": "Koto City Office", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact", "lat": 35.672647, "lon": 139.817304, "section": 1, "icon": "", "distText": "1.1 km", "distFrom": "previous stop"}, {"key": "35.67451,139.81468", "n": 3, "name": "イースト21 女神の噴水", "sub": "East 21 Goddess Fountain", "note": "<b style=\"color:#9a6700\">MED<\/b>—Hotel East 21 Tokyo—a trip report puts the stamp at the hotel", "lat": 35.674513, "lon": 139.814684, "section": 1, "icon": "", "distText": "315 m", "distFrom": "previous stop"}, {"key": "35.67977,139.80879", "n": 4, "name": "東京都現代美術館 入口", "sub": "MOT entrance", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact", "lat": 35.679775, "lon": 139.808788, "section": 1, "icon": "", "distText": "791 m", "distFrom": "previous stop"}, {"key": "35.61964,139.75001", "n": 1, "name": "天王洲アイル第四公園", "sub": "Tennozu Isle 4th Park", "note": "<b style=\"color:#9a6700\">MED<\/b>—OSM has 天王洲公園, not an exact name match", "lat": 35.619645, "lon": 139.750009, "section": 2, "icon": "", "distText": "", "distFrom": ""}, {"key": "35.61888,139.74433", "n": 2, "name": "聖蹟公園", "sub": "Seiseki Park", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact", "lat": 35.618878, "lon": 139.744325, "section": 2, "icon": "", "distText": "521 m", "distFrom": "previous stop"}, {"key": "35.61552,139.74408", "n": 3, "name": "街道松の広場", "sub": "Kaido-matsu Plaza", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact named feature", "lat": 35.615515, "lon": 139.744081, "section": 2, "icon": "", "distText": "375 m", "distFrom": "previous stop"}, {"key": "35.60366,139.74391", "n": 4, "name": "鮫洲入江広場", "sub": "Sameju Irie Plaza", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact named feature", "lat": 35.603655, "lon": 139.743908, "section": 2, "icon": "", "distText": "1.3 km", "distFrom": "previous stop"}, {"key": "34.75686,135.52790", "n": 1, "name": "浜屋敷 歴史文化まちづくりセンター", "sub": "Hamayashiki", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact", "lat": 34.756856, "lon": 135.527895, "section": 3, "icon": "", "distText": "", "distFrom": ""}, {"key": "34.75863,135.50002", "n": 2, "name": "銀の鳥", "sub": "Gin no Tori sculpture", "note": "<b style=\"color:#cf222e\">LOW<\/b>—Esaka Park centroid; sculpture position unknown", "lat": 34.758626, "lon": 135.500023, "section": 3, "icon": "", "distText": "2.5 km", "distFrom": "previous stop"}, {"key": "34.75863,135.50002#2", "n": 3, "name": "江坂公園周辺の文化財", "sub": "Esaka Park heritage marker", "note": "<b style=\"color:#cf222e\">LOW<\/b>—same centroid as 銀の鳥—must be a different spot", "lat": 34.758626, "lon": 135.500023, "section": 3, "icon": "", "distText": "0 m", "distFrom": "previous stop"}, {"key": "34.79622,135.50901", "n": 4, "name": "千里南公園のベル", "sub": "Senri-minami Park bell", "note": "<b style=\"color:#cf222e\">LOW<\/b>—park centroid; bell position unknown", "lat": 34.796217, "lon": 135.50901, "section": 3, "icon": "", "distText": "4.3 km", "distFrom": "previous stop"}, {"key": "34.80620,135.53136", "n": 5, "name": "万博記念公園駅前モニュメント", "sub": "Banpaku-kinen-koen stn monument", "note": "<b style=\"color:#9a6700\">MED<\/b>—station forecourt", "lat": 34.806196, "lon": 135.531359, "section": 3, "icon": "", "distText": "2.3 km", "distFrom": "previous stop"}, {"key": "32.75933,129.86463", "n": 1, "name": "長崎スタジアムシティ", "sub": "Nagasaki Stadium City", "note": "<b style=\"color:#9a6700\">MED<\/b>—large complex", "lat": 32.759331, "lon": 129.864632, "section": 4, "icon": "", "distText": "", "distFrom": ""}, {"key": "32.75273,129.86902", "n": 2, "name": "おのうえの丘", "sub": "Onoue no Oka", "note": "<b style=\"color:#cf222e\">LOW<\/b>—Onoue-machi district centroid", "lat": 32.75273, "lon": 129.869022, "section": 4, "icon": "", "distText": "841 m", "distFrom": "previous stop"}, {"key": "32.75165,129.87107", "n": 3, "name": "アミュプラザ長崎の大時計", "sub": "Amu Plaza clock", "note": "<b style=\"color:#9a6700\">MED<\/b>—mall building; clock inside", "lat": 32.751648, "lon": 129.871069, "section": 4, "icon": "", "distText": "226 m", "distFrom": "previous stop"}, {"key": "32.75299,129.87945", "n": 4, "name": "長崎歴史文化博物館", "sub": "Museum of History and Culture", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact", "lat": 32.752994, "lon": 129.879453, "section": 4, "icon": "", "distText": "798 m", "distFrom": "previous stop"}, {"key": "32.74862,129.87992", "n": 5, "name": "魚の町公園", "sub": "Uonomachi Park", "note": "<b style=\"color:#cf222e\">LOW<\/b>—district centroid, park not in OSM", "lat": 32.74862, "lon": 129.879922, "section": 4, "icon": "", "distText": "488 m", "distFrom": "previous stop"}, {"key": "32.74463,129.87382", "n": 6, "name": "長崎県庁舎跡地", "sub": "Former Prefectural Office site", "note": "<b style=\"color:#9a6700\">MED<\/b>—Edomachi district; site not in OSM", "lat": 32.744627, "lon": 129.873818, "section": 4, "icon": "", "distText": "723 m", "distFrom": "previous stop"}, {"key": "32.74302,129.87508", "n": 7, "name": "新地橋広場", "sub": "Shinchibashi Plaza", "note": "<b style=\"color:#9a6700\">MED<\/b>—nearest tram stop", "lat": 32.743023, "lon": 129.875077, "section": 4, "icon": "", "distText": "214 m", "distFrom": "previous stop"}, {"key": "32.74079,129.86883", "n": 8, "name": "水辺の森公園", "sub": "Mizube no Mori Park", "note": "<b style=\"color:#9a6700\">MED<\/b>—large waterfront park", "lat": 32.740795, "lon": 129.868831, "section": 4, "icon": "", "distText": "635 m", "distFrom": "previous stop"}], "sections": [{"name": "Tokyo: Minato City", "count": 5}, {"name": "Tokyo: Koto City", "count": 4}, {"name": "Tokyo: Shinagawa City", "count": 4}, {"name": "Suita City", "count": 5}, {"name": "Nagasaki City", "count": 8}], "storageKey": "jprally.v2", "reset": true, "hint": "", "gpx": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<gpx version=\"1.1\" creator=\"coord-link-page\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n\t<wpt lat=\"35.66709900\" lon=\"139.75784600\"><name>1. SL広場 C11 292号 · SL Plaza, C11 292<\/name><\/wpt>\n\t<wpt lat=\"35.66328700\" lon=\"139.75148500\"><name>2. 港区立鞆絵小学校校舎跡碑 · Tomoe Elementary site monument<\/name><\/wpt>\n\t<wpt lat=\"35.66661400\" lon=\"139.74503300\"><name>3. 江戸見坂 · Edomizaka<\/name><\/wpt>\n\t<wpt lat=\"35.65844900\" lon=\"139.74553600\"><name>4. 東京タワー · Tokyo Tower<\/name><\/wpt>\n\t<wpt lat=\"35.65825600\" lon=\"139.74667300\"><name>5. 芝公園 Gym Statue · Shiba Park gym statue<\/name><\/wpt>\n\t<wpt lat=\"35.67495700\" lon=\"139.82936200\"><name>1. 仙台堀川公園 赤ちゃん噴水池 · Sendaiborikawa baby fountain<\/name><\/wpt>\n\t<wpt lat=\"35.67264700\" lon=\"139.81730400\"><name>2. 江東区役所 · Koto City Office<\/name><\/wpt>\n\t<wpt lat=\"35.67451300\" lon=\"139.81468400\"><name>3. イースト21 女神の噴水 · East 21 Goddess Fountain<\/name><\/wpt>\n\t<wpt lat=\"35.67977500\" lon=\"139.80878800\"><name>4. 東京都現代美術館 入口 · MOT entrance<\/name><\/wpt>\n\t<wpt lat=\"35.61964500\" lon=\"139.75000900\"><name>1. 天王洲アイル第四公園 · Tennozu Isle 4th Park<\/name><\/wpt>\n\t<wpt lat=\"35.61887800\" lon=\"139.74432500\"><name>2. 聖蹟公園 · Seiseki Park<\/name><\/wpt>\n\t<wpt lat=\"35.61551500\" lon=\"139.74408100\"><name>3. 街道松の広場 · Kaido-matsu Plaza<\/name><\/wpt>\n\t<wpt lat=\"35.60365500\" lon=\"139.74390800\"><name>4. 鮫洲入江広場 · Sameju Irie Plaza<\/name><\/wpt>\n\t<wpt lat=\"34.75685600\" lon=\"135.52789500\"><name>1. 浜屋敷 歴史文化まちづくりセンター · Hamayashiki<\/name><\/wpt>\n\t<wpt lat=\"34.75862600\" lon=\"135.50002300\"><name>2. 銀の鳥 · Gin no Tori sculpture<\/name><\/wpt>\n\t<wpt lat=\"34.75862600\" lon=\"135.50002300\"><name>3. 江坂公園周辺の文化財 · Esaka Park heritage marker<\/name><\/wpt>\n\t<wpt lat=\"34.79621700\" lon=\"135.50901000\"><name>4. 千里南公園のベル · Senri-minami Park bell<\/name><\/wpt>\n\t<wpt lat=\"34.80619600\" lon=\"135.53135900\"><name>5. 万博記念公園駅前モニュメント · Banpaku-kinen-koen stn monument<\/name><\/wpt>\n\t<wpt lat=\"32.75933100\" lon=\"129.86463200\"><name>1. 長崎スタジアムシティ · Nagasaki Stadium City<\/name><\/wpt>\n\t<wpt lat=\"32.75273000\" lon=\"129.86902200\"><name>2. おのうえの丘 · Onoue no Oka<\/name><\/wpt>\n\t<wpt lat=\"32.75164800\" lon=\"129.87106900\"><name>3. アミュプラザ長崎の大時計 · Amu Plaza clock<\/name><\/wpt>\n\t<wpt lat=\"32.75299400\" lon=\"129.87945300\"><name>4. 長崎歴史文化博物館 · Museum of History and Culture<\/name><\/wpt>\n\t<wpt lat=\"32.74862000\" lon=\"129.87992200\"><name>5. 魚の町公園 · Uonomachi Park<\/name><\/wpt>\n\t<wpt lat=\"32.74462700\" lon=\"129.87381800\"><name>6. 長崎県庁舎跡地 · Former Prefectural Office site<\/name><\/wpt>\n\t<wpt lat=\"32.74302300\" lon=\"129.87507700\"><name>7. 新地橋広場 · Shinchibashi Plaza<\/name><\/wpt>\n\t<wpt lat=\"32.74079500\" lon=\"129.86883100\"><name>8. 水辺の森公園 · Mizube no Mori Park<\/name><\/wpt>\n\t<trk>\n\t\t<name>Tokyo: Minato City<\/name>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"35.66709900\" lon=\"139.75784600\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.66328700\" lon=\"139.75148500\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.66661400\" lon=\"139.74503300\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.65844900\" lon=\"139.74553600\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.65825600\" lon=\"139.74667300\"><\/trkpt>\n\t\t<\/trkseg>\n\t<\/trk>\n\t<trk>\n\t\t<name>Tokyo: Koto City<\/name>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"35.67495700\" lon=\"139.82936200\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.67264700\" lon=\"139.81730400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.67451300\" lon=\"139.81468400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.67977500\" lon=\"139.80878800\"><\/trkpt>\n\t\t<\/trkseg>\n\t<\/trk>\n\t<trk>\n\t\t<name>Tokyo: Shinagawa City<\/name>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"35.61964500\" lon=\"139.75000900\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.61887800\" lon=\"139.74432500\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.61551500\" lon=\"139.74408100\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.60365500\" lon=\"139.74390800\"><\/trkpt>\n\t\t<\/trkseg>\n\t<\/trk>\n\t<trk>\n\t\t<name>Suita City<\/name>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"34.75685600\" lon=\"135.52789500\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.75862600\" lon=\"135.50002300\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.75862600\" lon=\"135.50002300\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.79621700\" lon=\"135.50901000\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.80619600\" lon=\"135.53135900\"><\/trkpt>\n\t\t<\/trkseg>\n\t<\/trk>\n\t<trk>\n\t\t<name>Nagasaki City<\/name>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"32.75933100\" lon=\"129.86463200\"><\/trkpt>\n\t\t\t<trkpt lat=\"32.75273000\" lon=\"129.86902200\"><\/trkpt>\n\t\t\t<trkpt lat=\"32.75164800\" lon=\"129.87106900\"><\/trkpt>\n\t\t\t<trkpt lat=\"32.75299400\" lon=\"129.87945300\"><\/trkpt>\n\t\t\t<trkpt lat=\"32.74862000\" lon=\"129.87992200\"><\/trkpt>\n\t\t\t<trkpt lat=\"32.74462700\" lon=\"129.87381800\"><\/trkpt>\n\t\t\t<trkpt lat=\"32.74302300\" lon=\"129.87507700\"><\/trkpt>\n\t\t\t<trkpt lat=\"32.74079500\" lon=\"129.86883100\"><\/trkpt>\n\t\t<\/trkseg>\n\t<\/trk>\n<\/gpx>\n", "fileStem": "jp-stamp-rallies", "viewerUrl": "https://innoengserv.com/gpx-viewer.com/", "buttonIcons": {"ipogo": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"iPogo\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"ipogoButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#ipogoButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#00677a\"/> <path d=\"M-2 57Q60 37 122 57V-2H-2Z\" fill=\"#008474\"/> <path d=\"M-3 60Q60 40 123 60\" fill=\"none\" stroke=\"#fff\" stroke-width=\"8\"/> <path d=\"M60 29C45 29 39 38 40 52c1 13 12 20 17 38 1 4 5 4 6 0 5-18 16-25 17-38 1-14-5-23-20-23Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/> <circle cx=\"60\" cy=\"51\" r=\"9\" fill=\"#00677a\" stroke=\"#fff\" stroke-width=\"3.5\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>", "joystick": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"GPS JoyStick\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"gpsJoystickButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#gpsJoystickButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#8BC34A\"/> <ellipse cx=\"60\" cy=\"96\" rx=\"20\" ry=\"7\" fill=\"none\" stroke=\"#1976D2\" stroke-width=\"6\"/> <path d=\"M60 26C48 26 39 35 39 46c0 12 10 20 19 39 1 3 2 3 3 0 9-19 19-27 19-39 0-11-9-20-20-20Z\" fill=\"#1976D2\"/> <circle cx=\"60\" cy=\"47\" r=\"9\" fill=\"#2196F3\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>", "maps": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"Maps\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"mapsButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#mapsButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#f1f3f4\"/> <path d=\"M-2 78 40 52l40 22 42-24v75H-2Z\" fill=\"#a5d6a7\"/> <path d=\"M-2 92 38 68l42 22 42-24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"7\"/> <path d=\"M60 18C47 18 38 28 38 40c0 15 14 24 20 44 1 3 3 3 4 0 6-20 20-29 20-44 0-12-9-22-22-22Z\" fill=\"#ea4335\"/> <circle cx=\"60\" cy=\"40\" r=\"8.5\" fill=\"#fff\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>"}};
+  var D = {"points": [{"key": "35.66710,139.75785", "n": 1, "name": "SL広場 C11 292号", "sub": "SL Plaza, C11 292", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—Shimbashi Hibiya-guchi plaza", "lat": 35.667099, "lon": 139.757846, "section": 0, "icon": -1, "distText": "", "distFrom": ""}, {"key": "35.66329,139.75149", "n": 2, "name": "港区立鞆絵小学校校舎跡碑", "sub": "Tomoe Elementary site monument", "note": "<b style=\"color:#cf222e\">LOW<\/b>—not in OSM—Nishi-Shimbashi 3-chome centroid", "lat": 35.663287, "lon": 139.751485, "section": 0, "icon": -1, "distText": "714 m", "distFrom": "previous stop"}, {"key": "35.66661,139.74503", "n": 3, "name": "江戸見坂", "sub": "Edomizaka", "note": "<b style=\"color:#9a6700\">MED<\/b>—a slope/road—stop sits somewhere along it", "lat": 35.666614, "lon": 139.745033, "section": 0, "icon": -1, "distText": "690 m", "distFrom": "previous stop"}, {"key": "35.65845,139.74554", "n": 4, "name": "東京タワー", "sub": "Tokyo Tower", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact landmark", "lat": 35.658449, "lon": 139.745536, "section": 0, "icon": -1, "distText": "909 m", "distFrom": "previous stop"}, {"key": "35.65826,139.74667", "n": 5, "name": "芝公園 Gym Statue", "sub": "Shiba Park gym statue", "note": "<b style=\"color:#cf222e\">LOW<\/b>—large park, statue position unknown", "lat": 35.658256, "lon": 139.746673, "section": 0, "icon": -1, "distText": "105 m", "distFrom": "previous stop"}, {"key": "35.67496,139.82936", "n": 1, "name": "仙台堀川公園 赤ちゃん噴水池", "sub": "Sendaiborikawa baby fountain", "note": "<b style=\"color:#cf222e\">LOW<\/b>—park is a ~3.7 km linear greenway; also a Gym, not a stop", "lat": 35.674957, "lon": 139.829362, "section": 1, "icon": -1, "distText": "", "distFrom": ""}, {"key": "35.67265,139.81730", "n": 2, "name": "江東区役所", "sub": "Koto City Office", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact", "lat": 35.672647, "lon": 139.817304, "section": 1, "icon": -1, "distText": "1.1 km", "distFrom": "previous stop"}, {"key": "35.67451,139.81468", "n": 3, "name": "イースト21 女神の噴水", "sub": "East 21 Goddess Fountain", "note": "<b style=\"color:#9a6700\">MED<\/b>—Hotel East 21 Tokyo—a trip report puts the stamp at the hotel", "lat": 35.674513, "lon": 139.814684, "section": 1, "icon": -1, "distText": "315 m", "distFrom": "previous stop"}, {"key": "35.67977,139.80879", "n": 4, "name": "東京都現代美術館 入口", "sub": "MOT entrance", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact", "lat": 35.679775, "lon": 139.808788, "section": 1, "icon": -1, "distText": "791 m", "distFrom": "previous stop"}, {"key": "35.61964,139.75001", "n": 1, "name": "天王洲アイル第四公園", "sub": "Tennozu Isle 4th Park", "note": "<b style=\"color:#9a6700\">MED<\/b>—OSM has 天王洲公園, not an exact name match", "lat": 35.619645, "lon": 139.750009, "section": 2, "icon": -1, "distText": "", "distFrom": ""}, {"key": "35.61888,139.74433", "n": 2, "name": "聖蹟公園", "sub": "Seiseki Park", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact", "lat": 35.618878, "lon": 139.744325, "section": 2, "icon": -1, "distText": "521 m", "distFrom": "previous stop"}, {"key": "35.61552,139.74408", "n": 3, "name": "街道松の広場", "sub": "Kaido-matsu Plaza", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact named feature", "lat": 35.615515, "lon": 139.744081, "section": 2, "icon": -1, "distText": "375 m", "distFrom": "previous stop"}, {"key": "35.60366,139.74391", "n": 4, "name": "鮫洲入江広場", "sub": "Sameju Irie Plaza", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact named feature", "lat": 35.603655, "lon": 139.743908, "section": 2, "icon": -1, "distText": "1.3 km", "distFrom": "previous stop"}, {"key": "34.75686,135.52790", "n": 1, "name": "浜屋敷 歴史文化まちづくりセンター", "sub": "Hamayashiki", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact", "lat": 34.756856, "lon": 135.527895, "section": 3, "icon": -1, "distText": "", "distFrom": ""}, {"key": "34.75863,135.50002", "n": 2, "name": "銀の鳥", "sub": "Gin no Tori sculpture", "note": "<b style=\"color:#cf222e\">LOW<\/b>—Esaka Park centroid; sculpture position unknown", "lat": 34.758626, "lon": 135.500023, "section": 3, "icon": -1, "distText": "2.5 km", "distFrom": "previous stop"}, {"key": "34.75863,135.50002#2", "n": 3, "name": "江坂公園周辺の文化財", "sub": "Esaka Park heritage marker", "note": "<b style=\"color:#cf222e\">LOW<\/b>—same centroid as 銀の鳥—must be a different spot", "lat": 34.758626, "lon": 135.500023, "section": 3, "icon": -1, "distText": "0 m", "distFrom": "previous stop"}, {"key": "34.79622,135.50901", "n": 4, "name": "千里南公園のベル", "sub": "Senri-minami Park bell", "note": "<b style=\"color:#cf222e\">LOW<\/b>—park centroid; bell position unknown", "lat": 34.796217, "lon": 135.50901, "section": 3, "icon": -1, "distText": "4.3 km", "distFrom": "previous stop"}, {"key": "34.80620,135.53136", "n": 5, "name": "万博記念公園駅前モニュメント", "sub": "Banpaku-kinen-koen stn monument", "note": "<b style=\"color:#9a6700\">MED<\/b>—station forecourt", "lat": 34.806196, "lon": 135.531359, "section": 3, "icon": -1, "distText": "2.3 km", "distFrom": "previous stop"}, {"key": "32.75933,129.86463", "n": 1, "name": "長崎スタジアムシティ", "sub": "Nagasaki Stadium City", "note": "<b style=\"color:#9a6700\">MED<\/b>—large complex", "lat": 32.759331, "lon": 129.864632, "section": 4, "icon": -1, "distText": "", "distFrom": ""}, {"key": "32.75273,129.86902", "n": 2, "name": "おのうえの丘", "sub": "Onoue no Oka", "note": "<b style=\"color:#cf222e\">LOW<\/b>—Onoue-machi district centroid", "lat": 32.75273, "lon": 129.869022, "section": 4, "icon": -1, "distText": "841 m", "distFrom": "previous stop"}, {"key": "32.75165,129.87107", "n": 3, "name": "アミュプラザ長崎の大時計", "sub": "Amu Plaza clock", "note": "<b style=\"color:#9a6700\">MED<\/b>—mall building; clock inside", "lat": 32.751648, "lon": 129.871069, "section": 4, "icon": -1, "distText": "226 m", "distFrom": "previous stop"}, {"key": "32.75299,129.87945", "n": 4, "name": "長崎歴史文化博物館", "sub": "Museum of History and Culture", "note": "<b style=\"color:#1a7f37\">HIGH<\/b>—exact", "lat": 32.752994, "lon": 129.879453, "section": 4, "icon": -1, "distText": "798 m", "distFrom": "previous stop"}, {"key": "32.74862,129.87992", "n": 5, "name": "魚の町公園", "sub": "Uonomachi Park", "note": "<b style=\"color:#cf222e\">LOW<\/b>—district centroid, park not in OSM", "lat": 32.74862, "lon": 129.879922, "section": 4, "icon": -1, "distText": "488 m", "distFrom": "previous stop"}, {"key": "32.74463,129.87382", "n": 6, "name": "長崎県庁舎跡地", "sub": "Former Prefectural Office site", "note": "<b style=\"color:#9a6700\">MED<\/b>—Edomachi district; site not in OSM", "lat": 32.744627, "lon": 129.873818, "section": 4, "icon": -1, "distText": "723 m", "distFrom": "previous stop"}, {"key": "32.74302,129.87508", "n": 7, "name": "新地橋広場", "sub": "Shinchibashi Plaza", "note": "<b style=\"color:#9a6700\">MED<\/b>—nearest tram stop", "lat": 32.743023, "lon": 129.875077, "section": 4, "icon": -1, "distText": "214 m", "distFrom": "previous stop"}, {"key": "32.74079,129.86883", "n": 8, "name": "水辺の森公園", "sub": "Mizube no Mori Park", "note": "<b style=\"color:#9a6700\">MED<\/b>—large waterfront park", "lat": 32.740795, "lon": 129.868831, "section": 4, "icon": -1, "distText": "635 m", "distFrom": "previous stop"}], "sections": [{"name": "Tokyo: Minato City", "count": 5}, {"name": "Tokyo: Koto City", "count": 4}, {"name": "Tokyo: Shinagawa City", "count": 4}, {"name": "Suita City", "count": 5}, {"name": "Nagasaki City", "count": 8}], "storageKey": "jprally.v2", "reset": true, "hint": "", "gpx": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<gpx version=\"1.1\" creator=\"coord-link-page\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n\t<wpt lat=\"35.66709900\" lon=\"139.75784600\"><name>1. SL広場 C11 292号 · SL Plaza, C11 292<\/name><\/wpt>\n\t<wpt lat=\"35.66328700\" lon=\"139.75148500\"><name>2. 港区立鞆絵小学校校舎跡碑 · Tomoe Elementary site monument<\/name><\/wpt>\n\t<wpt lat=\"35.66661400\" lon=\"139.74503300\"><name>3. 江戸見坂 · Edomizaka<\/name><\/wpt>\n\t<wpt lat=\"35.65844900\" lon=\"139.74553600\"><name>4. 東京タワー · Tokyo Tower<\/name><\/wpt>\n\t<wpt lat=\"35.65825600\" lon=\"139.74667300\"><name>5. 芝公園 Gym Statue · Shiba Park gym statue<\/name><\/wpt>\n\t<wpt lat=\"35.67495700\" lon=\"139.82936200\"><name>1. 仙台堀川公園 赤ちゃん噴水池 · Sendaiborikawa baby fountain<\/name><\/wpt>\n\t<wpt lat=\"35.67264700\" lon=\"139.81730400\"><name>2. 江東区役所 · Koto City Office<\/name><\/wpt>\n\t<wpt lat=\"35.67451300\" lon=\"139.81468400\"><name>3. イースト21 女神の噴水 · East 21 Goddess Fountain<\/name><\/wpt>\n\t<wpt lat=\"35.67977500\" lon=\"139.80878800\"><name>4. 東京都現代美術館 入口 · MOT entrance<\/name><\/wpt>\n\t<wpt lat=\"35.61964500\" lon=\"139.75000900\"><name>1. 天王洲アイル第四公園 · Tennozu Isle 4th Park<\/name><\/wpt>\n\t<wpt lat=\"35.61887800\" lon=\"139.74432500\"><name>2. 聖蹟公園 · Seiseki Park<\/name><\/wpt>\n\t<wpt lat=\"35.61551500\" lon=\"139.74408100\"><name>3. 街道松の広場 · Kaido-matsu Plaza<\/name><\/wpt>\n\t<wpt lat=\"35.60365500\" lon=\"139.74390800\"><name>4. 鮫洲入江広場 · Sameju Irie Plaza<\/name><\/wpt>\n\t<wpt lat=\"34.75685600\" lon=\"135.52789500\"><name>1. 浜屋敷 歴史文化まちづくりセンター · Hamayashiki<\/name><\/wpt>\n\t<wpt lat=\"34.75862600\" lon=\"135.50002300\"><name>2. 銀の鳥 · Gin no Tori sculpture<\/name><\/wpt>\n\t<wpt lat=\"34.75862600\" lon=\"135.50002300\"><name>3. 江坂公園周辺の文化財 · Esaka Park heritage marker<\/name><\/wpt>\n\t<wpt lat=\"34.79621700\" lon=\"135.50901000\"><name>4. 千里南公園のベル · Senri-minami Park bell<\/name><\/wpt>\n\t<wpt lat=\"34.80619600\" lon=\"135.53135900\"><name>5. 万博記念公園駅前モニュメント · Banpaku-kinen-koen stn monument<\/name><\/wpt>\n\t<wpt lat=\"32.75933100\" lon=\"129.86463200\"><name>1. 長崎スタジアムシティ · Nagasaki Stadium City<\/name><\/wpt>\n\t<wpt lat=\"32.75273000\" lon=\"129.86902200\"><name>2. おのうえの丘 · Onoue no Oka<\/name><\/wpt>\n\t<wpt lat=\"32.75164800\" lon=\"129.87106900\"><name>3. アミュプラザ長崎の大時計 · Amu Plaza clock<\/name><\/wpt>\n\t<wpt lat=\"32.75299400\" lon=\"129.87945300\"><name>4. 長崎歴史文化博物館 · Museum of History and Culture<\/name><\/wpt>\n\t<wpt lat=\"32.74862000\" lon=\"129.87992200\"><name>5. 魚の町公園 · Uonomachi Park<\/name><\/wpt>\n\t<wpt lat=\"32.74462700\" lon=\"129.87381800\"><name>6. 長崎県庁舎跡地 · Former Prefectural Office site<\/name><\/wpt>\n\t<wpt lat=\"32.74302300\" lon=\"129.87507700\"><name>7. 新地橋広場 · Shinchibashi Plaza<\/name><\/wpt>\n\t<wpt lat=\"32.74079500\" lon=\"129.86883100\"><name>8. 水辺の森公園 · Mizube no Mori Park<\/name><\/wpt>\n\t<trk>\n\t\t<name>Tokyo: Minato City<\/name>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"35.66709900\" lon=\"139.75784600\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.66328700\" lon=\"139.75148500\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.66661400\" lon=\"139.74503300\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.65844900\" lon=\"139.74553600\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.65825600\" lon=\"139.74667300\"><\/trkpt>\n\t\t<\/trkseg>\n\t<\/trk>\n\t<trk>\n\t\t<name>Tokyo: Koto City<\/name>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"35.67495700\" lon=\"139.82936200\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.67264700\" lon=\"139.81730400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.67451300\" lon=\"139.81468400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.67977500\" lon=\"139.80878800\"><\/trkpt>\n\t\t<\/trkseg>\n\t<\/trk>\n\t<trk>\n\t\t<name>Tokyo: Shinagawa City<\/name>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"35.61964500\" lon=\"139.75000900\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.61887800\" lon=\"139.74432500\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.61551500\" lon=\"139.74408100\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.60365500\" lon=\"139.74390800\"><\/trkpt>\n\t\t<\/trkseg>\n\t<\/trk>\n\t<trk>\n\t\t<name>Suita City<\/name>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"34.75685600\" lon=\"135.52789500\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.75862600\" lon=\"135.50002300\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.75862600\" lon=\"135.50002300\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.79621700\" lon=\"135.50901000\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.80619600\" lon=\"135.53135900\"><\/trkpt>\n\t\t<\/trkseg>\n\t<\/trk>\n\t<trk>\n\t\t<name>Nagasaki City<\/name>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"32.75933100\" lon=\"129.86463200\"><\/trkpt>\n\t\t\t<trkpt lat=\"32.75273000\" lon=\"129.86902200\"><\/trkpt>\n\t\t\t<trkpt lat=\"32.75164800\" lon=\"129.87106900\"><\/trkpt>\n\t\t\t<trkpt lat=\"32.75299400\" lon=\"129.87945300\"><\/trkpt>\n\t\t\t<trkpt lat=\"32.74862000\" lon=\"129.87992200\"><\/trkpt>\n\t\t\t<trkpt lat=\"32.74462700\" lon=\"129.87381800\"><\/trkpt>\n\t\t\t<trkpt lat=\"32.74302300\" lon=\"129.87507700\"><\/trkpt>\n\t\t\t<trkpt lat=\"32.74079500\" lon=\"129.86883100\"><\/trkpt>\n\t\t<\/trkseg>\n\t<\/trk>\n<\/gpx>\n", "fileStem": "jp-stamp-rallies", "viewerUrl": "https://innoengserv.com/gpx-viewer.com/", "buttonIcons": {"ipogo": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"iPogo\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"ipogoButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#ipogoButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#00677a\"/> <path d=\"M-2 57Q60 37 122 57V-2H-2Z\" fill=\"#008474\"/> <path d=\"M-3 60Q60 40 123 60\" fill=\"none\" stroke=\"#fff\" stroke-width=\"8\"/> <path d=\"M60 29C45 29 39 38 40 52c1 13 12 20 17 38 1 4 5 4 6 0 5-18 16-25 17-38 1-14-5-23-20-23Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/> <circle cx=\"60\" cy=\"51\" r=\"9\" fill=\"#00677a\" stroke=\"#fff\" stroke-width=\"3.5\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>", "joystick": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"GPS JoyStick\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"gpsJoystickButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#gpsJoystickButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#8BC34A\"/> <ellipse cx=\"60\" cy=\"96\" rx=\"20\" ry=\"7\" fill=\"none\" stroke=\"#1976D2\" stroke-width=\"6\"/> <path d=\"M60 26C48 26 39 35 39 46c0 12 10 20 19 39 1 3 2 3 3 0 9-19 19-27 19-39 0-11-9-20-20-20Z\" fill=\"#1976D2\"/> <circle cx=\"60\" cy=\"47\" r=\"9\" fill=\"#2196F3\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>", "maps": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"Maps\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"mapsButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#mapsButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#f1f3f4\"/> <path d=\"M-2 78 40 52l40 22 42-24v75H-2Z\" fill=\"#a5d6a7\"/> <path d=\"M-2 92 38 68l42 22 42-24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"7\"/> <path d=\"M60 18C47 18 38 28 38 40c0 15 14 24 20 44 1 3 3 3 4 0 6-20 20-29 20-44 0-12-9-22-22-22Z\" fill=\"#ea4335\"/> <circle cx=\"60\" cy=\"40\" r=\"8.5\" fill=\"#fff\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>"}, "icons": []};
   var POINTS = D.points;
   // Long distances: tighten the letter spacing, then shrink the text in half-pixel steps until it fits the pill.
   // 2026-10-10 BEFORE: every pill 68px wide (the CSS). WHY: Bart: wasted room now that distances are shorter (no decimals
@@ -229,7 +242,8 @@
     var n = ++iconSeq;
     return '<span class="ico">' + ICONS[name].replace(/id="([^"]+)"/g, 'id="$1' + n + '"').replace(/url\(#([^)]+)\)/g, 'url(#$1' + n + ')') + '</span>';
   }
-  if (POINTS.some(function (p) { return p.icon; })) document.body.classList.add('icons');
+  // Rows hold an index into D.icons (each distinct picture stored once), -1 for none.
+  if (POINTS.some(function (p) { return p.icon >= 0; })) document.body.classList.add('icons');
   // Teleport app and second button are a per-device preference, shared with the Pokémap quest Export pages.
   var PREFS_KEY = 'pokemap_quest_export_prefs_v1';
   var prefs = { teleport: 'joystick', second: 'copy' };
@@ -341,19 +355,33 @@
   // 2026-10-11 BEFORE: every Done, link or Copy tap rebuilt the whole list. WHY: slow on big pages (482 stops: ~1 s per
   // tap on Bart's phone, and a link only opened after it). NOW: render() for whole-page changes; a single stop's change
   // redraws its row and the counts (updateRow). Rows come from the same buildRow either way, so they look the same.
-  var rowEls = {}, sectionEls = {}, BY_KEY = {};
+  var rowEls = {}, sectionEls = {}, subEls = {}, BY_KEY = {};
   POINTS.forEach(function (p) { BY_KEY[p.key] = p; });
   function render() {
     list.innerHTML = '';
-    rowEls = {}; sectionEls = {};
+    rowEls = {}; sectionEls = {}; subEls = {};
     var hintShown = false;
-    var lastSection = null;
-    // 2026-10-12 BEFORE: Hide done hid done rows only, so a finished section stayed as a bare heading (Bart). NOW: with
-    // Hide done on, a finished section's heading is left out too.
+    var lastSection = null, subNext = 0;
+    // 2026-10-12 BEFORE: Hide done hid done rows only, so finished prefectures and collections stayed as bare headings
+    // (Bart, Poké Lid page). NOW: with Hide done on, a finished or empty (0 / 0) subsection's heading and a finished
+    // section's heading are left out too, so only what's left to do shows.
     var finished = hideDone ? finishedHeadings() : {};
+    // Subsection headings of section si up to index upto (empty subsections included), each once, in order.
+    function emitSubs(si, upto) {
+      var subs = D.sections[si].subs;
+      if (!subs) return;
+      for (; subNext <= upto && subNext < subs.length; subNext++) {
+        if (finished[si + '.' + subNext]) continue;
+        var h3 = document.createElement('h3');
+        subEls[si + '.' + subNext] = h3;
+        list.appendChild(h3);
+      }
+    }
     POINTS.forEach(function (p) {
       var isDone = !!state[p.key];
       if (p.section !== lastSection) {
+        if (lastSection !== null) emitSubs(lastSection, Infinity);
+        subNext = 0;
         lastSection = p.section;
         var sec = D.sections[p.section];
         if (sec.name && !finished[p.section]) {
@@ -362,6 +390,7 @@
           list.appendChild(h2);
         }
       }
+      if (p.subsection != null) emitSubs(p.section, p.subsection);
       if (hideDone && isDone) return;
       if (!hintShown && D.hint) {
         hintShown = true;
@@ -372,6 +401,7 @@
       }
       list.appendChild(buildRow(p));
     });
+    if (lastSection !== null) emitSubs(lastSection, Infinity);
     fitPills();
     updateCounts();
   }
@@ -381,9 +411,10 @@
     row.className = 'row' + (isDone ? ' done' : '');
     row.dataset.key = p.key;
     if (document.body.classList.contains('icons')) {
-      var ic = document.createElement(p.icon ? 'img' : 'span');
-      ic.className = p.icon ? 'qicon' : 'noicon';
-      if (p.icon) { ic.alt = ''; ic.src = p.icon; }
+      var hasIcon = p.icon >= 0;
+      var ic = document.createElement(hasIcon ? 'img' : 'span');
+      ic.className = hasIcon ? 'qicon' : 'noicon';
+      if (hasIcon) { ic.alt = ''; ic.src = D.icons[p.icon]; }
       row.appendChild(ic);
     }
     // One line that scrolls sideways: leg distance, number + name (bold), details, then the less critical
@@ -493,8 +524,17 @@
     return row;
   }
   function updateCounts() {
-    var doneCount = 0, sectionDone = {};
-    POINTS.forEach(function (p) { if (state[p.key]) { doneCount++; sectionDone[p.section] = (sectionDone[p.section] || 0) + 1; } });
+    var doneCount = 0, sectionDone = {}, subDone = {};
+    POINTS.forEach(function (p) {
+      if (!state[p.key]) return;
+      doneCount++; sectionDone[p.section] = (sectionDone[p.section] || 0) + 1;
+      if (p.subsection != null) subDone[p.section + '.' + p.subsection] = (subDone[p.section + '.' + p.subsection] || 0) + 1;
+    });
+    Object.keys(subEls).forEach(function (k) {
+      var ix = k.split('.'), sub = D.sections[ix[0]].subs[ix[1]], sd = subDone[k] || 0, h3 = subEls[k];
+      h3.innerHTML = sub.name + ' <span class="c">' + sd + ' / ' + sub.count + '</span>';
+      h3.className = sub.count === 0 ? 'empty' : (sd === sub.count ? 'complete' : '');
+    });
     Object.keys(sectionEls).forEach(function (si) {
       var sec = D.sections[si], sd = sectionDone[si] || 0, h2 = sectionEls[si];
       h2.innerHTML = sec.name + ' <span class="c">' + (sd ? sd + ' / ' : '') + sec.count + '</span>';
@@ -508,23 +548,27 @@
   }
   // One stop changed: swap in a freshly built row. With Hide done on, a stop just marked done is removed; anything
   // else there (a row that must reappear, or a page with a hint box above the first visible row) redraws everything.
-  // Section index → true when all its stops are done.
+  // Section index → true when all its stops are done; "si.k" → true when subsection k is done or empty.
   function finishedHeadings() {
     var total = {}, done = {}, out = {};
     POINTS.forEach(function (p) {
       if (p.tba) return;
-      total[p.section] = (total[p.section] || 0) + 1;
-      if (state[p.key]) done[p.section] = (done[p.section] || 0) + 1;
+      var ks = [String(p.section)].concat(p.subsection != null ? [p.section + '.' + p.subsection] : []);
+      ks.forEach(function (k) { total[k] = (total[k] || 0) + 1; if (state[p.key]) done[k] = (done[k] || 0) + 1; });
     });
-    D.sections.forEach(function (sec, si) { if (sec.count && done[si] === total[si]) out[si] = true; });
+    D.sections.forEach(function (sec, si) {
+      if (sec.count && done[si] === total[si]) out[si] = true;
+      (sec.subs || []).forEach(function (sub, k) { if (!sub.count || done[si + '.' + k] === total[si + '.' + k]) out[si + '.' + k] = true; });
+    });
     return out;
   }
   function updateRow(key) {
     var p = BY_KEY[key], old = rowEls[key];
     if (!p) return;
     if (hideDone) {
-      // A stop that finishes its section takes the heading with it: redraw (see render).
-      var closes = state[key] && finishedHeadings()[p.section];
+      // A stop that finishes its subsection or section takes the heading with it: redraw (see render).
+      var f = finishedHeadings();
+      var closes = state[key] && (f[p.section] || (p.subsection != null && f[p.section + '.' + p.subsection]));
       if (old && state[key] && !D.hint && !closes) { old.remove(); delete rowEls[key]; updateCounts(); }
       else render();
       return;
@@ -591,20 +635,90 @@
   // GPX: built with the page (layout in the skill's references/gpx-apps.md) and also written next to it as <page>.gpx.
   // GPX downloads it (when the file isn't at hand); Copy GPX copies it, only when tapped, because iPogo imports a route
   // by pasting its text; Map hands the viewer exactly this text, so file, clipboard and map never disagree.
-  document.getElementById('gpxBtn').addEventListener('click', function () {
-    download(D.gpx, 'application/gpx+xml', D.fileStem + '.gpx');
+  // Done stops and the route buttons (2026-10-13, Bart chose "follow Hide done" + a hint either way). BEFORE: Copy,
+  // GPX/JoyRoute and Map always used the whole route. WHY: sending stops already done (e.g. to JoyRoute) makes no sense,
+  // and Hide done is the page's one switch for "what's left". NOW: with Hide done on, all four use only the stops not
+  // done (their waypoints and track points are taken out of the page's GPX, so names, numbering and the home marker
+  // stay); with it off, the whole route. When some stops are done, a short message after the tap says which it was.
+  function doneCount() { return POINTS.filter(function (p) { return !!state[p.key]; }).length; }
+  function routeGpx(full) {
+    if (!hideDone || !doneCount()) return full;
+    var done = {};
+    POINTS.forEach(function (p) { if (state[p.key] && p.lat != null) done[(+p.lat).toFixed(5) + ',' + (+p.lon).toFixed(5)] = true; });
+    var doc = new DOMParser().parseFromString(full, 'application/xml');
+    ['wpt', 'trkpt', 'rtept'].forEach(function (tag) {
+      Array.prototype.slice.call(doc.getElementsByTagName(tag)).forEach(function (el) {
+        if (done[(+el.getAttribute('lat')).toFixed(5) + ',' + (+el.getAttribute('lon')).toFixed(5)]) el.parentNode.removeChild(el);
+      });
+    });
+    return '<?xml version="1.0" encoding="UTF-8"?>\n' + new XMLSerializer().serializeToString(doc.documentElement);
+  }
+  var routeHintEl = null, routeHintTimer = 0;
+  function routeHint(before, after) {
+    var d = doneCount(), total = POINTS.length;
+    if (!d) return;
+    var left = total - d, what = hideDone ? 'the ' + left + (left === 1 ? ' stop' : ' stops') + ' left' : 'all ' + total + ' stops, including ' + d + ' done';
+    if (!routeHintEl) { routeHintEl = document.createElement('div'); routeHintEl.className = 'route-hint'; document.body.appendChild(routeHintEl); }
+    routeHintEl.textContent = before + (after ? ' ' + after : '') + ': ' + what + (hideDone ? ' (Hide done is on)' : '. Turn on Hide done to leave them out');
+    routeHintEl.classList.add('show');
+    clearTimeout(routeHintTimer);
+    routeHintTimer = setTimeout(function () { routeHintEl.classList.remove('show'); }, 4500);
+  }
+  // GPX / JoyRoute button and Copy button (template, 2026-10-13, Bart; same as Pokémap 7.55). BEFORE: header "Copy GPX" (copy icon) and
+  // "GPX" (download arrow; a tap downloaded the file). WHY: Bart wants the route in JoyRoute without hunting through
+  // Downloads. Sharing the file was tried first: Chrome-based browsers refuse to share .gpx files ("Permission denied";
+  // Web Share allows only images, media, PDF, text, HTML, CSV), so the button opens JoyRoute through a link that carries
+  // the GPX itself (joyroute://import?name=&gpx=, JoyRoute's import screen). NOW: with the page's JoyRoute switch on
+  // (localStorage joyroute = on, the same switch as the teleport links) on Android, the button reads "JoyRoute" with
+  // JoyRoute's launcher icon and a tap opens the route in JoyRoute; otherwise it reads "GPX" with the download arrow and
+  // a tap downloads as before. A long-press (or Shift+click) always downloads. "Copy GPX" became "Copy" with the iPogo
+  // icon (it copies the GPX for iPogo), because "JoyRoute" + "Copy GPX" don't fit one line at 412 px (3 px over).
+  var JOYROUTE_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#2E7D32"/><g transform="translate(5.33 5.33) scale(.556)"><path fill="#fff" d="M19,15.18V7c0,-2.21 -1.79,-4 -4,-4s-4,1.79 -4,4v10c0,1.1 -0.9,2 -2,2s-2,-0.9 -2,-2V8.82C8.16,8.4 9,7.3 9,6c0,-1.66 -1.34,-3 -3,-3S3,4.34 3,6c0,1.3 0.84,2.4 2,2.82V17c0,2.21 1.79,4 4,4s4,-1.79 4,-4V7c0,-1.1 0.9,-2 2,-2s2,0.9 2,2v8.18c-1.16,0.41 -2,1.51 -2,2.82c0,1.66 1.34,3 3,3s3,-1.34 3,-3C21,16.7 20.16,15.6 19,15.18z"/></g></svg>';
+  var gpxBtn = document.getElementById('gpxBtn');
+  var GPX_NAME = D.fileStem + '.gpx';
+  var GPX_TO_JOYROUTE = USE_JOYROUTE && /Android/i.test(navigator.userAgent);
+  function downloadGpx() { download(routeGpx(D.gpx), 'application/gpx+xml', GPX_NAME); routeHint('Downloaded'); }
+  if (GPX_TO_JOYROUTE) {
+    gpxBtn.innerHTML = JOYROUTE_ICON + 'JoyRoute';
+    gpxBtn.title = 'Open the route in JoyRoute (adds it to GPS JoyStick); long-press: download the GPX file';
+  }
+  var copyIcon = document.querySelector('#copyGpxBtn svg');
+  if (copyIcon && ICONS.ipogo) copyIcon.outerHTML = ICONS.ipogo;
+  var gpxPressTimer = 0, gpxLongPress = false, gpxIgnoreClickUntil = 0;
+  gpxBtn.addEventListener('pointerdown', function (e) {
+    if (e.pointerType === 'mouse') return;
+    gpxLongPress = false;
+    clearTimeout(gpxPressTimer);
+    gpxPressTimer = setTimeout(function () { gpxLongPress = true; }, 500);
+  });
+  gpxBtn.addEventListener('pointerup', function (e) {
+    clearTimeout(gpxPressTimer);
+    if (e.pointerType === 'mouse' || !gpxLongPress) return;
+    gpxLongPress = false;
+    gpxIgnoreClickUntil = Date.now() + 800;
+    downloadGpx();
+  });
+  gpxBtn.addEventListener('pointercancel', function () { clearTimeout(gpxPressTimer); gpxLongPress = false; });
+  gpxBtn.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  gpxBtn.addEventListener('click', function (e) {
+    if (Date.now() < gpxIgnoreClickUntil) return;
+    if (!GPX_TO_JOYROUTE || e.shiftKey) { downloadGpx(); return; }
+    routeHint('Sent', 'to JoyRoute');
+    location.href = 'joyroute://import?name=' + encodeURIComponent(GPX_NAME) + '&gpx=' + encodeURIComponent(routeGpx(D.gpx));
   });
   var copyGpxBtn = document.getElementById('copyGpxBtn');
   copyGpxBtn.addEventListener('click', function () {
     var lbl = copyGpxBtn.querySelector('span');
-    copyText(D.gpx).then(function () {
+    copyText(routeGpx(D.gpx)).then(function () {
+      routeHint('Copied');
       lbl.textContent = '\u2713 Copied';
       copyGpxBtn.title = 'GPX copied: paste it into iPogo';
-      setTimeout(function () { lbl.textContent = 'Copy GPX'; }, 2500);
+      setTimeout(function () { lbl.textContent = 'Copy'; }, 2500);
     });
   });
   document.getElementById('mapBtn').addEventListener('click', function () {
-    window.open(D.viewerUrl + '#gpx=' + encodeURIComponent(D.gpx), '_blank');
+    routeHint('Showing', 'on the map');
+    window.open(D.viewerUrl + '#gpx=' + encodeURIComponent(routeGpx(D.gpx)), '_blank');
   });
   render();
   // Location only when already allowed (no prompt on load); "start" pills ask when tapped. Re-read it when you come

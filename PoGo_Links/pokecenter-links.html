@@ -32,6 +32,14 @@
   #copyGpxBtn:active { box-shadow: 0 1px 0 #6448c8, 0 2px 6px rgba(111,79,196,.3); }
   #gpxBtn { background: linear-gradient(180deg, #ffb547, #f08a12); border: 1px solid #ffd08a; box-shadow: 0 3px 0 #9a5506, 0 6px 14px rgba(240,138,18,.35); }
   #gpxBtn:active { box-shadow: 0 1px 0 #9a5506, 0 2px 6px rgba(240,138,18,.3); }
+  /* 2026-10-13: a long-press downloads; without this it selected the label text instead (seen on the phone). */
+  #gpxBtn { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  /* Route-button message (2026-10-13): says whether Copy/GPX/JoyRoute/Map used the stops left or the whole route. */
+  .route-hint { position: fixed; left: 0; right: 0; margin: 0 auto; width: fit-content; bottom: 130px; max-width: calc(100vw - 32px); box-sizing: border-box;
+                padding: 9px 14px; border-radius: 12px; background: rgba(40,40,38,.96); border: 1px solid #555; color: #e5e5e5;
+                font-size: 13px; line-height: 1.35; text-align: center; box-shadow: 0 6px 18px rgba(0,0,0,.5); z-index: 50;
+                opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .route-hint.show { opacity: 1; }
   #mapBtn { background: linear-gradient(180deg, #2fc4b2, #138f86); border: 1px solid #8ee8dd; box-shadow: 0 3px 0 #0b5d57, 0 6px 14px rgba(19,143,134,.35); }
   #mapBtn:active { box-shadow: 0 1px 0 #0b5d57, 0 2px 6px rgba(19,143,134,.3); }
   /* Home: back to the published list (absolute URL, so it also works from Drive/Solid Explorer copies). 2026-10-10. */
@@ -46,6 +54,11 @@
   h2 { font-size: 15px; margin: 18px 0 8px; padding-bottom: 3px; border-bottom: 1px solid #404040; color: #e5e5e5; }
   h2 .c { color: #9ca3af; font-weight: 400; font-size: 12px; }
   h2.complete { opacity: .5; }
+  /* Subsections (2026-10-11, the Poké Lid page's prefectures): indented 12px, a step smaller and lighter than h2, with a
+     fainter rule; the rows below stay full width so their buttons keep their size. "x / N" like the game's counts. */
+  h3 { font-size: 13.5px; font-weight: 600; margin: 12px 0 6px 12px; padding-bottom: 2px; border-bottom: 1px solid #383836; color: #d1d5db; }
+  h3 .c { color: #9ca3af; font-weight: 400; font-size: 12px; }
+  h3.complete, h3.empty { opacity: .5; }
   .toolbar { position: fixed; left: 0; right: 0; max-width: 412px; box-sizing: border-box; margin: 0 auto; bottom: 0; z-index: 10; background: #242422; border-top: 1px solid #404040; padding: 7px 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .toolbar button, .toolbar label { background: #353533; color: #d1d5db; border: 1px solid #404040; border-radius: 6px; padding: 6px 14px; font-size: 13px; cursor: pointer; }
   #status { order: -1; flex: 1 0 100%; display: flex; justify-content: space-between; gap: 8px; font-weight: 600; color: #9ca3af; font-size: 13px; opacity: .85; padding-bottom: 2px; }
@@ -134,7 +147,7 @@
   .toolbar .brk { flex-basis: 100%; height: 0; }
   /* 2026-10-10 BEFORE: toolbar buttons at their natural widths, rows ragged. WHY: Mark all and Home were added (Bart)
      and his symmetry rule. NOW: toolbar buttons share each row equally (Hide done · Undo last · Mark all · Reset all,
-     then Export · Import); header labels never wrap (Home · Copy GPX · GPX · Map fit one line at 412 px). */
+     then Export · Import); header labels never wrap (Home · Copy GPX · GPX · Map fit one line at 412 px; 2026-10-13: Home · Copy · JoyRoute · Map, 10 px gaps). */
   .hbtn { white-space: nowrap; }
   .toolbar button, .toolbar label { flex: 1 1 0; min-width: 0; padding: 6px 4px; text-align: center; white-space: nowrap; }
   .toolbar { row-gap: 4px; } /* the break is an empty flex line, so the rows' gap counts twice around it */
@@ -148,7 +161,7 @@
 </head>
 <body>
 <div class="top"><h1>Pokémon Center Stamp Rally—complete, 18 of 18</h1><div class="sub">1 Jul 2026 – 31 Aug 2027 · every Pokémon Center in Japan · each gives a Pikachu with that centre&rsquo;s exclusive background · 2836 km end to end</div></div>
-<div class="head"><a id="homeBtn" class="hbtn" href="https://bartmaneh.github.io/PoGo_Links/" title="Back to the PoGO Link Pages list"><svg viewBox="8 8 48 48" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#263238" stroke="#26c6da" stroke-width="5"/><path d="M19 32.5 32 21l13 11.5-3.4 3L40 34.1V45H34v-8h-4v8h-6V34.1l-1.6 1.4z" fill="#fff" stroke="#fff" stroke-linejoin="round"/></svg>Home</a><button id="copyGpxBtn" class="hbtn" title="Copy the route's GPX text (to paste into iPogo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy GPX</span></button><button id="gpxBtn" class="hbtn" title="Download the route as a GPX file (iPogo, GPS JoyStick)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>GPX</button><button id="mapBtn" class="hbtn" title="Open the route in the GPX viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Map</button></div>
+<div class="head"><a id="homeBtn" class="hbtn" href="https://bartmaneh.github.io/PoGo_Links/" title="Back to the PoGO Link Pages list"><svg viewBox="8 8 48 48" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#263238" stroke="#26c6da" stroke-width="5"/><path d="M19 32.5 32 21l13 11.5-3.4 3L40 34.1V45H34v-8h-4v8h-6V34.1l-1.6 1.4z" fill="#fff" stroke="#fff" stroke-linejoin="round"/></svg>Home</a><button id="copyGpxBtn" class="hbtn" title="Copy the route's GPX text (to paste into iPogo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span></button><button id="gpxBtn" class="hbtn" title="Download the route as a GPX file (iPogo, GPS JoyStick)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>GPX</button><button id="mapBtn" class="hbtn" title="Open the route in the GPX viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Map</button></div>
 <div class="note">Coordinates are the official ones from each centre&rsquo;s page on shop.pokemon.co.jp (taken from its embedded map), so these are the buildings—not confirmed PokéStop positions. Several centres sit inside large stations or malls.</div>
 <div class="switches">
   <div class="toggle" id="teleportToggle"><span class="opt" data-v="ipogo">iPogo</span><button class="sw" aria-label="iPogo or GPS JoyStick"></button><span class="opt" data-v="joystick" data-t="GPS JoyStick">GPS JoyStick</span></div>
@@ -173,7 +186,7 @@
   // or =off (JoyRoute's Settings, "Link pages"). Read once; GPS JoyStick buttons use it below.
   var USE_JOYROUTE = false;
   try { USE_JOYROUTE = localStorage.getItem('joyroute') === 'on'; } catch (e) {}
-  var D = {"points": [{"key": "26.31409,127.79630", "n": 1, "name": "ポケモンセンターオキナワ", "sub": "Okinawa", "note": "〒901-2306沖縄県中頭郡北中城村字ライカム1イオンモール沖縄ライカム 1F", "lat": 26.314085, "lon": 127.7963, "section": 0, "icon": "", "distText": "", "distFrom": ""}, {"key": "33.58900,130.41926", "n": 2, "name": "ポケモンセンターフクオカ", "sub": "Fukuoka", "note": "〒812-0012福岡県福岡市博多区博多駅中央街9-1博多マルイ 2F", "lat": 33.589003, "lon": 130.419256, "section": 0, "icon": "", "distText": "847 km", "distFrom": "previous stop"}, {"key": "34.39862,132.47597", "n": 3, "name": "ポケモンセンターヒロシマ", "sub": "Hiroshima", "note": "〒732-0822広島県広島市南区松原町1-2ekie 2F", "lat": 34.398624, "lon": 132.475974, "section": 0, "icon": "", "distText": "210 km", "distFrom": "previous stop"}, {"key": "34.34228,134.05006", "n": 4, "name": "ポケモンセンターカガワ", "sub": "Kagawa", "note": "〒760-0029香川県高松市丸亀町8-23丸亀町グリーン 東館 1F", "lat": 34.342282, "lon": 134.050061, "section": 0, "icon": "", "distText": "145 km", "distFrom": "previous stop"}, {"key": "34.67317,135.50075", "n": 5, "name": "ポケモンセンターオーサカDX", "sub": "Osaka DX", "note": "〒542-8501大阪府大阪市中央区心斎橋筋1-7-1大丸心斎橋店 本館 9F", "lat": 34.673172, "lon": 135.500754, "section": 0, "icon": "", "distText": "138 km", "distFrom": "previous stop"}, {"key": "34.70185,135.49656", "n": 6, "name": "ポケモンセンターオーサカ", "sub": "Osaka", "note": "〒530-8373大阪府大阪市北区梅田3-1-1ルクア サウス 13F", "lat": 34.701853, "lon": 135.496559, "section": 0, "icon": "", "distText": "3.2 km", "distFrom": "previous stop"}, {"key": "35.00342,135.75838", "n": 7, "name": "ポケモンセンターキョウト", "sub": "Kyoto", "note": "〒600-8009京都府京都市下京区四条通室町東入函谷鉾町78京都経済センター SUINA室町 2F", "lat": 35.003417, "lon": 135.758384, "section": 0, "icon": "", "distText": "41.2 km", "distFrom": "previous stop"}, {"key": "35.16363,136.90803", "n": 8, "name": "ポケモンセンターナゴヤ", "sub": "Nagoya", "note": "〒460-0008愛知県名古屋市中区栄3-29-1名古屋PARCO 東館 2F", "lat": 35.163626, "lon": 136.90803, "section": 0, "icon": "", "distText": "106 km", "distFrom": "previous stop"}, {"key": "36.57915,136.64975", "n": 9, "name": "ポケモンセンターカナザワ", "sub": "Kanazawa", "note": "〒920-0849石川県金沢市堀川新町3-1金沢フォーラス 5F", "lat": 36.579148, "lon": 136.649754, "section": 0, "icon": "", "distText": "159 km", "distFrom": "previous stop"}, {"key": "35.46457,139.62449", "n": 10, "name": "ポケモンセンターヨコハマ", "sub": "Yokohama", "note": "main Yokohama centre; the satellite store is NOT part of the rally", "lat": 35.464572, "lon": 139.62449, "section": 0, "icon": "", "distText": "295 km", "distFrom": "previous stop"}, {"key": "35.66196,139.69844", "n": 11, "name": "ポケモンセンターシブヤ", "sub": "Shibuya", "note": "〒150-8377東京都渋谷区宇田川町15-1渋谷PARCO 6F", "lat": 35.661956, "lon": 139.698441, "section": 0, "icon": "", "distText": "22.9 km", "distFrom": "previous stop"}, {"key": "35.72907,139.71858", "n": 12, "name": "Pokémon GO Lab.", "sub": "Pokémon GO Lab (Ikebukuro)", "note": "inside Pokémon Center Mega Tokyo, 70 m from the centre&amp;rsquo;s own stop—confirmed in game", "lat": 35.72907, "lon": 139.71858, "section": 0, "icon": "", "distText": "7.7 km", "distFrom": "previous stop"}, {"key": "35.72891,139.71932", "n": 13, "name": "ポケモンセンターメガトウキョー", "sub": "Mega Tokyo (Ikebukuro)", "note": "Pokémon GO Lab is a separate stamp 70 m away, inside Sunshine City—do both", "lat": 35.728906, "lon": 139.719324, "section": 0, "icon": "", "distText": "70 m", "distFrom": "previous stop"}, {"key": "35.68029,139.77427", "n": 14, "name": "ポケモンセンタートウキョーDX", "sub": "Tokyo DX (Nihombashi)", "note": "〒103-0027東京都中央区日本橋2-11-2日本橋髙島屋S.C.東館 5F", "lat": 35.68029, "lon": 139.77427, "section": 0, "icon": "", "distText": "7.3 km", "distFrom": "previous stop"}, {"key": "35.71034,139.81261", "n": 15, "name": "ポケモンセンタースカイツリータウン", "sub": "Skytree Town", "note": "〒131-0045東京都墨田区押上1-1-2東京スカイツリータウン・ソラマチ イーストヤード 4F", "lat": 35.710345, "lon": 139.812612, "section": 0, "icon": "", "distText": "4.8 km", "distFrom": "previous stop"}, {"key": "35.68660,139.98904", "n": 16, "name": "ポケモンセンタートウキョーベイ", "sub": "Tokyo Bay", "note": "〒273-8530千葉県船橋市浜町2-1-1三井ショッピングパーク ららぽーとTOKYO-BAY 西館 2F", "lat": 35.686603, "lon": 139.989036, "section": 0, "icon": "", "distText": "16.1 km", "distFrom": "previous stop"}, {"key": "38.26216,140.88170", "n": 17, "name": "ポケモンセンタートウホク", "sub": "Tohoku (Sendai)", "note": "〒980-8484宮城県仙台市青葉区中央1-2-3仙台PARCO1 3F", "lat": 38.26216, "lon": 140.881702, "section": 0, "icon": "", "distText": "297 km", "distFrom": "previous stop"}, {"key": "43.06747,141.34927", "n": 18, "name": "ポケモンセンターサッポロ", "sub": "Sapporo", "note": "〒060-0005北海道札幌市中央区北5条西4-7大丸札幌店 8F", "lat": 43.067469, "lon": 141.349266, "section": 0, "icon": "", "distText": "536 km", "distFrom": "previous stop"}], "sections": [{"name": "", "count": 18}], "storageKey": "pokecenter.v1", "reset": true, "hint": "", "gpx": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<gpx version=\"1.1\" creator=\"coord-link-page\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n\t<wpt lat=\"26.31408500\" lon=\"127.79630000\"><name>1. ポケモンセンターオキナワ · Okinawa<\/name><\/wpt>\n\t<wpt lat=\"33.58900300\" lon=\"130.41925600\"><name>2. ポケモンセンターフクオカ · Fukuoka<\/name><\/wpt>\n\t<wpt lat=\"34.39862400\" lon=\"132.47597400\"><name>3. ポケモンセンターヒロシマ · Hiroshima<\/name><\/wpt>\n\t<wpt lat=\"34.34228200\" lon=\"134.05006100\"><name>4. ポケモンセンターカガワ · Kagawa<\/name><\/wpt>\n\t<wpt lat=\"34.67317200\" lon=\"135.50075400\"><name>5. ポケモンセンターオーサカDX · Osaka DX<\/name><\/wpt>\n\t<wpt lat=\"34.70185300\" lon=\"135.49655900\"><name>6. ポケモンセンターオーサカ · Osaka<\/name><\/wpt>\n\t<wpt lat=\"35.00341700\" lon=\"135.75838400\"><name>7. ポケモンセンターキョウト · Kyoto<\/name><\/wpt>\n\t<wpt lat=\"35.16362600\" lon=\"136.90803000\"><name>8. ポケモンセンターナゴヤ · Nagoya<\/name><\/wpt>\n\t<wpt lat=\"36.57914800\" lon=\"136.64975400\"><name>9. ポケモンセンターカナザワ · Kanazawa<\/name><\/wpt>\n\t<wpt lat=\"35.46457200\" lon=\"139.62449000\"><name>10. ポケモンセンターヨコハマ · Yokohama<\/name><\/wpt>\n\t<wpt lat=\"35.66195600\" lon=\"139.69844100\"><name>11. ポケモンセンターシブヤ · Shibuya<\/name><\/wpt>\n\t<wpt lat=\"35.72907000\" lon=\"139.71858000\"><name>12. Pokémon GO Lab. · Pokémon GO Lab (Ikebukuro)<\/name><\/wpt>\n\t<wpt lat=\"35.72890600\" lon=\"139.71932400\"><name>13. ポケモンセンターメガトウキョー · Mega Tokyo (Ikebukuro)<\/name><\/wpt>\n\t<wpt lat=\"35.68029000\" lon=\"139.77427000\"><name>14. ポケモンセンタートウキョーDX · Tokyo DX (Nihombashi)<\/name><\/wpt>\n\t<wpt lat=\"35.71034500\" lon=\"139.81261200\"><name>15. ポケモンセンタースカイツリータウン · Skytree Town<\/name><\/wpt>\n\t<wpt lat=\"35.68660300\" lon=\"139.98903600\"><name>16. ポケモンセンタートウキョーベイ · Tokyo Bay<\/name><\/wpt>\n\t<wpt lat=\"38.26216000\" lon=\"140.88170200\"><name>17. ポケモンセンタートウホク · Tohoku (Sendai)<\/name><\/wpt>\n\t<wpt lat=\"43.06746900\" lon=\"141.34926600\"><name>18. ポケモンセンターサッポロ · Sapporo<\/name><\/wpt>\n\t<trk>\n\t\t<name>Pokémon Center Stamp Rally<\/name>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"26.31408500\" lon=\"127.79630000\"><\/trkpt>\n\t\t\t<trkpt lat=\"33.58900300\" lon=\"130.41925600\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.39862400\" lon=\"132.47597400\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.34228200\" lon=\"134.05006100\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.67317200\" lon=\"135.50075400\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.70185300\" lon=\"135.49655900\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.00341700\" lon=\"135.75838400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.16362600\" lon=\"136.90803000\"><\/trkpt>\n\t\t\t<trkpt lat=\"36.57914800\" lon=\"136.64975400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.46457200\" lon=\"139.62449000\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.66195600\" lon=\"139.69844100\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.72907000\" lon=\"139.71858000\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.72890600\" lon=\"139.71932400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.68029000\" lon=\"139.77427000\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.71034500\" lon=\"139.81261200\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.68660300\" lon=\"139.98903600\"><\/trkpt>\n\t\t\t<trkpt lat=\"38.26216000\" lon=\"140.88170200\"><\/trkpt>\n\t\t\t<trkpt lat=\"43.06746900\" lon=\"141.34926600\"><\/trkpt>\n\t\t<\/trkseg>\n\t<\/trk>\n<\/gpx>\n", "fileStem": "pokecenter-links", "viewerUrl": "https://innoengserv.com/gpx-viewer.com/", "buttonIcons": {"ipogo": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"iPogo\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"ipogoButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#ipogoButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#00677a\"/> <path d=\"M-2 57Q60 37 122 57V-2H-2Z\" fill=\"#008474\"/> <path d=\"M-3 60Q60 40 123 60\" fill=\"none\" stroke=\"#fff\" stroke-width=\"8\"/> <path d=\"M60 29C45 29 39 38 40 52c1 13 12 20 17 38 1 4 5 4 6 0 5-18 16-25 17-38 1-14-5-23-20-23Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/> <circle cx=\"60\" cy=\"51\" r=\"9\" fill=\"#00677a\" stroke=\"#fff\" stroke-width=\"3.5\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>", "joystick": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"GPS JoyStick\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"gpsJoystickButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#gpsJoystickButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#8BC34A\"/> <ellipse cx=\"60\" cy=\"96\" rx=\"20\" ry=\"7\" fill=\"none\" stroke=\"#1976D2\" stroke-width=\"6\"/> <path d=\"M60 26C48 26 39 35 39 46c0 12 10 20 19 39 1 3 2 3 3 0 9-19 19-27 19-39 0-11-9-20-20-20Z\" fill=\"#1976D2\"/> <circle cx=\"60\" cy=\"47\" r=\"9\" fill=\"#2196F3\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>", "maps": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"Maps\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"mapsButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#mapsButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#f1f3f4\"/> <path d=\"M-2 78 40 52l40 22 42-24v75H-2Z\" fill=\"#a5d6a7\"/> <path d=\"M-2 92 38 68l42 22 42-24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"7\"/> <path d=\"M60 18C47 18 38 28 38 40c0 15 14 24 20 44 1 3 3 3 4 0 6-20 20-29 20-44 0-12-9-22-22-22Z\" fill=\"#ea4335\"/> <circle cx=\"60\" cy=\"40\" r=\"8.5\" fill=\"#fff\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>"}};
+  var D = {"points": [{"key": "26.31409,127.79630", "n": 1, "name": "ポケモンセンターオキナワ", "sub": "Okinawa", "note": "〒901-2306沖縄県中頭郡北中城村字ライカム1イオンモール沖縄ライカム 1F", "lat": 26.314085, "lon": 127.7963, "section": 0, "icon": -1, "distText": "", "distFrom": ""}, {"key": "33.58900,130.41926", "n": 2, "name": "ポケモンセンターフクオカ", "sub": "Fukuoka", "note": "〒812-0012福岡県福岡市博多区博多駅中央街9-1博多マルイ 2F", "lat": 33.589003, "lon": 130.419256, "section": 0, "icon": -1, "distText": "847 km", "distFrom": "previous stop"}, {"key": "34.39862,132.47597", "n": 3, "name": "ポケモンセンターヒロシマ", "sub": "Hiroshima", "note": "〒732-0822広島県広島市南区松原町1-2ekie 2F", "lat": 34.398624, "lon": 132.475974, "section": 0, "icon": -1, "distText": "210 km", "distFrom": "previous stop"}, {"key": "34.34228,134.05006", "n": 4, "name": "ポケモンセンターカガワ", "sub": "Kagawa", "note": "〒760-0029香川県高松市丸亀町8-23丸亀町グリーン 東館 1F", "lat": 34.342282, "lon": 134.050061, "section": 0, "icon": -1, "distText": "145 km", "distFrom": "previous stop"}, {"key": "34.67317,135.50075", "n": 5, "name": "ポケモンセンターオーサカDX", "sub": "Osaka DX", "note": "〒542-8501大阪府大阪市中央区心斎橋筋1-7-1大丸心斎橋店 本館 9F", "lat": 34.673172, "lon": 135.500754, "section": 0, "icon": -1, "distText": "138 km", "distFrom": "previous stop"}, {"key": "34.70185,135.49656", "n": 6, "name": "ポケモンセンターオーサカ", "sub": "Osaka", "note": "〒530-8373大阪府大阪市北区梅田3-1-1ルクア サウス 13F", "lat": 34.701853, "lon": 135.496559, "section": 0, "icon": -1, "distText": "3.2 km", "distFrom": "previous stop"}, {"key": "35.00342,135.75838", "n": 7, "name": "ポケモンセンターキョウト", "sub": "Kyoto", "note": "〒600-8009京都府京都市下京区四条通室町東入函谷鉾町78京都経済センター SUINA室町 2F", "lat": 35.003417, "lon": 135.758384, "section": 0, "icon": -1, "distText": "41.2 km", "distFrom": "previous stop"}, {"key": "35.16363,136.90803", "n": 8, "name": "ポケモンセンターナゴヤ", "sub": "Nagoya", "note": "〒460-0008愛知県名古屋市中区栄3-29-1名古屋PARCO 東館 2F", "lat": 35.163626, "lon": 136.90803, "section": 0, "icon": -1, "distText": "106 km", "distFrom": "previous stop"}, {"key": "36.57915,136.64975", "n": 9, "name": "ポケモンセンターカナザワ", "sub": "Kanazawa", "note": "〒920-0849石川県金沢市堀川新町3-1金沢フォーラス 5F", "lat": 36.579148, "lon": 136.649754, "section": 0, "icon": -1, "distText": "159 km", "distFrom": "previous stop"}, {"key": "35.46457,139.62449", "n": 10, "name": "ポケモンセンターヨコハマ", "sub": "Yokohama", "note": "main Yokohama centre; the satellite store is NOT part of the rally", "lat": 35.464572, "lon": 139.62449, "section": 0, "icon": -1, "distText": "295 km", "distFrom": "previous stop"}, {"key": "35.66196,139.69844", "n": 11, "name": "ポケモンセンターシブヤ", "sub": "Shibuya", "note": "〒150-8377東京都渋谷区宇田川町15-1渋谷PARCO 6F", "lat": 35.661956, "lon": 139.698441, "section": 0, "icon": -1, "distText": "22.9 km", "distFrom": "previous stop"}, {"key": "35.72907,139.71858", "n": 12, "name": "Pokémon GO Lab.", "sub": "Pokémon GO Lab (Ikebukuro)", "note": "inside Pokémon Center Mega Tokyo, 70 m from the centre&amp;rsquo;s own stop—confirmed in game", "lat": 35.72907, "lon": 139.71858, "section": 0, "icon": -1, "distText": "7.7 km", "distFrom": "previous stop"}, {"key": "35.72891,139.71932", "n": 13, "name": "ポケモンセンターメガトウキョー", "sub": "Mega Tokyo (Ikebukuro)", "note": "Pokémon GO Lab is a separate stamp 70 m away, inside Sunshine City—do both", "lat": 35.728906, "lon": 139.719324, "section": 0, "icon": -1, "distText": "70 m", "distFrom": "previous stop"}, {"key": "35.68029,139.77427", "n": 14, "name": "ポケモンセンタートウキョーDX", "sub": "Tokyo DX (Nihombashi)", "note": "〒103-0027東京都中央区日本橋2-11-2日本橋髙島屋S.C.東館 5F", "lat": 35.68029, "lon": 139.77427, "section": 0, "icon": -1, "distText": "7.3 km", "distFrom": "previous stop"}, {"key": "35.71034,139.81261", "n": 15, "name": "ポケモンセンタースカイツリータウン", "sub": "Skytree Town", "note": "〒131-0045東京都墨田区押上1-1-2東京スカイツリータウン・ソラマチ イーストヤード 4F", "lat": 35.710345, "lon": 139.812612, "section": 0, "icon": -1, "distText": "4.8 km", "distFrom": "previous stop"}, {"key": "35.68660,139.98904", "n": 16, "name": "ポケモンセンタートウキョーベイ", "sub": "Tokyo Bay", "note": "〒273-8530千葉県船橋市浜町2-1-1三井ショッピングパーク ららぽーとTOKYO-BAY 西館 2F", "lat": 35.686603, "lon": 139.989036, "section": 0, "icon": -1, "distText": "16.1 km", "distFrom": "previous stop"}, {"key": "38.26216,140.88170", "n": 17, "name": "ポケモンセンタートウホク", "sub": "Tohoku (Sendai)", "note": "〒980-8484宮城県仙台市青葉区中央1-2-3仙台PARCO1 3F", "lat": 38.26216, "lon": 140.881702, "section": 0, "icon": -1, "distText": "297 km", "distFrom": "previous stop"}, {"key": "43.06747,141.34927", "n": 18, "name": "ポケモンセンターサッポロ", "sub": "Sapporo", "note": "〒060-0005北海道札幌市中央区北5条西4-7大丸札幌店 8F", "lat": 43.067469, "lon": 141.349266, "section": 0, "icon": -1, "distText": "536 km", "distFrom": "previous stop"}], "sections": [{"name": "", "count": 18}], "storageKey": "pokecenter.v1", "reset": true, "hint": "", "gpx": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<gpx version=\"1.1\" creator=\"coord-link-page\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n\t<wpt lat=\"26.31408500\" lon=\"127.79630000\"><name>1. ポケモンセンターオキナワ · Okinawa<\/name><\/wpt>\n\t<wpt lat=\"33.58900300\" lon=\"130.41925600\"><name>2. ポケモンセンターフクオカ · Fukuoka<\/name><\/wpt>\n\t<wpt lat=\"34.39862400\" lon=\"132.47597400\"><name>3. ポケモンセンターヒロシマ · Hiroshima<\/name><\/wpt>\n\t<wpt lat=\"34.34228200\" lon=\"134.05006100\"><name>4. ポケモンセンターカガワ · Kagawa<\/name><\/wpt>\n\t<wpt lat=\"34.67317200\" lon=\"135.50075400\"><name>5. ポケモンセンターオーサカDX · Osaka DX<\/name><\/wpt>\n\t<wpt lat=\"34.70185300\" lon=\"135.49655900\"><name>6. ポケモンセンターオーサカ · Osaka<\/name><\/wpt>\n\t<wpt lat=\"35.00341700\" lon=\"135.75838400\"><name>7. ポケモンセンターキョウト · Kyoto<\/name><\/wpt>\n\t<wpt lat=\"35.16362600\" lon=\"136.90803000\"><name>8. ポケモンセンターナゴヤ · Nagoya<\/name><\/wpt>\n\t<wpt lat=\"36.57914800\" lon=\"136.64975400\"><name>9. ポケモンセンターカナザワ · Kanazawa<\/name><\/wpt>\n\t<wpt lat=\"35.46457200\" lon=\"139.62449000\"><name>10. ポケモンセンターヨコハマ · Yokohama<\/name><\/wpt>\n\t<wpt lat=\"35.66195600\" lon=\"139.69844100\"><name>11. ポケモンセンターシブヤ · Shibuya<\/name><\/wpt>\n\t<wpt lat=\"35.72907000\" lon=\"139.71858000\"><name>12. Pokémon GO Lab. · Pokémon GO Lab (Ikebukuro)<\/name><\/wpt>\n\t<wpt lat=\"35.72890600\" lon=\"139.71932400\"><name>13. ポケモンセンターメガトウキョー · Mega Tokyo (Ikebukuro)<\/name><\/wpt>\n\t<wpt lat=\"35.68029000\" lon=\"139.77427000\"><name>14. ポケモンセンタートウキョーDX · Tokyo DX (Nihombashi)<\/name><\/wpt>\n\t<wpt lat=\"35.71034500\" lon=\"139.81261200\"><name>15. ポケモンセンタースカイツリータウン · Skytree Town<\/name><\/wpt>\n\t<wpt lat=\"35.68660300\" lon=\"139.98903600\"><name>16. ポケモンセンタートウキョーベイ · Tokyo Bay<\/name><\/wpt>\n\t<wpt lat=\"38.26216000\" lon=\"140.88170200\"><name>17. ポケモンセンタートウホク · Tohoku (Sendai)<\/name><\/wpt>\n\t<wpt lat=\"43.06746900\" lon=\"141.34926600\"><name>18. ポケモンセンターサッポロ · Sapporo<\/name><\/wpt>\n\t<trk>\n\t\t<name>Pokémon Center Stamp Rally<\/name>\n\t\t<trkseg>\n\t\t\t<trkpt lat=\"26.31408500\" lon=\"127.79630000\"><\/trkpt>\n\t\t\t<trkpt lat=\"33.58900300\" lon=\"130.41925600\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.39862400\" lon=\"132.47597400\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.34228200\" lon=\"134.05006100\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.67317200\" lon=\"135.50075400\"><\/trkpt>\n\t\t\t<trkpt lat=\"34.70185300\" lon=\"135.49655900\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.00341700\" lon=\"135.75838400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.16362600\" lon=\"136.90803000\"><\/trkpt>\n\t\t\t<trkpt lat=\"36.57914800\" lon=\"136.64975400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.46457200\" lon=\"139.62449000\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.66195600\" lon=\"139.69844100\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.72907000\" lon=\"139.71858000\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.72890600\" lon=\"139.71932400\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.68029000\" lon=\"139.77427000\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.71034500\" lon=\"139.81261200\"><\/trkpt>\n\t\t\t<trkpt lat=\"35.68660300\" lon=\"139.98903600\"><\/trkpt>\n\t\t\t<trkpt lat=\"38.26216000\" lon=\"140.88170200\"><\/trkpt>\n\t\t\t<trkpt lat=\"43.06746900\" lon=\"141.34926600\"><\/trkpt>\n\t\t<\/trkseg>\n\t<\/trk>\n<\/gpx>\n", "fileStem": "pokecenter-links", "viewerUrl": "https://innoengserv.com/gpx-viewer.com/", "buttonIcons": {"ipogo": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"iPogo\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"ipogoButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#ipogoButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#00677a\"/> <path d=\"M-2 57Q60 37 122 57V-2H-2Z\" fill=\"#008474\"/> <path d=\"M-3 60Q60 40 123 60\" fill=\"none\" stroke=\"#fff\" stroke-width=\"8\"/> <path d=\"M60 29C45 29 39 38 40 52c1 13 12 20 17 38 1 4 5 4 6 0 5-18 16-25 17-38 1-14-5-23-20-23Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/> <circle cx=\"60\" cy=\"51\" r=\"9\" fill=\"#00677a\" stroke=\"#fff\" stroke-width=\"3.5\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>", "joystick": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"GPS JoyStick\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"gpsJoystickButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#gpsJoystickButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#8BC34A\"/> <ellipse cx=\"60\" cy=\"96\" rx=\"20\" ry=\"7\" fill=\"none\" stroke=\"#1976D2\" stroke-width=\"6\"/> <path d=\"M60 26C48 26 39 35 39 46c0 12 10 20 19 39 1 3 2 3 3 0 9-19 19-27 19-39 0-11-9-20-20-20Z\" fill=\"#1976D2\"/> <circle cx=\"60\" cy=\"47\" r=\"9\" fill=\"#2196F3\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>", "maps": "<svg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"Maps\" xmlns=\"http://www.w3.org/2000/svg\"> <defs> <clipPath id=\"mapsButtonIconClip\"><circle cx=\"60\" cy=\"60\" r=\"57\"/><\/clipPath> <\/defs> <g clip-path=\"url(#mapsButtonIconClip)\"> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#f1f3f4\"/> <path d=\"M-2 78 40 52l40 22 42-24v75H-2Z\" fill=\"#a5d6a7\"/> <path d=\"M-2 92 38 68l42 22 42-24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"7\"/> <path d=\"M60 18C47 18 38 28 38 40c0 15 14 24 20 44 1 3 3 3 4 0 6-20 20-29 20-44 0-12-9-22-22-22Z\" fill=\"#ea4335\"/> <circle cx=\"60\" cy=\"40\" r=\"8.5\" fill=\"#fff\"/> <\/g> <circle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> <\/svg>"}, "icons": []};
   var POINTS = D.points;
   // Long distances: tighten the letter spacing, then shrink the text in half-pixel steps until it fits the pill.
   // 2026-10-10 BEFORE: every pill 68px wide (the CSS). WHY: Bart: wasted room now that distances are shorter (no decimals
@@ -229,7 +242,8 @@
     var n = ++iconSeq;
     return '<span class="ico">' + ICONS[name].replace(/id="([^"]+)"/g, 'id="$1' + n + '"').replace(/url\(#([^)]+)\)/g, 'url(#$1' + n + ')') + '</span>';
   }
-  if (POINTS.some(function (p) { return p.icon; })) document.body.classList.add('icons');
+  // Rows hold an index into D.icons (each distinct picture stored once), -1 for none.
+  if (POINTS.some(function (p) { return p.icon >= 0; })) document.body.classList.add('icons');
   // Teleport app and second button are a per-device preference, shared with the Pokémap quest Export pages.
   var PREFS_KEY = 'pokemap_quest_export_prefs_v1';
   var prefs = { teleport: 'joystick', second: 'copy' };
@@ -341,19 +355,33 @@
   // 2026-10-11 BEFORE: every Done, link or Copy tap rebuilt the whole list. WHY: slow on big pages (482 stops: ~1 s per
   // tap on Bart's phone, and a link only opened after it). NOW: render() for whole-page changes; a single stop's change
   // redraws its row and the counts (updateRow). Rows come from the same buildRow either way, so they look the same.
-  var rowEls = {}, sectionEls = {}, BY_KEY = {};
+  var rowEls = {}, sectionEls = {}, subEls = {}, BY_KEY = {};
   POINTS.forEach(function (p) { BY_KEY[p.key] = p; });
   function render() {
     list.innerHTML = '';
-    rowEls = {}; sectionEls = {};
+    rowEls = {}; sectionEls = {}; subEls = {};
     var hintShown = false;
-    var lastSection = null;
-    // 2026-10-12 BEFORE: Hide done hid done rows only, so a finished section stayed as a bare heading (Bart). NOW: with
-    // Hide done on, a finished section's heading is left out too.
+    var lastSection = null, subNext = 0;
+    // 2026-10-12 BEFORE: Hide done hid done rows only, so finished prefectures and collections stayed as bare headings
+    // (Bart, Poké Lid page). NOW: with Hide done on, a finished or empty (0 / 0) subsection's heading and a finished
+    // section's heading are left out too, so only what's left to do shows.
     var finished = hideDone ? finishedHeadings() : {};
+    // Subsection headings of section si up to index upto (empty subsections included), each once, in order.
+    function emitSubs(si, upto) {
+      var subs = D.sections[si].subs;
+      if (!subs) return;
+      for (; subNext <= upto && subNext < subs.length; subNext++) {
+        if (finished[si + '.' + subNext]) continue;
+        var h3 = document.createElement('h3');
+        subEls[si + '.' + subNext] = h3;
+        list.appendChild(h3);
+      }
+    }
     POINTS.forEach(function (p) {
       var isDone = !!state[p.key];
       if (p.section !== lastSection) {
+        if (lastSection !== null) emitSubs(lastSection, Infinity);
+        subNext = 0;
         lastSection = p.section;
         var sec = D.sections[p.section];
         if (sec.name && !finished[p.section]) {
@@ -362,6 +390,7 @@
           list.appendChild(h2);
         }
       }
+      if (p.subsection != null) emitSubs(p.section, p.subsection);
       if (hideDone && isDone) return;
       if (!hintShown && D.hint) {
         hintShown = true;
@@ -372,6 +401,7 @@
       }
       list.appendChild(buildRow(p));
     });
+    if (lastSection !== null) emitSubs(lastSection, Infinity);
     fitPills();
     updateCounts();
   }
@@ -381,9 +411,10 @@
     row.className = 'row' + (isDone ? ' done' : '');
     row.dataset.key = p.key;
     if (document.body.classList.contains('icons')) {
-      var ic = document.createElement(p.icon ? 'img' : 'span');
-      ic.className = p.icon ? 'qicon' : 'noicon';
-      if (p.icon) { ic.alt = ''; ic.src = p.icon; }
+      var hasIcon = p.icon >= 0;
+      var ic = document.createElement(hasIcon ? 'img' : 'span');
+      ic.className = hasIcon ? 'qicon' : 'noicon';
+      if (hasIcon) { ic.alt = ''; ic.src = D.icons[p.icon]; }
       row.appendChild(ic);
     }
     // One line that scrolls sideways: leg distance, number + name (bold), details, then the less critical
@@ -493,8 +524,17 @@
     return row;
   }
   function updateCounts() {
-    var doneCount = 0, sectionDone = {};
-    POINTS.forEach(function (p) { if (state[p.key]) { doneCount++; sectionDone[p.section] = (sectionDone[p.section] || 0) + 1; } });
+    var doneCount = 0, sectionDone = {}, subDone = {};
+    POINTS.forEach(function (p) {
+      if (!state[p.key]) return;
+      doneCount++; sectionDone[p.section] = (sectionDone[p.section] || 0) + 1;
+      if (p.subsection != null) subDone[p.section + '.' + p.subsection] = (subDone[p.section + '.' + p.subsection] || 0) + 1;
+    });
+    Object.keys(subEls).forEach(function (k) {
+      var ix = k.split('.'), sub = D.sections[ix[0]].subs[ix[1]], sd = subDone[k] || 0, h3 = subEls[k];
+      h3.innerHTML = sub.name + ' <span class="c">' + sd + ' / ' + sub.count + '</span>';
+      h3.className = sub.count === 0 ? 'empty' : (sd === sub.count ? 'complete' : '');
+    });
     Object.keys(sectionEls).forEach(function (si) {
       var sec = D.sections[si], sd = sectionDone[si] || 0, h2 = sectionEls[si];
       h2.innerHTML = sec.name + ' <span class="c">' + (sd ? sd + ' / ' : '') + sec.count + '</span>';
@@ -508,23 +548,27 @@
   }
   // One stop changed: swap in a freshly built row. With Hide done on, a stop just marked done is removed; anything
   // else there (a row that must reappear, or a page with a hint box above the first visible row) redraws everything.
-  // Section index → true when all its stops are done.
+  // Section index → true when all its stops are done; "si.k" → true when subsection k is done or empty.
   function finishedHeadings() {
     var total = {}, done = {}, out = {};
     POINTS.forEach(function (p) {
       if (p.tba) return;
-      total[p.section] = (total[p.section] || 0) + 1;
-      if (state[p.key]) done[p.section] = (done[p.section] || 0) + 1;
+      var ks = [String(p.section)].concat(p.subsection != null ? [p.section + '.' + p.subsection] : []);
+      ks.forEach(function (k) { total[k] = (total[k] || 0) + 1; if (state[p.key]) done[k] = (done[k] || 0) + 1; });
     });
-    D.sections.forEach(function (sec, si) { if (sec.count && done[si] === total[si]) out[si] = true; });
+    D.sections.forEach(function (sec, si) {
+      if (sec.count && done[si] === total[si]) out[si] = true;
+      (sec.subs || []).forEach(function (sub, k) { if (!sub.count || done[si + '.' + k] === total[si + '.' + k]) out[si + '.' + k] = true; });
+    });
     return out;
   }
   function updateRow(key) {
     var p = BY_KEY[key], old = rowEls[key];
     if (!p) return;
     if (hideDone) {
-      // A stop that finishes its section takes the heading with it: redraw (see render).
-      var closes = state[key] && finishedHeadings()[p.section];
+      // A stop that finishes its subsection or section takes the heading with it: redraw (see render).
+      var f = finishedHeadings();
+      var closes = state[key] && (f[p.section] || (p.subsection != null && f[p.section + '.' + p.subsection]));
       if (old && state[key] && !D.hint && !closes) { old.remove(); delete rowEls[key]; updateCounts(); }
       else render();
       return;
@@ -591,20 +635,90 @@
   // GPX: built with the page (layout in the skill's references/gpx-apps.md) and also written next to it as <page>.gpx.
   // GPX downloads it (when the file isn't at hand); Copy GPX copies it, only when tapped, because iPogo imports a route
   // by pasting its text; Map hands the viewer exactly this text, so file, clipboard and map never disagree.
-  document.getElementById('gpxBtn').addEventListener('click', function () {
-    download(D.gpx, 'application/gpx+xml', D.fileStem + '.gpx');
+  // Done stops and the route buttons (2026-10-13, Bart chose "follow Hide done" + a hint either way). BEFORE: Copy,
+  // GPX/JoyRoute and Map always used the whole route. WHY: sending stops already done (e.g. to JoyRoute) makes no sense,
+  // and Hide done is the page's one switch for "what's left". NOW: with Hide done on, all four use only the stops not
+  // done (their waypoints and track points are taken out of the page's GPX, so names, numbering and the home marker
+  // stay); with it off, the whole route. When some stops are done, a short message after the tap says which it was.
+  function doneCount() { return POINTS.filter(function (p) { return !!state[p.key]; }).length; }
+  function routeGpx(full) {
+    if (!hideDone || !doneCount()) return full;
+    var done = {};
+    POINTS.forEach(function (p) { if (state[p.key] && p.lat != null) done[(+p.lat).toFixed(5) + ',' + (+p.lon).toFixed(5)] = true; });
+    var doc = new DOMParser().parseFromString(full, 'application/xml');
+    ['wpt', 'trkpt', 'rtept'].forEach(function (tag) {
+      Array.prototype.slice.call(doc.getElementsByTagName(tag)).forEach(function (el) {
+        if (done[(+el.getAttribute('lat')).toFixed(5) + ',' + (+el.getAttribute('lon')).toFixed(5)]) el.parentNode.removeChild(el);
+      });
+    });
+    return '<?xml version="1.0" encoding="UTF-8"?>\n' + new XMLSerializer().serializeToString(doc.documentElement);
+  }
+  var routeHintEl = null, routeHintTimer = 0;
+  function routeHint(before, after) {
+    var d = doneCount(), total = POINTS.length;
+    if (!d) return;
+    var left = total - d, what = hideDone ? 'the ' + left + (left === 1 ? ' stop' : ' stops') + ' left' : 'all ' + total + ' stops, including ' + d + ' done';
+    if (!routeHintEl) { routeHintEl = document.createElement('div'); routeHintEl.className = 'route-hint'; document.body.appendChild(routeHintEl); }
+    routeHintEl.textContent = before + (after ? ' ' + after : '') + ': ' + what + (hideDone ? ' (Hide done is on)' : '. Turn on Hide done to leave them out');
+    routeHintEl.classList.add('show');
+    clearTimeout(routeHintTimer);
+    routeHintTimer = setTimeout(function () { routeHintEl.classList.remove('show'); }, 4500);
+  }
+  // GPX / JoyRoute button and Copy button (template, 2026-10-13, Bart; same as Pokémap 7.55). BEFORE: header "Copy GPX" (copy icon) and
+  // "GPX" (download arrow; a tap downloaded the file). WHY: Bart wants the route in JoyRoute without hunting through
+  // Downloads. Sharing the file was tried first: Chrome-based browsers refuse to share .gpx files ("Permission denied";
+  // Web Share allows only images, media, PDF, text, HTML, CSV), so the button opens JoyRoute through a link that carries
+  // the GPX itself (joyroute://import?name=&gpx=, JoyRoute's import screen). NOW: with the page's JoyRoute switch on
+  // (localStorage joyroute = on, the same switch as the teleport links) on Android, the button reads "JoyRoute" with
+  // JoyRoute's launcher icon and a tap opens the route in JoyRoute; otherwise it reads "GPX" with the download arrow and
+  // a tap downloads as before. A long-press (or Shift+click) always downloads. "Copy GPX" became "Copy" with the iPogo
+  // icon (it copies the GPX for iPogo), because "JoyRoute" + "Copy GPX" don't fit one line at 412 px (3 px over).
+  var JOYROUTE_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#2E7D32"/><g transform="translate(5.33 5.33) scale(.556)"><path fill="#fff" d="M19,15.18V7c0,-2.21 -1.79,-4 -4,-4s-4,1.79 -4,4v10c0,1.1 -0.9,2 -2,2s-2,-0.9 -2,-2V8.82C8.16,8.4 9,7.3 9,6c0,-1.66 -1.34,-3 -3,-3S3,4.34 3,6c0,1.3 0.84,2.4 2,2.82V17c0,2.21 1.79,4 4,4s4,-1.79 4,-4V7c0,-1.1 0.9,-2 2,-2s2,0.9 2,2v8.18c-1.16,0.41 -2,1.51 -2,2.82c0,1.66 1.34,3 3,3s3,-1.34 3,-3C21,16.7 20.16,15.6 19,15.18z"/></g></svg>';
+  var gpxBtn = document.getElementById('gpxBtn');
+  var GPX_NAME = D.fileStem + '.gpx';
+  var GPX_TO_JOYROUTE = USE_JOYROUTE && /Android/i.test(navigator.userAgent);
+  function downloadGpx() { download(routeGpx(D.gpx), 'application/gpx+xml', GPX_NAME); routeHint('Downloaded'); }
+  if (GPX_TO_JOYROUTE) {
+    gpxBtn.innerHTML = JOYROUTE_ICON + 'JoyRoute';
+    gpxBtn.title = 'Open the route in JoyRoute (adds it to GPS JoyStick); long-press: download the GPX file';
+  }
+  var copyIcon = document.querySelector('#copyGpxBtn svg');
+  if (copyIcon && ICONS.ipogo) copyIcon.outerHTML = ICONS.ipogo;
+  var gpxPressTimer = 0, gpxLongPress = false, gpxIgnoreClickUntil = 0;
+  gpxBtn.addEventListener('pointerdown', function (e) {
+    if (e.pointerType === 'mouse') return;
+    gpxLongPress = false;
+    clearTimeout(gpxPressTimer);
+    gpxPressTimer = setTimeout(function () { gpxLongPress = true; }, 500);
+  });
+  gpxBtn.addEventListener('pointerup', function (e) {
+    clearTimeout(gpxPressTimer);
+    if (e.pointerType === 'mouse' || !gpxLongPress) return;
+    gpxLongPress = false;
+    gpxIgnoreClickUntil = Date.now() + 800;
+    downloadGpx();
+  });
+  gpxBtn.addEventListener('pointercancel', function () { clearTimeout(gpxPressTimer); gpxLongPress = false; });
+  gpxBtn.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  gpxBtn.addEventListener('click', function (e) {
+    if (Date.now() < gpxIgnoreClickUntil) return;
+    if (!GPX_TO_JOYROUTE || e.shiftKey) { downloadGpx(); return; }
+    routeHint('Sent', 'to JoyRoute');
+    location.href = 'joyroute://import?name=' + encodeURIComponent(GPX_NAME) + '&gpx=' + encodeURIComponent(routeGpx(D.gpx));
   });
   var copyGpxBtn = document.getElementById('copyGpxBtn');
   copyGpxBtn.addEventListener('click', function () {
     var lbl = copyGpxBtn.querySelector('span');
-    copyText(D.gpx).then(function () {
+    copyText(routeGpx(D.gpx)).then(function () {
+      routeHint('Copied');
       lbl.textContent = '\u2713 Copied';
       copyGpxBtn.title = 'GPX copied: paste it into iPogo';
-      setTimeout(function () { lbl.textContent = 'Copy GPX'; }, 2500);
+      setTimeout(function () { lbl.textContent = 'Copy'; }, 2500);
     });
   });
   document.getElementById('mapBtn').addEventListener('click', function () {
-    window.open(D.viewerUrl + '#gpx=' + encodeURIComponent(D.gpx), '_blank');
+    routeHint('Showing', 'on the map');
+    window.open(D.viewerUrl + '#gpx=' + encodeURIComponent(routeGpx(D.gpx)), '_blank');
   });
   render();
   // Location only when already allowed (no prompt on load); "start" pills ask when tapped. Re-read it when you come
