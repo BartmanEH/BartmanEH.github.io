@@ -54,6 +54,11 @@ Google Drive `Other/Pokémon GO/web pages w links/`, now an untouched archive).
   repo BartmanEH/pogo-links-inbox, whose GitHub job copies it into `PoGo_Links/`, rebuilds the list
   (`publish.py --index-only`) and pushes. Event-driven, live in about 1 to 2 minutes, no Mac needed. Setup and tokens:
   that repo's README.
+- **Quest Exports expire** (Pokémap 7.53+, list v2.15, 2026-10-13; Bart: quests change every day): each Export carries
+  `<meta name="pogolinks-expires" content="<UTC time>">` = the next midnight in its map's city. After that the list hides
+  it, the page shows a red Expired bar, and the inbox repo's scheduled job (`expire.yml`, just after each map's midnight
+  plus a 05:00-local fallback) deletes it from both repos with `publish.py --expire`. Only pages with that meta expire;
+  link pages never do. Git history keeps the deleted pages.
 - Link pages (made by the coord-link-page skill): `git pull`, put the page's `.html` into `PoGo_Links/`, then
   `python3 -I PoGo_Links/scripts/publish.py` (`-n` = dry run, `--no-push`, `--src DIR` to import pages from a folder).
   It pulls, rebuilds `PoGo_Links/index.html`, commits and pushes. It never deletes pages: to take one down, delete the

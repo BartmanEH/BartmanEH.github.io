@@ -5,7 +5,8 @@ The pages live in PoGo_Links/ itself (2026-10-10: Google Drive is no longer used
 their own via BartmanEH/pogo-links-inbox, whose GitHub job runs this script with --index-only; pages made by the
 coord-link-page skill are written into PoGo_Links/ and published with this script: it pulls, rebuilds
 PoGo_Links/index.html (the list, newest first), commits and pushes. It never deletes pages; to take one down, delete
-the file and publish. Pages are copied byte for byte: each one already embeds its GPX and keeps
+the file and publish. Exception (2026-10-13): pages with a pogolinks-expires time (quest Exports) are deleted after it by --expire,
+which the scheduled job in BartmanEH/pogo-links-inbox runs. Pages are copied byte for byte: each one already embeds its GPX and keeps
 its Done ticks under its own localStorage key.
 
 Usage (from anywhere):
@@ -13,6 +14,7 @@ Usage (from anywhere):
   python3 -I PoGo_Links/scripts/publish.py -n        # dry run: show what would change, touch nothing
   python3 -I PoGo_Links/scripts/publish.py --no-push # write and commit, don't push
   python3 -I PoGo_Links/scripts/publish.py --src DIR # first import the .html pages in DIR
+  python3 -I PoGo_Links/scripts/publish.py --expire  # delete expired pages, rebuild the list (the inbox job)
 Called by the coord-link-page skill after it writes a page (2026-10-10).
 """
 import argparse
@@ -29,7 +31,7 @@ import unicodedata
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
-LIST_VERSION = "2.14"   # 2.14 = floating footer less tall (notice line 49 → 38px); 2.13 = iOS: reordering no longer cancelled by the long-press link menu; 2.12 = a Remaining tile (places − done); 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
+LIST_VERSION = "2.15"   # 2.15 = pages past their pogolinks-expires time are hidden (quest Exports, daily); 2.14 = floating footer less tall (notice line 49 → 38px); 2.13 = iOS: reordering no longer cancelled by the long-press link menu; 2.12 = a Remaining tile (places − done); 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -57,6 +59,10 @@ def page_info(path):
     # "Complete" for it, however many stops are ticked (Bart, 2026-10-11, LEGO at 219/219; v2.8).
     m = re.search(r'<meta name="pogolinks-open" content="([^"]*)"', s)
     info["open"] = html.unescape(m.group(1)) if m else ""
+    # <meta name="pogolinks-expires" content="<UTC ISO time>">: after this the list hides the page and --expire deletes it.
+    # Pokémap quest Exports set it to the next local midnight of their map, when quests rotate (Bart, 2026-10-13; v2.15).
+    m = re.search(r'<meta name="pogolinks-expires" content="([^"]*)"', s)
+    info["expires"] = m.group(1) if m else ""
     dec = json.JSONDecoder()
     m = re.search(r"var D\s*=\s*", s)                 # coord-link-page pages
     if m:
@@ -153,6 +159,7 @@ PAGE = r"""<!DOCTYPE html>
           background: linear-gradient(135deg, rgba(255,255,255,.035), transparent 60%) var(--card); border: 1px solid var(--line);
           border-left: 3px solid var(--c); border-radius: 12px; padding: 12px 12px 10px 10px; margin-bottom: 10px; text-decoration: none;
           box-shadow: 0 2px 10px rgba(0,0,0,.25); transition: transform 90ms ease, box-shadow 90ms ease, background-color 90ms; }
+  .card[hidden] { display: none; }   /* expired pages (v2.15); display:grid above would override [hidden] */
   .card:active { transform: scale(.985); background-color: #3a3a36; }
   @media (hover: hover) { .card:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,.35); } }
   .card.s { --c: var(--tan); } .card.q { --c: var(--green); }
@@ -282,6 +289,9 @@ function refresh() {
   var total = 0, left = 0;
   document.querySelectorAll('.card').forEach(function (card) {
     var p = PAGES[card.dataset.file], st = {};
+    // Past its expiry (quest Exports: local midnight of their map): hidden here until the inbox job deletes it (v2.15).
+    card.hidden = !!(p.expires && Date.now() >= Date.parse(p.expires));
+    if (card.hidden) return;
     try { st = JSON.parse(localStorage.getItem(p.storage) || '{}') || {}; } catch (e) {}
     var done = p.keys.filter(function (k) { return st[k] && st[k].done !== false; }).length;
     total += done;
@@ -434,7 +444,8 @@ def build_index(pages):
             f'<span class="when" data-day="{day}">updated {day}</span><span class="file">{html.escape(stem)}</span></span>'
             f'<span class="bar"><span class="track"><span class="fill"></span></span><span class="lbl">{n} places</span></span></a>'
         )
-        data[name] = {"storage": info["storage"] or "", "keys": info["keys"], "tba": info["tba"], "open": info["open"]}
+        data[name] = {"storage": info["storage"] or "", "keys": info["keys"], "tba": info["tba"], "open": info["open"],
+                      "expires": info["expires"]}
     stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     places = sum(len(i["keys"]) + i["tba"] for _, i, _ in pages)
     out = PAGE
@@ -479,6 +490,23 @@ def write_index():
     return True
 
 
+def expired_pages(now=None):
+    """Pages whose pogolinks-expires time has passed (file names)."""
+    now = now or datetime.datetime.now(datetime.timezone.utc)
+    out = []
+    for n in site_pages():
+        exp = page_info(os.path.join(OUT, n))["expires"]
+        if not exp:
+            continue
+        try:
+            when = datetime.datetime.fromisoformat(exp.replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        if when <= now:
+            out.append(n)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("-n", "--dry-run", action="store_true")
@@ -486,7 +514,17 @@ def main():
     ap.add_argument("--src", help="also import every .html in this folder first (e.g. old pages from the Drive archive)")
     ap.add_argument("--index-only", action="store_true",
                     help="only rebuild the list (no pull, no commit): used by the GitHub job in BartmanEH/pogo-links-inbox")
+    ap.add_argument("--expire", action="store_true",
+                    help="delete pages past their pogolinks-expires time and rebuild the list (no pull, no commit): used by "
+                         "the scheduled job in BartmanEH/pogo-links-inbox; prints one 'Expired: <file>' line per page")
     a = ap.parse_args()
+
+    if a.expire:
+        for n in expired_pages():
+            os.remove(os.path.join(OUT, n))
+            print("Expired: " + n)
+        print("List changed." if write_index() else "List unchanged.")
+        return
 
     if a.index_only:
         print("List changed." if write_index() else "List unchanged.")
