@@ -31,7 +31,7 @@ import unicodedata
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
-LIST_VERSION = "2.16"   # 2.16 = quest Exports (pages with an expiry) always on top, above a saved order; 2.15 = pages past their pogolinks-expires time are hidden (quest Exports, daily); 2.14 = floating footer less tall (notice line 49 → 38px); 2.13 = iOS: reordering no longer cancelled by the long-press link menu; 2.12 = a Remaining tile (places − done); 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
+LIST_VERSION = "2.17"   # 2.17 = "updated today 12:28 PM": the publish time, not just the day, on its own second line; 2.16 = quest Exports (pages with an expiry) always on top, above a saved order; 2.15 = pages past their pogolinks-expires time are hidden (quest Exports, daily); 2.14 = floating footer less tall (notice line 49 → 38px); 2.13 = iOS: reordering no longer cancelled by the long-press link menu; 2.12 = a Remaining tile (places − done); 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -178,6 +178,11 @@ PAGE = r"""<!DOCTYPE html>
   .chip { color: var(--c); border: 1px solid color-mix(in srgb, var(--c) 55%, transparent); border-radius: 999px;
           padding: 0 7px; font-size: 11px; font-weight: 700; line-height: 17px; }
   .m .n { color: var(--tan); font-variant-numeric: tabular-nums; }
+  /* v2.17 (2026-10-13). BEFORE: the info line wrapped wherever it ran out of room (at 412 px the file name dropped to a
+     second line, sometimes the date). WHY: Bart, "the split should be purposeful". NOW: always two lines on every card,
+     line 1 = category, places, file name (cut with "…" when long); line 2 = "updated today 12:28 PM". */
+  .m .when { order: 9; flex-basis: 100%; }
+  .m .file { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* a long name ends in "…" instead of taking a line */
   .bar { grid-column: 2; display: flex; align-items: center; gap: 8px; margin-top: 3px; font-size: 11px; color: var(--grey);
          font-variant-numeric: tabular-nums; }
   .track { flex: 1; height: 6px; border-radius: 3px; background: #232321; overflow: hidden; box-shadow: inset 0 0 0 1px #4a4a44; }
@@ -321,10 +326,17 @@ function fitTitles() {
 }
 fitTitles();
 window.addEventListener('resize', fitTitles);
-// "updated today / yesterday / 3 days ago" from the Drive file's date (the page shows the plain date without scripts).
+// "updated today 12:28 PM / yesterday 4:10 PM / 3 days ago 9:05 AM" (the page shows the plain date without scripts).
+// v2.17 (2026-10-13). BEFORE: "updated today / yesterday / N days ago" from the publish date only (data-day). WHY: Bart:
+// "updated today" isn't enough to tell whether a fresh Export has landed (quest Exports are re-published several times a
+// day). NOW: data-t = the publish time (the page's last commit, page_date) and the viewer's local clock time is added;
+// a week or older shows the date and time.
 document.querySelectorAll('.when').forEach(function (el) {
-  var d = Math.round((new Date().setHours(0, 0, 0, 0) - new Date(el.dataset.day + 'T00:00').getTime()) / 864e5);
-  if (d >= 0 && d < 7) el.textContent = d === 0 ? 'updated today' : d === 1 ? 'updated yesterday' : 'updated ' + d + ' days ago';
+  var t = +el.dataset.t, when = t ? new Date(t) : new Date(el.dataset.day + 'T00:00');
+  var d = Math.round((new Date().setHours(0, 0, 0, 0) - new Date(when).setHours(0, 0, 0, 0)) / 864e5);
+  var clock = t ? ' ' + when.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
+  if (d >= 0 && d < 7) el.textContent = (d === 0 ? 'updated today' : d === 1 ? 'updated yesterday' : 'updated ' + d + ' days ago') + clock;
+  else if (t) el.textContent = 'updated ' + when.toLocaleDateString([], { month: 'short', day: 'numeric' }) + clock;
 });
 // © first year of this page, widening to "2026–2027" etc. as years pass (Bart, 2026-10-10;
 // BEFORE: "© 2014–current year", the IES site's span, which isn't this page's).
@@ -447,7 +459,7 @@ def build_index(pages):
             f'<span class="ic">{icon}</span>'
             f'<span class="t">{html.escape(info["title"])}</span>'
             f'<span class="m"><span class="chip">{cat_label}</span><span><span class="n">{n}</span> place{"s" if n != 1 else ""}</span>'
-            f'<span class="when" data-day="{day}">updated {day}</span><span class="file">{html.escape(stem)}</span></span>'
+            f'<span class="when" data-day="{day}" data-t="{int(mtime * 1000)}">updated {day}</span><span class="file">{html.escape(stem)}</span></span>'
             f'<span class="bar"><span class="track"><span class="fill"></span></span><span class="lbl">{n} places</span></span></a>'
         )
         data[name] = {"storage": info["storage"] or "", "keys": info["keys"], "tba": info["tba"], "open": info["open"],
