@@ -31,7 +31,7 @@ import unicodedata
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
-LIST_VERSION = "2.15"   # 2.15 = pages past their pogolinks-expires time are hidden (quest Exports, daily); 2.14 = floating footer less tall (notice line 49 → 38px); 2.13 = iOS: reordering no longer cancelled by the long-press link menu; 2.12 = a Remaining tile (places − done); 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
+LIST_VERSION = "2.16"   # 2.16 = quest Exports (pages with an expiry) always on top, above a saved order; 2.15 = pages past their pogolinks-expires time are hidden (quest Exports, daily); 2.14 = floating footer less tall (notice line 49 → 38px); 2.13 = iOS: reordering no longer cancelled by the long-press link menu; 2.12 = a Remaining tile (places − done); 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -193,7 +193,7 @@ PAGE = r"""<!DOCTYPE html>
   .file { color: #6b7280; }
   /* Reorder (2026-10-10, Bart): "Reorder" shows a grip on each card; drag it to move the card. The order is saved in this
      browser (localStorage, like the Done ticks), so each device keeps its own. Pages not in the saved order (new ones)
-     go on top, newest first. */
+     go on top, newest first. v2.16: pages with an expiry (quest Exports) always go first, above the saved order. */
   .order { display: flex; justify-content: space-between; align-items: center; margin: 0 0 10px; font-size: 12px; color: var(--grey); }
   .order button { font: inherit; font-size: 13px; font-weight: 700; color: var(--blue); background: var(--card); border: 1px solid var(--line);
                   border-radius: 999px; padding: 5px 14px; cursor: pointer; }
@@ -341,11 +341,17 @@ function saved() { try { return JSON.parse(localStorage.getItem(ORDER_KEY) || 'n
 function applyOrder() {
   var o = saved(), pos = {};
   (o || []).forEach(function (f, i) { pos[f] = i; });
-  cards().sort(function (a, b) {
-    var pa = a.dataset.file in pos ? pos[a.dataset.file] : -1e6 + +a.dataset.i,
-        pb = b.dataset.file in pos ? pos[b.dataset.file] : -1e6 + +b.dataset.i;
-    return pa - pb;
-  }).forEach(function (c) { list.appendChild(c); });
+  // v2.16 (2026-10-13). BEFORE: a page in the saved order kept its saved place, so a fresh quest Export (same file name
+  // every day, e.g. quests_nyc.html, already in the order) stayed wherever it had been dragged, last on Bart's phone.
+  // WHY: Bart wants new Exports at the top; he chose "quest Exports always on top" (over "re-published pages on top").
+  // NOW: pages with an expiry (pogolinks-expires: the quest Exports) come first in published order (newest first),
+  // then pages not in the saved order, then the saved order. Dragging an Export lower is undone on the next load.
+  function rank(c) {
+    var f = c.dataset.file, i = +c.dataset.i;
+    if (PAGES[f] && PAGES[f].expires) return -2e6 + i;
+    return f in pos ? pos[f] : -1e6 + i;
+  }
+  cards().sort(function (a, b) { return rank(a) - rank(b); }).forEach(function (c) { list.appendChild(c); });
   lbl.textContent = o ? 'Your order' : 'Newest first';
 }
 function saveOrder() {
