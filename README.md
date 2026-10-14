@@ -112,3 +112,23 @@ unlisted switch page (joyroute.html) so link pages and map sites work the same w
 - `favicon.ico` at the site root: pages without an icon link (the link pages) ask for it.
 - Done ticks are saved per browser and per site, so ticks from copies opened elsewhere (e.g. Solid Explorer)
   don't carry over; use a page's Export progress / Import progress buttons to move them.
+
+# Local Event Times (`Event_Times/`)
+
+When an event that starts at the same **local** time everywhere (e.g. a Pokémon GO event at 6:00 pm local) reaches each
+time zone, in your own time. From Bart's "Event Times" Google Sheets (2026-10-13). One static page, no server: the
+browser's own time-zone data does the maths, so daylight saving is right for any date.
+
+- Inputs (remembered per browser): event date, local start time, duration (default 3 h; None = started places stay
+  neutral), your time zone (the browser's by default).
+- Switches: **Key** (first and last in the world + the 5 Pokémap cities) | **All zones** (47 places, one or more per UTC
+  offset, incl. the half/quarter-hour ones), and iPogo | GPS JoyStick (shared with the link pages; GPS JoyStick goes
+  through JoyRoute when `?joyroute=on` is set, see "JoyRoute links").
+- Rows in the order the event reaches them; stoplight states: live = green, next to start = orange, finished = dark
+  card with a dark red outline. The "now" line and **Go to now** scroll to the live (or next) places, leaving one
+  finished place above; the page does this once on opening.
+- Places: the Sheet's 39 (Vanuatu's zone fixed to `Pacific/Efate`, old zone names updated) + 8 missing offsets
+  (Marquesas, Tehran, Kabul, Kathmandu, Yangon, Eucla, Lord Howe, Chatham), all checked on land with OpenStreetMap's
+  reverse lookup; 6 moved to city centres (Adelaide, Anchorage, Adak were in or by the water). Open idea: use each
+  zone's most populous place. The list is the `places` data inside the page's script.
+- Root-page button "Local Event Times", second (after PoGO Link Pages).

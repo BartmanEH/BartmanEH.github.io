@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#2b2b29">
+<title>Local Event Times</title>
+<link rel="icon" type="image/png" href="../img/favicon/favicon-32x32.png" sizes="32x32">
+<style>
+  /* Local Event Times (2026-10-13, from Bart's "Event Times" Google Sheets): an event that starts at the same LOCAL time
+     everywhere (e.g. a Pokémon GO event at 6:00 pm local) reaches each time zone at a different moment; this lists when,
+     in your own time, first zone to last. Look: Bart's VS Code palette and the PoGO Link Pages' hero, footer, switches
+     and teleport buttons. Width capped at 412px (his phones); everything spans the same width (his symmetry rule). */
+  :root { --bg: #2b2b29; --card: #33332f; --line: #404040; --text: #d1d5db; --bold: #e5e5e5; --grey: #9ca3af;
+          --blue: #74aeea; --purple: #bb7cd8; --green: #a1c281; --tan: #c99c6e; --red: #e06c75; --yellow: #ffd166; --cyan: #26c6da; --orange: #f0a04b;
+          /* Finished cards' outline: a dark red (Bart: the palette red #e06c75 was "too obvious"). */
+          --dark-red: #7a3b3f; }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); height: 100%; }
+  body { max-width: 412px; margin: 0 auto; padding: 20px 16px 0; min-height: calc(100vh + 22px); min-height: calc(100dvh + 22px);
+         display: flex; flex-direction: column; color: var(--text); font-family: -apple-system, system-ui, sans-serif;
+         -webkit-tap-highlight-color: transparent;
+         background: radial-gradient(120% 220px at 50% 0, rgba(116,174,234,.16), rgba(187,124,216,.07) 55%, transparent 100%) var(--bg); }
+  .hero { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; }
+  .globe { width: 40px; height: 40px; flex: 0 0 auto; filter: drop-shadow(0 3px 8px rgba(0,0,0,.45)); }
+  .kicker { color: var(--purple); font-size: 14px; font-weight: 700; letter-spacing: .2px; }
+  h1 { margin: 2px 0 0; font-size: 22px; line-height: 1.1; font-weight: 800; letter-spacing: -.3px; color: var(--bold);
+       background: linear-gradient(90deg, var(--blue), var(--purple)); -webkit-background-clip: text; background-clip: text;
+       -webkit-text-fill-color: transparent; }
+  .ies { margin-left: auto; flex: 0 0 auto; line-height: 0; }
+  .ies img { height: 26px; width: auto; filter: invert(90%); opacity: .85; transition: transform .5s ease-in-out; }
+  .ies img:hover { transform: scale(1.2); }
+  /* Inputs: two equal columns, labels above. */
+  .inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 8px; background: var(--card); border: 1px solid var(--line);
+            border-radius: 12px; padding: 10px 12px 12px; margin: 0 0 12px; }
+  .inputs label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 700; color: var(--purple); min-width: 0; }
+  .inputs input, .inputs select { width: 100%; min-width: 0; height: 34px; padding: 0 8px; font: inherit; font-size: 14px; font-weight: 400;
+            color: var(--bold); background: var(--bg); border: 1px solid #4a4a46; border-radius: 8px; color-scheme: dark; }
+  .summary { font-size: 13px; line-height: 1.45; color: var(--grey); margin: 0 0 12px; }
+  .summary b { color: var(--bold); font-weight: 600; }
+  /* Switches: the link pages' design (two boxes on one row, contents mirrored to the outer edges). */
+  .switches { display: flex; gap: 8px; margin-bottom: 12px; }
+  .toggle { flex: 1 1 auto; display: flex; align-items: center; gap: 5px; padding: 4px 6px; background: var(--card);
+            border: 1px solid var(--line); border-radius: 8px; user-select: none; -webkit-user-select: none; }
+  .switches .toggle:first-child { justify-content: flex-start; }
+  .switches .toggle:last-child { justify-content: flex-end; }
+  .toggle .opt { font-size: 13px; color: var(--text); cursor: pointer; display: inline-grid; white-space: nowrap; }
+  .toggle .opt::after { content: attr(data-t); font-weight: 700; height: 0; visibility: hidden; overflow: hidden; }
+  .toggle .opt.on { color: var(--bold); font-weight: 700; }
+  .toggle .sw { position: relative; width: 40px; height: 24px; border: 2px solid var(--text); border-radius: 13px; background: var(--bg);
+                cursor: pointer; padding: 0; flex: 0 0 auto; }
+  .toggle .sw::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%;
+                       background: var(--text); transition: transform 140ms ease; }
+  .toggle .sw.right::after { transform: translateX(16px); }
+  /* One row per place: name and your time, then zone details, then the buttons and the status pill. */
+  .row { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; margin-bottom: 6px;
+         display: grid; row-gap: 4px; }
+  /* States, like a stoplight (Bart, 2026-10-13): live = green, the next place to start = orange, finished = a dark card
+     with a red outline; the rest plain. Each pill's border matches its card.
+     BEFORE (mockup): next cyan, finished faded (opacity .5). WHY: Bart wanted the colours to read like a stoplight. */
+  .row.live { border-color: var(--green); }
+  .row.next { border-color: var(--orange); }
+  .row.past { background: #252523; border-color: var(--dark-red); }
+  .row.past .l1 b, .row.past .when, .row.past .l2, .row.past .tag { color: #7d7d78; }
+  .row.past .controls a { filter: saturate(.35) brightness(.75); }
+  .controls .state.next { color: var(--orange); border-color: var(--orange); }
+  .controls .state.past { border-color: var(--dark-red); }
+  .controls .state.started { color: var(--grey); }
+  /* "Now" line: what's live / next, with a button that scrolls there. */
+  .nowbar { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 13px; color: var(--grey); }
+  .nowbar b { color: var(--bold); font-weight: 600; }
+  .nowbar .g { color: var(--green); font-weight: 700; }
+  .nowbar button { flex: 0 0 auto; font: inherit; font-size: 13px; font-weight: 700; color: var(--blue); background: var(--card);
+                   border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; cursor: pointer; white-space: nowrap; }
+  .nowbar button:active { background-color: #3a3a36; }
+  .row .l1 { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; white-space: nowrap; }
+  .row .l1 b { color: var(--bold); font-size: 15px; overflow: hidden; text-overflow: ellipsis; }
+  .row .when { color: var(--green); font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .row .l2 { font-size: 12px; color: var(--grey); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row .tag { color: var(--tan); }
+  .controls { display: flex; gap: 6px; align-items: center; }
+  .controls a { display: inline-flex; align-items: center; justify-content: center; gap: 5px; height: 30px; font-size: 12px; font-weight: 700;
+                padding: 6px 8px; border-radius: 6px; border: 1px solid #444; text-decoration: none; white-space: nowrap; color: #fff;
+                text-shadow: 0 1px 2px rgba(0,0,0,.7); box-shadow: 0 3px 0 var(--edge, #000), 0 5px 10px rgba(0,0,0,.35);
+                transition: transform 90ms ease, box-shadow 90ms ease, filter 90ms ease; }
+  .controls a:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--edge, #000), 0 2px 4px rgba(0,0,0,.28); filter: brightness(.93); }
+  .controls .ico { display: inline-flex; width: 16px; height: 16px; flex: 0 0 16px; }
+  .controls .ico svg { width: 100%; height: 100%; display: block; }
+  .controls .ipogo-btn { background: #1f5856; border-color: #3f9f9a; --edge: #226d68; }
+  .controls .joystick-btn { background: #1a73e8; border-color: #9bc2ff; --edge: #0d47a1; }
+  .controls .maps-btn { background: #2e6b3a; border-color: #8fd19e; --edge: #2a6b3b; }
+  /* One width for every status pill (Bart's symmetry): wide enough for "ended 23h 59m ago". */
+  .controls .state { margin-left: auto; flex: 0 0 132px; width: 132px; text-align: center; white-space: nowrap; padding: 0 8px;
+                     background: var(--bg); border: 1px solid #4a4a46; border-radius: 10px; font-size: 12px; line-height: 20px;
+                     font-weight: 700; color: var(--yellow); font-variant-numeric: tabular-nums; }
+  .controls .state.live { color: var(--green); border-color: var(--green); }
+  .controls .state.past { color: var(--grey); }
+  .links { display: flex; justify-content: space-between; font-size: 12px; color: var(--grey); margin: 14px 0; }
+  .links a { color: var(--blue); text-decoration: none; }
+  /* Footer: Bart's standard ("© years [Bart] Stassen, P.Eng." centred 14px, the version just below the screen edge). */
+  .footer { position: sticky; bottom: -22px; margin: 18px -16px 0; margin-top: auto; z-index: 3; height: 61px;
+            display: flex; flex-direction: column; align-items: center; font-size: 14px; color: var(--grey); white-space: nowrap;
+            background: rgba(43,43,41,.94); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+            border-top: 1px solid var(--line); }
+  .footer .note { height: 38px; display: flex; align-items: center; }
+  .footer img { height: 30px; vertical-align: middle; margin: 0 4px; transition: transform .5s ease-in-out; }
+  .footer img:hover { transform: scale(1.5); }
+  .footer #version { height: 22px; font-size: 12px; line-height: 1; color: #888; }
+</style>
+</head>
+<body>
+<div class="hero">
+  <svg class="globe" viewBox="0 0 48 48" aria-hidden="true">
+    <circle cx="24" cy="24" r="21" fill="#1f3b57" stroke="#74aeea" stroke-width="2.5"/>
+    <ellipse cx="24" cy="24" rx="9" ry="21" fill="none" stroke="#74aeea" stroke-width="2"/>
+    <path d="M3 24h42M7 13h34M7 35h34" stroke="#74aeea" stroke-width="2" fill="none"/>
+    <circle cx="36" cy="36" r="10" fill="#2b2b29" stroke="#ffd166" stroke-width="2.5"/>
+    <path d="M36 30v6l4 2.5" stroke="#ffd166" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </svg>
+  <div><div class="kicker">BartmanEH's</div><h1>Local Event Times</h1></div>
+  <a class="ies" href="../" aria-label="Home"><img src="../img/IES_logo.svg" alt="IES"></a>
+</div>
+<div class="inputs">
+  <label>Event date<input type="date" id="date"></label>
+  <label>Local start time<input type="time" id="time" step="60"></label>
+  <label>Duration (optional)<select id="dur">
+    <option value="0">None</option><option value="60">1 h</option><option value="120">2 h</option><option value="180">3 h</option>
+    <option value="240">4 h</option><option value="300">5 h</option><option value="360">6 h</option><option value="480">8 h</option>
+  </select></label>
+  <label>Your time zone<select id="home"></select></label>
+</div>
+<div class="summary" id="summary"></div>
+<div class="switches">
+  <div class="toggle" id="viewToggle"><span class="opt" data-v="key" data-t="Key">Key</span><button class="sw" aria-label="Key places or all time zones"></button><span class="opt" data-v="all" data-t="All zones">All zones</span></div>
+  <div class="toggle" id="appToggle"><span class="opt" data-v="ipogo" data-t="iPogo">iPogo</span><button class="sw" aria-label="iPogo or GPS JoyStick"></button><span class="opt" data-v="joystick" data-t="GPS JoyStick">GPS JoyStick</span></div>
+</div>
+<div class="nowbar" id="nowbar" hidden><span id="nowtext"></span><button type="button" id="nowbtn">Go to now ↓</button></div>
+<div id="list"></div>
+<div class="links"><a href="../">&larr; Home</a><span>Times from your browser's time zone data</span></div>
+<div class="footer"><span class="note">&copy; <span id="year">2026</span><a href="../"><img src="../img/BartmanEH.png" alt="Bart"></a>Stassen, P.Eng.</span><span id="version">v1.0</span></div>
+<script>
+(function () {
+  var D = {"places":[{"name":"Kiritimati","region":"Kiribati","tz":"Pacific/Kiritimati","lat":1.9827663,"lon":-157.3660506,"key":"first"},{"name":"Apia","region":"Samoa","tz":"Pacific/Apia","lat":-13.8304461,"lon":-171.7702528,"key":""},{"name":"Nukuʻalofa","region":"Tonga","tz":"Pacific/Tongatapu","lat":-21.1310139,"lon":-175.2021323,"key":""},{"name":"Waitangi","region":"Chatham Islands","tz":"Pacific/Chatham","lat":-43.9535,"lon":-176.5597,"key":""},{"name":"Suva","region":"Fiji","tz":"Pacific/Fiji","lat":-18.1636111,"lon":178.4328391,"key":""},{"name":"Wake Island","region":"","tz":"Pacific/Wake","lat":19.2899233,"lon":166.6138085,"key":""},{"name":"Auckland","region":"New Zealand","tz":"Pacific/Auckland","lat":-36.8503842,"lon":174.7636645,"key":""},{"name":"Port Vila","region":"Vanuatu","tz":"Pacific/Efate","lat":-17.743802,"lon":168.3148231,"key":""},{"name":"Lord Howe Island","region":"Australia","tz":"Australia/Lord_Howe","lat":-31.5553,"lon":159.0821,"key":""},{"name":"Sydney","region":"Australia","tz":"Australia/Sydney","lat":-33.8562614,"lon":151.2134691,"key":"Pokémap"},{"name":"Brisbane","region":"Australia","tz":"Australia/Brisbane","lat":-27.46888,"lon":153.02355,"key":""},{"name":"Adelaide","region":"Australia","tz":"Australia/Adelaide","lat":-34.92818,"lon":138.59993,"key":""},{"name":"Seoul","region":"South Korea","tz":"Asia/Seoul","lat":37.5501691,"lon":126.9856236,"key":""},{"name":"Tokyo","region":"Japan","tz":"Asia/Tokyo","lat":35.6536618,"lon":139.7530915,"key":""},{"name":"Eucla","region":"Australia","tz":"Australia/Eucla","lat":-31.6774,"lon":128.8893,"key":""},{"name":"Taipei","region":"Taiwan","tz":"Asia/Taipei","lat":25.0322222,"lon":121.5191446,"key":""},{"name":"Singapore","region":"","tz":"Asia/Singapore","lat":1.2789464,"lon":103.8512752,"key":"Pokémap"},{"name":"Bangkok","region":"Thailand","tz":"Asia/Bangkok","lat":13.7485775,"lon":100.4908383,"key":""},{"name":"Yangon","region":"Myanmar","tz":"Asia/Yangon","lat":16.8409,"lon":96.1735,"key":""},{"name":"Dhaka","region":"Bangladesh","tz":"Asia/Dhaka","lat":23.805757,"lon":90.410612,"key":""},{"name":"Kathmandu","region":"Nepal","tz":"Asia/Kathmandu","lat":27.7172,"lon":85.324,"key":""},{"name":"Mumbai","region":"India","tz":"Asia/Kolkata","lat":18.9192455,"lon":72.8336708,"key":""},{"name":"Karachi","region":"Pakistan","tz":"Asia/Karachi","lat":24.8382714,"lon":67.0337657,"key":""},{"name":"Kabul","region":"Afghanistan","tz":"Asia/Kabul","lat":34.5553,"lon":69.2075,"key":""},{"name":"Dubai","region":"UAE","tz":"Asia/Dubai","lat":25.1928279,"lon":55.2701823,"key":""},{"name":"Tehran","region":"Iran","tz":"Asia/Tehran","lat":35.6892,"lon":51.389,"key":""},{"name":"Baghdad","region":"Iraq","tz":"Asia/Baghdad","lat":33.3181951,"lon":44.3670619,"key":""},{"name":"Athens","region":"Greece","tz":"Europe/Athens","lat":37.9695774,"lon":23.7231022,"key":""},{"name":"Brussels","region":"Belgium","tz":"Europe/Brussels","lat":50.8482382,"lon":4.3601536,"key":""},{"name":"London","region":"UK","tz":"Europe/London","lat":51.5017567,"lon":-0.129398,"key":"Pokémap"},{"name":"Reykjavik","region":"Iceland","tz":"Atlantic/Reykjavik","lat":64.14653,"lon":-21.94236,"key":""},{"name":"Praia","region":"Cape Verde","tz":"Atlantic/Cape_Verde","lat":14.9364449,"lon":-23.5417491,"key":""},{"name":"Nuuk","region":"Greenland","tz":"America/Nuuk","lat":64.1791399,"lon":-51.741915,"key":""},{"name":"Fernando de Noronha","region":"Brazil","tz":"America/Noronha","lat":-3.8460576,"lon":-32.4142055,"key":""},{"name":"St. John's","region":"Canada","tz":"America/St_Johns","lat":47.4820578,"lon":-52.9681265,"key":""},{"name":"Halifax","region":"Canada","tz":"America/Halifax","lat":44.6462897,"lon":-63.7031086,"key":""},{"name":"New York","region":"USA","tz":"America/New_York","lat":40.7656794,"lon":-73.9773551,"key":"Pokémap"},{"name":"Chicago","region":"USA","tz":"America/Chicago","lat":41.8339037,"lon":-87.8720462,"key":""},{"name":"Albuquerque","region":"USA","tz":"America/Denver","lat":35.0825302,"lon":-106.7465191,"key":""},{"name":"Vancouver","region":"Canada","tz":"America/Vancouver","lat":49.27993,"lon":-123.12036,"key":"Pokémap"},{"name":"Anchorage","region":"USA","tz":"America/Anchorage","lat":61.2175,"lon":-149.8949,"key":""},{"name":"Taiohae","region":"Marquesas Islands","tz":"Pacific/Marquesas","lat":-8.9106,"lon":-140.0997,"key":""},{"name":"Adak","region":"USA","tz":"America/Adak","lat":51.87493,"lon":-176.65771,"key":""},{"name":"Honolulu","region":"USA","tz":"Pacific/Honolulu","lat":21.3281791,"lon":-157.8692846,"key":""},{"name":"Midway","region":"","tz":"Pacific/Midway","lat":28.2032307,"lon":-177.3777234,"key":""},{"name":"Pago Pago","region":"American Samoa","tz":"Pacific/Pago_Pago","lat":-14.3290007,"lon":-170.7153487,"key":""},{"name":"Baker Island","region":"","tz":"Etc/GMT+12","lat":0.1955414,"lon":-176.484367,"key":"last"}],"icons":{"ipogo":"\u003csvg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"iPogo\" xmlns=\"http://www.w3.org/2000/svg\"> \u003cdefs> \u003cclipPath id=\"ipogoButtonIconClip\">\u003ccircle cx=\"60\" cy=\"60\" r=\"57\"/>\u003c/clipPath> \u003c/defs> \u003cg clip-path=\"url(#ipogoButtonIconClip)\"> \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#00677a\"/> \u003cpath d=\"M-2 57Q60 37 122 57V-2H-2Z\" fill=\"#008474\"/> \u003cpath d=\"M-3 60Q60 40 123 60\" fill=\"none\" stroke=\"#fff\" stroke-width=\"8\"/> \u003cpath d=\"M60 29C45 29 39 38 40 52c1 13 12 20 17 38 1 4 5 4 6 0 5-18 16-25 17-38 1-14-5-23-20-23Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/> \u003ccircle cx=\"60\" cy=\"51\" r=\"9\" fill=\"#00677a\" stroke=\"#fff\" stroke-width=\"3.5\"/> \u003c/g> \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> \u003c/svg>","joystick":"\u003csvg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"GPS JoyStick\" xmlns=\"http://www.w3.org/2000/svg\"> \u003cdefs> \u003cclipPath id=\"gpsJoystickButtonIconClip\">\u003ccircle cx=\"60\" cy=\"60\" r=\"57\"/>\u003c/clipPath> \u003c/defs> \u003cg clip-path=\"url(#gpsJoystickButtonIconClip)\"> \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#8BC34A\"/> \u003cellipse cx=\"60\" cy=\"96\" rx=\"20\" ry=\"7\" fill=\"none\" stroke=\"#1976D2\" stroke-width=\"6\"/> \u003cpath d=\"M60 26C48 26 39 35 39 46c0 12 10 20 19 39 1 3 2 3 3 0 9-19 19-27 19-39 0-11-9-20-20-20Z\" fill=\"#1976D2\"/> \u003ccircle cx=\"60\" cy=\"47\" r=\"9\" fill=\"#2196F3\"/> \u003c/g> \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> \u003c/svg>","maps":"\u003csvg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"Maps\" xmlns=\"http://www.w3.org/2000/svg\"> \u003cdefs> \u003cclipPath id=\"mapsButtonIconClip\">\u003ccircle cx=\"60\" cy=\"60\" r=\"57\"/>\u003c/clipPath> \u003c/defs> \u003cg clip-path=\"url(#mapsButtonIconClip)\"> \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#f1f3f4\"/> \u003cpath d=\"M-2 78 40 52l40 22 42-24v75H-2Z\" fill=\"#a5d6a7\"/> \u003cpath d=\"M-2 92 38 68l42 22 42-24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"7\"/> \u003cpath d=\"M60 18C47 18 38 28 38 40c0 15 14 24 20 44 1 3 3 3 4 0 6-20 20-29 20-44 0-12-9-22-22-22Z\" fill=\"#ea4335\"/> \u003ccircle cx=\"60\" cy=\"40\" r=\"8.5\" fill=\"#fff\"/> \u003c/g> \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> \u003c/svg>"}};
+  // GPS JoyStick buttons go through Bart's JoyRoute app when this browser's JoyRoute links setting is on (the same
+  // localStorage "joyroute" the PoGO Link Pages use: one site, one setting).
+  var USE_JOYROUTE = false;
+  try { USE_JOYROUTE = localStorage.getItem('joyroute') === 'on'; } catch (e) {}
+  // Teleport app: the same per-device preference as the link pages and the Pokémap Export.
+  var PREFS_KEY = 'pokemap_quest_export_prefs_v1', prefs = { teleport: 'joystick' };
+  try { var sp = JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') || {}; if (sp.teleport) prefs.teleport = sp.teleport; } catch (e) {}
+  // This page's own inputs, remembered in this browser.
+  var KEY = 'localeventtimes.v1', saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
+  function store() {
+    try { localStorage.setItem(KEY, JSON.stringify({ date: $date.value, time: $time.value, dur: $dur.value, home: $home.value, view: view })); } catch (e) {}
+  }
+  var $date = document.getElementById('date'), $time = document.getElementById('time'), $dur = document.getElementById('dur'),
+      $home = document.getElementById('home'), $list = document.getElementById('list'), $sum = document.getElementById('summary');
+
+  // Time zones: the browser's own database, so daylight saving is right for whatever date is entered.
+  var browserZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  var zones = (Intl.supportedValuesOf ? Intl.supportedValuesOf('timeZone') : [browserZone]).slice();
+  if (zones.indexOf(browserZone) < 0) zones.push(browserZone);
+  zones.sort().forEach(function (z) { var o = document.createElement('option'); o.value = o.textContent = z; $home.appendChild(o); });
+
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  var today = new Date();
+  $date.value = saved.date || (today.getFullYear() + '-' + pad(today.getMonth() + 1) + '-' + pad(today.getDate()));
+  $time.value = saved.time || '18:00';
+  // Default 3 h, a common Pokémon GO event length (Bart chose #3, 2026-10-13), so the colours mean something; None stays.
+  $dur.value = saved.dur || '180';
+  $home.value = (saved.home && zones.indexOf(saved.home) >= 0) ? saved.home : browserZone;
+  var view = saved.view || 'key';
+
+  // Minutes a zone is ahead of UTC at instant ms.
+  var fmtCache = {};
+  function offsetMin(tz, ms) {
+    var f = fmtCache[tz] || (fmtCache[tz] = new Intl.DateTimeFormat('en-US', { timeZone: tz, hourCycle: 'h23', year: 'numeric',
+      month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }));
+    var p = {}; f.formatToParts(new Date(ms)).forEach(function (x) { p[x.type] = +x.value; });
+    var asUtc = Date.UTC(p.year, p.month - 1, p.day, p.hour % 24, p.minute, p.second);
+    return Math.round((asUtc - Math.floor(ms / 1000) * 1000) / 60000);
+  }
+  // The instant when the wall clock in tz shows y-m-d h:mi (second pass settles daylight-saving edges).
+  function zonedToMs(y, m, d, h, mi, tz) {
+    var guess = Date.UTC(y, m - 1, d, h, mi), o = offsetMin(tz, guess), t = guess - o * 60000, o2 = offsetMin(tz, t);
+    return o2 === o ? t : guess - o2 * 60000;
+  }
+  function offText(min) {
+    var s = min < 0 ? '−' : '+', a = Math.abs(min);
+    return 'UTC' + s + Math.floor(a / 60) + (a % 60 ? ':' + pad(a % 60) : '');
+  }
+  // "Thu, Sep 17" and "12:00 am" in the chosen home zone (lower-case am/pm, as in Bart's Sheet).
+  function dayText(ms, tz) { return new Intl.DateTimeFormat('en-US', { timeZone: tz, weekday: 'short', month: 'short', day: 'numeric' }).format(ms); }
+  function clockText(ms, tz) { return new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: 'numeric', minute: '2-digit' }).format(ms).replace('AM', 'am').replace('PM', 'pm'); }
+  function span(min) {
+    min = Math.round(Math.abs(min));
+    var d = Math.floor(min / 1440), h = Math.floor(min % 1440 / 60), m = min % 60;
+    return d ? d + 'd ' + h + 'h' : h ? h + 'h ' + pad(m) + 'm' : m + 'm';
+  }
+  var iconSeq = 0;
+  function iconHtml(name) {
+    var n = ++iconSeq;
+    return '<span class="ico">' + D.icons[name].replace(/id="([^"]+)"/g, 'id="$1' + n + '"').replace(/url\(#([^)]+)\)/g, 'url(#$1' + n + ')') + '</span>';
+  }
+  function setupToggle(id, get, set) {
+    var t = document.getElementById(id), opts = t.querySelectorAll('.opt'), sw = t.querySelector('.sw');
+    function paint() {
+      Array.prototype.forEach.call(opts, function (o) { o.classList.toggle('on', o.dataset.v === get()); });
+      sw.classList.toggle('right', opts[1].dataset.v === get());
+    }
+    function choose(v) { if (v !== get()) { set(v); paint(); render(); } }
+    Array.prototype.forEach.call(opts, function (o) { o.addEventListener('click', function () { choose(o.dataset.v); }); });
+    sw.addEventListener('click', function () { choose(get() === opts[0].dataset.v ? opts[1].dataset.v : opts[0].dataset.v); });
+    paint();
+  }
+  setupToggle('viewToggle', function () { return view; }, function (v) { view = v; store(); });
+  setupToggle('appToggle', function () { return prefs.teleport; }, function (v) {
+    prefs.teleport = v;
+    try { var all = JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') || {}; all.teleport = v; localStorage.setItem(PREFS_KEY, JSON.stringify(all)); } catch (e) {}
+  });
+
+  function render() {
+    var dp = $date.value.split('-'), tp = $time.value.split(':'), home = $home.value, dur = +$dur.value || 0;
+    if (dp.length !== 3 || tp.length < 2) { $list.innerHTML = ''; $sum.textContent = 'Enter a date and a time.'; return; }
+    var now = Date.now();
+    var rows = D.places.map(function (p) {
+      var start = zonedToMs(+dp[0], +dp[1], +dp[2], +tp[0], +tp[1], p.tz);
+      return { p: p, start: start, off: offsetMin(p.tz, start) };
+    }).sort(function (a, b) { return a.start - b.start || b.off - a.off; });
+    var first = rows[0], last = rows[rows.length - 1];
+    $sum.innerHTML = 'At <b>' + clockText(Date.UTC(2000, 0, 1, +tp[0], +tp[1]), 'UTC') + '</b> local, the event reaches ' + rows.length +
+      ' places from <b>' + dayText(first.start, home) + ', ' + clockText(first.start, home) + '</b> to <b>' +
+      dayText(last.start + (dur ? dur * 60000 : 0), home) + ', ' + clockText(last.start + (dur ? dur * 60000 : 0), home) + '</b> your time' +
+      (dur ? ' (end of the last one)' : '') + '.';
+    var nextRow = null, firstLive = null, liveCount = 0, nextName = '', nextIn = 0;
+    $list.innerHTML = '';
+    rows.forEach(function (r) {
+      var p = r.p;
+      if (view === 'key' && !p.key) return;
+      var end = r.start + dur * 60000;
+      var row = document.createElement('div'), st, cls;
+      if (now < r.start) { st = 'in ' + span((r.start - now) / 60000); cls = ''; }
+      else if (dur && now < end) { st = 'live · ' + span((end - now) / 60000) + ' left'; cls = 'live'; }
+      // 2026-10-13 BEFORE: with no duration, every started place counted as finished (red). WHY: it may still be on
+      // there (Bart chose #3). NOW: without a duration a started place is neutral ("started … ago", grey pill).
+      else if (dur) { st = 'ended ' + span((now - end) / 60000) + ' ago'; cls = 'past'; }
+      else { st = 'started ' + span((now - r.start) / 60000) + ' ago'; cls = 'started'; }
+      row.className = 'row' + (cls ? ' ' + cls : '');
+      if (cls === 'live') { liveCount++; if (!firstLive) firstLive = row; }
+      if (!cls && !nextRow) { row.classList.add('next'); nextRow = row; nextName = p.name; nextIn = r.start - now; }
+      var pillCls = (!cls && nextRow === row) ? 'next' : cls;
+      var l1 = document.createElement('div'); l1.className = 'l1';
+      var b = document.createElement('b'); b.textContent = p.name; l1.appendChild(b);
+      var w = document.createElement('span'); w.className = 'when'; w.textContent = dayText(r.start, home) + ' · ' + clockText(r.start, home);
+      l1.appendChild(w); row.appendChild(l1);
+      var l2 = document.createElement('div'); l2.className = 'l2';
+      l2.textContent = (p.region ? p.region + ' · ' : '') + offText(r.off) + ' · ' + p.tz;
+      if (p.key) { var tg = document.createElement('span'); tg.className = 'tag'; tg.textContent = ' · ' + (p.key === 'first' ? 'first in the world' : p.key === 'last' ? 'last in the world' : 'Pokémap'); l2.appendChild(tg); }
+      row.appendChild(l2);
+      var c = document.createElement('div'); c.className = 'controls';
+      var tel = document.createElement('a');
+      if (prefs.teleport === 'ipogo') {
+        tel.className = 'ipogo-btn'; tel.href = 'pokemongo://?lat=' + p.lat + '&lng=' + p.lon; tel.innerHTML = iconHtml('ipogo') + '<span>iPogo</span>';
+      } else {
+        tel.className = 'joystick-btn'; tel.href = (USE_JOYROUTE ? 'joyroute' : 'gpsjoystick') + '://teleport?lat=' + p.lat + '&lng=' + p.lon;
+        tel.innerHTML = iconHtml('joystick') + '<span>GPS JoyStick</span>';
+      }
+      c.appendChild(tel);
+      var mp = document.createElement('a'); mp.className = 'maps-btn'; mp.href = 'https://maps.google.com/?q=' + p.lat + ',' + p.lon;
+      mp.target = '_blank'; mp.rel = 'noopener'; mp.innerHTML = iconHtml('maps') + '<span>Maps</span>'; c.appendChild(mp);
+      var s = document.createElement('span'); s.className = 'state ' + pillCls; s.textContent = st; c.appendChild(s);
+      row.appendChild(c);
+      $list.appendChild(row);
+    });
+    // The now line: live count and the next start; the button scrolls to the first live place, else the next one.
+    target = firstLive || nextRow;
+    var parts = [];
+    if (liveCount) parts.push('<span class="g">' + liveCount + ' live</span>');
+    if (nextRow) parts.push('next: <b>' + nextName + '</b> in ' + span(nextIn / 60000));
+    document.getElementById('nowtext').innerHTML = parts.join(' · ');
+    document.getElementById('nowbar').hidden = !target;
+  }
+  var target = null;
+  // 2026-10-13 BEFORE: the target row was centred, leaving a screenful of finished places above it. WHY: Bart: "leave
+  // just one". NOW: the row before the target (one finished place) sits at the top of the screen.
+  function goNow(smooth) {
+    if (!target) return;
+    var top = (target.previousElementSibling || target).getBoundingClientRect().top + scrollY - 8;
+    scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'auto' });
+  }
+  document.getElementById('nowbtn').addEventListener('click', function () { goNow(true); });
+  [$date, $time, $dur, $home].forEach(function (el) { el.addEventListener('change', function () { store(); render(); }); });
+  $time.addEventListener('input', render); $date.addEventListener('input', render);
+  render();
+  // Once on opening: scroll to what's live or next, if it isn't already on screen.
+  if (target) { var rt = target.getBoundingClientRect(); if (rt.top < 0 || rt.bottom > innerHeight) goNow(false); }
+  setInterval(render, 30000);
+  var first = 2026, nowY = new Date().getFullYear();
+  if (nowY > first) document.getElementById('year').textContent = first + '–' + nowY;
+})();
+</script>
+</body>
+</html>
