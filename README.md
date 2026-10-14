@@ -121,8 +121,8 @@ browser's own time-zone data does the maths, so daylight saving is right for any
 
 - Inputs (remembered per browser): event date, local start time, duration (default 3 h; None = started places stay
   neutral), your time zone (the browser's by default).
-- Switches: **Key** (first and last in the world + the 5 Pokémap cities) | **All zones** (47 places, one or more per UTC
-  offset, incl. the half/quarter-hour ones), and iPogo | GPS JoyStick (shared with the link pages; GPS JoyStick goes
+- Switches: **Key** (first and last in the world + the 5 Pokémap cities) | **All zones** (42 places, one per UTC offset or
+  daylight-saving rule, incl. the half/quarter-hour ones), and iPogo | GPS JoyStick (shared with the link pages; GPS JoyStick goes
   through JoyRoute when `?joyroute=on` is set, see "JoyRoute links"), and on its own row **Maps** | **PoGoMap** (the
   map button opens Google Maps or pogomap.info at the place, `/location/<lat>/<lon>/17` with decimal commas;
   remembered per browser).
@@ -132,11 +132,13 @@ browser's own time-zone data does the maths, so daylight saving is right for any
 - Places: the Sheet's 39 (Vanuatu's zone fixed to `Pacific/Efate`, old zone names updated) + 8 missing offsets
   (Marquesas, Tehran, Kabul, Kathmandu, Yangon, Eucla, Lord Howe, Chatham), all checked on land with OpenStreetMap's
   reverse lookup; 6 moved to city centres (Adelaide, Anchorage, Adak were in or by the water). Open idea: use each
-  zone's most populous place. The list is the `places` data inside the page's script.
+  zone's most populous place. 2026-10-14: 5 dropped that matched another place's offset all year (Wake Island,
+  Nukuʻalofa, Seoul, Taipei, Midway; Bart kept Suva, Apia, Tokyo, Singapore, Pago Pago). The list is the `places`
+  data inside the page's script.
   Each entry: `name`, `region`, `tz`, `lat`, `lon`, `key` (`first` / `last` / `Pokémap` = in the Key view; `""` = All
   zones only). The footer version (`#version`, v1.1) shows a deploy has landed.
 - Coordinate tweaks (started 2026-10-14): Bart scouts each place on pogomap.info (the PoGoMap button), taps ⓘ on a
   gym or stop and sends the coordinates shown there, which replace that place's `lat`/`lon` as given. Done: Kiritimati
-  (Unity Mini Stadium), Waitangi, Apia, Nukuʻalofa, Auckland, Suva; next in All zones order: Wake Island. pogomap.info and the live site
-  can't be reached from cloud sessions, so check links on a phone.
+  (Unity Mini Stadium), Waitangi, Apia, Auckland, Suva; next in All zones order: Port Vila. pogomap.info and the
+  live site can't be reached from cloud sessions, so check links on a phone.
 - Root-page button "Local Event Times", second (after PoGO Link Pages).
