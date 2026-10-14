@@ -131,8 +131,8 @@ browser's own time-zone data does the maths, so daylight saving is right for any
   neutral), your time zone (the browser's by default).
 - Switches, row 1 as on the link pages: iPogo | GPS JoyStick (shared with the link pages; GPS JoyStick goes through JoyRoute
   when `?joyroute=on` is set, see "JoyRoute links") and **Maps** | **Copy** (the same per-device setting; Copy copies the place's
-  `lat,lon`); row 2, on its own: **Key** (first and last in the world + the 5 Pokémap cities) | **All zones** (44 places, one per
-  UTC offset or daylight-saving rule, incl. the half/quarter-hour ones). BEFORE v1.6 (2026-10-14): Key | All zones shared row 1
+  `lat,lon`); row 2, on its own: **All zones** (44 places, one per UTC offset or daylight-saving rule, incl. the
+  half/quarter-hour ones) | **Key** (first and last in the world + the 5 Pokémap cities; the default, on the right since v1.7). BEFORE v1.6 (2026-10-14): Key | All zones shared row 1
   with iPogo | GPS JoyStick and Maps | Copy had row 2; WHY: Bart, the same layout as the other pages. The **Maps** | **PoGoMap** switch (pogomap.info at
   `/location/<lat>/<lon>/17` with decimal commas) is hidden since v1.5, not deleted (`MAP_SWITCH` in the script).
 - Rows in the order the event reaches them; stoplight states: live = green, next to start = orange, finished = dark
@@ -146,7 +146,7 @@ browser's own time-zone data does the maths, so daylight saving is right for any
   data inside the page's script.
   Each entry: `name`, `region`, `tz`, `lat`, `lon`, `key` (`first` / `last` / `Pokémap` = in the Key view; `""` = All
   zones only), `site` (Pokémap places: the city's map site, shown as a **Pokémap ↗** badge link). The footer version
-  (`#version`, v1.6) shows a deploy has landed.
+  (`#version`, v1.7) shows a deploy has landed.
 - Coordinate tweaks (started 2026-10-14): Bart scouts each place on pogomap.info (the PoGoMap button), taps ⓘ on a
   gym or stop and sends the coordinates shown there, which replace that place's `lat`/`lon` as given (check each pair
   lands in its place: copying from pogomap.info can drop a minus sign or a leading digit; fix those and say so).
