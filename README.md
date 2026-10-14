@@ -139,8 +139,8 @@ browser's own time-zone data does the maths, so daylight saving is right for any
   finished place above; the page does this once on opening.
 - Places: the Sheet's 39 (Vanuatu's zone fixed to `Pacific/Efate`, old zone names updated) + 8 missing offsets
   (Marquesas, Tehran, Kabul, Kathmandu, Yangon, Eucla, Lord Howe, Chatham), all checked on land with OpenStreetMap's
-  reverse lookup; 6 moved to city centres (Adelaide, Anchorage, Adak were in or by the water). Open idea: use each
-  zone's most populous place. 2026-10-14: 5 dropped that matched another place's offset all year (Wake Island,
+  reverse lookup; 6 moved to city centres (Adelaide, Anchorage, Adak were in or by the water). Most populous place per zone:
+  decided 2026-10-14 (see "Most populous place on each clock" below; was an open idea). 2026-10-14: 5 dropped that matched another place's offset all year (Wake Island,
   Nukuʻalofa, Seoul, Taipei, Midway; Bart kept Suva, Apia, Tokyo, Singapore, Pago Pago). The list is the `places`
   data inside the page's script.
   Each entry: `name`, `region`, `tz`, `lat`, `lon`, `key` (`first` / `last` / `Pokémap` = in the Key view; `""` = All
