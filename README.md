@@ -136,7 +136,8 @@ browser's own time-zone data does the maths, so daylight saving is right for any
   Nukuʻalofa, Seoul, Taipei, Midway; Bart kept Suva, Apia, Tokyo, Singapore, Pago Pago). The list is the `places`
   data inside the page's script.
   Each entry: `name`, `region`, `tz`, `lat`, `lon`, `key` (`first` / `last` / `Pokémap` = in the Key view; `""` = All
-  zones only). The footer version (`#version`, v1.1) shows a deploy has landed.
+  zones only), `site` (Pokémap places: the city's map site, shown as a **Pokémap ↗** badge link). The footer version
+  (`#version`, v1.2) shows a deploy has landed.
 - Coordinate tweaks (started 2026-10-14): Bart scouts each place on pogomap.info (the PoGoMap button), taps ⓘ on a
   gym or stop and sends the coordinates shown there, which replace that place's `lat`/`lon` as given. Done: Kiritimati
   (Unity Mini Stadium), Waitangi, Apia, Auckland, Suva, Port Vila, Lord Howe Island, Sydney, Adelaide, Gold Coast (was Brisbane), Tokyo, Eucla, Singapore; next in All zones order: Bangkok. pogomap.info and the
