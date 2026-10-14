@@ -20,7 +20,8 @@ const input = document.querySelector('#start-word');
 const solveButton = document.querySelector('#solve-button');
 const resetButton = document.querySelector('#reset-button');
 const hintMode = document.querySelector('#hint-mode');
-const status = document.querySelector('#status');
+// 2026-10-14: was `status`, which shadows the browser's window.status (ESLint no-redeclare).
+const statusEl = document.querySelector('#status');
 const solution = document.querySelector('#solution');
 const solutionHeading = document.querySelector('#solution-heading');
 const pathContainer = document.querySelector('#path');
@@ -132,8 +133,8 @@ function rankedNextSteps(word) {
 }
 
 function setStatus(message, isError = false) {
-	status.textContent = message;
-	status.classList.toggle('error', isError);
+	statusEl.textContent = message;
+	statusEl.classList.toggle('error', isError);
 }
 
 function makeWordButton(word, previousWord) {

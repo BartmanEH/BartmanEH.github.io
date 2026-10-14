@@ -55,43 +55,17 @@
 					<div class="name">Bastian (Bart) Stassen, P.Eng.</div>
 					<div class="company">Innovative Engineering Services</div>
 					<div>
-						<!-- 2026-10-10: list of Bart's PoGO link pages, published from Google Drive by PoGo_Links/scripts/publish.py.
-						     BEFORE: "PoGo Link Pages", last button. WHY: Bart uses it most and spells it PoGO.
-						     NOW: "PoGO Link Pages", first button (2026-10-10). -->
-						<form action="./PoGo_Links/">
+						<!-- 2026-10-14 (v1.2) BEFORE: six buttons here (PoGO Link Pages, Local Event Times, DVB Calculator, Wordle
+						     Solver, Poople Solver, Shiny URL Converter). WHY: Bart wanted a higher level with two groups.
+						     NOW: PoGO Tools (link pages, event times, URL converter) and IES Tools (DVB calculator, solvers). -->
+						<form action="./PoGO_Tools/">
 							<p style="padding-top: 10px;">
-								<input type="submit" value="PoGO Link Pages" class="myButton buttonMain">
+								<input type="submit" value="PoGO Tools" class="myButton buttonMain">
 							</p>
 						</form>
-						<!-- 2026-10-13: when an event at the same local time (e.g. 6:00 pm local) reaches each time zone, in your
-						     own time (from Bart's "Event Times" Google Sheets). Second button: it's Pokémon GO-related like the first. -->
-						<form action="./Event_Times/">
+						<form action="./IES_Tools/">
 							<p style="padding-top: 10px;">
-								<input type="submit" value="Local Event Times" class="myButton buttonMain">
-							</p>
-						</form>
-						<form action="./DVB_Calc/">
-							<input type="hidden" name="submit">
-							<p style="padding-top: 10px;">
-								<input type="submit" name="DVBCalc_button" value="DVB Calculator" class="myButton buttonMain">
-							</p>
-						</form>
-						<form action="./Wordle_Solver/">
-							<input type="hidden" name="submit">
-							<p style="padding-top: 10px;">
-								<input type="submit" name="Wordle_solver_button" value="Wordle Solver" class="myButton buttonMain">
-							</p>
-						</form>
-						<form action="./Poople_Solver/">
-							<input type="hidden" name="submit">
-							<p style="padding-top: 10px;">
-								<input type="submit" name="Poople_solver_button" value="Poople Solver" class="myButton buttonMain">
-							</p>
-						</form>
-						<form action="./URL_converter/">
-							<input type="hidden" name="submit">
-							<p style="padding-top: 10px;">
-								<input type="submit" name="URL_converter_button" value="Shiny URL Converter" class="myButton buttonMain">
+								<input type="submit" value="IES Tools" class="myButton buttonMain">
 							</p>
 						</form>
 				</div><!-- forms -->
@@ -105,7 +79,7 @@
 			     NOW: "©2016–<year>" and v1.1 (1.0 = the page before 2026-10-10; 1.1 = PoGO Link Pages button first + this footer). -->
 			<div class="footer">
 				<p>&copy;<span id="year">2016</span> <input type="image" alt="Bart" src="./img/BartmanEH.png" class="footer_img" style="height:30px;">Stassen, P.Eng.</p>
-				<span id="version" style="position: absolute; left: 0; right: 0; top: 50px; display: block; font-size: 12px; line-height: 1; margin: 0; color: #888;">v1.1</span>
+				<span id="version" style="position: absolute; left: 0; right: 0; top: 50px; display: block; font-size: 12px; line-height: 1; margin: 0; color: #888;">v1.2</span>
 			</div><!-- footer -->
 			<script>
 				// © first year, widening to "2016–<this year>".

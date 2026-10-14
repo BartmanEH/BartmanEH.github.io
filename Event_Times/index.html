@@ -165,15 +165,15 @@
   // GPS JoyStick buttons go through Bart's JoyRoute app when this browser's JoyRoute links setting is on (the same
   // localStorage "joyroute" the PoGO Link Pages use: one site, one setting).
   var USE_JOYROUTE = false;
-  try { USE_JOYROUTE = localStorage.getItem('joyroute') === 'on'; } catch (e) {}
+  try { USE_JOYROUTE = localStorage.getItem('joyroute') === 'on'; } catch { /* ignore: not available in this browser */ }
   // Teleport app: the same per-device preference as the link pages and the Pokémap Export.
   var PREFS_KEY = 'pokemap_quest_export_prefs_v1', prefs = { teleport: 'joystick', second: 'copy' };
-  try { var sp = JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') || {}; if (sp.teleport) prefs.teleport = sp.teleport; if (sp.second) prefs.second = sp.second; } catch (e) {}
+  try { var sp = JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') || {}; if (sp.teleport) prefs.teleport = sp.teleport; if (sp.second) prefs.second = sp.second; } catch { /* ignore: not available in this browser */ }
   // This page's own inputs, remembered in this browser.
   var KEY = 'localeventtimes.v1', saved = {};
-  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch { /* ignore: not available in this browser */ }
   function store() {
-    try { localStorage.setItem(KEY, JSON.stringify({ date: $date.value, time: $time.value, dur: $dur.value, home: $home.value, view: view, map: map })); } catch (e) {}
+    try { localStorage.setItem(KEY, JSON.stringify({ date: $date.value, time: $time.value, dur: $dur.value, home: $home.value, view: view, map: map })); } catch { /* ignore: not available in this browser */ }
   }
   var $date = document.getElementById('date'), $time = document.getElementById('time'), $dur = document.getElementById('dur'),
       $home = document.getElementById('home'), $list = document.getElementById('list'), $sum = document.getElementById('summary');
@@ -242,11 +242,11 @@
   setupToggle('mapToggle', function () { return map; }, function (v) { map = v; store(); });
   setupToggle('appToggle', function () { return prefs.teleport; }, function (v) {
     prefs.teleport = v;
-    try { var all = JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') || {}; all.teleport = v; localStorage.setItem(PREFS_KEY, JSON.stringify(all)); } catch (e) {}
+    try { var all = JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') || {}; all.teleport = v; localStorage.setItem(PREFS_KEY, JSON.stringify(all)); } catch { /* ignore: not available in this browser */ }
   });
   setupToggle('secondToggle', function () { return prefs.second; }, function (v) {
     prefs.second = v;
-    try { var all = JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') || {}; all.second = v; localStorage.setItem(PREFS_KEY, JSON.stringify(all)); } catch (e) {}
+    try { var all = JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') || {}; all.second = v; localStorage.setItem(PREFS_KEY, JSON.stringify(all)); } catch { /* ignore: not available in this browser */ }
   });
   // Copy, as on the link pages: navigator.clipboard needs a secure context, so fall back to execCommand, then a prompt.
   var copiedName = null; // the place whose Copy button shows "✓ Copied" (the last one copied; survives re-renders)
@@ -257,7 +257,7 @@
   function legacyCopy(text) {
     var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
     document.body.appendChild(ta); ta.select(); var ok = false;
-    try { ok = document.execCommand('copy'); } catch (e) {}
+    try { ok = document.execCommand('copy'); } catch { /* ignore: not available in this browser */ }
     document.body.removeChild(ta);
     if (!ok) prompt('Copy the coordinates:', text);
   }

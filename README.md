@@ -1,3 +1,11 @@
+# Main page (`index.html`) and the two groups
+
+Since 2026-10-14 (main page v1.2) the main page has two buttons, each opening a group page in the same style:
+- **PoGO Tools** (`PoGO_Tools/`): PoGO Link Pages, Local Event Times, Shiny URL Converter.
+- **IES Tools** (`IES_Tools/`): DVB Calculator, Wordle Solver, Poople Solver.
+
+A new tool gets its button on its group page, not on the main page.
+
 # Wordle Solver
 <ul class="main-ul">
   <li>Enter your guess words for NYT <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a></li>

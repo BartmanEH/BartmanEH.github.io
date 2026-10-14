@@ -191,11 +191,13 @@ export async function tryResolveShortUrl(shortUrl) {
     clearTimeout(timeoutId);
     if (error.name === "AbortError") {
       throw new Error(
-        "Short URL resolution timed out after 5 s. Open the short URL once, copy the final long URL, and paste that here."
+        "Short URL resolution timed out after 5 s. Open the short URL once, copy the final long URL, and paste that here.",
+        { cause: error }
       );
     }
     throw new Error(
-      "Direct short URL resolution is blocked in many browsers on static sites. Open the short URL once, copy the final long URL, and paste that here."
+      "Direct short URL resolution is blocked in many browsers on static sites. Open the short URL once, copy the final long URL, and paste that here.",
+      { cause: error }
     );
   }
 

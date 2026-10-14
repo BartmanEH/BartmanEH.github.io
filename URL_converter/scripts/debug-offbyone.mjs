@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { convertClassicUrl, parseUserInput } from "../converter.js";
+import { parseUserInput } from "../converter.js";
 
 const mapping = JSON.parse(fs.readFileSync(new URL("../data/current-mapping.json", import.meta.url), "utf8"));
 const crosswalk = JSON.parse(fs.readFileSync(new URL("../data/classic-crosswalk.json", import.meta.url), "utf8"));
@@ -50,7 +50,7 @@ for (const { key, digit } of bucketDigits) {
 console.log(`\nUnmapped legacy IDs: ${unmappedLegacyIds.length}`);
 console.log(`Missing current rows: ${missingCurrentRows.length}`);
 
-const digit1Count = [...pidStatuses.values()].filter((d) => d === "1").count;
+// 2026-10-14: removed `digit1Count` (unused, and `.count` was always undefined; dexCount below is the real count).
 const ownCount = [...pidStatuses.values()].filter((d) => d === "2").length;
 const offerCount = [...pidStatuses.values()].filter((d) => d === "3").length;
 const dexCount = [...pidStatuses.values()].filter((d) => d === "1").length;

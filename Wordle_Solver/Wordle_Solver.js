@@ -399,7 +399,9 @@ function resultsModeClicked() {
 function copyrightClicked() {
   // disabled: conflicts with auto-scoring against today's real answer (the future-only pool excludes today's
   // answer by construction, so possibilities can never include it) - logic kept intact in case this is revisited
-  return;
+  // 2026-10-14 BEFORE: a bare `return;` above the kept logic. WHY: ESLint no-unreachable. NOW: a switch, off.
+  const futureOnlyToggleEnabled = false;
+  if (!futureOnlyToggleEnabled) return;
   boolAnswersOnly = !boolAnswersOnly;                               // toggle Answers only boolean switch
   boolPrevAnswers = !boolPrevAnswers;                               // toggle Previous Answers only boolean switch
   window.scroll(0, 0);                                              // scroll to top of page

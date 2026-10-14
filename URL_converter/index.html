@@ -392,7 +392,7 @@
 				// encodes ? and & before redirecting (%3F → ?, %26 → &, %3D → =)
 				raw = raw.replace(/https?:\/\/\S+/gi, (urlMatch) => {
 					if (/%3F/i.test(urlMatch)) {
-						try { return decodeURIComponent(urlMatch); } catch {}
+						try { return decodeURIComponent(urlMatch); } catch { /* not URL-encoded: use as is */ }
 					}
 					return urlMatch;
 				});
@@ -407,7 +407,7 @@
 
 				if (parsed.kind === "short-url") {
 					setStatus("Resolving via proxy...", "busy");
-					let resolved = null;
+					let resolved;
 
 					try {
 						resolved = await resolveViaProxy(parsed.source);
@@ -429,7 +429,7 @@
 					setStatus("Resolved — parsing...", "busy");
 					resolved = decodeEntities(resolved);
 					if (/%3F/i.test(resolved)) {
-						try { resolved = decodeURIComponent(resolved); } catch {}
+						try { resolved = decodeURIComponent(resolved); } catch { /* not URL-encoded: use as is */ }
 					}
 					try {
 						parsed = parseUserInput(resolved, parsed.fallbackName, "long-url");
@@ -501,8 +501,8 @@
 					});
 				} catch (err) {
 					clearTimeout(timeoutId);
-					if (err.name === "AbortError") throw new Error("Proxy timed out after 5 s.");
-					throw new Error("Proxy unreachable: " + err.message);
+					if (err.name === "AbortError") throw new Error("Proxy timed out after 5 s.", { cause: err });
+					throw new Error("Proxy unreachable: " + err.message, { cause: err });
 				}
 				clearTimeout(timeoutId);
 
@@ -546,7 +546,7 @@
 					if (u.hostname === "tinyurl.com" || u.hostname === "www.tinyurl.com") {
 						return "https://preview.tinyurl.com" + u.pathname;
 					}
-				} catch {}
+				} catch { /* not a URL: no preview link */ }
 				return null;
 			}
 

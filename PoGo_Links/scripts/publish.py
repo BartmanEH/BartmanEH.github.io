@@ -269,6 +269,8 @@ __ROWS__
 <div class="links"><a href="../">&larr; Home</a><span>Published __STAMP__</span></div>
 <div class="footer"><span class="note">&copy; <span id="year">__FIRST__</span><a href="../"><img src="../img/BartmanEH.png" alt="Bart"></a>Stassen, P.Eng.</span><span id="version">v__VERSION__</span></div>
 <script>
+  // 2026-10-14 BEFORE: storage/clipboard failures were swallowed with `catch (e) {}`. WHY: the site's ESLint now checks
+  // HTML pages too (no-empty, no-unused-vars). NOW: `catch { /* ignore: ... */ }`, same behaviour, lint-clean.
 // JoyRoute links (v2.9, 2026-10-11): JoyRoute's Settings opens this list with ?joyroute=on|off. It switches this
 // browser's localStorage "joyroute", which every link page reads (USE_JOYROUTE): on, their GPS JoyStick buttons use
 // joyroute://teleport (JoyRoute teleports in the background, then opens Pokémon GO); off, gpsjoystick:// as before.
@@ -278,7 +280,7 @@ __ROWS__
 (function () {
   var q = new URLSearchParams(location.search), v = String(q.get('joyroute') || '').toLowerCase();
   if (v !== 'on' && v !== 'off') return;
-  try { if (v === 'on') localStorage.setItem('joyroute', 'on'); else localStorage.removeItem('joyroute'); } catch (e) {}
+  try { if (v === 'on') localStorage.setItem('joyroute', 'on'); else localStorage.removeItem('joyroute'); } catch { /* ignore: not available in this browser */ }
   q.delete('joyroute');
   history.replaceState(history.state, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash);
   var n = document.getElementById('jrnote');
@@ -297,7 +299,7 @@ function refresh() {
     // Past its expiry (quest Exports: local midnight of their map): hidden here until the inbox job deletes it (v2.15).
     card.hidden = !!(p.expires && Date.now() >= Date.parse(p.expires));
     if (card.hidden) return;
-    try { st = JSON.parse(localStorage.getItem(p.storage) || '{}') || {}; } catch (e) {}
+    try { st = JSON.parse(localStorage.getItem(p.storage) || '{}') || {}; } catch { /* ignore: not available in this browser */ }
     var done = p.keys.filter(function (k) { return st[k] && st[k].done !== false; }).length;
     total += done;
     var bar = card.querySelector('.bar');
@@ -349,7 +351,7 @@ window.addEventListener('pageshow', refresh);   // coming Back from a page (bfca
 var ORDER_KEY = 'pogolinks.order.v1', list = document.getElementById('list'), lbl = document.getElementById('ordlbl'),
     btn = document.getElementById('reorder'), reset = document.getElementById('reset');
 function cards() { return Array.prototype.slice.call(list.querySelectorAll('.card')); }
-function saved() { try { return JSON.parse(localStorage.getItem(ORDER_KEY) || 'null'); } catch (e) { return null; } }
+function saved() { try { return JSON.parse(localStorage.getItem(ORDER_KEY) || 'null'); } catch { return null; } }
 function applyOrder() {
   var o = saved(), pos = {};
   (o || []).forEach(function (f, i) { pos[f] = i; });
@@ -367,7 +369,7 @@ function applyOrder() {
   lbl.textContent = o ? 'Your order' : 'Newest first';
 }
 function saveOrder() {
-  try { localStorage.setItem(ORDER_KEY, JSON.stringify(cards().map(function (c) { return c.dataset.file; }))); } catch (e) {}
+  try { localStorage.setItem(ORDER_KEY, JSON.stringify(cards().map(function (c) { return c.dataset.file; }))); } catch { /* ignore: not available in this browser */ }
   lbl.textContent = 'Your order';
 }
 cards().forEach(function (c) {
@@ -383,7 +385,7 @@ function setMode(on) {
 }
 btn.addEventListener('click', function () { setMode(!document.body.classList.contains('reorder')); });
 reset.addEventListener('click', function () {
-  try { localStorage.removeItem(ORDER_KEY); } catch (e) {}
+  try { localStorage.removeItem(ORDER_KEY); } catch { /* ignore: not available in this browser */ }
   applyOrder();
 });
 // In reorder mode a tap must not open the page.

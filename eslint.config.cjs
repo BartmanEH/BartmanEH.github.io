@@ -2,6 +2,7 @@
 const js = require("@eslint/js");
 const globals = require("globals");
 const unicorn = require("eslint-plugin-unicorn");
+const html = require("eslint-plugin-html");
 // Custom rule: enforce exactly one space **before** inline comments
 const inlineCommentSpacingRule = {
   meta: {
@@ -38,9 +39,8 @@ const inlineCommentSpacingRule = {
     };
   },
 };
-module.exports = [
-  js.configs.recommended,
-  {
+// Browser scripts: .js files and (since 2026-10-14) the <script> blocks inside .html pages.
+const browserScripts = {
     files: ["**/*.js", "**/*.user.js"],
     languageOptions: {
       ecmaVersion: "latest",
@@ -79,7 +79,17 @@ module.exports = [
       // enforce exactly one space before inline comments
       "custom/inline-comment-spacing": ["warn"],
     },
-  },
+};
+module.exports = [
+  // 2026-10-14 BEFORE: no ignores, so the bundled minified jQuery files counted (122 problems), and .html pages were
+  // never linted at all. WHY: Bart: lint must be clean, HTML included. NOW: third-party minified files are ignored and
+  // eslint-plugin-html lints every page's inline scripts with the same rules as the .js files.
+  { ignores: ["**/node_modules/**", "**/*.min.js"] },
+  js.configs.recommended,
+  browserScripts,
+  { ...browserScripts, files: ["**/*.html"], plugins: { ...browserScripts.plugins, html } },
+  // The URL converter is an ES module (converter.js, imported by the page's <script type="module"> and the .mjs tests).
+  { files: ["URL_converter/converter.js", "URL_converter/index.html"], languageOptions: { sourceType: "module" } },
   {
     files: ["**/*.mjs"],
     languageOptions: {
