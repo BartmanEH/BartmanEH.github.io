@@ -275,10 +275,11 @@
         tel.innerHTML = iconHtml('joystick') + '<span>GPS JoyStick</span>';
       }
       c.appendChild(tel);
-      // 2026-10-14: the map button opens Google Maps or PoGoMap (pogomap.info, its /location/lat,lng/zoom link), per the switch.
+      // 2026-10-14: the map button opens Google Maps or PoGoMap, per the switch. PoGoMap's link is /location/lat/lng/zoom
+      // with decimal commas (Bart's link from the site: /location/45,385069/-75,639621/17); lat,lng with dots opens London.
       var mp = document.createElement('a'); mp.target = '_blank'; mp.rel = 'noopener';
       if (map === 'pogomap') {
-        mp.className = 'pogomap-btn'; mp.href = 'https://www.pogomap.info/location/' + p.lat + ',' + p.lon + '/16';
+        mp.className = 'pogomap-btn'; mp.href = 'https://www.pogomap.info/location/' + String(p.lat).replace('.', ',') + '/' + String(p.lon).replace('.', ',') + '/17';
         mp.innerHTML = iconHtml('pogomap') + '<span>PoGoMap</span>';
       } else {
         mp.className = 'maps-btn'; mp.href = 'https://maps.google.com/?q=' + p.lat + ',' + p.lon;

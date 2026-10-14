@@ -124,7 +124,8 @@ browser's own time-zone data does the maths, so daylight saving is right for any
 - Switches: **Key** (first and last in the world + the 5 Pokémap cities) | **All zones** (47 places, one or more per UTC
   offset, incl. the half/quarter-hour ones), and iPogo | GPS JoyStick (shared with the link pages; GPS JoyStick goes
   through JoyRoute when `?joyroute=on` is set, see "JoyRoute links"), and on its own row **Maps** | **PoGoMap** (the
-  map button opens Google Maps or pogomap.info at the place; remembered per browser).
+  map button opens Google Maps or pogomap.info at the place, `/location/<lat>/<lon>/17` with decimal commas;
+  remembered per browser).
 - Rows in the order the event reaches them; stoplight states: live = green, next to start = orange, finished = dark
   card with a dark red outline. The "now" line and **Go to now** scroll to the live (or next) places, leaving one
   finished place above; the page does this once on opening.
