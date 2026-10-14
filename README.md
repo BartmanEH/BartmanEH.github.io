@@ -137,6 +137,6 @@ browser's own time-zone data does the maths, so daylight saving is right for any
   zones only). The footer version (`#version`, v1.1) shows a deploy has landed.
 - Coordinate tweaks (started 2026-10-14): Bart scouts each place on pogomap.info (the PoGoMap button), taps ⓘ on a
   gym or stop and sends the coordinates shown there, which replace that place's `lat`/`lon` as given. Done: Kiritimati
-  (Unity Mini Stadium), Waitangi, Apia, Nukuʻalofa; next in All zones order: Auckland. pogomap.info and the live site
+  (Unity Mini Stadium), Waitangi, Apia, Nukuʻalofa, Auckland; next in All zones order: Suva. pogomap.info and the live site
   can't be reached from cloud sessions, so check links on a phone.
 - Root-page button "Local Event Times", second (after PoGO Link Pages).
