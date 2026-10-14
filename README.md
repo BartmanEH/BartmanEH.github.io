@@ -137,7 +137,7 @@ browser's own time-zone data does the maths, so daylight saving is right for any
   data inside the page's script.
   Each entry: `name`, `region`, `tz`, `lat`, `lon`, `key` (`first` / `last` / `Pokémap` = in the Key view; `""` = All
   zones only), `site` (Pokémap places: the city's map site, shown as a **Pokémap ↗** badge link). The footer version
-  (`#version`, v1.3) shows a deploy has landed.
+  (`#version`, v1.4) shows a deploy has landed.
 - Coordinate tweaks (started 2026-10-14): Bart scouts each place on pogomap.info (the PoGoMap button), taps ⓘ on a
   gym or stop and sends the coordinates shown there, which replace that place's `lat`/`lon` as given (check each pair
   lands in its place: copying from pogomap.info can drop a minus sign or a leading digit; fix those and say so).
