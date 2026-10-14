@@ -139,7 +139,18 @@ browser's own time-zone data does the maths, so daylight saving is right for any
   zones only), `site` (Pokémap places: the city's map site, shown as a **Pokémap ↗** badge link). The footer version
   (`#version`, v1.2) shows a deploy has landed.
 - Coordinate tweaks (started 2026-10-14): Bart scouts each place on pogomap.info (the PoGoMap button), taps ⓘ on a
-  gym or stop and sends the coordinates shown there, which replace that place's `lat`/`lon` as given. Done: Kiritimati
-  (Unity Mini Stadium), Waitangi, Apia, Auckland, Suva, Port Vila, Lord Howe Island, Sydney, Adelaide, Gold Coast (was Brisbane), Tokyo, Eucla, Singapore, Bangkok, Yangon, Dhaka, Kathmandu, Mumbai, Karachi, Kabul, Dubai, Tehran, Baghdad, Athens, Amsterdam (was Brussels), London, Reykjavik, Praia, Nuuk, Fernando de Noronha, St. John's, Halifax, New York (the NYC Pokémap's Default spot), Chicago; next in All zones order: Albuquerque. pogomap.info and the
-  live site can't be reached from cloud sessions, so check links on a phone.
+  gym or stop and sends the coordinates shown there, which replace that place's `lat`/`lon` as given (check each pair
+  lands in its place: copying from pogomap.info can drop a minus sign or a leading digit; fix those and say so).
+  - Done (34): Kiritimati (Unity Mini Stadium), Waitangi, Apia, Auckland, Suva, Port Vila, Lord Howe Island, Sydney,
+    Adelaide, Gold Coast (was Brisbane), Tokyo, Eucla, Singapore, Bangkok, Yangon, Dhaka, Kathmandu, Mumbai, Karachi,
+    Kabul, Dubai, Tehran, Baghdad, Athens, Amsterdam (was Brussels), London, Reykjavik, Praia, Nuuk, Fernando de
+    Noronha, St. John's, Halifax, New York (the NYC Pokémap's Default spot, 40.765705,-73.976226), Chicago.
+  - To do (8): Albuquerque, Vancouver, Anchorage, Taiohae, Adak, Honolulu, Pago Pago, Baker Island.
+  - Open, needs a session with web access: Bart wants the most populous place on each clock (it was only an "open
+    idea" above; Albuquerque etc. came from his Sheet). Unchecked candidates, from memory: Albuquerque -> Denver (same
+    `America/Denver`; Bart leaning to switch), Baghdad -> Istanbul (UTC+3 all year), Mumbai -> Delhi (metro),
+    Bangkok -> Jakarta (metro), Reykjavik -> Abidjan/Accra (UTC+0 all year). Bart's deliberate picks stay: Gold Coast,
+    Singapore and Amsterdam (Pokémap/choice), Tokyo, Suva, Apia, Pago Pago. Verify populations and confirm each with
+    Bart before switching; he then sends coordinates for the new place.
+  - pogomap.info and the live site couldn't be reached from the 2026-10-14 cloud session; links were checked on a phone.
 - Root-page button "Local Event Times", second (after PoGO Link Pages).
