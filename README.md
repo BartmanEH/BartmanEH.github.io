@@ -140,6 +140,6 @@ browser's own time-zone data does the maths, so daylight saving is right for any
   (`#version`, v1.2) shows a deploy has landed.
 - Coordinate tweaks (started 2026-10-14): Bart scouts each place on pogomap.info (the PoGoMap button), taps ⓘ on a
   gym or stop and sends the coordinates shown there, which replace that place's `lat`/`lon` as given. Done: Kiritimati
-  (Unity Mini Stadium), Waitangi, Apia, Auckland, Suva, Port Vila, Lord Howe Island, Sydney, Adelaide, Gold Coast (was Brisbane), Tokyo, Eucla, Singapore, Bangkok, Yangon, Dhaka, Kathmandu, Mumbai, Karachi; next in All zones order: Kabul. pogomap.info and the
+  (Unity Mini Stadium), Waitangi, Apia, Auckland, Suva, Port Vila, Lord Howe Island, Sydney, Adelaide, Gold Coast (was Brisbane), Tokyo, Eucla, Singapore, Bangkok, Yangon, Dhaka, Kathmandu, Mumbai, Karachi, Dubai; Kabul pending (34.520584, 69.174084?); next in All zones order: Tehran. pogomap.info and the
   live site can't be reached from cloud sessions, so check links on a phone.
 - Root-page button "Local Event Times", second (after PoGO Link Pages).
