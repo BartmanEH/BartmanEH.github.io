@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="dark">
+<title>Push test</title>
+<style>
+  /* Throwaway lab test (2026-10-14, Bart + Claude): can this https page reach the PushTest app's server on
+     127.0.0.1:8787 (catch-up, Server-Sent Events, POST)? Deleted right after the test. */
+  :root { --bg: #2b2b29; --card: #33332f; --text: #d1d5db; --blue: #74aeea; --green: #a1c281; --red: #e06c75; --grey: #9ca3af; }
+  * { box-sizing: border-box; }
+  body { margin: 0 auto; max-width: 412px; padding: 16px; background: var(--bg); color: var(--text); font: 14px system-ui, sans-serif; }
+  h1 { font-size: 18px; margin: 0 0 12px; }
+  .row { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+  button { flex: 1; padding: 10px; background: var(--card); color: var(--blue); border: 1px solid #404040; border-radius: 8px; font-size: 14px; }
+  #log { background: var(--card); border-radius: 8px; padding: 8px; font: 12px ui-monospace, monospace; white-space: pre-wrap; word-break: break-all; min-height: 200px; }
+  .ok { color: var(--green); } .bad { color: var(--red); } .dim { color: var(--grey); }
+</style>
+</head>
+<body>
+<h1>Push test</h1>
+<div class="row"><button id="go">Connect</button><button id="post">POST tick</button><button id="state">GET /state</button></div>
+<div id="log"></div>
+<script>
+(function () {
+  'use strict';
+  var BASE = 'http://127.0.0.1:8787', TOKEN = 'pt-test-token', q = '?token=' + TOKEN;
+  var logEl = document.getElementById('log'), es = null, lastEventAt = 0;
+  function log(text, cls) {
+    var d = new Date(), t = d.toTimeString().slice(0, 8) + '.' + String(d.getMilliseconds()).padStart(3, '0');
+    var s = document.createElement('div');
+    s.className = cls || '';
+    s.textContent = t + '  ' + text;
+    logEl.appendChild(s);
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+  function getState() {
+    return fetch(BASE + '/state' + q).then(function (r) { return r.json(); }).then(function (j) {
+      log('state: n=' + j.n + ' ' + j.ticks.join(' '), 'ok');
+    }).catch(function (e) { log('state failed: ' + e, 'bad'); });
+  }
+  function connect() {
+    if (es) { es.close(); }
+    log('connecting to ' + BASE, 'dim');
+    getState().then(function () {
+      es = new EventSource(BASE + '/events' + q);
+      es.onopen = function () { log('stream open', 'ok'); };
+      es.onmessage = function (ev) {
+        var gap = lastEventAt ? ' (+' + Math.round((Date.now() - lastEventAt) / 1000) + ' s)' : '';
+        lastEventAt = Date.now();
+        var j = JSON.parse(ev.data);
+        log('event id=' + ev.lastEventId + ' from ' + j.from + ' delay ' + (Date.now() - j.at) + ' ms' + gap, 'ok');
+      };
+      es.onerror = function () { log('stream error, readyState ' + es.readyState + ' (0 = reconnecting, 2 = closed)', 'bad'); };
+    });
+  }
+  document.getElementById('go').onclick = connect;
+  document.getElementById('state').onclick = getState;
+  document.getElementById('post').onclick = function () {
+    fetch(BASE + '/tick' + q, { method: 'POST' }).then(function (r) { return r.json(); })
+      .then(function (j) { log('posted, n=' + j.n, 'ok'); })
+      .catch(function (e) { log('post failed: ' + e, 'bad'); });
+  };
+  document.addEventListener('visibilitychange', function () { log('page ' + document.visibilityState, 'dim'); });
+  log('Tap Connect. UA: ' + navigator.userAgent.replace(/^Mozilla\/5.0 /, ''), 'dim');
+}());
+</script>
+</body>
+</html>
