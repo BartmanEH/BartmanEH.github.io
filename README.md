@@ -121,8 +121,8 @@ browser's own time-zone data does the maths, so daylight saving is right for any
 
 - Inputs (remembered per browser): event date, local start time, duration (default 3 h; None = started places stay
   neutral), your time zone (the browser's by default).
-- Switches: **Key** (first and last in the world + the 5 Pokémap cities) | **All zones** (47 places, one or more per UTC
-  offset, incl. the half/quarter-hour ones), and iPogo | GPS JoyStick (shared with the link pages; GPS JoyStick goes
+- Switches: **Key** (first and last in the world + the 5 Pokémap cities) | **All zones** (47 places, one per UTC offset or
+  daylight-saving rule, incl. the half/quarter-hour ones), and iPogo | GPS JoyStick (shared with the link pages; GPS JoyStick goes
   through JoyRoute when `?joyroute=on` is set, see "JoyRoute links"), and on its own row **Maps** | **PoGoMap** (the
   map button opens Google Maps or pogomap.info at the place, `/location/<lat>/<lon>/17` with decimal commas;
   remembered per browser).
@@ -132,11 +132,30 @@ browser's own time-zone data does the maths, so daylight saving is right for any
 - Places: the Sheet's 39 (Vanuatu's zone fixed to `Pacific/Efate`, old zone names updated) + 8 missing offsets
   (Marquesas, Tehran, Kabul, Kathmandu, Yangon, Eucla, Lord Howe, Chatham), all checked on land with OpenStreetMap's
   reverse lookup; 6 moved to city centres (Adelaide, Anchorage, Adak were in or by the water). Open idea: use each
-  zone's most populous place. The list is the `places` data inside the page's script.
+  zone's most populous place. 2026-10-14: 5 dropped that matched another place's offset all year (Wake Island,
+  Nukuʻalofa, Seoul, Taipei, Midway; Bart kept Suva, Apia, Tokyo, Singapore, Pago Pago). The list is the `places`
+  data inside the page's script.
   Each entry: `name`, `region`, `tz`, `lat`, `lon`, `key` (`first` / `last` / `Pokémap` = in the Key view; `""` = All
-  zones only). The footer version (`#version`, v1.1) shows a deploy has landed.
+  zones only), `site` (Pokémap places: the city's map site, shown as a **Pokémap ↗** badge link). The footer version
+  (`#version`, v1.3) shows a deploy has landed.
 - Coordinate tweaks (started 2026-10-14): Bart scouts each place on pogomap.info (the PoGoMap button), taps ⓘ on a
-  gym or stop and sends the coordinates shown there, which replace that place's `lat`/`lon` as given. Done: Kiritimati
-  (Unity Mini Stadium), Waitangi, Apia, Nukuʻalofa; next in All zones order: Auckland. pogomap.info and the live site
-  can't be reached from cloud sessions, so check links on a phone.
+  gym or stop and sends the coordinates shown there, which replace that place's `lat`/`lon` as given (check each pair
+  lands in its place: copying from pogomap.info can drop a minus sign or a leading digit; fix those and say so).
+  - Done (43): Kiritimati (Unity Mini Stadium), Waitangi, Apia, Auckland, Suva, Port Vila, Lord Howe Island, Sydney,
+    Adelaide, Gold Coast (was Brisbane), Tokyo, Eucla, Singapore, Bangkok, Yangon, Dhaka, Kathmandu, Mumbai, Karachi,
+    Kabul, Dubai, Tehran, Istanbul (was Baghdad), Athens, Amsterdam (was Brussels), London, Reykjavik, Praia, Nuuk,
+    Fernando de Noronha, St. John's, Halifax, New York (the NYC Pokémap's Default spot, 40.765705,-73.976226),
+    Chicago, Denver (was Albuquerque, same `America/Denver`), Vancouver, Anchorage, Adak, Honolulu, Pago Pago, Baker
+    Island, Darwin (added), São Paulo (added). Midway Atoll (scouted 2026-10-14, then dropped again: no permanent
+    residents; Pago Pago is the bigger place on UTC-11).
+  - To do (2 clocks): Taiohae and Atuona, Port Vila, Nouméa and Yuzhno-Sakhalinsk (each a town centre for now; Bart
+    checks them on pogomap.info and keeps one per clock).
+  - Most populous place on each clock (decided 2026-10-14, checked against UN World Urbanization Prospects 2025 and
+    the zones that keep the same offset all year): Bart kept Bangkok (not Jakarta) and Mumbai (not Delhi) and switched
+    Baghdad to Istanbul (UTC+3 all year), kept Reykjavik (not Abidjan); Port Vila, Nouméa and Yuzhno-Sakhalinsk
+    (UTC+11 all year) are all listed until he picks. Taiohae had no stops or gyms; the Marquesas (the only UTC-9:30
+    place) have no bigger town, so Atuona (Hiva Oa: Gauguin's grave, Brel museum) is listed too until he picks. Two
+    clocks were missing and were added: UTC-3 all year (São Paulo; Halifax is -3 only in its summer) and UTC+9:30 all
+    year (Darwin; Adelaide is +9:30 only in its winter).
+  - pogomap.info and the live site couldn't be reached from the 2026-10-14 cloud session; links were checked on a phone.
 - Root-page button "Local Event Times", second (after PoGO Link Pages).
