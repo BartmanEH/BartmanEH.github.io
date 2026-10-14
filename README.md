@@ -145,8 +145,9 @@ browser's own time-zone data does the maths, so daylight saving is right for any
   Nukuʻalofa, Seoul, Taipei, Midway; Bart kept Suva, Apia, Tokyo, Singapore, Pago Pago). The list is the `places`
   data inside the page's script.
   Each entry: `name`, `region`, `tz`, `lat`, `lon`, `key` (`first` / `last` / `Pokémap` = in the Key view; `""` = All
-  zones only), `site` (Pokémap places: the city's map site, shown as a **Pokémap ↗** badge link). The footer version
-  (`#version`, v1.7) shows a deploy has landed.
+  zones only), `site` (Pokémap places: the city's map site, shown as a **Pokémap ↗** badge link, first on the card's
+  second line so the badges line up, like the "first/last in the world" tags; v1.8, before that both came last). The footer version
+  (`#version`, v1.8) shows a deploy has landed.
 - Coordinate tweaks (started 2026-10-14): Bart scouts each place on pogomap.info (the PoGoMap button), taps ⓘ on a
   gym or stop and sends the coordinates shown there, which replace that place's `lat`/`lon` as given (check each pair
   lands in its place: copying from pogomap.info can drop a minus sign or a leading digit; fix those and say so).
