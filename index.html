@@ -79,7 +79,8 @@
 			     NOW: "©2016–<year>" and v1.1 (1.0 = the page before 2026-10-10; 1.1 = PoGO Link Pages button first + this footer). -->
 			<div class="footer">
 				<p>&copy;<span id="year">2016</span> <input type="image" alt="Bart" src="./img/BartmanEH.png" class="footer_img" style="height:30px;">Stassen, P.Eng.</p>
-				<span id="version" style="position: absolute; left: 0; right: 0; top: 50px; display: block; font-size: 12px; line-height: 1; margin: 0; color: #888;">v1.2</span>
+				<!-- 2026-10-15 BEFORE: version at top: 50px. WHY: on iOS Safari (floating toolbar) it showed above the toolbar instead of just off screen (Bart's screenshot). NOW: iOS only (css/style.css .ver rule, 16px lower, behind the toolbar); other browsers keep 50px. -->
+			<span id="version" class="ver" style="position: absolute; left: 0; right: 0; top: 50px; display: block; font-size: 12px; line-height: 1; margin: 0; color: #888;">v1.3</span>
 			</div><!-- footer -->
 			<script>
 				// © first year, widening to "2016–<this year>".

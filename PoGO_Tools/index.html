@@ -78,7 +78,8 @@
 			</div><!-- content -->
 			<div class="footer">
 				<p>&copy;<span id="year">2026</span> <input type="image" alt="Bart" src="../img/BartmanEH.png" class="footer_img" style="height:30px;">Stassen, P.Eng.</p>
-				<span id="version" style="position: absolute; left: 0; right: 0; top: 50px; display: block; font-size: 12px; line-height: 1; margin: 0; color: #888;">v1.0</span>
+				<!-- 2026-10-15 BEFORE: version at top: 50px. WHY: on iOS Safari (floating toolbar) it showed above the toolbar instead of just off screen (Bart's screenshot). NOW: iOS only (css/style.css .ver rule, 16px lower, behind the toolbar); other browsers keep 50px. -->
+			<span id="version" class="ver" style="position: absolute; left: 0; right: 0; top: 50px; display: block; font-size: 12px; line-height: 1; margin: 0; color: #888;">v1.1</span>
 			</div><!-- footer -->
 			<script>
 				// © first year, widening to "2026–<this year>".
