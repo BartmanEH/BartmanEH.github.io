@@ -90,9 +90,9 @@ a, a:visited {
 }
 
 /* 2026-10-15 (Bart, iOS only): on iOS Safari's floating toolbar the version line (inline top: 50px) showed above the toolbar
-   instead of just off screen. NOW: 16px lower there; Android and desktop keep 50px. !important beats the inline style. */
+   instead of just off screen. NOW: 76px lower there (v2: 16px was still behind the toolbar, visible through its glass; the screen edge is ~74px below the page bottom); Android and desktop keep 50px. !important beats the inline style. */
 @supports (-webkit-touch-callout: none) {
-	.footer #version.ver { top: 66px !important; }
+	.footer #version.ver { top: 126px !important; }
 }
 
 @supports (-webkit-touch-callout: none) {
