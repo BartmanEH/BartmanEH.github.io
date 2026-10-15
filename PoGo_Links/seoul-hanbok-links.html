@@ -705,7 +705,10 @@ if(n){localStorage.setItem(K,JSON.stringify(out));location.reload();}})();
   // p.lon), not by this page's keys, which can be ids or 5-decimal text. Edge asks once per site for permission to reach JoyRoute;
   // until then the stream simply fails. Nothing happens unless this is Android with the JoyRoute switch on.
   var HOP_BASE = 'http://127.0.0.1:48730';
-  var HOP_TOKEN_KEY = 'joyroute_hop_token', HOP_LINKED_KEY = D.storageKey + ':hopLinked', HOP_TRY_KEY = D.storageKey + ':hopTry';
+  // BEFORE: one token per site (key 'joyroute_hop_token'). WHY: two pages of one site then shared a token and JoyRoute's server, which finds
+  // the HopRoute by token, could answer one page with the other's card (Bart, 2026-10-15). NOW: one token per page, keyed by this page's storage
+  // key (the PoGo Links list page reads the same key to show live counts).
+  var HOP_TOKEN_KEY = 'joyroute_hop_token:' + D.storageKey, HOP_LINKED_KEY = D.storageKey + ':hopLinked', HOP_TRY_KEY = D.storageKey + ':hopTry';
   var hopToken = '', hopLinked = false, hopTry = 0, hopSource = null, hopFails = 0;
   var HOP_KEY_BY_COORD = {};
   function hopCoordOf(p) { return Number(p.lat).toFixed(6) + ',' + Number(p.lon).toFixed(6); }

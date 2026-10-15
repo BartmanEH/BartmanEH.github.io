@@ -31,7 +31,7 @@ import unicodedata
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
-LIST_VERSION = "2.17"   # 2.17 = "updated today 12:28 PM": the publish time, not just the day, on its own second line; 2.16 = quest Exports (pages with an expiry) always on top, above a saved order; 2.15 = pages past their pogolinks-expires time are hidden (quest Exports, daily); 2.14 = floating footer less tall (notice line 49 → 38px); 2.13 = iOS: reordering no longer cancelled by the long-press link menu; 2.12 = a Remaining tile (places − done); 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
+LIST_VERSION = "2.18"   # 2.18 = live counts from JoyRoute's HopRoute stream (2026-10-15, Bart); 2.17 = "updated today 12:28 PM": the publish time, not just the day, on its own second line; 2.16 = quest Exports (pages with an expiry) always on top, above a saved order; 2.15 = pages past their pogolinks-expires time are hidden (quest Exports, daily); 2.14 = floating footer less tall (notice line 49 → 38px); 2.13 = iOS: reordering no longer cancelled by the long-press link menu; 2.12 = a Remaining tile (places − done); 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -292,6 +292,7 @@ __ROWS__
 // Progress: each page keeps its Done ticks in localStorage on this same site, so the list can read them.
 // A place counts as done when its key is in the page's saved state (the two LEGO pages share one key on purpose).
 var PAGES = __DATA__;
+var jrDone = {};   // file -> the points JoyRoute says are ticked ({"lat,lng": true})
 function refresh() {
   var total = 0, left = 0;
   document.querySelectorAll('.card').forEach(function (card) {
@@ -300,7 +301,11 @@ function refresh() {
     card.hidden = !!(p.expires && Date.now() >= Date.parse(p.expires));
     if (card.hidden) return;
     try { st = JSON.parse(localStorage.getItem(p.storage) || '{}') || {}; } catch { /* ignore: not available in this browser */ }
-    var done = p.keys.filter(function (k) { return st[k] && st[k].done !== false; }).length;
+    // v2.18 (2026-10-15, Bart) BEFORE: only the page's own saved ticks. WHY: with a HopRoute running, a route page in a background tab is paused
+    // by the browser and can't apply JoyRoute's ticks, so this count stayed old until Bart went into that page and back. NOW: the larger of the saved
+    // ticks and what JoyRoute reports for this page over its stream (jrDone, below); the route page writes the real ticks when it next wakes.
+    var stored = p.keys.filter(function (k) { return st[k] && st[k].done !== false; }).length;
+    var done = Math.min(p.keys.length, Math.max(stored, Object.keys(jrDone[card.dataset.file] || {}).length));
     total += done;
     var bar = card.querySelector('.bar');
     // v2.11 BEFORE: this was "var total", which shadowed the outer total (JS var scoping), so the ticks above were added
@@ -346,6 +351,38 @@ var first = __FIRST__, now = new Date().getFullYear();
 if (now > first) document.getElementById('year').textContent = first + '\u2013' + now;
 refresh();
 window.addEventListener('pageshow', refresh);   // coming Back from a page (bfcache) shows the new ticks
+// Live counts from JoyRoute (v2.18, 2026-10-15, Bart): a page that has a HopRoute keeps a token under 'joyroute_hop_token:<its storage key>' on this
+// site, so for each such card the list opens JoyRoute's local event stream (127.0.0.1:48730, the same one the page itself uses; Edge's one-time
+// permission for this site covers it) and shows the larger of the saved count and JoyRoute's. Only on Android with JoyRoute links on, only while
+// this page is showing (a background tab is paused anyway), and a stream that fails 3 times is dropped until the page is shown again.
+var jrStreams = {};
+function jrToken(p) { try { return p.storage ? localStorage.getItem('joyroute_hop_token:' + p.storage) : null; } catch { return null; } }
+function jrOpen() {
+  var on = false;
+  try { on = localStorage.getItem('joyroute') === 'on'; } catch { /* ignore: not available in this browser */ }
+  if (!on || !/Android/i.test(navigator.userAgent) || !window.EventSource || document.visibilityState !== 'visible') return;
+  document.querySelectorAll('.card').forEach(function (card) {
+    var file = card.dataset.file, token = card.hidden ? null : jrToken(PAGES[file]);
+    if (!token || jrStreams[file]) return;
+    var fails = 0, src = new EventSource('http://127.0.0.1:48730/events?token=' + token);
+    jrStreams[file] = src;
+    src.onopen = function () { fails = 0; };
+    src.onmessage = function (ev) {
+      var m;
+      try { m = JSON.parse(ev.data); } catch { return; }
+      var list = m && (m.type === 'state' ? m.done : m.at);
+      if (!list) return;
+      if (m.type === 'state') jrDone[file] = {};
+      var set = jrDone[file] || (jrDone[file] = {});
+      list.forEach(function (k) { set[k] = true; });
+      refresh();
+    };
+    src.onerror = function () { if (++fails >= 3) { src.close(); delete jrStreams[file]; } };
+  });
+}
+function jrClose() { Object.keys(jrStreams).forEach(function (f) { jrStreams[f].close(); delete jrStreams[f]; }); }
+document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') jrOpen(); else jrClose(); });
+jrOpen();
 
 // Reorder: drag a card by its grip. Saved order = list of file names; files not in it go first, in the published order.
 var ORDER_KEY = 'pogolinks.order.v1', list = document.getElementById('list'), lbl = document.getElementById('ordlbl'),
