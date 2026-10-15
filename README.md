@@ -6,6 +6,12 @@ Since 2026-10-14 (main page v1.2) the main page has two buttons, each opening a 
 
 A new tool gets its button on its group page, not on the main page.
 
+Footer version line (2026-10-15, Bart): these three pages (main v1.4, PoGO Tools / IES Tools v1.2) use `css/style.css` `.footer` with the
+version inline at `top: 50px` below the footer. On iOS Safari (floating bottom toolbar) it showed above the toolbar instead of just off screen.
+Added an iOS-only rule (`@supports (-webkit-touch-callout: none)`, class `ver`, `top: 126px !important`; Android and desktop keep 50px). Tried 66px first
+(still visible through the toolbar glass), then 126px; Bart saw no change on his iPhone and chose to leave it as is ("maybe a red herring").
+Safari caches the CSS for 10 minutes: close the tab and open a new one to test. Not verified on a real device after the last step.
+
 # Wordle Solver
 <ul class="main-ul">
   <li>Enter your guess words for NYT <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a></li>
@@ -89,7 +95,7 @@ Google Drive `Other/Pokémon GO/web pages w links/`, now an untouched archive).
   spacing, then smaller text, never below 12 px).
 - Reorder: Reorder → drag a card's grip → Done; Reset = newest first. Saved per browser (localStorage
   `pogolinks.order.v1`); pages not in it (new ones) show on top, newest first.
-- Header: Poké Ball, "BartmanEH's PoGO Link Pages", the IES logo linking home. Footer: Bart's standard (see the shared
+- Header: Poké Ball, "BartmanEH's PoGO Link Pages", the IES logo linking to PoGO Tools (`../PoGO_Tools/`; list 2.19, 2026-10-15, as is the bottom "← PoGO Tools" link; BEFORE both went to the site root). Individual link pages' header Home still goes to the list. Footer: Bart's standard (see the shared
   notes), sticky at the bottom of the screen with the version just below the edge until you reach the end.
 
 ## JoyRoute links (`?joyroute=on|off`)
