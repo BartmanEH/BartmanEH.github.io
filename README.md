@@ -141,6 +141,8 @@ browser's own time-zone data does the maths, so daylight saving is right for any
   the summary sentence shortened ("6:00 pm local hits 44 places, <start> to <end> your time (last one ends).").
 - v1.9.1 (2026-10-15, Bart's iOS screenshot): the time box poked out of the inputs card on iOS (Safari gives date/time inputs a minimum
   width). BEFORE: `1fr 1fr` columns. NOW: `minmax(0, 1fr)` columns, native look off on the time input and dropdowns (own arrow).
+- v1.9.2 (2026-10-15): the start time uses the date's trick (visible label, invisible real input on top, "6:00 PM"). BEFORE: iOS drew the
+  native time text at the top of its box instead of centred.
 - Rows in the order the event reaches them; stoplight states: live = green, next to start = orange, finished = dark
   card with a dark red outline. The "now" line and **Go to now** scroll to the live (or next) places, leaving one
   finished place above; the page does this once on opening.
@@ -153,7 +155,7 @@ browser's own time-zone data does the maths, so daylight saving is right for any
   Each entry: `name`, `region`, `tz`, `lat`, `lon`, `key` (`first` / `last` / `Pokémap` = in the Key view; `""` = All
   zones only), `site` (Pokémap places: the city's map site, shown as a **Pokémap ↗** badge link, first on the card's
   second line so the badges line up, like the "first/last in the world" tags; v1.8, before that both came last). The footer version
-  (`#version`, v1.9.1) shows a deploy has landed.
+  (`#version`, v1.9.2) shows a deploy has landed.
 - Coordinate tweaks (started 2026-10-14): Bart scouts each place on pogomap.info (the PoGoMap button), taps ⓘ on a
   gym or stop and sends the coordinates shown there, which replace that place's `lat`/`lon` as given (check each pair
   lands in its place: copying from pogomap.info can drop a minus sign or a leading digit; fix those and say so).
