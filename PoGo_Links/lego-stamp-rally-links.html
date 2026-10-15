@@ -327,16 +327,23 @@ if(n){localStorage.setItem(K,JSON.stringify(out));location.reload();}
   // Placeholder stops (no location yet) can never be marked, whatever triggers the handler.
   var TBA = {};
   POINTS.forEach(function (p) { if (p.tba) TBA[p.key] = true; });
+  // A stop ticked here is also told to JoyRoute's HopRoute (only when a HopRoute from this page is connected), by its coordinates;
+  // un-ticking here is not sent (ticks only ever get added). Failures are ignored.
+  function hopTick(key) {
+    var p = BY_KEY[key];
+    if (!hopLinked || !hopToken || !GPX_TO_JOYROUTE || !p || p.tba) return;
+    try { fetch(HOP_BASE + '/tick?token=' + hopToken + '&at=' + encodeURIComponent(hopCoordOf(p)), { method: 'POST' }).catch(function () {}); } catch { /* ignore */ }
+  }
   function markDone(key) {
     if (TBA[key]) return;
     if (state[key]) return;
     state[key] = { done: true, ts: Date.now() };
-    save(); updateRow(key);
+    save(); updateRow(key); hopTick(key);
   }
   function toggleDone(key) {
     if (TBA[key]) return;
     if (state[key]) delete state[key];
-    else state[key] = { done: true, ts: Date.now() };
+    else { state[key] = { done: true, ts: Date.now() }; hopTick(key); }
     save(); updateRow(key);
   }
   function label(p) { return p.n + '. ' + p.name; }
@@ -692,6 +699,78 @@ if(n){localStorage.setItem(K,JSON.stringify(out));location.reload();}
   var gpxBtn = document.getElementById('gpxBtn');
   var GPX_NAME = D.fileStem + '.gpx';
   var GPX_TO_JOYROUTE = USE_JOYROUTE && /Android/i.test(navigator.userAgent);
+  // HopRoute page link (2026-10-14, Bart; same code as Pokémap 7.65's Export; JoyRoute's side is its HopServer on 127.0.0.1:48730).
+  // BEFORE: the JoyRoute button only sent the route; progress made in JoyRoute never reached this page. WHY: HopRoute walks the
+  // stops one jump at a time and Bart ticks them on its bar, and he does not want the page out of sync. NOW: when the JoyRoute
+  // button is used, the link also carries this page's address, origin and a token this browser made up once; JoyRoute keeps them on
+  // the HopRoute card. The page then opens an event stream to JoyRoute's local server and marks the stops JoyRoute reports (it only
+  // ever adds ticks), and tells JoyRoute when a stop is ticked here. Stops are named by COORDINATES (6 decimals, from p.lat and
+  // p.lon), not by this page's keys, which can be ids or 5-decimal text. Edge asks once per site for permission to reach JoyRoute;
+  // until then the stream simply fails. Nothing happens unless this is Android with the JoyRoute switch on.
+  var HOP_BASE = 'http://127.0.0.1:48730';
+  var HOP_TOKEN_KEY = 'joyroute_hop_token', HOP_LINKED_KEY = D.storageKey + ':hopLinked', HOP_TRY_KEY = D.storageKey + ':hopTry';
+  var hopToken = '', hopLinked = false, hopTry = 0, hopSource = null, hopFails = 0;
+  var HOP_KEY_BY_COORD = {};
+  function hopCoordOf(p) { return Number(p.lat).toFixed(6) + ',' + Number(p.lon).toFixed(6); }
+  POINTS.forEach(function (p) { if (!p.tba && p.lat != null && p.lon != null) HOP_KEY_BY_COORD[hopCoordOf(p)] = p.key; });
+  try {
+    hopToken = localStorage.getItem(HOP_TOKEN_KEY) || '';
+    if (!hopToken && window.crypto && crypto.getRandomValues) {
+      var rnd = new Uint8Array(16);
+      crypto.getRandomValues(rnd);
+      hopToken = Array.prototype.map.call(rnd, function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+      localStorage.setItem(HOP_TOKEN_KEY, hopToken);
+    }
+    hopLinked = localStorage.getItem(HOP_LINKED_KEY) === '1';
+    hopTry = Number(localStorage.getItem(HOP_TRY_KEY)) || 0;
+  } catch { /* ignore: not available in this browser */ }
+  // The JoyRoute button's icon shows the link: normal (no HopRoute from this page yet), bright with a ring (live), grey
+  // (a HopRoute from this page exists but JoyRoute can't be reached right now).
+  var hopStyle = document.createElement('style');
+  hopStyle.textContent = '#gpxBtn.jr-live svg{border-radius:50%;box-shadow:0 0 0 2px #a5d6a7;filter:brightness(1.35) saturate(1.2)}' +
+    '#gpxBtn.jr-off svg{filter:grayscale(1) opacity(.55)}';
+  document.head.appendChild(hopStyle);
+  function hopIcon(mode) {
+    gpxBtn.classList.toggle('jr-live', mode === 'live');
+    gpxBtn.classList.toggle('jr-off', mode === 'off');
+    if (!GPX_TO_JOYROUTE) return;
+    gpxBtn.title = mode === 'live' ? 'JoyRoute is connected: ticks are shared both ways'
+      : mode === 'off' ? 'A HopRoute from this page exists but JoyRoute is not reachable: open JoyRoute (HopRoute tab)'
+      : 'Open the route in JoyRoute (adds it to GPS JoyStick, or starts a HopRoute); long-press: download the GPX file';
+  }
+  function hopWanted() { return hopLinked || (Date.now() - hopTry < 600000); }
+  function hopConnect() {
+    if (!GPX_TO_JOYROUTE || !hopToken || !hopWanted() || hopSource || !window.EventSource) return;
+    var src = new EventSource(HOP_BASE + '/events?token=' + hopToken);
+    hopSource = src;
+    src.onopen = function () {
+      hopFails = 0;
+      hopIcon('live');
+      if (!hopLinked) { hopLinked = true; try { localStorage.setItem(HOP_LINKED_KEY, '1'); } catch { /* ignore */ } }
+    };
+    src.onmessage = function (ev) {
+      var m;
+      try { m = JSON.parse(ev.data); } catch { return; }
+      var coords = m && (m.type === 'state' ? m.done : m.at);
+      if (!coords || !coords.length) return;
+      var fresh = [];
+      coords.forEach(function (c) { var k = HOP_KEY_BY_COORD[c]; if (k && !state[k]) fresh.push(k); });
+      fresh.forEach(function (k) { state[k] = { done: true, ts: Date.now() }; });
+      if (!fresh.length) return;
+      save();
+      if (fresh.length > 3) render(); else fresh.forEach(updateRow);
+    };
+    src.onerror = function () {
+      if (hopLinked) hopIcon('off');
+      // EventSource retries by itself; give up after a few failures and try again when the page is shown again.
+      if (++hopFails >= 3) { src.close(); hopSource = null; }
+    };
+  }
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') { hopFails = 0; hopConnect(); }
+  });
+  if (hopLinked) hopIcon('off');
+  hopConnect();
   function downloadGpx() { download(routeGpx(D.gpx), 'application/gpx+xml', GPX_NAME); routeHint('Downloaded'); }
   if (GPX_TO_JOYROUTE) {
     gpxBtn.innerHTML = JOYROUTE_ICON + 'JoyRoute';
@@ -719,7 +798,15 @@ if(n){localStorage.setItem(K,JSON.stringify(out));location.reload();}
     if (Date.now() < gpxIgnoreClickUntil) return;
     if (!GPX_TO_JOYROUTE || e.shiftKey) { downloadGpx(); return; }
     routeHint('Sent', 'to JoyRoute');
-    location.href = 'joyroute://import?name=' + encodeURIComponent(GPX_NAME) + '&gpx=' + encodeURIComponent(routeGpx(D.gpx));
+    // Also this page's address, origin and token, so a HopRoute made from this link can talk to the page; and from now on
+    // (10 minutes) the page looks for JoyRoute's server when it is shown again.
+    var hopParams = '';
+    if (hopToken) {
+      hopParams = '&page=' + encodeURIComponent(location.href.split('#')[0]) + '&origin=' + encodeURIComponent(location.origin) + '&token=' + hopToken;
+      hopTry = Date.now();
+      try { localStorage.setItem(HOP_TRY_KEY, String(hopTry)); } catch { /* ignore */ }
+    }
+    location.href = 'joyroute://import?name=' + encodeURIComponent(GPX_NAME) + '&gpx=' + encodeURIComponent(routeGpx(D.gpx)) + hopParams;
   });
   var copyGpxBtn = document.getElementById('copyGpxBtn');
   copyGpxBtn.addEventListener('click', function () {
