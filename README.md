@@ -91,6 +91,7 @@ Google Drive `Other/Pokémon GO/web pages w links/`, now an untouched archive).
   Bangkok) count in a page's total, so it can't show "Complete" before they're done (v2.7).
   A page with `<meta name="pogolinks-open" content="why">` never shows "Complete" (v2.8): used by the LEGO page while
   the game doesn't list that rally as completed; remove the meta when it does.
+  2026-10-15: the 2026-10-13 re-render had dropped it from the LEGO page (list showed Complete); restored, and `rerender_page.py` now keeps `pogolinks-open`/`pogolinks-expires`.
 - Titles: em dashes closed up (The Canadian Style); long titles are condensed to one line by script (tighter letter
   spacing, then smaller text, never below 12 px).
 - Reorder: Reorder → drag a card's grip → Done; Reset = newest first. Saved per browser (localStorage
