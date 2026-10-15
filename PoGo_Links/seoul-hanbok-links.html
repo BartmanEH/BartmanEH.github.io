@@ -324,24 +324,19 @@ if(n){localStorage.setItem(K,JSON.stringify(out));location.reload();}})();
   // Placeholder stops (no location yet) can never be marked, whatever triggers the handler.
   var TBA = {};
   POINTS.forEach(function (p) { if (p.tba) TBA[p.key] = true; });
-  // A stop ticked here is also told to JoyRoute's HopRoute (only when a HopRoute from this page is connected), by its coordinates;
-  // un-ticking here is not sent (ticks only ever get added). Failures are ignored.
-  function hopTick(key) {
-    var p = BY_KEY[key];
-    if (!hopLinked || !hopToken || !GPX_TO_JOYROUTE || !p || p.tba) return;
-    try { fetch(HOP_BASE + '/tick?token=' + hopToken + '&at=' + encodeURIComponent(hopCoordOf(p)), { method: 'POST' }).catch(function () {}); } catch { /* ignore */ }
-  }
+  // Every change here (tick, un-tick, Undo last, Mark all, Reset all, Import) is also told to JoyRoute's HopRoute, by coordinates
+  // (hopChanged, in the HopRoute page link code below).
   function markDone(key) {
     if (TBA[key]) return;
     if (state[key]) return;
     state[key] = { done: true, ts: Date.now() };
-    save(); updateRow(key); hopTick(key);
+    save(); updateRow(key); hopChanged([key], true);
   }
   function toggleDone(key) {
     if (TBA[key]) return;
     if (state[key]) delete state[key];
-    else { state[key] = { done: true, ts: Date.now() }; hopTick(key); }
-    save(); updateRow(key);
+    else state[key] = { done: true, ts: Date.now() };
+    save(); updateRow(key); hopChanged([key], !!state[key]);
   }
   function label(p) { return p.n + '. ' + p.name; }
   // The most recently marked stop is whichever timestamp in state is largest: no separate stack to drift.
@@ -357,13 +352,13 @@ if(n){localStorage.setItem(K,JSON.stringify(out));location.reload();}})();
     if (together.length > 1) {
       if (!confirm('Un-mark the ' + together.length + ' stops marked together by Mark all done? Marked ' + Math.round((Date.now() - bestTs) / 1000) + 's ago.')) return;
       together.forEach(function (k) { delete state[k]; });
-      save(); render(); return;
+      save(); render(); hopChanged(together, false); return;
     }
     var point = POINTS.filter(function (p) { return p.key === bestKey; })[0];
     var name = point ? label(point) : bestKey;
     if (!confirm('Un-mark "' + name + '"? Marked ' + Math.round((Date.now() - bestTs) / 1000) + 's ago.')) return;
     delete state[bestKey];
-    save(); updateRow(bestKey);
+    save(); updateRow(bestKey); hopChanged([bestKey], false);
     var row = list.querySelector('[data-key="' + bestKey.replace(/"/g, '\\"') + '"]');
     if (row) {
       row.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -614,14 +609,15 @@ if(n){localStorage.setItem(K,JSON.stringify(out));location.reload();}})();
     if (!confirm('Mark all ' + todo.length + ' remaining stops on this page done? Undo last takes it back.')) return;
     var now = Date.now();
     todo.forEach(function (p) { state[p.key] = { done: true, ts: now }; });
-    save(); render();
+    save(); render(); hopChanged(todo.map(function (p) { return p.key; }), true);
   });
   resetAllBtn.addEventListener('click', function () {
     var n = Object.keys(state).length;
     if (!n) { alert('Nothing is marked done.'); return; }
     if (!confirm('Clear all ' + n + ' done marks on this page? This cannot be undone.')) return;
+    var cleared = Object.keys(state);
     state = {};
-    save(); render();
+    save(); render(); hopChanged(cleared, false);
   });
   function download(text, type, fileName) {
     var blob = new Blob([text], { type: type });
@@ -642,9 +638,9 @@ if(n){localStorage.setItem(K,JSON.stringify(out));location.reload();}})();
     var reader = new FileReader();
     reader.onload = function () {
       try {
-        var imported = JSON.parse(reader.result), n = 0;
-        Object.keys(imported).forEach(function (k) { var v = normalise(imported[k]); if (v) { state[k] = v; n++; } });
-        save(); render();
+        var imported = JSON.parse(reader.result), n = 0, got = [];
+        Object.keys(imported).forEach(function (k) { var v = normalise(imported[k]); if (v) { state[k] = v; n++; got.push(k); } });
+        save(); render(); hopChanged(got, true);
         alert('Imported ' + n + ' done marks.');
       } catch { alert('Invalid progress file'); }
       e.target.value = '';
@@ -709,7 +705,13 @@ if(n){localStorage.setItem(K,JSON.stringify(out));location.reload();}})();
   // the HopRoute by token, could answer one page with the other's card (Bart, 2026-10-15). NOW: one token per page, keyed by this page's storage
   // key (the PoGo Links list page reads the same key to show live counts).
   var HOP_TOKEN_KEY = 'joyroute_hop_token:' + D.storageKey, HOP_LINKED_KEY = D.storageKey + ':hopLinked', HOP_TRY_KEY = D.storageKey + ':hopTry';
-  var hopToken = '', hopLinked = false, hopTry = 0, hopSource = null, hopFails = 0;
+  // Two-way sync (2026-10-15, Bart). BEFORE: ticks were only ever added, both ways, and ticks made here before the link existed never
+  // reached JoyRoute. WHY: Bart ticks rows here first (GPS JoyStick links) and starts a HopRoute later, and un-ticks were never
+  // shared. NOW: per stop the NEWEST change (tick or un-tick, from either side) wins. A tick's time is its ts in state; an un-tick's
+  // time is kept in HOP_GONE_KEY ({key: ms}). On connecting the page sends its whole state (POST /sync) and takes JoyRoute's merged
+  // answer; after that every change goes both ways as it happens (POST /marks here; add/remove events from JoyRoute).
+  var HOP_GONE_KEY = D.storageKey + ':hopGone';
+  var hopToken = '', hopLinked = false, hopTry = 0, hopSource = null, hopFails = 0, hopGone = {};
   var HOP_KEY_BY_COORD = {};
   function hopCoordOf(p) { return Number(p.lat).toFixed(6) + ',' + Number(p.lon).toFixed(6); }
   POINTS.forEach(function (p) { if (!p.tba && p.lat != null && p.lon != null) HOP_KEY_BY_COORD[hopCoordOf(p)] = p.key; });
@@ -723,7 +725,63 @@ if(n){localStorage.setItem(K,JSON.stringify(out));location.reload();}})();
     }
     hopLinked = localStorage.getItem(HOP_LINKED_KEY) === '1';
     hopTry = Number(localStorage.getItem(HOP_TRY_KEY)) || 0;
+    hopGone = JSON.parse(localStorage.getItem(HOP_GONE_KEY) || '{}') || {};
   } catch { /* ignore: not available in this browser */ }
+  function hopSaveGone() {
+    try { if (Object.keys(hopGone).length) localStorage.setItem(HOP_GONE_KEY, JSON.stringify(hopGone)); else localStorage.removeItem(HOP_GONE_KEY); } catch { /* ignore */ }
+  }
+  function hopPost(path, marks) {
+    // text/plain: the body is JSON, but a "simple" type keeps the request free of an extra CORS header check.
+    return fetch(HOP_BASE + path + '?token=' + hopToken, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ marks: marks }) })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); });
+  }
+  // A change made here, for the stops [keys] (now done or not): remember un-tick times, and tell JoyRoute if a HopRoute from this
+  // page exists (if JoyRoute can't be reached now, the sync on the next connect carries it). Failures are ignored.
+  function hopChanged(keys, done) {
+    if (!GPX_TO_JOYROUTE || !keys.length) return;
+    var now = Date.now(), marks = [];
+    keys.forEach(function (k) {
+      var p = BY_KEY[k];
+      if (done) delete hopGone[k]; else hopGone[k] = now;
+      if (p && !p.tba && p.lat != null) marks.push([hopCoordOf(p), done ? 1 : 0, done ? ((state[k] && +state[k].ts) || 0) : now]);
+    });
+    hopSaveGone();
+    if (hopLinked && hopToken && marks.length) hopPost('/marks', marks).catch(function () {});
+  }
+  // A change from JoyRoute for the stop at coordinates c: taken only if newer than what this page has (a tie goes to the tick,
+  // the same rule as JoyRoute's). Returns the stop's key if anything changed.
+  function hopApply(c, done, ts) {
+    var k = HOP_KEY_BY_COORD[c];
+    if (!k) return null;
+    var on = !!state[k], mine = on ? (+state[k].ts || 0) : (hopGone[k] != null ? hopGone[k] : -1);
+    if (ts < mine || (ts === mine && (on || !done))) return null;
+    if (done) { state[k] = { done: true, ts: ts }; delete hopGone[k]; } else { delete state[k]; hopGone[k] = ts; }
+    return k;
+  }
+  function hopApplied(keys) {
+    if (!keys.length) return;
+    save(); hopSaveGone();
+    if (keys.length > 3) render(); else keys.forEach(updateRow);
+  }
+  // On connecting: send everything this page knows, take JoyRoute's merged marks. An older JoyRoute without /sync: fall back to
+  // adding the ticks its state event listed (the behaviour before 2026-10-15).
+  function hopSync(stateDone) {
+    var marks = [];
+    POINTS.forEach(function (p) {
+      if (p.tba || p.lat == null) return;
+      if (state[p.key]) marks.push([hopCoordOf(p), 1, +state[p.key].ts || 0]);
+      else if (hopGone[p.key] != null) marks.push([hopCoordOf(p), 0, hopGone[p.key]]);
+    });
+    hopPost('/sync', marks).then(function (r) {
+      var changed = [];
+      (r.marks || []).forEach(function (m) { var k = hopApply(m[0], !!m[1], +m[2] || 0); if (k) changed.push(k); });
+      hopApplied(changed);
+    }).catch(function () {
+      var changed = [], now = Date.now();
+      (stateDone || []).forEach(function (c) { var k = hopApply(c, true, now); if (k) changed.push(k); });
+      hopApplied(changed);
+    });
+  }
   // The JoyRoute button's icon shows the link: normal (no HopRoute from this page yet), bright with a ring (live), grey
   // (a HopRoute from this page exists but JoyRoute can't be reached right now).
   var hopStyle = document.createElement('style');
@@ -751,14 +809,13 @@ if(n){localStorage.setItem(K,JSON.stringify(out));location.reload();}})();
     src.onmessage = function (ev) {
       var m;
       try { m = JSON.parse(ev.data); } catch { return; }
-      var coords = m && (m.type === 'state' ? m.done : m.at);
-      if (!coords || !coords.length) return;
-      var fresh = [];
-      coords.forEach(function (c) { var k = HOP_KEY_BY_COORD[c]; if (k && !state[k]) fresh.push(k); });
-      fresh.forEach(function (k) { state[k] = { done: true, ts: Date.now() }; });
-      if (!fresh.length) return;
-      save();
-      if (fresh.length > 3) render(); else fresh.forEach(updateRow);
+      if (!m) return;
+      if (m.type === 'state') { hopSync(m.done); return; }
+      var coords = m.type === 'add' ? m.at : m.type === 'remove' ? m.gone : null;
+      if (!coords) return;
+      var changed = [], now = Date.now();
+      coords.forEach(function (c, i) { var k = hopApply(c, m.type === 'add', m.ts ? +m.ts[i] : now); if (k) changed.push(k); });
+      hopApplied(changed);
     };
     src.onerror = function () {
       if (hopLinked) hopIcon('off');
