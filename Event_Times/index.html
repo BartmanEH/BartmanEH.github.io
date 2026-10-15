@@ -18,11 +18,12 @@
           /* Finished cards' outline: a dark red (Bart: the palette red #e06c75 was "too obvious"). */
           --dark-red: #7a3b3f; }
   * { box-sizing: border-box; }
-  html { background: var(--bg); height: 100%; }
+  /* v1.9 BEFORE: a radial-gradient on body (120% x 220px ellipse). WHY: on iOS Safari it showed as a rounded box around the
+     header (Bart: "yucky" next to Android). NOW: a plain top-to-bottom fade on html, which has no edge to draw. */
+  html { height: 100%; background: linear-gradient(180deg, rgba(116,174,234,.14), rgba(187,124,216,.05) 90px, transparent 160px) no-repeat var(--bg); }
   body { max-width: 412px; margin: 0 auto; padding: 20px 16px 0; min-height: calc(100vh + 22px); min-height: calc(100dvh + 22px);
          display: flex; flex-direction: column; color: var(--text); font-family: -apple-system, system-ui, sans-serif;
-         -webkit-tap-highlight-color: transparent;
-         background: radial-gradient(120% 220px at 50% 0, rgba(116,174,234,.16), rgba(187,124,216,.07) 55%, transparent 100%) var(--bg); }
+         -webkit-tap-highlight-color: transparent; }
   .hero { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; }
   .globe { width: 40px; height: 40px; flex: 0 0 auto; filter: drop-shadow(0 3px 8px rgba(0,0,0,.45)); }
   .kicker { color: var(--purple); font-size: 14px; font-weight: 700; letter-spacing: .2px; }
@@ -38,12 +39,20 @@
   .inputs label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 700; color: var(--purple); min-width: 0; }
   .inputs input, .inputs select { width: 100%; min-width: 0; height: 34px; padding: 0 8px; font: inherit; font-size: 14px; font-weight: 400;
             color: var(--bold); background: var(--bg); border: 1px solid #4a4a46; border-radius: 8px; color-scheme: dark; }
+  /* v1.9: the date shows as "Oct 15, 2026" on every phone (BEFORE: the browser's own format, numeric on Android, long on iOS).
+     The real date input sits invisibly on top, so a tap still opens the native picker. */
+  .datebox { position: relative; height: 34px; }
+  .datebox .shown { display: flex; align-items: center; height: 34px; padding: 0 8px; font-size: 14px; font-weight: 400; color: var(--bold);
+            background: var(--bg); border: 1px solid #4a4a46; border-radius: 8px; }
+  .inputs .datebox input { position: absolute; inset: 0; opacity: 0; height: 34px; }
   .summary { font-size: 13px; line-height: 1.45; color: var(--grey); margin: 0 0 12px; }
   .summary b { color: var(--bold); font-weight: 600; }
   /* Switches: the link pages' design (two boxes on one row, contents mirrored to the outer edges). */
   .switches { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
   /* 2026-10-14: a third switch doesn't fit beside the two; it gets its own full-width row, centred (v1.6: Key | All zones). */
   .switches .toggle.wide { flex: 1 1 100%; justify-content: center; }
+  /* v1.9: Go to now shares the All zones | Key row (BEFORE: it sat beside the "next:" text); the switch box takes the rest of the width. */
+  .switches #viewToggle { flex: 1 1 auto; }
   .switches .toggle[hidden] { display: none; }
   .toggle { flex: 1 1 auto; display: flex; align-items: center; gap: 5px; padding: 4px 6px; background: var(--card);
             border: 1px solid var(--line); border-radius: 8px; user-select: none; -webkit-user-select: none; }
@@ -75,9 +84,9 @@
   .nowbar { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 13px; color: var(--grey); }
   .nowbar b { color: var(--bold); font-weight: 600; }
   .nowbar .g { color: var(--green); font-weight: 700; }
-  .nowbar button { flex: 0 0 auto; font: inherit; font-size: 13px; font-weight: 700; color: var(--blue); background: var(--card);
-                   border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; cursor: pointer; white-space: nowrap; }
-  .nowbar button:active { background-color: #3a3a36; }
+  .gonow { flex: 0 0 auto; font: inherit; font-size: 13px; font-weight: 700; color: var(--blue); background: var(--card);
+                   border: 1px solid var(--line); border-radius: 8px; padding: 0 12px; cursor: pointer; white-space: nowrap; }
+  .gonow:active { background-color: #3a3a36; }
   /* 2026-10-14: places on the same clock all year (same time zone in all but name) share a group box (Bart). The box sits
      6px outside the cards (negative margin = padding + border), so grouped cards keep the same edges as the rest.
      v1.3 BEFORE: 1px dashed #5a5a55. WHY: Bart couldn't see it on the phone. NOW (v1.4): 2px dashed purple. */
@@ -138,7 +147,7 @@
   <a class="ies" href="../" aria-label="Home"><img src="../img/IES_logo.svg" alt="IES"></a>
 </div>
 <div class="inputs">
-  <label>Event date<input type="date" id="date"></label>
+  <label>Event date<span class="datebox"><span class="shown" id="dateShown"></span><input type="date" id="date"></span></label>
   <label>Local start time<input type="time" id="time" step="60"></label>
   <label>Duration (optional)<select id="dur">
     <option value="0">None</option><option value="60">1 h</option><option value="120">2 h</option><option value="180">3 h</option>
@@ -156,12 +165,13 @@
        the link pages' layout: iPogo | GPS JoyStick and Maps | Copy on one row. NOW: those two on row 1, Key | All zones (this page's
        own switch) alone on row 2, centred. v1.7: flipped to All zones | Key (Bart: balances better; Key, the default, is now on the right). -->
   <div class="toggle wide" id="viewToggle"><span class="opt" data-v="all" data-t="All zones">All zones</span><button class="sw" aria-label="All time zones or key places"></button><span class="opt" data-v="key" data-t="Key">Key</span></div>
+  <button type="button" class="gonow" id="nowbtn" hidden>Go to now ↓</button>
   <div class="toggle wide" id="mapToggle" hidden><span class="opt" data-v="maps" data-t="Maps">Maps</span><button class="sw" aria-label="Google Maps or PoGoMap"></button><span class="opt" data-v="pogomap" data-t="PoGoMap">PoGoMap</span></div>
 </div>
-<div class="nowbar" id="nowbar" hidden><span id="nowtext"></span><button type="button" id="nowbtn">Go to now ↓</button></div>
+<div class="nowbar" id="nowbar" hidden><span id="nowtext"></span></div>
 <div id="list"></div>
 <div class="links"><a href="../">&larr; Home</a><span>Times from your browser's time zone data</span></div>
-<div class="footer"><span class="note">&copy; <span id="year">2026</span><a href="../"><img src="../img/BartmanEH.png" alt="Bart"></a>Stassen, P.Eng.</span><span id="version">v1.8</span></div>
+<div class="footer"><span class="note">&copy; <span id="year">2026</span><a href="../"><img src="../img/BartmanEH.png" alt="Bart"></a>Stassen, P.Eng.</span><span id="version">v1.9</span></div>
 <script>
 (function () {
   var D = {"places":[{"name":"Kiritimati","region":"Kiribati","tz":"Pacific/Kiritimati","lat":1.986345,"lon":-157.478025,"key":"first"},{"name":"Apia","region":"Samoa","tz":"Pacific/Apia","lat":-13.830003,"lon":-171.767745,"key":""},{"name":"Waitangi","region":"Chatham Islands","tz":"Pacific/Chatham","lat":-43.95189,"lon":-176.559764,"key":""},{"name":"Suva","region":"Fiji","tz":"Pacific/Fiji","lat":-18.147828,"lon":178.454772,"key":""},{"name":"Auckland","region":"New Zealand","tz":"Pacific/Auckland","lat":-36.844574,"lon":174.769699,"key":""},{"name":"Port Vila","region":"Vanuatu","tz":"Pacific/Efate","lat":-17.743125,"lon":168.313991,"key":""},{"name":"Lord Howe Island","region":"Australia","tz":"Australia/Lord_Howe","lat":-31.528242,"lon":159.066158,"key":""},{"name":"Sydney","region":"Australia","tz":"Australia/Sydney","lat":-33.85613,"lon":151.21501,"key":"Pokémap","site":"https://sydneypogomap.com/"},{"name":"Gold Coast","region":"Australia","tz":"Australia/Brisbane","lat":-28.033223,"lon":153.435577,"key":""},{"name":"Adelaide","region":"Australia","tz":"Australia/Adelaide","lat":-34.932198,"lon":138.605726,"key":""},{"name":"Darwin","region":"Australia","tz":"Australia/Darwin","lat":-12.467034,"lon":130.839766,"key":""},{"name":"Tokyo","region":"Japan","tz":"Asia/Tokyo","lat":35.678473,"lon":139.753573,"key":""},{"name":"Eucla","region":"Australia","tz":"Australia/Eucla","lat":-31.678942,"lon":128.879458,"key":""},{"name":"Singapore","region":"","tz":"Asia/Singapore","lat":1.264191,"lon":103.822091,"key":"Pokémap","site":"https://sgpokemap.com/"},{"name":"Bangkok","region":"Thailand","tz":"Asia/Bangkok","lat":13.73704248701212,"lon":100.56216227027569,"key":""},{"name":"Yangon","region":"Myanmar","tz":"Asia/Yangon","lat":16.780085,"lon":96.174185,"key":""},{"name":"Dhaka","region":"Bangladesh","tz":"Asia/Dhaka","lat":23.712857,"lon":90.399757,"key":""},{"name":"Kathmandu","region":"Nepal","tz":"Asia/Kathmandu","lat":27.695713,"lon":85.326413,"key":""},{"name":"Mumbai","region":"India","tz":"Asia/Kolkata","lat":18.92193,"lon":72.83443,"key":""},{"name":"Karachi","region":"Pakistan","tz":"Asia/Karachi","lat":24.874986,"lon":67.038186,"key":""},{"name":"Kabul","region":"Afghanistan","tz":"Asia/Kabul","lat":34.520584,"lon":69.174084,"key":""},{"name":"Dubai","region":"UAE","tz":"Asia/Dubai","lat":25.070862,"lon":55.138762,"key":""},{"name":"Tehran","region":"Iran","tz":"Asia/Tehran","lat":35.700907,"lon":51.405707,"key":""},{"name":"Istanbul","region":"Turkey","tz":"Europe/Istanbul","lat":41.063054,"lon":28.983754,"key":""},{"name":"Athens","region":"Greece","tz":"Europe/Athens","lat":37.97725,"lon":23.74105,"key":""},{"name":"Amsterdam","region":"Netherlands","tz":"Europe/Amsterdam","lat":52.378504,"lon":4.90001,"key":""},{"name":"London","region":"UK","tz":"Europe/London","lat":51.507807,"lon":-0.074293,"key":"Pokémap","site":"https://londonpogomap.com/"},{"name":"Reykjavik","region":"Iceland","tz":"Atlantic/Reykjavik","lat":64.147286,"lon":-21.939912,"key":""},{"name":"Praia","region":"Cape Verde","tz":"Atlantic/Cape_Verde","lat":14.917547,"lon":-23.509257,"key":""},{"name":"Nuuk","region":"Greenland","tz":"America/Nuuk","lat":64.172945,"lon":-51.745855,"key":""},{"name":"Fernando de Noronha","region":"Brazil","tz":"America/Noronha","lat":-3.834878,"lon":-32.398378,"key":""},{"name":"São Paulo","region":"Brazil","tz":"America/Sao_Paulo","lat":-23.554465,"lon":-46.647744,"key":""},{"name":"St. John's","region":"Canada","tz":"America/St_Johns","lat":47.57074,"lon":-52.68696,"key":""},{"name":"Halifax","region":"Canada","tz":"America/Halifax","lat":44.647578,"lon":-63.577522,"key":""},{"name":"New York","region":"USA","tz":"America/New_York","lat":40.765705,"lon":-73.976226,"key":"Pokémap","site":"https://nycpokemap.com/"},{"name":"Chicago","region":"USA","tz":"America/Chicago","lat":41.882715,"lon":-87.623985,"key":""},{"name":"Denver","region":"USA","tz":"America/Denver","lat":39.74027,"lon":-104.98763,"key":""},{"name":"Vancouver","region":"Canada","tz":"America/Vancouver","lat":49.294414,"lon":-123.137686,"key":"Pokémap","site":"https://vanpokemap.com/"},{"name":"Anchorage","region":"USA","tz":"America/Anchorage","lat":61.217045,"lon":-149.891655,"key":""},{"name":"Atuona","region":"Marquesas Islands","tz":"Pacific/Marquesas","lat":-9.803623,"lon":-139.04284,"key":""},{"name":"Adak","region":"USA","tz":"America/Adak","lat":51.867537,"lon":-176.633363,"key":""},{"name":"Honolulu","region":"USA","tz":"Pacific/Honolulu","lat":21.305189,"lon":-157.858729,"key":""},{"name":"Pago Pago","region":"American Samoa","tz":"Pacific/Pago_Pago","lat":-14.329096,"lon":-170.722096,"key":""},{"name":"Baker Island","region":"","tz":"Etc/GMT+12","lat":0.195759,"lon":-176.48417,"key":"last"}],"icons":{"ipogo":"\u003csvg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"iPogo\" xmlns=\"http://www.w3.org/2000/svg\"> \u003cdefs> \u003cclipPath id=\"ipogoButtonIconClip\">\u003ccircle cx=\"60\" cy=\"60\" r=\"57\"/>\u003c/clipPath> \u003c/defs> \u003cg clip-path=\"url(#ipogoButtonIconClip)\"> \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#00677a\"/> \u003cpath d=\"M-2 57Q60 37 122 57V-2H-2Z\" fill=\"#008474\"/> \u003cpath d=\"M-3 60Q60 40 123 60\" fill=\"none\" stroke=\"#fff\" stroke-width=\"8\"/> \u003cpath d=\"M60 29C45 29 39 38 40 52c1 13 12 20 17 38 1 4 5 4 6 0 5-18 16-25 17-38 1-14-5-23-20-23Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3.5\" stroke-linejoin=\"round\"/> \u003ccircle cx=\"60\" cy=\"51\" r=\"9\" fill=\"#00677a\" stroke=\"#fff\" stroke-width=\"3.5\"/> \u003c/g> \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> \u003c/svg>","joystick":"\u003csvg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"GPS JoyStick\" xmlns=\"http://www.w3.org/2000/svg\"> \u003cdefs> \u003cclipPath id=\"gpsJoystickButtonIconClip\">\u003ccircle cx=\"60\" cy=\"60\" r=\"57\"/>\u003c/clipPath> \u003c/defs> \u003cg clip-path=\"url(#gpsJoystickButtonIconClip)\"> \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#8BC34A\"/> \u003cellipse cx=\"60\" cy=\"96\" rx=\"20\" ry=\"7\" fill=\"none\" stroke=\"#1976D2\" stroke-width=\"6\"/> \u003cpath d=\"M60 26C48 26 39 35 39 46c0 12 10 20 19 39 1 3 2 3 3 0 9-19 19-27 19-39 0-11-9-20-20-20Z\" fill=\"#1976D2\"/> \u003ccircle cx=\"60\" cy=\"47\" r=\"9\" fill=\"#2196F3\"/> \u003c/g> \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> \u003c/svg>","pogomap":"\u003csvg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"PoGoMap\" xmlns=\"http://www.w3.org/2000/svg\"> \u003cdefs> \u003cclipPath id=\"pogomapButtonIconClip\">\u003ccircle cx=\"60\" cy=\"60\" r=\"57\"/>\u003c/clipPath> \u003c/defs> \u003cg clip-path=\"url(#pogomapButtonIconClip)\"> \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#3d3a8f\"/> \u003ccircle cx=\"60\" cy=\"60\" r=\"30\" fill=\"#29b6f6\" stroke=\"#fff\" stroke-width=\"6\"/> \u003cpath d=\"M30 60h60\" stroke=\"#fff\" stroke-width=\"6\"/> \u003ccircle cx=\"60\" cy=\"60\" r=\"11\" fill=\"#fff\" stroke=\"#1565c0\" stroke-width=\"4\"/> \u003c/g> \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> \u003c/svg>","maps":"\u003csvg viewBox=\"0 0 120 120\" role=\"img\" aria-label=\"Maps\" xmlns=\"http://www.w3.org/2000/svg\"> \u003cdefs> \u003cclipPath id=\"mapsButtonIconClip\">\u003ccircle cx=\"60\" cy=\"60\" r=\"57\"/>\u003c/clipPath> \u003c/defs> \u003cg clip-path=\"url(#mapsButtonIconClip)\"> \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"#f1f3f4\"/> \u003cpath d=\"M-2 78 40 52l40 22 42-24v75H-2Z\" fill=\"#a5d6a7\"/> \u003cpath d=\"M-2 92 38 68l42 22 42-24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"7\"/> \u003cpath d=\"M60 18C47 18 38 28 38 40c0 15 14 24 20 44 1 3 3 3 4 0 6-20 20-29 20-44 0-12-9-22-22-22Z\" fill=\"#ea4335\"/> \u003ccircle cx=\"60\" cy=\"40\" r=\"8.5\" fill=\"#fff\"/> \u003c/g> \u003ccircle cx=\"60\" cy=\"60\" r=\"57\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/> \u003c/svg>"}};
@@ -277,7 +287,13 @@
     }
     return sigCache[key];
   }
+  function showDate() {
+    var d = $date.value.split('-');
+    document.getElementById('dateShown').textContent = d.length === 3
+      ? new Date(Date.UTC(+d[0], +d[1] - 1, +d[2])).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : 'Pick a date';
+  }
   function render() {
+    showDate();
     var dp = $date.value.split('-'), tp = $time.value.split(':'), home = $home.value, dur = +$dur.value || 0;
     if (dp.length !== 3 || tp.length < 2) { $list.innerHTML = ''; $sum.textContent = 'Enter a date and a time.'; return; }
     var now = Date.now();
@@ -286,10 +302,12 @@
       return { p: p, start: start, off: offsetMin(p.tz, start), clock: clockSig(p.tz, +dp[0]) };
     }).sort(function (a, b) { return a.start - b.start || b.off - a.off || (a.clock < b.clock ? -1 : a.clock > b.clock ? 1 : 0); });
     var first = rows[0], last = rows[rows.length - 1];
-    $sum.innerHTML = 'At <b>' + clockText(Date.UTC(2000, 0, 1, +tp[0], +tp[1]), 'UTC') + '</b> local, the event reaches ' + rows.length +
-      ' places from <b>' + dayText(first.start, home) + ', ' + clockText(first.start, home) + '</b> to <b>' +
-      dayText(last.start + (dur ? dur * 60000 : 0), home) + ', ' + clockText(last.start + (dur ? dur * 60000 : 0), home) + '</b> your time' +
-      (dur ? ' (end of the last one)' : '') + '.';
+    // v1.9 BEFORE: "At 6:00 pm local, the event reaches 44 places from <start> to <end> your time (end of the last one)." WHY: Bart
+    // wanted it shorter. NOW: "6:00 pm local hits 44 places, <start> to <end> (your time; last one ends)."
+    var endMs = last.start + (dur ? dur * 60000 : 0);
+    $sum.innerHTML = '<b>' + clockText(Date.UTC(2000, 0, 1, +tp[0], +tp[1]), 'UTC') + '</b> local hits ' + rows.length + ' places, <b>' +
+      dayText(first.start, home) + ', ' + clockText(first.start, home) + '</b> to <b>' + dayText(endMs, home) + ', ' + clockText(endMs, home) +
+      '</b> your time' + (dur ? ' (last one ends)' : '') + '.';
     var nextRow = null, firstLive = null, liveCount = 0, nextName = '', nextIn = 0;
     $list.innerHTML = '';
     var built = [];
@@ -372,6 +390,7 @@
     if (nextRow) parts.push('next: <b>' + nextName + '</b> in ' + span(nextIn / 60000));
     document.getElementById('nowtext').innerHTML = parts.join(' · ');
     document.getElementById('nowbar').hidden = !target;
+    document.getElementById('nowbtn').hidden = !target;
   }
   var target = null;
   // 2026-10-13 BEFORE: the target row was centred, leaving a screenful of finished places above it. WHY: Bart: "leave

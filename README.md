@@ -135,6 +135,10 @@ browser's own time-zone data does the maths, so daylight saving is right for any
   half/quarter-hour ones) | **Key** (first and last in the world + the 5 Pokémap cities; the default, on the right since v1.7). BEFORE v1.6 (2026-10-14): Key | All zones shared row 1
   with iPogo | GPS JoyStick and Maps | Copy had row 2; WHY: Bart, the same layout as the other pages. The **Maps** | **PoGoMap** switch (pogomap.info at
   `/location/<lat>/<lon>/17` with decimal commas) is hidden since v1.5, not deleted (`MAP_SWITCH` in the script).
+- v1.9 (2026-10-15, Bart): the date always shows long ("Oct 15, 2026"; BEFORE: the browser's own format, numeric on Android; the
+  real date input sits invisibly on top so the native picker still opens); **Go to now** moved into the All zones | Key row (BEFORE: in
+  the "next:" line); the body's radial gradient replaced by a top fade on `html` (WHY: it drew a rounded box around the header on iOS);
+  the summary sentence shortened ("6:00 pm local hits 44 places, <start> to <end> your time (last one ends).").
 - Rows in the order the event reaches them; stoplight states: live = green, next to start = orange, finished = dark
   card with a dark red outline. The "now" line and **Go to now** scroll to the live (or next) places, leaving one
   finished place above; the page does this once on opening.
@@ -147,7 +151,7 @@ browser's own time-zone data does the maths, so daylight saving is right for any
   Each entry: `name`, `region`, `tz`, `lat`, `lon`, `key` (`first` / `last` / `Pokémap` = in the Key view; `""` = All
   zones only), `site` (Pokémap places: the city's map site, shown as a **Pokémap ↗** badge link, first on the card's
   second line so the badges line up, like the "first/last in the world" tags; v1.8, before that both came last). The footer version
-  (`#version`, v1.8) shows a deploy has landed.
+  (`#version`, v1.9) shows a deploy has landed.
 - Coordinate tweaks (started 2026-10-14): Bart scouts each place on pogomap.info (the PoGoMap button), taps ⓘ on a
   gym or stop and sends the coordinates shown there, which replace that place's `lat`/`lon` as given (check each pair
   lands in its place: copying from pogomap.info can drop a minus sign or a leading digit; fix those and say so).
