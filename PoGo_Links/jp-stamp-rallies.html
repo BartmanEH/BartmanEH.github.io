@@ -61,7 +61,10 @@
   h3.complete, h3.empty { opacity: .5; }
   .toolbar { position: fixed; left: 0; right: 0; max-width: 412px; box-sizing: border-box; margin: 0 auto; bottom: 0; z-index: 10; background: #242422; border-top: 1px solid #404040; padding: 7px 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .toolbar button, .toolbar label { background: #353533; color: #d1d5db; border: 1px solid #404040; border-radius: 6px; padding: 6px 14px; font-size: 13px; cursor: pointer; }
-  #status { order: -1; flex: 1 0 100%; display: flex; justify-content: space-between; gap: 8px; font-weight: 600; color: #9ca3af; font-size: 13px; opacity: .85; padding-bottom: 2px; }
+  /* 2026-10-16 (Bart) BEFORE: the whole status line grey #9ca3af at 85% opacity. WHY: the done count was too dim to read at a glance.
+     NOW: the done count in the palette's text colour #d1d5db, full opacity; the "generated" time stays grey. */
+  #status { order: -1; flex: 1 0 100%; display: flex; justify-content: space-between; gap: 8px; font-weight: 600; color: #9ca3af; font-size: 13px; padding-bottom: 2px; }
+  #doneCount { color: #d1d5db; }
   /* Each switch in its own card like the rows (Bart), both on one row at phone width: 13px labels, 40px switches. */
   /* 2026-10-12 BEFORE: space-between (each box its natural width, an uneven gap between them) and unselected labels
      #7d7d78. WHY: Bart: the gap was awkward and the unselected text too dark. NOW: two equal halves with the toolbar's
@@ -545,7 +548,10 @@
       h2.className = sd === sec.count ? 'complete' : '';
     });
     var tbaCount = POINTS.filter(function (p) { return p.tba; }).length;
-    statusEl.textContent = doneCount + ' of ' + (POINTS.length - tbaCount) + ' done' + (tbaCount ? ' \u00b7 ' + tbaCount + ' to come' : '');
+    // 2026-10-16 (Bart) BEFORE: always "N of <stops> done". WHY: a page marked open (<meta name="pogolinks-open">, e.g. the LEGO rally,
+    // whose real total is unknown) read as finished at 219 of 219. NOW: such a page shows "N of ??? done", like the list page (v2.20).
+    var openTotal = !!document.querySelector('meta[name="pogolinks-open"]');
+    statusEl.textContent = doneCount + ' of ' + (openTotal ? '???' : (POINTS.length - tbaCount)) + ' done' + (tbaCount ? ' \u00b7 ' + tbaCount + ' to come' : '');
     undoBtn.disabled = doneCount === 0;
     resetAllBtn.disabled = doneCount === 0;
     markAllBtn.disabled = doneCount >= POINTS.length - tbaCount;

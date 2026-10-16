@@ -31,7 +31,7 @@ import unicodedata
 # Shown just below the footer (Bart's standard); bump when the list page changes.
 # 2.0 = redesign + reorder; 2.1 = IES logo (home link) top right; 2.2 = logo bigger and centred, floating footer
 # (all 2026-10-10); 2.3 = version in the footer, sticky footer.
-LIST_VERSION = "2.19"   # 2.19 = bottom link "← PoGO Tools" (to ../PoGO_Tools/; BEFORE "← Home" to the site root; Bart 2026-10-15; the IES logo goes to PoGO Tools too; the footer picture still goes to the root); 2.18 = live counts from JoyRoute's HopRoute stream (2026-10-15, Bart); 2.17 = "updated today 12:28 PM": the publish time, not just the day, on its own second line; 2.16 = quest Exports (pages with an expiry) always on top, above a saved order; 2.15 = pages past their pogolinks-expires time are hidden (quest Exports, daily); 2.14 = floating footer less tall (notice line 49 → 38px); 2.13 = iOS: reordering no longer cancelled by the long-press link menu; 2.12 = a Remaining tile (places − done); 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
+LIST_VERSION = "2.20"   # 2.20 = a page marked open (pogolinks-open) shows its total as "???" (Bart 2026-10-16); 2.19 = bottom link "← PoGO Tools" (to ../PoGO_Tools/; BEFORE "← Home" to the site root; Bart 2026-10-15; the IES logo goes to PoGO Tools too; the footer picture still goes to the root); 2.18 = live counts from JoyRoute's HopRoute stream (2026-10-15, Bart); 2.17 = "updated today 12:28 PM": the publish time, not just the day, on its own second line; 2.16 = quest Exports (pages with an expiry) always on top, above a saved order; 2.15 = pages past their pogolinks-expires time are hidden (quest Exports, daily); 2.14 = floating footer less tall (notice line 49 → 38px); 2.13 = iOS: reordering no longer cancelled by the long-press link menu; 2.12 = a Remaining tile (places − done); 2.11 = the Done tile counts ticks again (was always 0 since 2.7); 2.10 = JoyRoute note matches JoyRoute 2026-10-11 (no longer opens Pokémon GO); 2.9 = ?joyroute=on|off switches JoyRoute links (from JoyRoute's Settings); 2.8 = a page can mark itself not complete (pogolinks-open meta); 2.7 = to-be-announced stops count in a page's total; 2.6 = long titles condensed to one line; 2.4 = progress bars actually fill (were 0px wide); 2.5 = yellow in progress, green complete
 FIRST_YEAR = "2026"   # the list page was first published in 2026: "© 2026", then "© 2026–<year>"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -314,7 +314,9 @@ function refresh() {
     left += places - done;
     bar.querySelector('.fill').style.width = (places ? 100 * done / places : 0) + '%';
     var complete = done > 0 && done === places && !p.open;   // "open": the game doesn't call it completed yet (v2.8)
-    bar.querySelector('.lbl').textContent = complete ? 'Complete' : done + ' / ' + places;
+    // v2.20 (2026-10-16, Bart) BEFORE: an open page showed "219 / 219" (yellow), which read like done-but-not-done. WHY: its real total is unknown
+    // (the LEGO rally may count a closed store). NOW: an open page shows the total as "???"; the bar still fills by the known stops.
+    bar.querySelector('.lbl').textContent = complete ? 'Complete' : done + ' / ' + (p.open ? '???' : places);
     bar.querySelector('.lbl').title = p.open || '';
     bar.classList.toggle('complete', complete);
   });

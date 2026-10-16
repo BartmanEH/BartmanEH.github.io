@@ -61,7 +61,10 @@
   h3.complete, h3.empty { opacity: .5; }
   .toolbar { position: fixed; left: 0; right: 0; max-width: 412px; box-sizing: border-box; margin: 0 auto; bottom: 0; z-index: 10; background: #242422; border-top: 1px solid #404040; padding: 7px 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .toolbar button, .toolbar label { background: #353533; color: #d1d5db; border: 1px solid #404040; border-radius: 6px; padding: 6px 14px; font-size: 13px; cursor: pointer; }
-  #status { order: -1; flex: 1 0 100%; display: flex; justify-content: space-between; gap: 8px; font-weight: 600; color: #9ca3af; font-size: 13px; opacity: .85; padding-bottom: 2px; }
+  /* 2026-10-16 (Bart) BEFORE: the whole status line grey #9ca3af at 85% opacity. WHY: the done count was too dim to read at a glance.
+     NOW: the done count in the palette's text colour #d1d5db, full opacity; the "generated" time stays grey. */
+  #status { order: -1; flex: 1 0 100%; display: flex; justify-content: space-between; gap: 8px; font-weight: 600; color: #9ca3af; font-size: 13px; padding-bottom: 2px; }
+  #doneCount { color: #d1d5db; }
   /* Each switch in its own card like the rows (Bart), both on one row at phone width: 13px labels, 40px switches. */
   /* 2026-10-12 BEFORE: space-between (each box its natural width, an uneven gap between them) and unselected labels
      #7d7d78. WHY: Bart: the gap was awkward and the unselected text too dark. NOW: two equal halves with the toolbar's
@@ -161,7 +164,7 @@
 <meta name="pogolinks-open" content="the game may not list this rally as completed even with every map stop stamped">
 </head>
 <body>
-<div class="top"><h1>LEGO Store Stamp Rally—219 of 219 map stops stamped</h1><div class="sub">Ends 4 Feb 2027 (per the in-game sheet) · coordinates from the KML behind Niantic's own Stamp Rally map</div></div>
+<div class="top"><h1>LEGO Store Stamp Rally<br>219 of ??? stops stamped</h1><div class="sub">Ends 4 Feb 2027 (per the in-game sheet) · coordinates from the KML behind Niantic's own Stamp Rally map</div></div>
 <div class="head"><a id="homeBtn" class="hbtn" href="https://bartmaneh.github.io/PoGo_Links/" title="Back to the PoGO Link Pages list"><svg viewBox="8 8 48 48" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#263238" stroke="#26c6da" stroke-width="5"/><path d="M19 32.5 32 21l13 11.5-3.4 3L40 34.1V45H34v-8h-4v8h-6V34.1l-1.6 1.4z" fill="#fff" stroke="#fff" stroke-linejoin="round"/></svg>Home</a><button id="copyGpxBtn" class="hbtn" title="Copy the route's GPX text (to paste into iPogo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span></button><button id="gpxBtn" class="hbtn" title="Download the route as a GPX file (iPogo, GPS JoyStick)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>GPX</button><button id="mapBtn" class="hbtn" title="Open the route in the GPX viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Map</button></div>
 <style>/* 2026-10-16 (Bart): notes are collapsible panels (amber open, green closed by default), chevron like JoyRoute's status card. BEFORE: plain <div class=note>. Kept inside the notes block so rerender_page.py keeps it. */details.note{border-radius:6px}/* BEFORE: 0 6px 6px 0 (square left, from .note). WHY: Bart wanted all four corners rounded. */details.note>summary{list-style:none;cursor:pointer;font-weight:700;display:flex;align-items:flex-start;gap:8px}details.note>summary::-webkit-details-marker{display:none}details.note>summary::after{content:'';flex:none;margin-left:auto;margin-top:5px;width:7px;height:7px;border-right:2px solid #74aeea;border-bottom:2px solid #74aeea;transform:rotate(-45deg);transition:transform .15s}details.note[open]>summary::after{transform:rotate(45deg);margin-top:2px}details.note[open]>summary{margin-bottom:4px}</style><details class="note" open><summary>Collecting every stop may not complete the rally.</summary>Even with a stamp at every stop on the official map (219), the game may not list this rally under “Completed stamp rallies” in the Scrapbook (seen 2026-10-11). A likely reason: the LEGO Store at Queens Center (Elmhurst, NY), which was on the rally map at launch, has closed, and nothing at its site has a stamp in the game (checked 2026-10-16).</details><details class="note ok"><summary>Stores added later.</summary>The 8 amber rows were added to the official map after 29 Aug, and their stamps went live in the game only later: at first some showed the store PokéStop without a stamp icon; by 10 Oct 2026 all 8 could be stamped. Two stores from the launch map aren’t here: Oak Park (Overland Park, KS) moved to Town Center Crossing (Leawood, KS), which is listed; Queens Center (Elmhurst, NY) has closed. Community lists on Reddit (r/PokemonGoSpoofing) still show both.</details>
 <script>
@@ -559,7 +562,10 @@ if(n){localStorage.setItem(K,JSON.stringify(out));location.reload();}
       h2.className = sd === sec.count ? 'complete' : '';
     });
     var tbaCount = POINTS.filter(function (p) { return p.tba; }).length;
-    statusEl.textContent = doneCount + ' of ' + (POINTS.length - tbaCount) + ' done' + (tbaCount ? ' \u00b7 ' + tbaCount + ' to come' : '');
+    // 2026-10-16 (Bart) BEFORE: always "N of <stops> done". WHY: a page marked open (<meta name="pogolinks-open">, e.g. the LEGO rally,
+    // whose real total is unknown) read as finished at 219 of 219. NOW: such a page shows "N of ??? done", like the list page (v2.20).
+    var openTotal = !!document.querySelector('meta[name="pogolinks-open"]');
+    statusEl.textContent = doneCount + ' of ' + (openTotal ? '???' : (POINTS.length - tbaCount)) + ' done' + (tbaCount ? ' \u00b7 ' + tbaCount + ' to come' : '');
     undoBtn.disabled = doneCount === 0;
     resetAllBtn.disabled = doneCount === 0;
     markAllBtn.disabled = doneCount >= POINTS.length - tbaCount;
