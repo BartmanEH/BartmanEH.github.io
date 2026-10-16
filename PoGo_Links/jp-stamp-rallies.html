@@ -24,6 +24,9 @@
   h1 { display: inline; font-size: 18px; margin: 0 8px 0 0; color: #e5e5e5; }
   .head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 12px; } /* spans the rows' width */
   h1 .c { color: #9ca3af; font-weight: 400; font-size: 13px; }
+  /* 2026-10-16 (Bart): the heading is two rows, the page name, then a live status from the page's own ticks (same words as the
+     bottom bar). BEFORE: counts typed into each heading by hand ("—complete, 18 of 18"), which went stale and differed per page. */
+  #headStatus { display: block; }
   .hbtn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 13px 6px 10px; border-radius: 999px; font-size: 13px; font-weight: 800; letter-spacing: .3px; color: #fff; cursor: pointer; text-shadow: 0 1px 2px rgba(0,0,0,.45); transition: transform 90ms ease, box-shadow 90ms ease, filter 90ms ease; }
   .hbtn svg { width: 16px; height: 16px; flex: 0 0 16px; }
   .hbtn:hover { filter: brightness(1.08); }
@@ -163,7 +166,7 @@
 </style>
 </head>
 <body>
-<div class="top"><h1>Japan Stamp Rallies—complete, 26 of 26</h1><div class="sub">Minato / Koto / Shinagawa from 25 May 2026 · Suita from 9 May 2025 · Nagasaki from 10 Nov 2025 · none have an end date</div></div>
+<div class="top"><h1>Japan Stamp Rallies<span class="hs" id="headStatus"></span></h1><div class="sub">Minato / Koto / Shinagawa from 25 May 2026 · Suita from 9 May 2025 · Nagasaki from 10 Nov 2025 · none have an end date</div></div>
 <div class="head"><a id="homeBtn" class="hbtn" href="https://bartmaneh.github.io/PoGo_Links/" title="Back to the PoGO Link Pages list"><svg viewBox="8 8 48 48" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#263238" stroke="#26c6da" stroke-width="5"/><path d="M19 32.5 32 21l13 11.5-3.4 3L40 34.1V45H34v-8h-4v8h-6V34.1l-1.6 1.4z" fill="#fff" stroke="#fff" stroke-linejoin="round"/></svg>Home</a><button id="copyGpxBtn" class="hbtn" title="Copy the route's GPX text (to paste into iPogo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span></button><button id="gpxBtn" class="hbtn" title="Download the route as a GPX file (iPogo, GPS JoyStick)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>GPX</button><button id="mapBtn" class="hbtn" title="Open the route in the GPX viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Map</button></div>
 <div class="note"><b>Geocoded from stop names, not official coordinates.</b> HIGH matched a uniquely named OSM feature; MED matched the right building or park; LOW is a district or large-park centroid and may be hundreds of metres out (8 of 26 are LOW).</div>
 <div class="switches">
@@ -551,7 +554,12 @@
     // 2026-10-16 (Bart) BEFORE: always "N of <stops> done". WHY: a page marked open (<meta name="pogolinks-open">, e.g. the LEGO rally,
     // whose real total is unknown) read as finished at 219 of 219. NOW: such a page shows "N of ??? done", like the list page (v2.20).
     var openTotal = !!document.querySelector('meta[name="pogolinks-open"]');
-    statusEl.textContent = doneCount + ' of ' + (openTotal ? '???' : (POINTS.length - tbaCount)) + ' done' + (tbaCount ? ' \u00b7 ' + tbaCount + ' to come' : '');
+    var placesKnown = POINTS.length - tbaCount;
+    // "complete" only when every stop is done, none is still to be announced, and the page isn't marked open (same rule as the list page).
+    var statusText = doneCount + ' of ' + (openTotal ? '???' : placesKnown) + ' done' + (tbaCount ? ' \u00b7 ' + tbaCount + ' to come' : '')
+      + (!openTotal && !tbaCount && placesKnown && doneCount >= placesKnown ? ' \u00b7 complete' : '');
+    statusEl.textContent = statusText;
+    document.getElementById('headStatus').textContent = statusText;
     undoBtn.disabled = doneCount === 0;
     resetAllBtn.disabled = doneCount === 0;
     markAllBtn.disabled = doneCount >= POINTS.length - tbaCount;
