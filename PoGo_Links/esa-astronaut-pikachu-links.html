@@ -51,8 +51,16 @@
   #homeBtn { text-decoration: none; background: linear-gradient(180deg, #3bb8f0, #1a86c8); border: 1px solid #a8e2fb; box-shadow: 0 3px 0 #1d6aa3, 0 6px 14px rgba(26,134,200,.35); }
   #homeBtn:active { box-shadow: 0 1px 0 #1d6aa3, 0 2px 6px rgba(26,134,200,.3); }
   .sub { display: inline; color: #9ca3af; font-size: 12.5px; }
-  .note { background: #3a3424; border-left: 3px solid #d29922; padding: 9px 11px; margin: 0 0 12px; font-size: 13px; line-height: 1.5; color: #d1d5db; border-radius: 0 6px 6px 0; }
+  /* 2026-10-16 (Bart) BEFORE: plain note boxes, square left corners (border-radius 0 6px 6px 0). WHY: wordy but necessary notes;
+     Bart wanted them collapsible, chevron like JoyRoute's status card, all corners rounded. NOW: a note with a bold title is a
+     <details> panel (build_page.py --note; open unless "closed:"); a note without a title stays a plain box. */
+  .note { background: #3a3424; border-left: 3px solid #d29922; padding: 9px 11px; margin: 0 0 12px; font-size: 13px; line-height: 1.5; color: #d1d5db; border-radius: 6px; }
   .note.ok { background: #24382a; border-left-color: #3fb950; }
+  details.note > summary { list-style: none; cursor: pointer; font-weight: 700; display: flex; align-items: flex-start; gap: 8px; }
+  details.note > summary::-webkit-details-marker { display: none; }
+  details.note > summary::after { content: ""; flex: none; margin-left: auto; margin-top: 5px; width: 7px; height: 7px; border-right: 2px solid #74aeea; border-bottom: 2px solid #74aeea; transform: rotate(-45deg); transition: transform .15s; }
+  details.note[open] > summary::after { transform: rotate(45deg); margin-top: 2px; }
+  details.note[open] > summary { margin-bottom: 4px; }
   .hint { font-size: 12.5px; font-weight: 600; color: #ffd166; margin: 10px 0 4px; }
   h2 { font-size: 15px; margin: 18px 0 8px; padding-bottom: 3px; border-bottom: 1px solid #404040; color: #e5e5e5; }
   h2 .c { color: #9ca3af; font-weight: 400; font-size: 12px; }
@@ -168,7 +176,7 @@
 <body>
 <div class="top"><h1>Astronaut Pikachu<span class="hs" id="headStatus"></span></h1><div class="sub">Pokémon GO × European Space Agency · six science and space museums · 4 Oct 2026 – 30 Apr 2027 · in-person 1★ raids with a museum Location Background</div></div>
 <div class="head"><a id="homeBtn" class="hbtn" href="https://bartmaneh.github.io/PoGo_Links/" title="Back to the PoGO Link Pages list"><svg viewBox="8 8 48 48" aria-hidden="true"><circle cx="32" cy="32" r="22" fill="#263238" stroke="#26c6da" stroke-width="5"/><path d="M19 32.5 32 21l13 11.5-3.4 3L40 34.1V45H34v-8h-4v8h-6V34.1l-1.6 1.4z" fill="#fff" stroke="#fff" stroke-linejoin="round"/></svg>Home</a><button id="copyGpxBtn" class="hbtn" title="Copy the route's GPX text (to paste into iPogo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span></button><button id="gpxBtn" class="hbtn" title="Download the route as a GPX file (iPogo, GPS JoyStick)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>GPX</button><button id="mapBtn" class="hbtn" title="Open the route in the GPX viewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>Map</button></div>
-<div class="note"><b>How it works:</b> win the 1★ raid at any of the six museums to catch Astronaut Pikachu. Runs until 30 Apr 2027.<br><b>First week only, 4–10 Oct 2026:</b> extra research tasks and more Astronaut Pikachu in the wild at the museums.<br><b>Event research:</b> picked up at each museum in the first week only (until 10 Oct 2026); once collected, its timer runs until about 10 May 2027 (in-game).</div>
+<details class="note" open><summary>How it works:</summary>win the 1★ raid at any of the six museums to catch Astronaut Pikachu. Runs until 30 Apr 2027.<br><b>First week only, 4–10 Oct 2026:</b> extra research tasks and more Astronaut Pikachu in the wild at the museums.<br><b>Event research:</b> picked up at each museum in the first week only (until 10 Oct 2026); once collected, its timer runs until about 10 May 2027 (in-game).</details>
 <div class="switches">
   <div class="toggle" id="teleportToggle"><span class="opt" data-v="ipogo">iPogo</span><button class="sw" aria-label="iPogo or GPS JoyStick"></button><span class="opt" data-v="joystick" data-t="GPS JoyStick">GPS JoyStick</span></div>
   <div class="toggle" id="secondToggle"><span class="opt" data-v="maps" data-t="Maps">Maps</span><button class="sw" aria-label="Maps or Copy"></button><span class="opt" data-v="copy">Copy</span></div>
