@@ -1,12 +1,12 @@
 # Main page (`index.html`) and the two groups
 
 Since 2026-10-14 (main page v1.2) the main page has two buttons, each opening a group page in the same style:
-- **PoGO Tools** (`PoGO_Tools/`): PoGO Link Pages, Local Event Times, Shiny URL Converter.
+- **PoGO Tools** (`PoGO_Tools/`, v1.3): PoGO Link Pages, Local Event Times, Shiny URL Converter, GPX Viewer (2026-10-16, same link as on IES Tools).
 - **IES Tools** (`IES_Tools/`, v1.3): DVB Calculator, Wordle Solver, Poople Solver, GPX Viewer (2026-10-16; links out to `https://innoengserv.com/gpx-viewer.com/` on the Pi).
 
 A new tool gets its button on its group page, not on the main page.
 
-Footer version line (2026-10-15, Bart): these three pages (main v1.4, PoGO Tools v1.2, IES Tools v1.3 (GPX Viewer button 2026-10-16)) use `css/style.css` `.footer` with the
+Footer version line (2026-10-15, Bart): these three pages (main v1.4, PoGO Tools / IES Tools v1.3 (GPX Viewer button 2026-10-16)) use `css/style.css` `.footer` with the
 version inline at `top: 50px` below the footer. On iOS Safari (floating bottom toolbar) it showed above the toolbar instead of just off screen.
 Added an iOS-only rule (`@supports (-webkit-touch-callout: none)`, class `ver`, `top: 126px !important`; Android and desktop keep 50px). Tried 66px first
 (still visible through the toolbar glass), then 126px; Bart saw no change on his iPhone and chose to leave it as is ("maybe a red herring").
