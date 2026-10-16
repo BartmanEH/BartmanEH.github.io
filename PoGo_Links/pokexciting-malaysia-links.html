@@ -562,10 +562,19 @@
     // 2026-10-16 (Bart) BEFORE: always "N of <stops> done". WHY: a page marked open (<meta name="pogolinks-open">, e.g. the LEGO rally,
     // whose real total is unknown) read as finished at 219 of 219. NOW: such a page shows "N of ??? done", like the list page (v2.20).
     var openTotal = !!document.querySelector('meta[name="pogolinks-open"]');
-    var placesKnown = POINTS.length - tbaCount;
-    // "complete" only when every stop is done, none is still to be announced, and the page isn't marked open (same rule as the list page).
-    var statusText = doneCount + ' of ' + (openTotal ? '???' : placesKnown) + ' done' + (tbaCount ? ' \u00b7 ' + tbaCount + ' to come' : '')
-      + (!openTotal && !tbaCount && placesKnown && doneCount >= placesKnown ? ' \u00b7 complete' : '');
+    // 2026-10-16 (Bart) BEFORE: one count over every row. WHY: the LEGO page added sections of candidate stores to check, whose Done
+    // means "checked", not "stamped". NOW: sections marked extra (D.sections[i].extra, build_page.py --extra-group) are counted apart:
+    // "219 of ??? stamped · 0 of 22 checked" (words from D.doneWord / D.extraWord, default "done" / "checked").
+    var mainTotal = 0, mainDone = 0, extraTotal = 0, extraDone = 0;
+    POINTS.forEach(function (p) {
+      if (p.tba) return;
+      var extra = !!(D.sections[p.section] && D.sections[p.section].extra);
+      if (extra) { extraTotal++; if (state[p.key]) extraDone++; } else { mainTotal++; if (state[p.key]) mainDone++; }
+    });
+    // "complete" only when every main stop is done, none is still to be announced, and the page isn't marked open (as on the list page).
+    var statusText = mainDone + ' of ' + (openTotal ? '???' : mainTotal) + ' ' + (D.doneWord || 'done') + (tbaCount ? ' \u00b7 ' + tbaCount + ' to come' : '')
+      + (extraTotal ? ' \u00b7 ' + extraDone + ' of ' + extraTotal + ' ' + (D.extraWord || 'checked') : '')
+      + (!openTotal && !tbaCount && mainTotal && mainDone >= mainTotal ? ' \u00b7 complete' : '');
     statusEl.textContent = statusText;
     document.getElementById('headStatus').textContent = statusText;
     undoBtn.disabled = doneCount === 0;
