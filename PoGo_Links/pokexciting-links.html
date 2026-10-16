@@ -130,6 +130,7 @@
   .row .controls .dist { flex: 0 0 68px; width: 68px; box-sizing: border-box; margin-left: auto; padding: 0 3px; text-align: center; white-space: nowrap; overflow: hidden; background: #2b2b29; border: 1px solid #4a4a46; border-radius: 10px; font-size: 12px; line-height: 20px; font-weight: 700; color: #ffd166; }
   .row .controls .dist.here { border-color: #26c6da; color: #26c6da; }
   .row .line .dim { color: #9ca3af; font-size: 12px; }
+  .row .line2 { font-size: 12.5px; line-height: 1.4; color: #9ca3af; white-space: normal; margin: 1px 0 4px; }
   /* BEFORE gap 8px, Done 62px, Copy min 74px. WHY: room for the pill on this row at phone width. NOW (2026-10-09): 6px gap,
      Done 56px (still fits "✓ Done"), Copy 60px, buttons don't shrink. Measured at 375px: exactly fits. */
   .controls { display: flex; flex-wrap: nowrap; gap: 6px; align-items: center; }
@@ -191,7 +192,7 @@
   <a class="mark" href="https://bartmaneh.github.io/PoGo_Links/" title="BartmanEH: all PoGO Link Pages"><img src="data:image/png;base64,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" alt="Bart"><span>manEH</span></a>
   <label for="importInput">Import progress</label>
   <input type="file" id="importInput" accept="application/json,.json,.txt">
-  <span id="status"><span id="doneCount"></span><span style="font-weight: 400; font-size: 12px;">generated 2026-10-16 10:09</span></span>
+  <span id="status"><span id="doneCount"></span><span style="font-weight: 400; font-size: 12px; white-space: nowrap;" title="page version (build or re-render time)">2026-10-16 10:55</span></span>
 </div>
 <div id="list"></div>
 <script>
@@ -475,10 +476,19 @@
     var dim = document.createElement('span');
     dim.className = 'dim';
     var doneText = (isDone && state[p.key].ts) ? ' · done ' + new Date(state[p.key].ts).toLocaleString() : '';
-    dim.innerHTML = (p.note ? ' · ' + p.note : '');
+    // 2026-10-16 (Bart): a section with noteLine (build_page.py --note-line-group) shows each row's note on its own wrapping line under
+    // the name, so it reads in full without scrolling (e.g. the LEGO page's opening dates). BEFORE: notes only at the end of the line.
+    var noteOwnLine = !!(p.note && D.sections[p.section] && D.sections[p.section].noteLine);
+    dim.innerHTML = (p.note && !noteOwnLine ? ' · ' + p.note : '');
     if (!p.tba) dim.appendChild(document.createTextNode(' · ' + p.lat.toFixed(5) + ', ' + p.lon.toFixed(5) + doneText));
     line.appendChild(dim);
     row.appendChild(line);
+    if (noteOwnLine) {
+      var line2 = document.createElement('div');
+      line2.className = 'line2';
+      line2.innerHTML = p.note;
+      row.appendChild(line2);
+    }
     // A placeholder (no location yet): greyed and dashed; never counted or marked. Its buttons are drawn like the
     // others but disabled below (Bart, 2026-10-09: BEFORE no buttons; WHY the row's shape should match; NOW greyed).
     if (p.tba) row.classList.add('tba');
@@ -565,9 +575,13 @@
     // 2026-10-16 (Bart) BEFORE: one count over every row. WHY: the LEGO page added sections of candidate stores to check, whose Done
     // means "checked", not "stamped". NOW: sections marked extra (D.sections[i].extra, build_page.py --extra-group) are counted apart:
     // "219 of ??? stamped · 0 of 22 checked" (words from D.doneWord / D.extraWord, default "done" / "checked").
+    // 2026-10-16 (Bart) BEFORE: every section counted (main or extra). WHY: places already checked in the game and found
+    // without a stamp are kept as a record, not as work left. NOW: sections marked record (D.sections[i].record,
+    // build_page.py --record-group) are left out of every count (still listed, with their own section count).
     var mainTotal = 0, mainDone = 0, extraTotal = 0, extraDone = 0;
     POINTS.forEach(function (p) {
       if (p.tba) return;
+      if (D.sections[p.section] && D.sections[p.section].record) return;
       var extra = !!(D.sections[p.section] && D.sections[p.section].extra);
       if (extra) { extraTotal++; if (state[p.key]) extraDone++; } else { mainTotal++; if (state[p.key]) mainDone++; }
     });
