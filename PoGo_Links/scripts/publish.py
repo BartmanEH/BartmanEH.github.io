@@ -595,6 +595,15 @@ def main():
         print("List changed." if write_index() else "List unchanged.")
         return
 
+    # 2026-10-28 (Bart, F27): the shared colours live in ~/.claude/skills/palette/joy-palette.json; never publish a page or template
+    # whose copy differs. Only here, not in --index-only / --expire: the inbox job's runner has no ~/.claude/skills.
+    checker = os.path.expanduser("~/.claude/skills/palette/check_palette.py")
+    if not os.path.exists(checker):
+        sys.exit("Palette checker missing: clone BartmanEH/claude-skills to ~/.claude/skills first.")
+    for project, root in (("site", REPO), ("template", os.path.expanduser("~/.claude/skills"))):
+        if subprocess.run([sys.executable, "-I", checker, project, root]).returncode:
+            sys.exit("Not published: fix the colours above (or joy-palette.json) first.")
+
     # Several Macs, one repo, and the inbox job pushes Exports: never publish onto a stale checkout.
     git("fetch", "-q")
     ahead_behind = git("rev-list", "--left-right", "--count", "HEAD...@{u}").split()
