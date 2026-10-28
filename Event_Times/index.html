@@ -5,15 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#2b2b29">
+<meta name="theme-color" content="#0b0b0a">
 <title>Local Event Times</title>
 <link rel="icon" type="image/png" href="../img/favicon/favicon-32x32.png" sizes="32x32">
 <style>
   /* Local Event Times (2026-10-13, from Bart's "Event Times" Google Sheets): an event that starts at the same LOCAL time
      everywhere (e.g. a Pokémon GO event at 6:00 pm local) reaches each time zone at a different moment; this lists when,
      in your own time, first zone to last. Look: Bart's VS Code palette and the PoGO Link Pages' hero, footer, switches
-     and teleport buttons. Width capped at 412px (his phones); everything spans the same width (his symmetry rule). */
-  :root { --bg: #2b2b29; --card: #33332f; --line: #404040; --text: #d1d5db; --bold: #e5e5e5; --grey: #9ca3af;
+     and teleport buttons. Width capped at 412px (his phones); everything spans the same width (his symmetry rule).
+     2026-10-28 (Bart, F27, the Joy palette as in JoyFeed): BEFORE page #2b2b29, cards #33332f, pressed #3a3a36; NOW page #0b0b0a, cards #2b2b29, pressed #333331. */
+  :root { --bg: #0b0b0a; --card: #2b2b29; --line: #404040; --text: #d1d5db; --bold: #e5e5e5; --grey: #9ca3af;
           --blue: #74aeea; --purple: #bb7cd8; --green: #a1c281; --tan: #c99c6e; --red: #e06c75; --yellow: #ffd166; --cyan: #26c6da; --orange: #f0a04b;
           /* Finished cards' outline: a dark red (Bart: the palette red #e06c75 was "too obvious"). */
           --dark-red: #7a3b3f; }
@@ -91,7 +92,7 @@
   .nowbar .g { color: var(--green); font-weight: 700; }
   .gonow { flex: 0 0 auto; font: inherit; font-size: 13px; font-weight: 700; color: var(--blue); background: var(--card);
                    border: 1px solid var(--line); border-radius: 8px; padding: 0 12px; cursor: pointer; white-space: nowrap; }
-  .gonow:active { background-color: #3a3a36; }
+  .gonow:active { background-color: #333331; }
   /* 2026-10-14: places on the same clock all year (same time zone in all but name) share a group box (Bart). The box sits
      6px outside the cards (negative margin = padding + border), so grouped cards keep the same edges as the rest.
      v1.3 BEFORE: 1px dashed #5a5a55. WHY: Bart couldn't see it on the phone. NOW (v1.4): 2px dashed purple. */
@@ -104,7 +105,7 @@
   /* 2026-10-14: the Pokémap tag is a badge link to that city's Pokémap site (Bart). */
   .row a.badge { display: inline-block; margin-right: 6px; padding: 0 7px; line-height: 16px; font-size: 11px; font-weight: 700;
                  color: var(--tan); border: 1px solid var(--tan); border-radius: 999px; text-decoration: none; vertical-align: 1px; }
-  .row a.badge:active { background: #3a3a36; }
+  .row a.badge:active { background: #333331; }
   .row.past a.badge { color: #7d7d78; border-color: #5a5a55; }
   .controls { display: flex; gap: 6px; align-items: center; }
   .controls a, .controls button { font-family: inherit; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 5px; height: 30px; font-size: 12px; font-weight: 700;
@@ -145,7 +146,7 @@
     <circle cx="24" cy="24" r="21" fill="#1f3b57" stroke="#74aeea" stroke-width="2.5"/>
     <ellipse cx="24" cy="24" rx="9" ry="21" fill="none" stroke="#74aeea" stroke-width="2"/>
     <path d="M3 24h42M7 13h34M7 35h34" stroke="#74aeea" stroke-width="2" fill="none"/>
-    <circle cx="36" cy="36" r="10" fill="#2b2b29" stroke="#ffd166" stroke-width="2.5"/>
+    <circle cx="36" cy="36" r="10" fill="#0b0b0a" stroke="#ffd166" stroke-width="2.5"/>
     <path d="M36 30v6l4 2.5" stroke="#ffd166" stroke-width="2.5" fill="none" stroke-linecap="round"/>
   </svg>
   <div><div class="kicker">BartmanEH's</div><h1>Local Event Times</h1></div>

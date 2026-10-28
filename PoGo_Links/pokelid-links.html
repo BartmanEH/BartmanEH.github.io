@@ -7,13 +7,13 @@
 <style>
   /* Same look as the Pokémap quest Export page (userscript), plus sections, notes and a start hint. */
   * { box-sizing: border-box; }
-  /* Colours: Bart's VS Code palette (the early Claude code-block look): page #2b2b29, cards #33332f, borders #404040,
+  /* 2026-10-28 (Bart, F27, the Joy palette as in JoyFeed): BEFORE page #2b2b29, cards #33332f, toolbar #242422 and its buttons #353533; NOW page #0b0b0a, cards #2b2b29, toolbar #2b2b29, buttons #3a3a37. Colours: Bart's VS Code palette (the early Claude code-block look): page #0b0b0a, cards #2b2b29, borders #404040,
      text #d1d5db, bold #e5e5e5, grey #9ca3af. Keep the Pokémap quest Export page and the coord-link-page template in step. */
   /* Page width. BEFORE: full window width, so on a desktop the rows stretched and the pills sat far from the rest.
      WHY: Bart wants desktops to show the phone view. NOW (2026-10-10): at most 412px wide (Pixel 6 Pro), centred; phones are
      narrower, so nothing changes there. The bottom bar is capped to match. */
-  html { background: #2b2b29; }
-  body { max-width: 412px; box-sizing: border-box; margin: 0 auto; padding: 16px 16px 84px; background: #2b2b29; color: #d1d5db; font-family: -apple-system, system-ui, sans-serif; }
+  html { background: #0b0b0a; }
+  body { max-width: 412px; box-sizing: border-box; margin: 0 auto; padding: 16px 16px 84px; background: #0b0b0a; color: #d1d5db; font-family: -apple-system, system-ui, sans-serif; }
   /* Title and sub line share the first line; the three header buttons get their own row (they don't fit beside the
      title at phone width). */
   /* 2026-10-11 BEFORE: h1 and .sub display:inline, so a long sub started on the title row and wrapped from there.
@@ -70,8 +70,8 @@
   h3 { font-size: 13.5px; font-weight: 600; margin: 12px 0 6px 12px; padding-bottom: 2px; border-bottom: 1px solid #383836; color: #d1d5db; }
   h3 .c { color: #9ca3af; font-weight: 400; font-size: 12px; }
   h3.complete, h3.empty { opacity: .5; }
-  .toolbar { position: fixed; left: 0; right: 0; max-width: 412px; box-sizing: border-box; margin: 0 auto; bottom: 0; z-index: 10; background: #242422; border-top: 1px solid #404040; padding: 7px 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-  .toolbar button, .toolbar label { background: #353533; color: #d1d5db; border: 1px solid #404040; border-radius: 6px; padding: 6px 14px; font-size: 13px; cursor: pointer; }
+  .toolbar { position: fixed; left: 0; right: 0; max-width: 412px; box-sizing: border-box; margin: 0 auto; bottom: 0; z-index: 10; background: #2b2b29; border-top: 1px solid #404040; padding: 7px 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .toolbar button, .toolbar label { background: #3a3a37; color: #d1d5db; border: 1px solid #404040; border-radius: 6px; padding: 6px 14px; font-size: 13px; cursor: pointer; }
   /* 2026-10-16 (Bart) BEFORE: the whole status line grey #9ca3af at 85% opacity. WHY: the done count was too dim to read at a glance.
      NOW: the done count in the palette's text colour #d1d5db, full opacity; the "generated" time stays grey. */
   #status { order: -1; flex: 1 0 100%; display: flex; justify-content: space-between; gap: 8px; font-weight: 600; color: #9ca3af; font-size: 13px; padding-bottom: 2px; }
@@ -85,7 +85,7 @@
      BEFORE two fixed halves, which left the narrower Maps / Copy box mostly empty. */
   .switches { display: flex; gap: 8px; margin-bottom: 12px; }
   .switches .toggle { flex: 1 1 auto; }
-  .toggle { display: flex; justify-content: center; align-items: center; gap: 5px; padding: 4px 6px; background: #33332f; border: 1px solid #404040; border-radius: 8px; user-select: none; -webkit-user-select: none; }
+  .toggle { display: flex; justify-content: center; align-items: center; gap: 5px; padding: 4px 6px; background: #2b2b29; border: 1px solid #404040; border-radius: 8px; user-select: none; -webkit-user-select: none; }
   /* Mirrored (Bart): the left box's contents hug its left edge, the right box's its right edge, same inset. */
   .switches .toggle:first-child { justify-content: flex-start; }
   .switches .toggle:last-child { justify-content: flex-end; }
@@ -104,12 +104,12 @@
   .switches .toggle:last-child .opt:first-child { text-align: right; }
   .toggle .opt { font-size: 13px; color: #d1d5db; cursor: pointer; font-weight: 400; }
   .toggle .opt.on { color: #e5e5e5; font-weight: 700; }
-  .toggle .sw { position: relative; width: 40px; height: 24px; border: 2px solid #d1d5db; border-radius: 13px; background: #2b2b29; cursor: pointer; padding: 0; flex: 0 0 auto; }
+  .toggle .sw { position: relative; width: 40px; height: 24px; border: 2px solid #d1d5db; border-radius: 13px; background: #0b0b0a; cursor: pointer; padding: 0; flex: 0 0 auto; }
   .toggle .sw::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #d1d5db; transition: transform 140ms ease; }
   .toggle .sw.right::after { transform: translateX(16px); }
   /* Two lines per stop: one sideways-scrolling info line, then the buttons. The icon column only exists when
      some stop has an icon (body.icons). */
-  .row { background: #33332f; border: 1px solid #404040; border-radius: 8px; padding: 6px 8px; margin-bottom: 6px; display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 5px; align-items: center; }
+  .row { background: #2b2b29; border: 1px solid #404040; border-radius: 8px; padding: 6px 8px; margin-bottom: 6px; display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 5px; align-items: center; }
   /* Picture column. BEFORE: 44px column, 38px tall, 8px left padding and gap. WHY: the distance pill moved onto the
      button row and needs the room; Bart wanted bigger pictures. NOW (2026-10-09, same as Pokémap 7.34): 52x56, left
      padding 3px, gap 5px, teleport labels kerned 1px tighter; fits from 412px wide (narrower phones scroll). */
@@ -127,7 +127,7 @@
   /* Distance pill. BEFORE: at the start of line 1, as wide as its text, so names started at random positions. WHY: Bart
      didn't like the uneven sizing. NOW (2026-10-09): at the right end of the button row, one fixed width; long text is
      tightened and shrunk to fit (fitPills in the script). The location pill ("from here") is cyan like the Default badge. */
-  .row .controls .dist { flex: 0 0 68px; width: 68px; box-sizing: border-box; margin-left: auto; padding: 0 3px; text-align: center; white-space: nowrap; overflow: hidden; background: #2b2b29; border: 1px solid #4a4a46; border-radius: 10px; font-size: 12px; line-height: 20px; font-weight: 700; color: #ffd166; }
+  .row .controls .dist { flex: 0 0 68px; width: 68px; box-sizing: border-box; margin-left: auto; padding: 0 3px; text-align: center; white-space: nowrap; overflow: hidden; background: #0b0b0a; border: 1px solid #4a4a46; border-radius: 10px; font-size: 12px; line-height: 20px; font-weight: 700; color: #ffd166; }
   .row .controls .dist.here { border-color: #26c6da; color: #26c6da; }
   /* 2026-10-16 (Bart): a flagged row (data p.flag, points.json "flag": true, e.g. a moved pin) gets a red distance pill so it stands out. */
   .row .controls .dist.flag { border-color: #ff7b72; color: #ff7b72; }
