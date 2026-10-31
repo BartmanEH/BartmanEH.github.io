@@ -55,8 +55,6 @@ save(badge(get("CollectionIcon/stamp_pokecenter_icon.png"), 256), "pokecenter-li
 g = get("StampUiIcon/stamp_generic_icon.png")
 bb = g.getchannel("A").getbbox()
 save(badge(g, bb[2] - bb[0]), "jp-stamp-rallies")
-# 2026-10-31: the Día de Muertos Stamp Hunt (Mexico City) has no badge in PokeMiners yet; same generic icon, replace when one appears
-save(badge(g, bb[2] - bb[0]), "mexico-dia-de-muertos-links")
 # 2026-10-11 BEFORE: no Malaysia badge. WHY: new page pokexciting-malaysia-links (Bart: every new page gets its
 # PokeMiners badge). NOW: the rally's own badge, as on the in-game stamp sheet; its circle is 250 of 256 px.
 save(badge(get("CollectionIcon/stamp_regional_malaysia_icon.png"), 250), "pokexciting-malaysia-links")
@@ -70,4 +68,13 @@ ink.putalpha(p.getchannel("A"))
 lego = badge(ink, ink.width)
 save(lego, "lego-stamp-rally-links")
 # 2026-10-11 BEFORE: also lego-outstanding.png. WHY: Bart deleted that page (rally complete, 219/219). NOW: one LEGO icon.
+# 2026-10-31 BEFORE: the Día de Muertos Stamp Hunt (Mexico City) used the generic stamp icon as a placeholder (no badge in
+# PokeMiners). WHY: the in-game card's final stamp is the Duskull stamp, stamp_duskull_01.png (a mask like LEGO's), orange on
+# white as the game draws it. NOW: that stamp, tinted like the LEGO one.
+ORANGE = (245, 166, 35, 255)
+d = get("stamp_duskull_01.png")
+d = d.crop(d.getchannel("A").getbbox())
+dink = Image.composite(Image.new("RGBA", d.size, ORANGE), Image.new("RGBA", d.size, WHITE), d.convert("L"))
+dink.putalpha(d.getchannel("A"))
+save(badge(dink, dink.width), "mexico-dia-de-muertos-links")
 print(f"Wrote 5 badge icons to {ICONS}")
