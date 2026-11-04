@@ -11,6 +11,7 @@ Writes PoGo_Links/icons/:
   pokexciting-malaysia-links.png             StampRally/CollectionIcon/stamp_regional_malaysia_icon.png (circle 250 px)
   pokexciting-taiwan-links.png               StampRally/CollectionIcon/stamp_regional_taiwan_icon.png (circle 250 px)
   mexico-hawlucha-links.png                  StampRally/CollectionIcon/stamp_gowa_mexicocity_icon.png (circle 250 px)
+  sendai-lapras-links.png                    StampRally/CollectionIcon/stamp_gowa_sendai_icon.png (circle 250 px)
   lego-stamp-rally-links.png
                                              StampRally/stamp_pikachu_11.png, the LEGO rally's stamp: a mask
                                              (white = ink), tinted green on white as the game shows it
@@ -63,6 +64,8 @@ save(badge(get("CollectionIcon/stamp_regional_malaysia_icon.png"), 250), "pokexc
 save(badge(get("CollectionIcon/stamp_regional_taiwan_icon.png"), 250), "pokexciting-taiwan-links")
 # 2026-11-03: new page mexico-hawlucha-links; the GO Wild Area Mexico City rally's own badge, circle 250 of 256 px.
 save(badge(get("CollectionIcon/stamp_gowa_mexicocity_icon.png"), 250), "mexico-hawlucha-links")
+# 2026-11-03: new page sendai-lapras-links; the GO Wild Area Sendai rally's own badge, circle 250 of 256 px.
+save(badge(get("CollectionIcon/stamp_gowa_sendai_icon.png"), 250), "sendai-lapras-links")
 
 p = get("stamp_pikachu_11.png")
 p = p.crop(p.getchannel("A").getbbox())
@@ -80,4 +83,4 @@ d = d.crop(d.getchannel("A").getbbox())
 dink = Image.composite(Image.new("RGBA", d.size, ORANGE), Image.new("RGBA", d.size, WHITE), d.convert("L"))
 dink.putalpha(d.getchannel("A"))
 save(badge(dink, dink.width), "mexico-dia-de-muertos-links")
-print(f"Wrote 8 badge icons to {ICONS}")
+print(f"Wrote 9 badge icons to {ICONS}")
